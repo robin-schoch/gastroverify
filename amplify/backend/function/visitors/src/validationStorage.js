@@ -1,9 +1,9 @@
 const AWS = require('aws-sdk')
 const jwtUtil = require('./jwtUtil')
-
-AWS.config.update({ region: process.env.TABLE_REGION || 'eu-central-1' })
+const smsUtil = require('./smsUtil')
+AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-var moment = require('moment');
+const moment = require('moment');
 const crypto = require('crypto');
 // add dev if local
 let tableName = "validation";
@@ -41,7 +41,12 @@ module.exports.createValidation = (phoneNumber) => {
         validation_requested: moment.utc().unix(),
         validation_success: 0
     }
-    return insertValidationData(item)
+
+    return Promise.all([
+        insertValidationData(item),
+        smsUtil.sendVerifactionSMS(phoneNumber, item.code)
+    ])
+
 }
 
 
@@ -94,7 +99,7 @@ module.exports.validateNumber = (phoneNumber, code) => {
                 let w = data.Item ? data.Item : data
                 if (w.code === code && w.validation_success === 0) {
                     w.validation_success = moment.utc().unix()
-                    insertValidationData(w).then(elem => jwtUtil.generateJWT(phoneNumber)).catch(err => reject(err))
+                    insertValidationData(w).then(elem => resolve(jwtUtil.generateJWT(phoneNumber))).catch(err => reject(err))
                 } else {
                     reject("invalid")
                 }
