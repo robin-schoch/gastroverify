@@ -178,6 +178,13 @@
                   }
                 ]
               }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sns:Publish"
+              ],
+              "Resource": "*"
             }
           ]
         }
@@ -259,18 +266,6 @@
                       "index/*"
                     ]
                   ]
-                }
-              ]
-            },
-            {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "sns:Publish"
-                  ],
-                  "Resource": "*"
                 }
               ]
             }
