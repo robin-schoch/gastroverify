@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "storage": {
+      "checkInStorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "gastroStorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "auth": {
+      "gastroverifyd8b8759f": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

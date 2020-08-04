@@ -10,6 +10,11 @@
             "StackName": "amplify-gastroverify-dev-75918",
             "StackId": "arn:aws:cloudformation:eu-central-1:375439687272:stack/amplify-gastroverify-dev-75918/a2f1f820-d617-11ea-8e01-0a0ddac78b4a",
             "AmplifyAppId": "d3kezlnq1hnpnp"
+        },
+        "categories": {
+            "auth": {
+                "gastroverifyd8b8759f": {}
+            }
         }
     }
 }

@@ -20,6 +20,43 @@
             "privacy": {
                 "open": true
             }
+        },
+        {
+            "name": "/gastro",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "userPoolGroups": {
+                    "admin": [
+                        "/POST",
+                        "/GET",
+                        "/PUT",
+                        "/PATCH",
+                        "/DELETE"
+                    ],
+                    "gastro": [
+                        "/POST",
+                        "/GET",
+                        "/PUT",
+                        "/PATCH",
+                        "/DELETE"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "/admin",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "userPoolGroups": {
+                    "admin": [
+                        "/POST",
+                        "/GET",
+                        "/PUT",
+                        "/PATCH",
+                        "/DELETE"
+                    ]
+                }
+            }
         }
     ],
     "resourceName": "v1",
@@ -27,6 +64,9 @@
     "functionArns": [
         {
             "lambdaFunction": "visitors"
+        },
+        {
+            "lambdaFunction": "gastro"
         }
     ],
     "privacy": {
@@ -43,7 +83,37 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "gastro",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "auth",
+            "resourceName": "gastroverifyd8b8759f",
+            "attributes": [
+                "UserPoolId"
+            ]
+        },
+        {
+            "category": "auth",
+            "resourceName": "userPoolGroups",
+            "attributes": [
+                "adminGroupRole"
+            ]
+        },
+        {
+            "category": "auth",
+            "resourceName": "userPoolGroups",
+            "attributes": [
+                "gastroGroupRole"
+            ]
         }
     ],
-    "uuid": "2a823f9c"
+    "uuid": "79671d7e",
+    "authResourceName": "gastroverifyd8b8759f"
 }

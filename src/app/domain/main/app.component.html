@@ -1,0 +1,22 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="over" [(opened)]="opened">
+    Sidenav content
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <mat-toolbar *ngIf="!(toolbarHidden$ | async)">
+      <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
+    </mat-toolbar>
+
+
+    <router-outlet></router-outlet>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
