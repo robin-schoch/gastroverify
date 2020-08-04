@@ -22,6 +22,7 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 
+
 const port = 3030;
 
 // declare a new express app
@@ -50,19 +51,43 @@ app.use(function (req, res, next) {
  ****************************/
 
 app.post('/v1/register', (req, res) => {
-    // Add your code here
-    const blocked = false;
-    if (blocked) {
-        res.status(400)
-        res.json({error: "blocked"})
+    const phoneNumber = req.body.phoneNr;
+    if (phoneNumber) {
+        validation.validateValidationRequest(phoneNumber).then(_ => {
+            validation.createValidation(phoneNumber).then(valid => {
+                res.json({timestamp: valid.validation_requested})
+            }).catch(error => {
+                res.status(500)
+                console.log(error)
+                res.json({error: error})
+            })
+        }).catch(error => {
+            res.status(400)
+            res.json({timestamp: error.interval})
+        })
     } else {
-        res.json(validation.createValidation(req.body.phoneNr))
+        res.status(401)
+        res.json({erorr: "missing parameter"})
     }
 });
 
 app.post('/v1/validate', function (req, res) {
-    // Add your code here
-    res.json({success: 'post call succeed!', url: req.url, body: req.body})
+    const phoneNumber = req.body.phoneNr;
+    const code = req.body.verificationCode;
+    if (code && phoneNumber) {
+        validation.validateNumber(phoneNumber, code).then(token => {
+            res.status(200)
+            res.json({token: token})
+        }).catch(err => {
+            res.status(403)
+            res.json({error: err})
+        })
+
+    } else {
+        res.status(400)
+        res.json({erorr: "missing parameter"})
+    }
+
 });
 
 app.post('/v1/:barId', function (req, res) {
