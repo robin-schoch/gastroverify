@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const jwtUtil = require('./jwtUtil')
-AWS.config.update({region: process.env.TABLE_REGION});
-AWS.config.update({region: 'eu-central-1'});
+
+AWS.config.update({ region: process.env.TABLE_REGION || 'eu-central-1' })
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 var moment = require('moment');
 const crypto = require('crypto');

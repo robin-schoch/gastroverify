@@ -32,6 +32,7 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 
 
 const validation = require('./validationStorage')
+const smsUtil = require('./smsUtil')
 
 // Enable CORS for all methods
 app.use(function (req, res, next) {
@@ -49,6 +50,10 @@ app.use(function (req, res, next) {
 /****************************
  * Example post method *
  ****************************/
+
+app.post('/v1/send', (req, res) => {
+    smsUtil.sendVerifactionSMS("+41764235351", 1232).then(data => res.json({data: data})).catch(error => res.json({errr: error}))
+})
 
 app.post('/v1/register', (req, res) => {
     const phoneNumber = req.body.phoneNr;
