@@ -116,27 +116,31 @@ app.post('/v1/validate', function (req, res) {
 });
 
 app.post('/v1/:barId', function (req, res) {
-    console.log(req.header('Authorization'))
+    console.log("checkIn...")
     jwtUtil.verifyJWT(req.header('Authorization')).then(decoded => {
-        let checkIn = new CheckIn(req.params.barId, req.body.firstName, req.body.surName,
+        let cI = new CheckIn(req.params.barId, req.body.firstName, req.body.surName,
             req.body.email, req.body.address, req.body.city, req.body.zipcode,
             req.body.checkIn, moment.utc().unix(), decoded.phone)
-        checkinStorage.addCheckIn(checkIn).then(_ => {
+        console.log("created user")
+        checkinStorage.addCheckIn(cI).then(elem => {
             console.log("added")
-            res.json({checkIn: `welcome ${checkIn.firstname} and enjoy your stay at ${req.params.barId}`})
+            res.json({checkIn: `welcome ${cI.firstname} and enjoy your stay at ${req.params.barId}`})
         }).catch(err => {
             res.status(500)
             console.log("error")
             console.log(err)
             res.json({error: "error"})
         })
-    }).then(err => {
+    }).catch(err => {
         res.json(err)
     })
 });
 
-app.get('/v1/:barId', function (req, res) {
-    res.json({success: 'redirect to app', url: req.url});
+app.get('/v1', function (req, res) {
+    res.json({
+        success: 'redirect to app',
+        url: req.url
+    });
 });
 
 

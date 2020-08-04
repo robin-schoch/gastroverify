@@ -22,7 +22,7 @@ class CheckIn {
         this.city = city
         this.zipcode = zipcode
         this.checkIn = checkIn
-        this.timestmap = timestamp
+        this.timestamp = timestamp
         this.phonenumber = phonenumber
     }
 

@@ -20,13 +20,14 @@ const insertCheckInData = (item) => {
         Item: item
     }
     console.log(putItemParams)
+    // return new Promise(((resolve, reject) => resolve(putItemParams)))
     return new Promise((resolve, reject) => {
         dynamodb.put(putItemParams, (err, data) => {
-            console.log("worked?")
             if (err) {
                 console.log(err)
                 reject(err)
             } else {
+                console.log(item)
                 resolve(putItemParams.Item)
             }
         });
