@@ -1,4 +1,3 @@
-
 const AWS = require('aws-sdk')
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 var moment = require('moment');
@@ -11,13 +10,10 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 } else if (process.env.ENV === undefined) {
     tableName = tableName + '-dev'
 }
-const partitionKeyName = "id";
-const sortKeyName = "barid";
-const secondaryKeyName = "barid";
+const partitionKeyName = "phonenumberhash";
 
 
 module.exports.createValidation = (phoneNumber) => {
-
     const item = {
         phonenumberhash: crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'),
         code: Math.floor(Math.random() * 10000 + 1000),
@@ -36,6 +32,40 @@ module.exports.createValidation = (phoneNumber) => {
                 resolve(putItemParams.Item)
             }
         });
+    })
+}
+
+module.exports.validateValidationRequest = (phoneNumber) => {
+    const now = moment.utc().unix()
+    var params = {};
+    params[partitionKeyName] = crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex');
+    let getItemParams = {
+        TableName: tableName,
+        Key: params
+    }
+    return new Promise((resolve, reject) => {
+        dynamodb.get(getItemParams, (err, data) => {
+            if (err || Object.keys(data).length === 0) {
+                resolve(true)
+            } else {
+                let w = data.Item ? data.Item : data
+                let coolDown = (1 * 60 * 1000)
+                let registeredCoolDown = (24 * 60 * 60 * 1000)
+                if (w.validation_success === 0 && now - w.validation_requested > coolDown) {
+                    resolve(true)
+                } else {
+                    reject({interval: (coolDown - (now - w.validation_requested)), status: "cool down"})
+                }
+                if (now - w.validation_success > registeredCoolDown) {
+                    resolve(true)
+                } else {
+                    reject({
+                        interval: (registeredCoolDown - (now - w.validation_requested)),
+                        status: "phone number registered"
+                    })
+                }
+            }
+        })
     })
 }
 

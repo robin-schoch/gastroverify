@@ -1,0 +1,49 @@
+{
+    "paths": [
+        {
+            "name": "/v1/register",
+            "lambdaFunction": "visitors",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/v1/validate",
+            "lambdaFunction": "visitors",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/v1/{barId}",
+            "lambdaFunction": "visitors",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "v1",
+    "apiName": "v1",
+    "functionArns": [
+        {
+            "lambdaFunction": "visitors"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-gastroverify-dev-75918-authRole",
+        "unAuthRoleName": "amplify-gastroverify-dev-75918-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "visitors",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "2a823f9c"
+}

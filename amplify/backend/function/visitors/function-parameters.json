@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "storage": {
+      "checkInStorage": [
+        "create",
+        "read",
+        "update"
+      ],
+      "validationStorage": [
+        "create",
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

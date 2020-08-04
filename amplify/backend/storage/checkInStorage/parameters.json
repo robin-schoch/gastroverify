@@ -1,0 +1,7 @@
+{
+    "tableName": "checkIn",
+    "partitionKeyName": "id",
+    "partitionKeyType": "S",
+    "sortKeyName": "barid",
+    "sortKeyType": "S"
+}
