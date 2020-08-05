@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk')
-const jwtUtil = require('./jwtUtil')
-const smsUtil = require('./smsUtil')
+const jwtUtil = require('../util/jwtUtil')
+const smsUtil = require('../util/smsUtil')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const moment = require('moment');

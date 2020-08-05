@@ -1,3 +1,42 @@
-<p>
-  signup works!
-</p>
+<form #signUpForm="ngForm" *ngIf="newUser$ | async as newUser" fxLayout="column">
+  <div fxLayout="column">
+    <mat-form-field fxFlex="100">
+      <input [(ngModel)]="newUser.username" class="cell" delayedFocus matInput name="username"
+             placeholder="username"
+             required type="text">
+    </mat-form-field>
+
+    <mat-form-field fxFlex="100">
+      <input [(ngModel)]="newUser.email" class="cell" delayedFocus matInput name="email"
+             placeholder="username"
+             required type="text">
+    </mat-form-field>
+
+    <mat-form-field fxFlex="100">
+      <input [(ngModel)]="newUser.password" class="cell" delayedFocus matInput name="password"
+             placeholder="username"
+             required type="text">
+    </mat-form-field>
+  </div>
+
+
+  <div fxLayout="row">
+    <button (click)="clearForm()" [disabled]="false"
+            mat-icon-button
+            matTooltip="clear"
+            name="delete"
+            type="button"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+
+    <button (click)="signUp()" [disabled]="false"
+            mat-icon-button
+            matTooltip="clear"
+            name="delete"
+            type="button"
+    >
+      <mat-icon>forward</mat-icon>
+    </button>
+  </div>
+</form>

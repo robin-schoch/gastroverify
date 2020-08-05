@@ -31,10 +31,10 @@ app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
 
-const validationStorage = require('./validationStorage')
-const jwtUtil = require('./jwtUtil')
-const CheckIn = require('./checkIn')
-const checkinStorage = require('./checkInStorage')
+const validationStorage = require('./storages/validationStorage')
+const jwtUtil = require('./util/jwtUtil')
+const CheckIn = require('./domain/checkIn')
+const checkinStorage = require('./storages/checkInStorage')
 
 // Enable CORS for all methods
 app.use(function (req, res, next) {
@@ -115,7 +115,7 @@ app.post('/v1/validate', function (req, res) {
 
 });
 
-app.post('/v1/:barId', function (req, res) {
+app.post('/v1/checkin/:barId', function (req, res) {
     console.log("checkIn...")
     jwtUtil.verifyJWT(req.header('Authorization')).then(decoded => {
         let cI = new CheckIn(req.params.barId, req.body.firstName, req.body.surName,
@@ -149,6 +149,7 @@ app.listen(port, function () {
 });
 
 // Export the app object. When executing the application local this does nothing. However,
-// to port it to AWS Lambda we will create a wrapper around that will load the app from
+// to port it to AWS Lambda we will create a wrapper around that will
+// load the app from
 // this file
 module.exports = app

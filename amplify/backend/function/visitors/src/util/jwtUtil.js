@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-
 const secret = "notSAFEEEEE!!!" // where should it be??
 
 module.exports.generateJWT = (phoneNumber) => {

@@ -1,6 +1,5 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.AWS_REGION || 'eu-central-1'})
-
 const SNS = new AWS.SNS()
 
 module.exports.sendVerifactionSMS = (phoneNumber, code, language = "de") => {

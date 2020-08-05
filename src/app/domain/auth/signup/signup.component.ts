@@ -1,4 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {SignUp} from '../sign-up';
+
 
 @Component({
   selector: 'app-signup',
@@ -8,9 +11,18 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class SignupComponent implements OnInit {
 
+  public newUser$: BehaviorSubject<SignUp> = new BehaviorSubject<SignUp>(new SignUp());
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  clearForm() {
+
+  }
+
+  signUp() {
+
+  }
 }
