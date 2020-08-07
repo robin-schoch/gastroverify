@@ -49,6 +49,20 @@
                     "/DELETE"
                 ]
             }
+        },
+        {
+            "name": "/v1/entry",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
         }
     ],
     "resourceName": "v1",
@@ -62,7 +76,7 @@
         }
     ],
     "privacy": {
-        "auth": 1,
+        "auth": 2,
         "unauth": 0,
         "authRoleName": "amplify-gastroverify-dev-75918-authRole",
         "unAuthRoleName": "amplify-gastroverify-dev-75918-unauthRole"
@@ -99,6 +113,6 @@
             ]
         }
     ],
-    "uuid": "33b5d38d",
+    "uuid": "9ea0a860",
     "authResourceName": "gastroverifyd8b8759f"
 }
