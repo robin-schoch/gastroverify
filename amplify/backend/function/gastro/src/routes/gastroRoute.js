@@ -2,11 +2,12 @@ const express = require('express'), router = express.Router();
 const jwt = require('jsonwebtoken');
 const {createGastro} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
+const jwt = require('jsonwebtoken');
 
 router.get('/', (req, res) => {
     getEntries('myBar', 2).then(data => {
-        console.log(req.header('x-gastro'))
-        res.json(req.header('x-gastro'))
+        console.log(req.header('Authorization'))
+        res.json(jwt.decode(req.header('Authorization')))
     }).catch(error => res.json(error))
 })
 

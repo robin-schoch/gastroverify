@@ -9,7 +9,8 @@ export class EntryService {
 
     apiName = 'v1';
     private myInit = { // OPTIONAL
-        headers: {}
+        headers: {
+        }
     };
 
     constructor() { }
@@ -18,7 +19,7 @@ export class EntryService {
     public getData() {
         Auth.currentSession().then(session => {
             console.log(session.getIdToken().getJwtToken());
-            this.myInit.headers['x-gastro'] = session.getIdToken().getJwtToken();
+            this.myInit.headers['Authorization'] = session.getIdToken().getJwtToken();
 
             API.get(
                 this.apiName,

@@ -22,6 +22,7 @@ var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const gastroRoute = require('./routes/gastroRoute')
 const adminRoute = require('./routes/adminRoute')
+const entryRoute = require('./routes/entryRoute')
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
@@ -42,6 +43,8 @@ app.use(function (req, res, next) {
 app.use('/v1/gastro', gastroRoute)
 
 app.use('/v1/admin', adminRoute)
+
+app.use('/v1/entry', entryRoute)
 
 
 app.listen(3000, function () {
