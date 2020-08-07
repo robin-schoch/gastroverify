@@ -39,9 +39,9 @@ app.use(function (req, res, next) {
  * /gastro*
  **********************/
 
-app.use('/gastro', gastroRoute)
+app.use('/v1/gastro', gastroRoute)
 
-app.use('/admin', adminRoute)
+app.use('/v1/admin', adminRoute)
 
 
 app.listen(3000, function () {

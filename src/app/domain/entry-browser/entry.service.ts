@@ -18,7 +18,7 @@ export class EntryService {
         console.log('asfd');
         API.get(
             this.apiName,
-            '/gastro',
+            '/v1/gastro',
             this.myInit
         ).then(res => console.log(res)).catch(error => console.log(error));
     }
