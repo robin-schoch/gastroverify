@@ -1,13 +1,13 @@
 {
   "permissions": {
     "storage": {
-      "checkInStorage": [
+      "gastroStorage": [
         "create",
         "read",
         "update",
         "delete"
       ],
-      "gastroStorage": [
+      "entryStorage": [
         "create",
         "read",
         "update",

@@ -1,5 +1,5 @@
 {
-    "tableName": "checkin",
+    "tableName": "entry",
     "partitionKeyName": "BarId",
     "partitionKeyType": "S",
     "sortKeyName": "EntryTime",

@@ -10,14 +10,6 @@
 		"env": {
 			"Type": "String"
 		},
-		"storagecheckInStorageName": {
-			"Type": "String",
-			"Default": "storagecheckInStorageName"
-		},
-		"storagecheckInStorageArn": {
-			"Type": "String",
-			"Default": "storagecheckInStorageArn"
-		},
 		"storagevalidationStorageName": {
 			"Type": "String",
 			"Default": "storagevalidationStorageName"
@@ -25,6 +17,14 @@
 		"storagevalidationStorageArn": {
 			"Type": "String",
 			"Default": "storagevalidationStorageArn"
+		},
+		"storageentryStorageName": {
+			"Type": "String",
+			"Default": "storageentryStorageName"
+		},
+		"storageentryStorageArn": {
+			"Type": "String",
+			"Default": "storageentryStorageArn"
 		}
 	},
 	"Conditions": {
@@ -72,17 +72,17 @@
 						"REGION": {
 							"Ref": "AWS::Region"
 						},
-						"STORAGE_CHECKINSTORAGE_NAME": {
-							"Ref": "storagecheckInStorageName"
-						},
-						"STORAGE_CHECKINSTORAGE_ARN": {
-							"Ref": "storagecheckInStorageArn"
-						},
 						"STORAGE_VALIDATIONSTORAGE_NAME": {
 							"Ref": "storagevalidationStorageName"
 						},
 						"STORAGE_VALIDATIONSTORAGE_ARN": {
 							"Ref": "storagevalidationStorageArn"
+						},
+						"STORAGE_ENTRYSTORAGE_NAME": {
+							"Ref": "storageentryStorageName"
+						},
+						"STORAGE_ENTRYSTORAGE_ARN": {
+							"Ref": "storageentryStorageArn"
 						}
 					}
 				},
@@ -97,7 +97,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/visitors-43366954466868622b4a-build.zip"
+					"S3Key": "amplify-builds/visitors-6147476c5972766b2b69-build.zip"
 				}
 			}
 		},
@@ -222,14 +222,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storagecheckInStorageArn"
+									"Ref": "storagevalidationStorageArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storagecheckInStorageArn"
+												"Ref": "storagevalidationStorageArn"
 											},
 											"index/*"
 										]
@@ -250,18 +250,19 @@
 								"dynamodb:Scan",
 								"dynamodb:Query",
 								"dynamodb:Update*",
-								"dynamodb:RestoreTable*"
+								"dynamodb:RestoreTable*",
+								"dynamodb:Delete*"
 							],
 							"Resource": [
 								{
-									"Ref": "storagevalidationStorageArn"
+									"Ref": "storageentryStorageArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storagevalidationStorageArn"
+												"Ref": "storageentryStorageArn"
 											},
 											"index/*"
 										]

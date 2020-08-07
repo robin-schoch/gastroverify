@@ -13,15 +13,15 @@ const awsmobile = {
     "aws_dynamodb_all_tables_region": "eu-central-1",
     "aws_dynamodb_table_schemas": [
         {
-            "tableName": "checkIn-dev",
-            "region": "eu-central-1"
-        },
-        {
             "tableName": "validation-dev",
             "region": "eu-central-1"
         },
         {
             "tableName": "gastro-dev",
+            "region": "eu-central-1"
+        },
+        {
+            "tableName": "entry-dev",
             "region": "eu-central-1"
         }
     ],

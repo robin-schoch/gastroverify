@@ -10,14 +10,6 @@
 		"env": {
 			"Type": "String"
 		},
-		"storagecheckInStorageName": {
-			"Type": "String",
-			"Default": "storagecheckInStorageName"
-		},
-		"storagecheckInStorageArn": {
-			"Type": "String",
-			"Default": "storagecheckInStorageArn"
-		},
 		"storagegastroStorageName": {
 			"Type": "String",
 			"Default": "storagegastroStorageName"
@@ -29,6 +21,14 @@
 		"authgastroverifyd8b8759fUserPoolId": {
 			"Type": "String",
 			"Default": "authgastroverifyd8b8759fUserPoolId"
+		},
+		"storageentryStorageName": {
+			"Type": "String",
+			"Default": "storageentryStorageName"
+		},
+		"storageentryStorageArn": {
+			"Type": "String",
+			"Default": "storageentryStorageArn"
 		}
 	},
 	"Conditions": {
@@ -76,12 +76,6 @@
 						"REGION": {
 							"Ref": "AWS::Region"
 						},
-						"STORAGE_CHECKINSTORAGE_NAME": {
-							"Ref": "storagecheckInStorageName"
-						},
-						"STORAGE_CHECKINSTORAGE_ARN": {
-							"Ref": "storagecheckInStorageArn"
-						},
 						"STORAGE_GASTROSTORAGE_NAME": {
 							"Ref": "storagegastroStorageName"
 						},
@@ -90,6 +84,12 @@
 						},
 						"AUTH_GASTROVERIFYD8B8759F_USERPOOLID": {
 							"Ref": "authgastroverifyd8b8759fUserPoolId"
+						},
+						"STORAGE_ENTRYSTORAGE_NAME": {
+							"Ref": "storageentryStorageName"
+						},
+						"STORAGE_ENTRYSTORAGE_ARN": {
+							"Ref": "storageentryStorageArn"
 						}
 					}
 				},
@@ -104,7 +104,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/gastro-774b527a4c6e4a735042-build.zip"
+					"S3Key": "amplify-builds/gastro-584f7a79487937646137-build.zip"
 				}
 			}
 		},
@@ -223,14 +223,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storagecheckInStorageArn"
+									"Ref": "storagegastroStorageArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storagecheckInStorageArn"
+												"Ref": "storagegastroStorageArn"
 											},
 											"index/*"
 										]
@@ -256,14 +256,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storagegastroStorageArn"
+									"Ref": "storageentryStorageArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storagegastroStorageArn"
+												"Ref": "storageentryStorageArn"
 											},
 											"index/*"
 										]

@@ -7,7 +7,7 @@ const moment = require('moment');
 
 
 // add dev if local
-let tableName = "checkIn";
+let tableName = "entry";
 console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
