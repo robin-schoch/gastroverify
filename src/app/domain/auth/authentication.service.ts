@@ -1,70 +1,159 @@
 import {Injectable} from '@angular/core';
 import {Auth} from 'aws-amplify';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {CognitoUser} from 'amazon-cognito-identity-js';
 import {SignUp} from './sign-up';
+import {filter} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthenticationService {
 
-  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public activeUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
+    /***************************************************************************
+     *                                                                         *
+     * Fields                                                                  *
+     *                                                                         *
+     **************************************************************************/
 
-  constructor() { }
+    private _isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private _activeUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
 
-  public signOut(): void {
-    Auth.signOut({global: true}).then(logout => {
-      console.log(logout);
-      this.isAuthenticated = false;
-      this.activeUser = null;
-    });
-  }
+    private _signUpUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
 
-  public signIn(username, password): void {
-    Auth.signIn(username, password).then(user => {
-      this.isAuthenticated = user;
-      this.isAuthenticated = true;
-    }).catch(error => {
-        console.log(error);
-      }
-    );
-  }
+    /***************************************************************************
+     *                                                                         *
+     * Constructor                                                             *
+     *                                                                         *
+     **************************************************************************/
 
-  public signUp(signUp: SignUp) {
-    Auth.signUp(this.toAWSSignUp(signUp)).then(user => {
-      this.activeUser = user.user;
-    }).catch(error => console.log(error));
-  }
+    constructor(
+        private router: Router
+    ) {
+        Auth.currentAuthenticatedUser().then(user => {
+            this.activeUser = user;
+            this.isAuthenticated = true;
+        }).catch(elem => console.log('no active user'));
+    }
 
-  public confirmSignUp(code) {
-    Auth.confirmSignUp(this.activeUser$.getValue().username, code)
-        .then(elem => this.isAuthenticated = true)
-        .catch(error => console.log(error));
-  }
+    /***************************************************************************
+     *                                                                         *
+     * Public API                                                              *
+     *                                                                         *
+     **************************************************************************/
 
-  public changePassword(oldPw, newPw) {
-    Auth.changePassword(this.activeUser$.getValue(), oldPw, newPw)
-        .then(elem => console.log(elem))
-        .catch(elem => console.log(elem));
-  }
+    public signOut(): void {
+        Auth.signOut({global: true}).then(logout => {
+            this.isAuthenticated = false;
+            this.activeUser = null;
+            this.router.navigate(['/']);
+        });
+    }
 
-  private set isAuthenticated(isAuthenticated: boolean) {
-    this.isAuthenticated$.next(isAuthenticated);
-  }
+    public signIn(username, password): void {
+        Auth.signIn(
+            username,
+            password
+        ).then(user => {
+            this.isAuthenticated = user;
+            this.isAuthenticated = true;
+        }).catch(error => {
+                console.log(error);
+            }
+        );
+    }
 
-  private set activeUser(user: CognitoUser) {
-    this.activeUser$.next(user);
-  }
+    public signUp(signUp: SignUp): boolean {
+        if (signUp.email && signUp.password) {
+            Auth.signUp(this.toAWSSignUp(signUp)).then(user => {
+                this.signUpUser = user.user;
+            }).catch(error => this.signUpUser = error);
+            return true;
+        }
+        return false;
 
-  private toAWSSignUp(signUp: SignUp): any {
-    return {
-      username: signUp.username,
-      password: signUp.password,
-      attributes: {
-        email: signUp.email
-      }
-    };
-  }
+    }
+
+    public confirmSignUp(code, user: SignUp): Observable<any> {
+        const confirmationSucceded = new Subject();
+        Auth.confirmSignUp(
+            this._signUpUser$.getValue().username,
+            code
+        )
+            .then(elem => {
+                confirmationSucceded.next('success');
+                const signUpUserSnapshto = this._signUpUser$.getValue();
+
+                this.signIn(
+                    user.email,
+                    user.password
+                );
+                confirmationSucceded.complete();
+            })
+            .catch(error => {
+                confirmationSucceded.next('error');
+                confirmationSucceded.complete();
+                console.log(error);
+            });
+        return confirmationSucceded.asObservable();
+    }
+
+    public changePassword(oldPw, newPw) {
+        Auth.changePassword(
+            this._activeUser$.getValue(),
+            oldPw,
+            newPw
+        )
+            .then(elem => console.log(elem))
+            .catch(elem => console.log(elem));
+    }
+
+    /***************************************************************************
+     *                                                                         *
+     * Getters / Setters                                                       *
+     *                                                                         *
+     **************************************************************************/
+
+    public get isAuthenticated$(): Observable<boolean> {
+        return this._isAuthenticated$.asObservable();
+    }
+
+    public get activeUser$(): Observable<CognitoUser> {
+        return this._activeUser$.pipe(filter(user => !!user));
+    }
+
+    public get isAuthenticated(): boolean {
+        return this._isAuthenticated$.getValue();
+    }
+
+    public set isAuthenticated(isAuthenticated: boolean) {
+        this._isAuthenticated$.next(isAuthenticated);
+    }
+
+    public set activeUser(user: CognitoUser) {
+        this._activeUser$.next(user);
+    }
+
+    public set signUpUser(user: CognitoUser | any) {
+        this._signUpUser$.next(user);
+    }
+
+    /***************************************************************************
+     *                                                                         *
+     * Private methods                                                         *
+     *                                                                         *
+     **************************************************************************/
+
+
+
+    private toAWSSignUp(signUp: SignUp): any {
+        return {
+            username: signUp.email,
+            password: signUp.password,
+            attributes: {
+                email: signUp.email
+            }
+        };
+    }
 }

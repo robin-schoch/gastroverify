@@ -1,42 +1,85 @@
-<form #signUpForm="ngForm" *ngIf="newUser$ | async as newUser" fxLayout="column">
-  <div fxLayout="column">
-    <mat-form-field fxFlex="100">
-      <input [(ngModel)]="newUser.username" class="cell" delayedFocus matInput name="username"
-             placeholder="username"
-             required type="text">
-    </mat-form-field>
+<mat-horizontal-stepper linear #stepper xmlns="http://www.w3.org/1999/html">
+    <mat-step [editable]="true">
+        <ng-template matStepLabel>Information</ng-template>
+        <form #signUpForm="ngForm" *ngIf="newUser$ | async as newUser" fxLayout="column">
+            <div>
+                <div fxLayout="column">
 
-    <mat-form-field fxFlex="100">
-      <input [(ngModel)]="newUser.email" class="cell" delayedFocus matInput name="email"
-             placeholder="username"
-             required type="text">
-    </mat-form-field>
+                    <mat-form-field fxFlex="100">
+                        <input [(ngModel)]="newUser.email" class="cell" delayedFocus matInput name="email"
+                               placeholder="Email"
+                               required type="email">
+                    </mat-form-field>
 
-    <mat-form-field fxFlex="100">
-      <input [(ngModel)]="newUser.password" class="cell" delayedFocus matInput name="password"
-             placeholder="username"
-             required type="text">
-    </mat-form-field>
-  </div>
+                    <mat-form-field fxFlex="100">
+                        <input [(ngModel)]="newUser.password" class="cell" delayedFocus matInput name="password"
+                               placeholder="Passwort"
+                               required type="password">
+                    </mat-form-field>
+                </div>
 
 
-  <div fxLayout="row">
-    <button (click)="clearForm()" [disabled]="false"
-            mat-icon-button
-            matTooltip="clear"
-            name="delete"
-            type="button"
-    >
-      <mat-icon>clear</mat-icon>
-    </button>
+                <div fxLayout="row">
+                    <button (click)="clearForm()" [disabled]="signUpForm.invalid"
+                            mat-icon-button
+                            matTooltip="clear"
+                            name="delete"
+                            type="button"
+                    >
+                        <mat-icon>clear</mat-icon>
+                    </button>
 
-    <button (click)="signUp()" [disabled]="false"
-            mat-icon-button
-            matTooltip="clear"
-            name="delete"
-            type="button"
-    >
-      <mat-icon>forward</mat-icon>
-    </button>
-  </div>
-</form>
+                    <button matStepperNext (click)="signUp()" [disabled]="signUpForm.invalid"
+                            mat-icon-button
+                            matTooltip="continue"
+                            name="delete"
+                            type="button"
+                    >
+                        <mat-icon>forward</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </mat-step>
+
+    <mat-step>
+        <ng-template matStepLabel>Bestätigen</ng-template>
+        <form #confirmFrom="ngForm" *ngIf="newUser$ | async as newUser" fxLayout="column">
+            <div>
+
+                <div fxLayout="column">
+                    <mat-form-field fxFlex="100">
+                        <input class="cell" delayedFocus matInput name="code"
+
+                               placeholder="Code"
+                               required type="number"
+                               #confirmationInput
+                        >
+                    </mat-form-field>
+                </div>
+
+
+                <div fxLayout="row">
+                    <button (click)="confirmSignUp(confirmationInput.value)" [disabled]="false"
+                            mat-icon-button
+                            matTooltip="Bestätigen"
+                            name="confirm"
+                            type="button"
+                    >
+                        <mat-icon>check</mat-icon>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </mat-step>
+
+</mat-horizontal-stepper>
+
+

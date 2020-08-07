@@ -14,7 +14,7 @@ import {LandingComponent} from './domain/landing/landing.component';
 import {SignupComponent} from './domain/auth/signup/signup.component';
 import {AuthComponent} from './domain/auth/auth.component';
 import {SigninComponent} from './domain/auth/signin/signin.component';
-import {SignoutComponent} from './domain/auth/signout/signout.component';
+
 import Amplify from 'aws-amplify';
 import awsconfig from './../aws-exports';
 import {FormsModule} from '@angular/forms';
@@ -22,6 +22,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatCardModule} from '@angular/material/card';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatStepperModule} from '@angular/material/stepper';
+import { SignOutDirective } from './domain/auth/sign-out.directive';
 
 Amplify.configure(awsconfig);
 
@@ -33,23 +37,26 @@ Amplify.configure(awsconfig);
     SignupComponent,
     AuthComponent,
     SigninComponent,
-    SignoutComponent
+    SignOutDirective
   ],
-  imports: [
-    BrowserModule,
-    FlexLayoutModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSliderModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTooltipModule
-  ],
+    imports: [
+        BrowserModule,
+        FlexLayoutModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatSliderModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatCardModule,
+        MatTabsModule,
+        MatStepperModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
