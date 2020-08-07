@@ -1,7 +1,7 @@
 {
-    "tableName": "checkIn",
-    "partitionKeyName": "id",
+    "tableName": "checkin",
+    "partitionKeyName": "BarId",
     "partitionKeyType": "S",
-    "sortKeyName": "barid",
+    "sortKeyName": "EntryTime",
     "sortKeyType": "S"
 }

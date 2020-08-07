@@ -1,5 +1,3 @@
-const {v4: uuidv4} = require('uuid');
-
 class CheckIn {
     constructor(
         barid,
@@ -13,17 +11,15 @@ class CheckIn {
         timestamp,
         phonenumber
     ) {
-        this.id = uuidv4()
-        this.barid = barid
-        this.firstname = firstName
-        this.surName = surName
-        this.email = email
-        this.address = address
-        this.city = city
-        this.zipcode = zipcode
-        this.checkIn = checkIn
-        this.timestamp = timestamp
-        this.phonenumber = phonenumber
+        this.BarId = barid
+        this.EntryTime = timestamp
+        this.LastName = surName
+        this.Email = email
+        this.Street = address
+        this.City = city
+        this.Zipcode = zipcode
+        this.CheckIn = checkIn
+        this.PhoneNumber = phonenumber
     }
 
 
@@ -31,3 +27,7 @@ class CheckIn {
 
 
 module.exports = CheckIn
+/*
+patrtionkey = phone and sortkey = time
+ */
+// checkin

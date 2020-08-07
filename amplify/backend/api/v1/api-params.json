@@ -22,28 +22,6 @@
             }
         },
         {
-            "name": "/gastro",
-            "lambdaFunction": "gastro",
-            "privacy": {
-                "userPoolGroups": {
-                    "admin": [
-                        "/POST",
-                        "/GET",
-                        "/PUT",
-                        "/PATCH",
-                        "/DELETE"
-                    ],
-                    "gastro": [
-                        "/POST",
-                        "/GET",
-                        "/PUT",
-                        "/PATCH",
-                        "/DELETE"
-                    ]
-                }
-            }
-        },
-        {
             "name": "/admin",
             "lambdaFunction": "gastro",
             "privacy": {
@@ -56,6 +34,20 @@
                         "/DELETE"
                     ]
                 }
+            }
+        },
+        {
+            "name": "/gastro",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
             }
         }
     ],
@@ -70,7 +62,7 @@
         }
     ],
     "privacy": {
-        "auth": 0,
+        "auth": 1,
         "unauth": 0,
         "authRoleName": "amplify-gastroverify-dev-75918-authRole",
         "unAuthRoleName": "amplify-gastroverify-dev-75918-unauthRole"
@@ -105,15 +97,8 @@
             "attributes": [
                 "adminGroupRole"
             ]
-        },
-        {
-            "category": "auth",
-            "resourceName": "userPoolGroups",
-            "attributes": [
-                "gastroGroupRole"
-            ]
         }
     ],
-    "uuid": "79671d7e",
+    "uuid": "069f6948",
     "authResourceName": "gastroverifyd8b8759f"
 }

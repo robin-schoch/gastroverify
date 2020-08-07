@@ -120,7 +120,7 @@ app.post('/v1/checkin/:barId', function (req, res) {
     jwtUtil.verifyJWT(req.header('Authorization')).then(decoded => {
         let cI = new CheckIn(req.params.barId, req.body.firstName, req.body.surName,
             req.body.email, req.body.address, req.body.city, req.body.zipcode,
-            req.body.checkIn, moment.utc().unix(), decoded.phone)
+            req.body.checkIn, moment().toISOString(), decoded.phone)
         console.log("created user")
         checkinStorage.addCheckIn(cI).then(elem => {
             console.log("added")

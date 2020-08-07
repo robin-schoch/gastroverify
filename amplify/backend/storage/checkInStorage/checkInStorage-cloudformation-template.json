@@ -40,12 +40,12 @@
                 "AttributeDefinitions": [
                   
                   {
-                      "AttributeName": "id",
+                      "AttributeName": "BarId",
                       "AttributeType": "S"
                   }  , 
                   
                   {
-                      "AttributeName": "barid",
+                      "AttributeName": "EntryTime",
                       "AttributeType": "S"
                   } 
                   
@@ -53,12 +53,12 @@
                 "KeySchema": [
                   
                   {
-                    "AttributeName": "id",
+                    "AttributeName": "BarId",
                     "KeyType": "HASH"
                   }  , 
                   
                   {
-                    "AttributeName": "barid",
+                    "AttributeName": "EntryTime",
                     "KeyType": "RANGE"
                   } 
                   
@@ -93,29 +93,6 @@
                         }
                     ]
                 }
-                
-                ,"GlobalSecondaryIndexes": [
-                  
-                    {
-                        "IndexName": "barid",
-                        "KeySchema": [
-                            
-                            {
-                                "AttributeName": "barid",
-                                "KeyType": "HASH"
-                            } 
-                            
-                        ],
-                        "Projection": {
-                            "ProjectionType": "ALL"
-                        },
-                        "ProvisionedThroughput": {
-                            "ReadCapacityUnits": "5",
-                            "WriteCapacityUnits": "5"
-                        }
-                    } 
-                  
-                ]
                 
             }
         }
