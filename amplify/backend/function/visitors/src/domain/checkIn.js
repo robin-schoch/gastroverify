@@ -13,6 +13,7 @@ class CheckIn {
     ) {
         this.BarId = barid
         this.EntryTime = timestamp
+        this.FirstName = firstName
         this.LastName = surName
         this.Email = email
         this.Street = address

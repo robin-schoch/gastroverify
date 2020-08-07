@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../auth/authentication.service';
 import {ToolbarService} from '../main/toolbar.service';
+import {EntryService} from '../entry-browser/entry.service';
 
 @Component({
     selector: 'app-gastro-dashboard',
@@ -12,12 +13,14 @@ export class GastroDashboardComponent implements OnInit {
 
     constructor(
         private authenticationService: AuthenticationService,
-        private toolbarService: ToolbarService
+        private toolbarService: ToolbarService,
+        private entryService: EntryService
     ) { }
 
     ngOnInit() {
         this.toolbarService.toolbarHidden = false;
-      //  this.authenticationService.signOut()
+        this.entryService.getData();
+        //  this.authenticationService.signOut()
     }
 
 }

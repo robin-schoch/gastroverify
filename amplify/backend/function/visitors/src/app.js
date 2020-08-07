@@ -124,7 +124,7 @@ app.post('/v1/checkin/:barId', function (req, res) {
         console.log("created user")
         checkinStorage.addCheckIn(cI).then(elem => {
             console.log("added")
-            res.json({checkIn: `welcome ${cI.firstname} and enjoy your stay at ${req.params.barId}`})
+            res.json({checkIn: `welcome ${cI.FirstName} and enjoy your stay at ${req.params.barId}`})
         }).catch(err => {
             res.status(500)
             console.log("error")
