@@ -1,0 +1,7 @@
+{
+    "tableName": "qrStorage",
+    "partitionKeyName": "uuid",
+    "partitionKeyType": "S",
+    "sortKeyName": "ownerId",
+    "sortKeyType": "S"
+}
