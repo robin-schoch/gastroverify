@@ -35,6 +35,7 @@ const validationStorage = require('./storages/validationStorage')
 const jwtUtil = require('./util/jwtUtil')
 const CheckIn = require('./domain/checkIn')
 const checkinStorage = require('./storages/checkInStorage')
+const {getQrCode} = require('./storages/qrCodeStorage')
 
 // Enable CORS for all methods
 app.use(function (req, res, next) {
@@ -50,7 +51,7 @@ app.use(function (req, res, next) {
 
 
 /****************************
- * Example post method *
+ * Example post method      *
  ****************************/
 
 
@@ -107,24 +108,32 @@ app.post('/v1/validate', function (req, res) {
             res.status(403)
             res.json({error: err})
         })
-
     } else {
         res.status(400)
         res.json({erorr: "missing parameter"})
     }
-
 });
 
-app.post('/v1/checkin/:barId', function (req, res) {
+app.post('/v1/checkin/:qrId', function (req, res) {
     console.log("checkIn...")
+    const flag = req.body.checkIn;
     jwtUtil.verifyJWT(req.header('Authorization')).then(decoded => {
-        let cI = new CheckIn(req.params.barId, req.body.firstName, req.body.surName,
-            req.body.email, req.body.address, req.body.city, req.body.zipcode,
-            req.body.checkIn, moment().toISOString(), decoded.phone)
-        console.log("created user")
-        checkinStorage.addCheckIn(cI).then(elem => {
-            console.log("added")
-            res.json({checkIn: `welcome ${cI.FirstName} and enjoy your stay at ${req.params.barId}`})
+        getQrCode(req.params.qrId).then(code => {
+            let cI = new CheckIn(code.barId, req.body.firstName, req.body.surName,
+                req.body.email, req.body.address, req.body.city, req.body.zipcode,
+                flag, moment().toISOString(), decoded.phone)
+            console.log("created user")
+            checkinStorage.addCheckIn(cI).then(elem => {
+                console.log("added")
+                if (code.checkIn) {
+                    res.json({checkIn: `welcome ${cI.FirstName} and enjoy your stay at ${code.barId}`})
+                } else {
+                    res.json({checkIn: `see you soon ${cI.FirstName}! We hope you enjoyed your stay at ${code.barId}`})
+                }
+            }).catch(error => {
+                res.status(401)
+                res.json({error: "bar does not exist"})
+            })
         }).catch(err => {
             res.status(500)
             console.log("error")

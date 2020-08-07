@@ -14,7 +14,8 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 } else if (process.env.ENV === undefined) {
     tableName = tableName + '-dev'
 }
-const partitionKeyName = "id";
+const partitionKeyName = "BarId";
+const sortkeyName = "EntryTime";
 
 const query = (queryParams) => {
     return new Promise((resolve, reject) => {
@@ -28,21 +29,19 @@ const query = (queryParams) => {
     })
 }
 
-const getEntries = (id) => {
+const getEntries = (id, pageSize) => {
+    console.log(tableName)
     const queryParams = {
         ExpressionAttributeValues: {
-            ':bar': {S: id},
-            ':entry': {
-                S: moment().subtract(14, 'days').toISOString()
-            },
+            ':bar': id,
+            ':entry': moment().subtract(14, 'days').toISOString(),
         },
-        KeyConditionExpression: 'BarId = :bar and EntryTime >= :entry',
-        ProjectionExpression: 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber,  EntryTime',
+        KeyConditionExpression: `${partitionKeyName} = :bar and ${sortkeyName} >= :entry`,
+        ProjectionExpression: 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime',
+        Limit: pageSize,
         TableName: tableName
     };
     return query(queryParams)
-
-
 }
 
 

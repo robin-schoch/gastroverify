@@ -4,8 +4,9 @@ const {createGastro} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
 
 router.get('/', (req, res) => {
-    getEntries('myBar').then(data => {
-        res.json(data)
+    getEntries('myBar', 2).then(data => {
+        console.log(req.header('x-gastro'))
+        res.json(req.header('x-gastro'))
     }).catch(error => res.json(error))
 })
 

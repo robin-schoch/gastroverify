@@ -22,7 +22,7 @@
             }
         },
         {
-            "name": "/admin",
+            "name": "/v1/admin",
             "lambdaFunction": "gastro",
             "privacy": {
                 "userPoolGroups": {
@@ -37,7 +37,7 @@
             }
         },
         {
-            "name": "/gastro",
+            "name": "/v1/gastro",
             "lambdaFunction": "gastro",
             "privacy": {
                 "private": true,
@@ -99,6 +99,6 @@
             ]
         }
     ],
-    "uuid": "069f6948",
+    "uuid": "33b5d38d",
     "authResourceName": "gastroverifyd8b8759f"
 }

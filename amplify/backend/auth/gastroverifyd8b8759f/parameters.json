@@ -1,6 +1,6 @@
 {
     "identityPoolName": "gastroverifyd8b8759f_identitypool_d8b8759f",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "gastrod8b8759f",
     "userPoolName": "gastroverifyd8b8759f_userpool_d8b8759f",
     "autoVerifiedAttributes": [

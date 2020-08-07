@@ -104,6 +104,10 @@
 		"entryStorage": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
+		},
+		"qrCodeStorage": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
 		}
 	},
 	"auth": {

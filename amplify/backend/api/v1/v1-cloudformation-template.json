@@ -128,7 +128,7 @@
                               ]
                             },
                               "/POST",
-                            "/gastro/*"
+                            "/v1/gastro/*"
                           ]
                         ]
                       },
@@ -159,7 +159,7 @@
                               ]
                             },
                               "/POST",
-                            "/gastro"
+                            "/v1/gastro"
                           ]
                         ]
                       }
@@ -194,7 +194,7 @@
                               ]
                             },
                               "/GET",
-                            "/gastro/*"
+                            "/v1/gastro/*"
                           ]
                         ]
                       },
@@ -225,7 +225,7 @@
                               ]
                             },
                               "/GET",
-                            "/gastro"
+                            "/v1/gastro"
                           ]
                         ]
                       }
@@ -260,7 +260,7 @@
                               ]
                             },
                               "/PUT",
-                            "/gastro/*"
+                            "/v1/gastro/*"
                           ]
                         ]
                       },
@@ -291,7 +291,7 @@
                               ]
                             },
                               "/PUT",
-                            "/gastro"
+                            "/v1/gastro"
                           ]
                         ]
                       }
@@ -326,7 +326,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/gastro/*"
+                            "/v1/gastro/*"
                           ]
                         ]
                       },
@@ -357,7 +357,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/gastro"
+                            "/v1/gastro"
                           ]
                         ]
                       }
@@ -392,7 +392,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/gastro/*"
+                            "/v1/gastro/*"
                           ]
                         ]
                       },
@@ -423,7 +423,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/gastro"
+                            "/v1/gastro"
                           ]
                         ]
                       }
@@ -449,13 +449,13 @@
         
           
           
-          "adminGroupadminPolicy": {
+          "adminGroupv1adminPolicy": {
           "DependsOn": [
               "v1"
             ],
           "Type": "AWS::IAM::Policy",
           "Properties": {
-              "PolicyName": "v1-admin-admin-group-policy",
+              "PolicyName": "v1-v1admin-admin-group-policy",
               "Roles": [
                 {
                     "Fn::Join": [
@@ -507,7 +507,7 @@
                               ]
                             },
                               "/POST",
-                            "/admin/*"
+                            "/v1/admin/*"
                           ]
                         ]
                       },
@@ -538,7 +538,7 @@
                               ]
                             },
                               "/POST",
-                            "/admin"
+                            "/v1/admin"
                           ]
                         ]
                       }
@@ -573,7 +573,7 @@
                               ]
                             },
                               "/GET",
-                            "/admin/*"
+                            "/v1/admin/*"
                           ]
                         ]
                       },
@@ -604,7 +604,7 @@
                               ]
                             },
                               "/GET",
-                            "/admin"
+                            "/v1/admin"
                           ]
                         ]
                       }
@@ -639,7 +639,7 @@
                               ]
                             },
                               "/PUT",
-                            "/admin/*"
+                            "/v1/admin/*"
                           ]
                         ]
                       },
@@ -670,7 +670,7 @@
                               ]
                             },
                               "/PUT",
-                            "/admin"
+                            "/v1/admin"
                           ]
                         ]
                       }
@@ -705,7 +705,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/admin/*"
+                            "/v1/admin/*"
                           ]
                         ]
                       },
@@ -736,7 +736,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/admin"
+                            "/v1/admin"
                           ]
                         ]
                       }
@@ -771,7 +771,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/admin/*"
+                            "/v1/admin/*"
                           ]
                         ]
                       },
@@ -802,7 +802,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/admin"
+                            "/v1/admin"
                           ]
                         ]
                       }
@@ -1462,7 +1462,7 @@
                 }
               },   
               
-              "/admin": {
+              "/v1/admin": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -1567,7 +1567,7 @@
                   }
                 }
               },
-              "/admin/{proxy+}": {
+              "/v1/admin/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -1673,7 +1673,7 @@
                 }
               },   
               
-              "/gastro": {
+              "/v1/gastro": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -1778,7 +1778,7 @@
                   }
                 }
               },
-              "/gastro/{proxy+}": {
+              "/v1/gastro/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -1996,7 +1996,7 @@
         
         
         
-      "DeploymentAPIGWv1069f6948": {
+      "DeploymentAPIGWv133b5d38d": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",

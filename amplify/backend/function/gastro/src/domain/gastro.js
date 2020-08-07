@@ -1,22 +1,23 @@
 class Gastro {
-  constructor(
-    email,
-    firstName,
-    lastName,
-    address,
-    city,
-    zipcode,
-    bars = [],
-    bills = [],
-  ) {
-    this.email = email
-    this.name = name
-    this.address = address
-    this.city = city
-    this.zipcode = zipcode
-    this.bars = bars
-    this.bills = bills
-  }
+    constructor(
+        email,
+        barName,
+        address,
+        city,
+        zipcode,
+        checkOutCode,
+        checkInCode,
+        bills = [],
+    ) {
+        this.email = email
+        this.barName = barName
+        this.address = address
+        this.city = city
+        this.zipcode = zipcode
+        this.checkOutCode = checkOutCode
+        this.checkInCode = checkInCode
+        this.bills = bills
+    }
 }
 
 module.exports = Gastro

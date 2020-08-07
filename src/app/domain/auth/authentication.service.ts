@@ -31,6 +31,7 @@ export class AuthenticationService {
     constructor(
         private router: Router
     ) {
+
         Auth.currentAuthenticatedUser().then(user => {
             this.activeUser = user;
             this.isAuthenticated = true;
