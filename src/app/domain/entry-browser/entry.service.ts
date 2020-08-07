@@ -9,7 +9,7 @@ export class EntryService {
 
     apiName = 'v1';
     private myInit = { // OPTIONAL
-        headers: {}
+
     };
 
     constructor() { }
@@ -17,11 +17,11 @@ export class EntryService {
 
     public getData() {
         Auth.currentSession().then(session => {
-            console.log(session.getIdToken().getJwtToken());
+          //  console.log(session.getIdToken().getJwtToken());
 
             API.get(
                 this.apiName,
-                '/v1/gastro',
+                '/v1/entry',
                 this.myInit
             ).then(res => console.log(res)).catch(error => console.log(error));
         });

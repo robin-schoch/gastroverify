@@ -8,6 +8,12 @@ const awsmobile = {
             "name": "v1",
             "endpoint": "https://5cyg79qk1a.execute-api.eu-central-1.amazonaws.com/dev",
             "region": "eu-central-1",
+            custom_header: async () => {
+                return {Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}`}
+                // Alternatively, with Cognito User Pools use this:
+                // return { Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}` }
+                // return { Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}` }
+            }
 
         }
     ],
