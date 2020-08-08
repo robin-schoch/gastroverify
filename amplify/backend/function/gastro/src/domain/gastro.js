@@ -1,7 +1,8 @@
 class Gastro {
     constructor(
         email,
-        barName,
+        firstName,
+        lastName,
         address,
         city,
         zipcode,
@@ -9,7 +10,8 @@ class Gastro {
         bills = [],
     ) {
         this.email = email
-        this.barName = barName
+        this.firstName = firstName
+        this.lastName = lastName
         this.address = address
         this.city = city
         this.zipcode = zipcode

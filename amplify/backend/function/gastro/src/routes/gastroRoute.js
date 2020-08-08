@@ -1,17 +1,22 @@
 const express = require('express'), router = express.Router();
 const jwt = require('jsonwebtoken');
+const {Bar} = require("../domain/gastro");
 const {createGastro, getGastro, updateGastro} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
 
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
 router.get('/', (req, res) => {
-
+    getGastro(req.xUser.email).then(gastro => {
+        res.json(gastro)
+    }).catch(error => {
+        res.json(error)
+    })
 
 })
 
 router.get('/:id', (req, res) => {
     getGastro(req.xUser.email).then(gastro => {
-        res.json({gastro})
+        res.json(gastro)
     }).catch(error => {
         res.json(error)
     })
@@ -40,7 +45,7 @@ router.post('/:id/bar', (req, res) => {
             })
 
             Promise.all([updateGastro, addMappingIn, addMappingOut]).then(([a, b, c]) => {
-                res.json({success: bar})
+                res.json(a)
             })
         }
     })
@@ -53,7 +58,7 @@ router.delete('/:id/bar/:barId', (req, res) => {
         Promise.all([deleteQrMapping(bar.checkInCode), deleteQrMapping(bar.checkOutCode)]).then(elem => {
             gastor.bars = gastor.bars.filter(bars => bars.barid !== req.params.barId)
             updateGastro(gastor).then(success => {
-                res.json({success})
+                res.json(success)
             })
         })
 
@@ -61,7 +66,7 @@ router.delete('/:id/bar/:barId', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    createGastro(req.xUser.email, req.body.firstName, req.body.lastName, req.body.address, req.body.city, req.body.city).then(success => {
+    createGastro(req.xUser.email, req.body.firstName, req.body.lastName, req.body.address, req.body.city, req.body.zipcode).then(success => {
         res.json(success)
     })
 

@@ -5,9 +5,10 @@ import {AuthenticationService} from '../auth/authentication.service';
 
 export interface Gastro {
     email: string,
-    barName: string,
+    firstName: string,
+    lastName: string,
     address: string,
-    city: string,
+    city: string
     zipcode: string,
     bars: Bar[]
     bills: any[]
@@ -34,7 +35,7 @@ export class GastroService {
 
     apiName = 'verifyGateway';
     private myInit = { // OPTIONAL
-        body: {}
+
     };
 
     constructor(
@@ -45,25 +46,30 @@ export class GastroService {
         return this._gastro$.asObservable();
     }
 
-    createGatro(gastro: Gastro) {
+    public set gastro(gastro: Gastro){
+        this._gastro$.next(gastro)
+    }
+    createGatro() {
+        console.log(this._gastro$.getValue());
+        let gastro = this._gastro$.getValue();
         let body = Object.assign(
             {},
             this.myInit
         );
-        body.body = gastro;
+        body['body'] = gastro;
         API.post(
             this.apiName,
             '/v1/gastro',
             body
         ).then(elem => {
-            console.log(elem);
+            this._gastro$.next(elem);
+
         }).catch(elem => {
             console.log(elem);
         });
     }
 
     getGastro() {
-
         API.get(
             this.apiName,
             '/v1/gastro/me',
@@ -72,6 +78,7 @@ export class GastroService {
             this._gastro$.next(elem);
         }).catch(error => {
             console.log(error);
+            this._gastro$.next(<Gastro>{});
         });
     }
 
@@ -81,16 +88,12 @@ export class GastroService {
             {},
             this.myInit
         );
-        body.body = bar;
-        API.post(
+        body['body'] = bar;
+        return API.post(
             this.apiName,
             '/v1/gastro/me/bar',
             body
-        ).then(elem => {
-            console.log(elem);
-        }).catch(error => {
-            console.log(error);
-        });
+        )
     }
 
     removeBar(bar: Bar) {

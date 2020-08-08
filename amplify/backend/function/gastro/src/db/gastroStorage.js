@@ -52,7 +52,7 @@ const updateGastro = (gastro, create = false) => {
 
 
 const createGastro = (email, firstName, lastName, address, city, zipcode) => {
-    const g = new Gastro(email, firstName, lastName, city, zipcode)
+    const g = new Gastro(email, firstName, lastName, address, city, zipcode)
     return updateGastro(g, true)
 }
 

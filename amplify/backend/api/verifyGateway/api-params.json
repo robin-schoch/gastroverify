@@ -22,20 +22,6 @@
             }
         },
         {
-            "name": "/v1/gastro",
-            "lambdaFunction": "gastro",
-            "privacy": {
-                "private": true,
-                "auth": [
-                    "/POST",
-                    "/GET",
-                    "/PUT",
-                    "/PATCH",
-                    "/DELETE"
-                ]
-            }
-        },
-        {
             "name": "/v1/admin",
             "lambdaFunction": "gastro",
             "privacy": {
@@ -55,6 +41,20 @@
             "lambdaFunction": "gastro",
             "privacy": {
                 "open": true
+            }
+        },
+        {
+            "name": "/v1/gastro",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
             }
         }
     ],
@@ -106,5 +106,6 @@
                 "adminGroupRole"
             ]
         }
-    ]
+    ],
+    "uuid": "945bea66"
 }

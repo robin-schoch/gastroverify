@@ -25,20 +25,25 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatCardModule} from '@angular/material/card';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatStepperModule} from '@angular/material/stepper';
-import { SignOutDirective } from './domain/auth/sign-out.directive';
+import {SignOutDirective} from './domain/auth/sign-out.directive';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {AddBarDialogComponent} from './domain/gastro-dashboard/add-bar-dialog/add-bar-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 Amplify.configure(awsconfig);
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    GastroDashboardComponent,
-    LandingComponent,
-    SignupComponent,
-    AuthComponent,
-    SigninComponent,
-    SignOutDirective
-  ],
+    declarations: [
+        AppComponent,
+        GastroDashboardComponent,
+        LandingComponent,
+        SignupComponent,
+        AuthComponent,
+        SigninComponent,
+        SignOutDirective,
+        AddBarDialogComponent
+    ],
     imports: [
         BrowserModule,
         FlexLayoutModule,
@@ -55,10 +60,15 @@ Amplify.configure(awsconfig);
         MatTooltipModule,
         MatCardModule,
         MatTabsModule,
-        MatStepperModule
+        MatStepperModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatDialogModule,
+        MatDialogModule
     ],
-  providers: [],
-  bootstrap: [AppComponent]
+    entryComponents: [AddBarDialogComponent],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

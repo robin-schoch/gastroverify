@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
     next()
 });
 
-app().use((req, res, next) => {
+app.use((req, res, next) => {
     verifyXIDToken(req.header('X-ID-Token')).then(token => {
         req.xUser = token;
         console.log(token)
@@ -56,7 +56,6 @@ app.use('/v1/gastro', gastroRoute)
 app.use('/v1/admin', adminRoute)
 
 app.use('/v1/entry', entryRoute)
-
 
 
 app.listen(3000, function () {
