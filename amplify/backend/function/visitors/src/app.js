@@ -1,10 +1,8 @@
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
-	STORAGE_ENTRYSTORAGE_ARN
-	STORAGE_ENTRYSTORAGE_NAME
-	STORAGE_QRCODESTORAGE_ARN
-	STORAGE_QRCODESTORAGE_NAME
+	STORAGE_QRENTRYSTORAGE_ARN
+	STORAGE_QRENTRYSTORAGE_NAME
 	STORAGE_VALIDATIONSTORAGE_ARN
 	STORAGE_VALIDATIONSTORAGE_NAME
 Amplify Params - DO NOT EDIT *//*
@@ -118,12 +116,11 @@ app.post('/v1/validate', function (req, res) {
 
 app.post('/v1/checkin/:qrId', function (req, res) {
     console.log("checkIn...")
-    const flag = req.body.checkIn;
     jwtUtil.verifyJWT(req.header('Authorization')).then(decoded => {
         getQrCode(req.params.qrId).then(code => {
             let cI = new CheckIn(code.barId, req.body.firstName, req.body.surName,
                 req.body.email, req.body.address, req.body.city, req.body.zipcode,
-                flag, moment().toISOString(), decoded.phone)
+                code.checkIn, moment().toISOString(), decoded.phone)
             console.log("created user")
             checkinStorage.addCheckIn(cI).then(elem => {
                 console.log("added")

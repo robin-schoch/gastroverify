@@ -15,15 +15,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "entryStorage",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "qrCodeStorage",
+					"resourceName": "qrEntryStorage",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -46,7 +38,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "entryStorage",
+					"resourceName": "qrEntryStorage",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -114,6 +106,14 @@
 			"providerPlugin": "awscloudformation"
 		},
 		"qrCodeStorage": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"qrEntryStorage": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"qrCodeMappingStorage": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
 		}

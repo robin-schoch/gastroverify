@@ -22,13 +22,13 @@
 			"Type": "String",
 			"Default": "authgastroverifyd8b8759fUserPoolId"
 		},
-		"storageentryStorageName": {
+		"storageqrEntryStorageName": {
 			"Type": "String",
-			"Default": "storageentryStorageName"
+			"Default": "storageqrEntryStorageName"
 		},
-		"storageentryStorageArn": {
+		"storageqrEntryStorageArn": {
 			"Type": "String",
-			"Default": "storageentryStorageArn"
+			"Default": "storageqrEntryStorageArn"
 		}
 	},
 	"Conditions": {
@@ -85,11 +85,11 @@
 						"AUTH_GASTROVERIFYD8B8759F_USERPOOLID": {
 							"Ref": "authgastroverifyd8b8759fUserPoolId"
 						},
-						"STORAGE_ENTRYSTORAGE_NAME": {
-							"Ref": "storageentryStorageName"
+						"STORAGE_QRENTRYSTORAGE_NAME": {
+							"Ref": "storageqrEntryStorageName"
 						},
-						"STORAGE_ENTRYSTORAGE_ARN": {
-							"Ref": "storageentryStorageArn"
+						"STORAGE_QRENTRYSTORAGE_ARN": {
+							"Ref": "storageqrEntryStorageArn"
 						}
 					}
 				},
@@ -104,7 +104,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/gastro-7736626b615076365a70-build.zip"
+					"S3Key": "amplify-builds/gastro-464b4b30696134616659-build.zip"
 				}
 			}
 		},
@@ -256,14 +256,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageentryStorageArn"
+									"Ref": "storageqrEntryStorageArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageentryStorageArn"
+												"Ref": "storageqrEntryStorageArn"
 											},
 											"index/*"
 										]

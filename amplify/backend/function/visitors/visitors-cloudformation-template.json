@@ -18,21 +18,13 @@
 			"Type": "String",
 			"Default": "storagevalidationStorageArn"
 		},
-		"storageentryStorageName": {
+		"storageqrEntryStorageName": {
 			"Type": "String",
-			"Default": "storageentryStorageName"
+			"Default": "storageqrEntryStorageName"
 		},
-		"storageentryStorageArn": {
+		"storageqrEntryStorageArn": {
 			"Type": "String",
-			"Default": "storageentryStorageArn"
-		},
-		"storageqrCodeStorageName": {
-			"Type": "String",
-			"Default": "storageqrCodeStorageName"
-		},
-		"storageqrCodeStorageArn": {
-			"Type": "String",
-			"Default": "storageqrCodeStorageArn"
+			"Default": "storageqrEntryStorageArn"
 		}
 	},
 	"Conditions": {
@@ -86,17 +78,11 @@
 						"STORAGE_VALIDATIONSTORAGE_ARN": {
 							"Ref": "storagevalidationStorageArn"
 						},
-						"STORAGE_ENTRYSTORAGE_NAME": {
-							"Ref": "storageentryStorageName"
+						"STORAGE_QRENTRYSTORAGE_NAME": {
+							"Ref": "storageqrEntryStorageName"
 						},
-						"STORAGE_ENTRYSTORAGE_ARN": {
-							"Ref": "storageentryStorageArn"
-						},
-						"STORAGE_QRCODESTORAGE_NAME": {
-							"Ref": "storageqrCodeStorageName"
-						},
-						"STORAGE_QRCODESTORAGE_ARN": {
-							"Ref": "storageqrCodeStorageArn"
+						"STORAGE_QRENTRYSTORAGE_ARN": {
+							"Ref": "storageqrEntryStorageArn"
 						}
 					}
 				},
@@ -111,7 +97,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/visitors-76426f6f5a4964454f38-build.zip"
+					"S3Key": "amplify-builds/visitors-576468594b702b36472f-build.zip"
 				}
 			}
 		},
@@ -269,47 +255,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageentryStorageArn"
+									"Ref": "storageqrEntryStorageArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageentryStorageArn"
-											},
-											"index/*"
-										]
-									]
-								}
-							]
-						},
-						{
-							"Effect": "Allow",
-							"Action": [
-								"dynamodb:Put*",
-								"dynamodb:Create*",
-								"dynamodb:BatchWriteItem",
-								"dynamodb:Get*",
-								"dynamodb:BatchGetItem",
-								"dynamodb:List*",
-								"dynamodb:Describe*",
-								"dynamodb:Scan",
-								"dynamodb:Query",
-								"dynamodb:Update*",
-								"dynamodb:RestoreTable*",
-								"dynamodb:Delete*"
-							],
-							"Resource": [
-								{
-									"Ref": "storageqrCodeStorageArn"
-								},
-								{
-									"Fn::Join": [
-										"/",
-										[
-											{
-												"Ref": "storageqrCodeStorageArn"
+												"Ref": "storageqrEntryStorageArn"
 											},
 											"index/*"
 										]

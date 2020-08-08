@@ -6,10 +6,13 @@
   "dependencies": {
     "aws-sdk": "^2.728.0",
     "aws-serverless-express": "^3.3.5",
+    "axios": "^0.19.2",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.27.0"
+    "jwk-to-pem": "^2.0.4",
+    "moment": "^2.27.0",
+    "uuidv4": "^6.2.2"
   },
   "devDependencies": {},
   "scripts": {

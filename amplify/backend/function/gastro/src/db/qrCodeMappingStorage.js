@@ -1,11 +1,9 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-
 const moment = require('moment');
+const util = require('util');
 
-
-// add dev if local
 let tableName = "qrCodeMapping";
 console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
@@ -16,28 +14,39 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 const partitionKeyName = "qrCodeId";
 const sortKeyName = "ownerId";
 
-const get = (getParams) => {
+
+const addQrCodeMapping = (mapping) => {
+    let putItemParams = {
+        TableName: tableName,
+        Item: mapping
+    }
+    // if (create) putItemParams['ConditionExpression'] = 'attribute_not_exists(email)'
+    console.log(putItemParams)
     return new Promise((resolve, reject) => {
-        dynamodb.get(getParams, (err, data) => {
-            if (err || Object.keys(data).length < 1) {
+        dynamodb.put(putItemParams, (err, data) => {
+            if (err) {
                 reject(err)
             } else {
-                resolve(data)
+                resolve(putItemParams.Item)
             }
-        })
+        });
     })
 }
 
-const getQrCode = (qrCode) => {
-
-    let getItemParams = {
+const deleteQrMapping = (mapping) => {
+    let deleteItem = {
         TableName: tableName,
-        Key: qrCode
+        Key: {
+            qrCodeId: mapping,
+        },
     }
-    return get(getItemParams)
+
+    return util.promisify(dynamodb.delete)(deleteItem)
+
 }
 
 
 module.exports = {
-    getQrCode
+    addQrCodeMapping,
+    deleteQrMapping
 }

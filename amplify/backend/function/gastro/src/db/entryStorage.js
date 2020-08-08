@@ -29,7 +29,7 @@ const query = (queryParams) => {
     })
 }
 
-const getEntries = (id, pageSize) => {
+const getEntries = (id, pageSize, LastEvaluatedKey) => {
     console.log(tableName)
     const queryParams = {
         ExpressionAttributeValues: {
@@ -39,6 +39,7 @@ const getEntries = (id, pageSize) => {
         KeyConditionExpression: `${partitionKeyName} = :bar and ${sortkeyName} >= :entry`,
         ProjectionExpression: 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime',
         Limit: pageSize,
+        LastEvaluatedKey: LastEvaluatedKey,
         TableName: tableName
     };
     return query(queryParams)

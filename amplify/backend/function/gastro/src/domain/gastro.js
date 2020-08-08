@@ -5,8 +5,7 @@ class Gastro {
         address,
         city,
         zipcode,
-        checkOutCode,
-        checkInCode,
+        bars = [],
         bills = [],
     ) {
         this.email = email
@@ -14,10 +13,36 @@ class Gastro {
         this.address = address
         this.city = city
         this.zipcode = zipcode
-        this.checkOutCode = checkOutCode
-        this.checkInCode = checkInCode
+        this.bars = bars
         this.bills = bills
     }
 }
 
-module.exports = Gastro
+class Bar {
+    constructor(
+        barid,
+        name,
+        street,
+        city,
+        zipcode,
+        checkOutCode,
+        checkInCode,
+        active
+    ) {
+        this.barid = barid
+        this.name = name
+        this.street = street
+        this.city = city
+        this.zipcode = zipcode
+        this.checkOutCode = checkOutCode
+        this.checkInCode = checkInCode
+        this.active = active
+
+    }
+
+}
+
+module.exports = {
+    Gastro,
+    Bar
+}

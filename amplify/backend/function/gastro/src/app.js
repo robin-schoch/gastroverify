@@ -11,10 +11,10 @@ See the License for the specific language governing permissions and limitations 
 	AUTH_GASTROVERIFYD8B8759F_USERPOOLID
 	ENV
 	REGION
-	STORAGE_ENTRYSTORAGE_ARN
-	STORAGE_ENTRYSTORAGE_NAME
 	STORAGE_GASTROSTORAGE_ARN
 	STORAGE_GASTROSTORAGE_NAME
+	STORAGE_QRENTRYSTORAGE_ARN
+	STORAGE_QRENTRYSTORAGE_NAME
 Amplify Params - DO NOT EDIT */
 
 var express = require('express')
@@ -27,13 +27,24 @@ const entryRoute = require('./routes/entryRoute')
 var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
-
+const {verifyXIDToken} = require('./jwtUtil')
 // Enable CORS for all methods
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  next()
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
 });
+
+app().use((req, res, next) => {
+    verifyXIDToken(req.header('X-ID-Token')).then(token => {
+        req.xUser = token;
+        console.log(token)
+        next()
+    }).catch(error => {
+        res.status(401)
+        res.json(error)
+    })
+})
 
 
 /**********************
@@ -47,8 +58,9 @@ app.use('/v1/admin', adminRoute)
 app.use('/v1/entry', entryRoute)
 
 
+
 app.listen(3000, function () {
-  console.log("App started")
+    console.log("App started")
 });
 
 // Export the app object. When executing the application local this does nothing. However,

@@ -3,6 +3,13 @@
 
 const awsmobile = {
     "aws_project_region": "eu-central-1",
+    "aws_cloud_logic_custom": [
+        {
+            "name": "verifyGateway",
+            "endpoint": "https://k0h8b64v55.execute-api.eu-central-1.amazonaws.com/dev",
+            "region": "eu-central-1"
+        }
+    ],
     "aws_dynamodb_all_tables_region": "eu-central-1",
     "aws_dynamodb_table_schemas": [
         {

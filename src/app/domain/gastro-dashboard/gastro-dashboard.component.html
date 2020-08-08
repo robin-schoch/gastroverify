@@ -2,4 +2,42 @@
 
     <span>hey</span>
     <button mat-raised-button appSignOut>Logout</button>
+
+
+    <div *ngIf="gastro$ | async as gastro">
+        {{gastro.email}}
+    </div>
+
+
+    <form #signInFrom="ngForm" *ngIf="!(gastro$ | async)" fxLayout="column">
+
+
+        <mat-form-field fxFlex="100">
+            <input [(ngModel)]="newGastro.barName" class="cell" delayedFocus matInput name="email"
+                   placeholder="Name"
+                   required type="name">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100">
+            <input [(ngModel)]="newGastro.address" class="cell" delayedFocus matInput name="email"
+                   placeholder="Strasse + Nummer"
+                   required type="Address">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100">
+            <input [(ngModel)]="newGastro.city" class="cell" delayedFocus matInput name="email"
+                   placeholder="Ort"
+                   required type="city">
+        </mat-form-field>
+
+
+        <mat-form-field fxFlex="100">
+            <input [(ngModel)]="newGastro.zipcode" class="cell" delayedFocus matInput name="email"
+                   placeholder="PLZ"
+                   required type="zip">
+        </mat-form-field>
+
+        <button mat-raised-button (click)="register()">Registrieren</button>
+
+    </form>
 </div>

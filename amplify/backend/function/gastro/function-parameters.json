@@ -7,7 +7,7 @@
         "update",
         "delete"
       ],
-      "entryStorage": [
+      "qrEntryStorage": [
         "create",
         "read",
         "update",

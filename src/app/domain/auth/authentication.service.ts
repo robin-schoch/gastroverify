@@ -17,7 +17,7 @@ export class AuthenticationService {
      *                                                                         *
      **************************************************************************/
 
-    private _isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private _isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
     private _activeUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
 
     private _signUpUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
@@ -35,6 +35,7 @@ export class AuthenticationService {
         Auth.currentAuthenticatedUser().then(user => {
             this.activeUser = user;
             this.isAuthenticated = true;
+            console.log('Active user: ' + user.username);
         }).catch(elem => console.log('no active user'));
     }
 
@@ -117,7 +118,7 @@ export class AuthenticationService {
      **************************************************************************/
 
     public get isAuthenticated$(): Observable<boolean> {
-        return this._isAuthenticated$.asObservable();
+        return this._isAuthenticated$.pipe(filter(state => state !== null));
     }
 
     public get activeUser$(): Observable<CognitoUser> {
