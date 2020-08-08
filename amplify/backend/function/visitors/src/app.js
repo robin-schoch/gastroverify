@@ -132,13 +132,13 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                 }
             }).catch(error => {
                 res.status(401)
-                res.json({error: "bar does not exist"})
+                res.json({error: error})
             })
         }).catch(err => {
-            res.status(500)
+            res.status(404)
             console.log("error")
             console.log(err)
-            res.json({error: "error"})
+            res.json({error: "bar does not exist", err})
         })
     }).catch(err => {
         res.json(err)
