@@ -2,8 +2,8 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../auth/authentication.service';
 import {ToolbarService} from '../main/toolbar.service';
 import {EntryService} from '../entry-browser/entry.service';
-import {Gastro, GastroService} from './gastro.service';
-import {Observable} from 'rxjs';
+import {Bar, Gastro, GastroService} from './gastro.service';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {AddBarDialogComponent, IAddBarData} from './add-bar-dialog/add-bar-dialog.component';
@@ -18,11 +18,13 @@ export class GastroDashboardComponent implements OnInit {
 
     public gastro$: Observable<Gastro>;
     public newGastro$: Observable<boolean>;
+    public selectedBar$ = new BehaviorSubject<Bar>(null);
     displayedColumns: string[] = [
-        'position',
-        'name',
-        'weight',
-        'symbol'
+        'BarID',
+        'Name',
+        'CheckOutCode',
+        'CheckInCode',
+        'Delete'
     ];
 
 
@@ -55,5 +57,14 @@ export class GastroDashboardComponent implements OnInit {
                 data: <IAddBarData>{}
             }
         );
+    }
+
+    deleteBar(bar: Bar) {
+        this.gastroService.removeBar(bar).then(elem => this.gastroService.gastro = elem).catch(error => console.log(error));
+
+    }
+
+    selectBar(row: Bar) {
+        this.selectedBar$.next(row);
     }
 }

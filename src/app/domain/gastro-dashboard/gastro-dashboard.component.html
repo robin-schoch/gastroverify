@@ -25,14 +25,14 @@
                            required type="Address">
                 </mat-form-field>
 
-                <mat-form-field >
+                <mat-form-field>
                     <input [(ngModel)]="gastro.city" class="cell" delayedFocus matInput name="city"
                            placeholder="Ort"
                            required type="city">
                 </mat-form-field>
 
 
-                <mat-form-field >
+                <mat-form-field>
                     <input [(ngModel)]="gastro.zipcode" class="cell" delayedFocus matInput name="zip"
                            placeholder="PLZ"
                            required type="zip">
@@ -51,46 +51,59 @@
         <mat-card-header>
             <mat-card-title>
                 Bars
-                <button (click)="openAddDialog()" mat-button >hinzufügen</button>
+                <button (click)="openAddDialog()" mat-button>hinzufügen</button>
             </mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
-            <div class="mat-elevation-z8" *ngIf="gastro.bars.length > 0">
-                <table mat-table [dataSource]="gastro.bars">
+            <div *ngIf="!!gastro.bars || gastro.bars?.length > 0" fxFlex>
+                <table mat-table [dataSource]="gastro.bars" fxFlex>
 
-                    <!-- Position Column -->
-                    <ng-container matColumnDef="position">
-                        <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <!-- Bar ID Column -->
+                    <ng-container matColumnDef="BarID">
+                        <th mat-header-cell *matHeaderCellDef> Bar ID</th>
                         <td mat-cell *matCellDef="let element"> {{element.barid}} </td>
                     </ng-container>
 
                     <!-- Name Column -->
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <ng-container matColumnDef="Name">
+                        <th mat-header-cell *matHeaderCellDef> Name</th>
                         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                     </ng-container>
 
                     <!-- Weight Column -->
-                    <ng-container matColumnDef="weight">
-                        <th mat-header-cell *matHeaderCellDef> Weight </th>
+                    <ng-container matColumnDef="CheckOutCode">
+                        <th mat-header-cell *matHeaderCellDef> CheckOutCode</th>
                         <td mat-cell *matCellDef="let element"> {{element.checkOutCode}} </td>
                     </ng-container>
 
                     <!-- Symbol Column -->
-                    <ng-container matColumnDef="symbol">
-                        <th mat-header-cell *matHeaderCellDef> Symbol </th>
+                    <ng-container matColumnDef="CheckInCode">
+                        <th mat-header-cell *matHeaderCellDef> CheckInCode</th>
                         <td mat-cell *matCellDef="let element"> {{element.checkInCode}} </td>
                     </ng-container>
 
+                    <!-- Delete Column -->
+                    <ng-container matColumnDef="Delete">
+                        <th mat-header-cell *matHeaderCellDef> Löschen</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-mini-fab color="primary" (click)="deleteBar(element)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectBar(row)"></tr>
                 </table>
 
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
             </div>
         </mat-card-content>
     </mat-card>
+
+    <div>
+        <app-entry-browser [bar]="(selectedBar$ | async)"></app-entry-browser>
+    </div>
 
 
 </div>

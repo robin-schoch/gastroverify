@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>Favorite Animal</h1>
+<div mat-dialog-content>
+    <form #addBarForm="ngForm" fxLayout="column">
+        <mat-form-field>
+            <input [(ngModel)]="newBar.barid" class="cell" delayedFocus matInput name="firstname"
+                   placeholder="Name"
+                   required type="name">
+        </mat-form-field>
+        <mat-form-field>
+
+            <input [(ngModel)]="newBar.name" class="cell" delayedFocus matInput name="lastname"
+                   placeholder="Nachname"
+                   required type="name">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input [(ngModel)]="newBar.street" class="cell" delayedFocus matInput name="address"
+                   placeholder="Strasse + Nummer"
+                   required type="Address">
+        </mat-form-field>
+
+        <mat-form-field >
+            <input [(ngModel)]="newBar.city" class="cell" delayedFocus matInput name="city"
+                   placeholder="Ort"
+                   required type="city">
+        </mat-form-field>
+
+
+        <mat-form-field >
+            <input [(ngModel)]="newBar.zipcode" class="cell" delayedFocus matInput name="zip"
+                   placeholder="PLZ"
+                   required type="zip">
+        </mat-form-field>
+
+        <button mat-raised-button (click)="addBar()">Hinzufügen</button>
+    </form>
+
+</div>

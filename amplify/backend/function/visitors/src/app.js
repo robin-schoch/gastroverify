@@ -1,6 +1,10 @@
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
+	STORAGE_ENTRYSTORAGE_ARN
+	STORAGE_ENTRYSTORAGE_NAME
+	STORAGE_QRCODEMAPPINGSTORAGE_ARN
+	STORAGE_QRCODEMAPPINGSTORAGE_NAME
 	STORAGE_QRENTRYSTORAGE_ARN
 	STORAGE_QRENTRYSTORAGE_NAME
 	STORAGE_VALIDATIONSTORAGE_ARN
@@ -118,16 +122,16 @@ app.post('/v1/checkin/:qrId', function (req, res) {
     console.log("checkIn...")
     jwtUtil.verifyJWT(req.header('Authorization')).then(decoded => {
         getQrCode(req.params.qrId).then(code => {
-            let cI = new CheckIn(code.barId, req.body.firstName, req.body.surName,
+            let cI = new CheckIn(code.barName, req.body.firstName, req.body.surName,
                 req.body.email, req.body.address, req.body.city, req.body.zipcode,
                 code.checkIn, moment().toISOString(), decoded.phone)
             console.log("created user")
             checkinStorage.addCheckIn(cI).then(elem => {
                 console.log("added")
                 if (code.checkIn) {
-                    res.json({checkIn: `welcome ${cI.FirstName} and enjoy your stay at ${code.barId}`})
+                    res.json({checkIn: `welcome ${cI.FirstName} and enjoy your stay at ${code.barName}`})
                 } else {
-                    res.json({checkIn: `see you soon ${cI.FirstName}! We hope you enjoyed your stay at ${code.barId}`})
+                    res.json({checkIn: `see you soon ${cI.FirstName}! We hope you enjoyed your stay at ${code.barName}`})
                 }
             }).catch(error => {
                 res.status(401)

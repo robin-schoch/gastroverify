@@ -6,7 +6,19 @@
         "read",
         "update"
       ],
+      "entryStorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "qrEntryStorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "qrCodeMappingStorage": [
         "create",
         "read",
         "update",

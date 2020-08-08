@@ -89,6 +89,7 @@ export class GastroService {
             this.myInit
         );
         body['body'] = bar;
+        console.log(body)
         return API.post(
             this.apiName,
             '/v1/gastro/me/bar',
@@ -97,14 +98,10 @@ export class GastroService {
     }
 
     removeBar(bar: Bar) {
-        API.del(
+       return  API.del(
             this.apiName,
-            '/v1/gastro/me/bar' + bar.barid,
+            '/v1/gastro/me/bar/' + bar.barid,
             this.myInit
-        ).then(elem => {
-            console.log(elem);
-        }).catch(elem => {
-            console.log(elem);
-        });
+        )
     }
 }

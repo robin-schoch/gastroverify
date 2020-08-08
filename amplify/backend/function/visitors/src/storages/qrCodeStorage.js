@@ -18,21 +18,28 @@ const sortKeyName = "ownerId";
 
 const get = (getParams) => {
     return new Promise((resolve, reject) => {
-        dynamodb.get(getParams, (err, data) => {
-            if (err || Object.keys(data).length < 1) {
+        dynamodb.query(getParams, (err, data) => {
+            console.log(data)
+            if (err || !data.Items || data.Items.length < 1) {
                 reject(err)
             } else {
-                resolve(data)
+                resolve(data.Items[0])
             }
         })
     })
 }
 
+
 const getQrCode = (qrCode) => {
 
     let getItemParams = {
         TableName: tableName,
-        Key: qrCode
+        ExpressionAttributeValues: {
+            ':qrCode': qrCode,
+        },
+        KeyConditionExpression: `${partitionKeyName} = :qrCode`,
+        ProjectionExpression: 'checkIn, barName',
+        Limit: 1,
     }
     return get(getItemParams)
 }

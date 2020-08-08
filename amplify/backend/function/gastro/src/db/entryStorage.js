@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-
+const {Page} = require('./../domain/page')
 
 const moment = require('moment');
 
@@ -23,7 +23,7 @@ const query = (queryParams) => {
             if (err) {
                 reject(err)
             } else {
-                resolve(data)
+                resolve(new Page(data.Items, data.Count, data.LastEvaluatedKey))
             }
         })
     })

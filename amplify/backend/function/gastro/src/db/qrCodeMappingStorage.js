@@ -33,15 +33,28 @@ const addQrCodeMapping = (mapping) => {
     })
 }
 
-const deleteQrMapping = (mapping) => {
+const deleteQrMapping = (mapping, ownerId) => {
     let deleteItem = {
         TableName: tableName,
         Key: {
             qrCodeId: mapping,
+            ownerId: ownerId
         },
     }
 
-    return util.promisify(dynamodb.delete)(deleteItem)
+    return new Promise(((resolve, reject) => {
+        dynamodb.delete(deleteItem, (err, data) => {
+            if (err) {
+                console.log(err)
+                reject(err)
+            } else {
+                console.log(data)
+                resolve(data)
+            }
+        })
+    }))
+
+  //  return util.promisify(dynamodb.delete)(deleteItem)
 
 }
 

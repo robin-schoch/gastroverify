@@ -15,7 +15,23 @@
                 },
                 {
                     "category": "storage",
+                    "resourceName": "entryStorage",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
                     "resourceName": "qrEntryStorage",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "qrCodeMappingStorage",
                     "attributes": [
                         "Name",
                         "Arn"
@@ -38,7 +54,23 @@
                 },
                 {
                     "category": "storage",
+                    "resourceName": "entryStorage",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
                     "resourceName": "qrEntryStorage",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "qrCodeMappingStorage",
                     "attributes": [
                         "Name",
                         "Arn"

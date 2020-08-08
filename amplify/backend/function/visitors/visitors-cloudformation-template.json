@@ -25,6 +25,22 @@
 		"storageqrEntryStorageArn": {
 			"Type": "String",
 			"Default": "storageqrEntryStorageArn"
+		},
+		"storageqrCodeMappingStorageName": {
+			"Type": "String",
+			"Default": "storageqrCodeMappingStorageName"
+		},
+		"storageqrCodeMappingStorageArn": {
+			"Type": "String",
+			"Default": "storageqrCodeMappingStorageArn"
+		},
+		"storageentryStorageName": {
+			"Type": "String",
+			"Default": "storageentryStorageName"
+		},
+		"storageentryStorageArn": {
+			"Type": "String",
+			"Default": "storageentryStorageArn"
 		}
 	},
 	"Conditions": {
@@ -83,6 +99,18 @@
 						},
 						"STORAGE_QRENTRYSTORAGE_ARN": {
 							"Ref": "storageqrEntryStorageArn"
+						},
+						"STORAGE_QRCODEMAPPINGSTORAGE_NAME": {
+							"Ref": "storageqrCodeMappingStorageName"
+						},
+						"STORAGE_QRCODEMAPPINGSTORAGE_ARN": {
+							"Ref": "storageqrCodeMappingStorageArn"
+						},
+						"STORAGE_ENTRYSTORAGE_NAME": {
+							"Ref": "storageentryStorageName"
+						},
+						"STORAGE_ENTRYSTORAGE_ARN": {
+							"Ref": "storageentryStorageArn"
 						}
 					}
 				},
@@ -97,7 +125,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/visitors-576468594b702b36472f-build.zip"
+					"S3Key": "amplify-builds/visitors-357874673253794a426a-build.zip"
 				}
 			}
 		},
@@ -255,6 +283,39 @@
 							],
 							"Resource": [
 								{
+									"Ref": "storageentryStorageArn"
+								},
+								{
+									"Fn::Join": [
+										"/",
+										[
+											{
+												"Ref": "storageentryStorageArn"
+											},
+											"index/*"
+										]
+									]
+								}
+							]
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:Put*",
+								"dynamodb:Create*",
+								"dynamodb:BatchWriteItem",
+								"dynamodb:Get*",
+								"dynamodb:BatchGetItem",
+								"dynamodb:List*",
+								"dynamodb:Describe*",
+								"dynamodb:Scan",
+								"dynamodb:Query",
+								"dynamodb:Update*",
+								"dynamodb:RestoreTable*",
+								"dynamodb:Delete*"
+							],
+							"Resource": [
+								{
 									"Ref": "storageqrEntryStorageArn"
 								},
 								{
@@ -263,6 +324,39 @@
 										[
 											{
 												"Ref": "storageqrEntryStorageArn"
+											},
+											"index/*"
+										]
+									]
+								}
+							]
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:Put*",
+								"dynamodb:Create*",
+								"dynamodb:BatchWriteItem",
+								"dynamodb:Get*",
+								"dynamodb:BatchGetItem",
+								"dynamodb:List*",
+								"dynamodb:Describe*",
+								"dynamodb:Scan",
+								"dynamodb:Query",
+								"dynamodb:Update*",
+								"dynamodb:RestoreTable*",
+								"dynamodb:Delete*"
+							],
+							"Resource": [
+								{
+									"Ref": "storageqrCodeMappingStorageArn"
+								},
+								{
+									"Fn::Join": [
+										"/",
+										[
+											{
+												"Ref": "storageqrCodeMappingStorageArn"
 											},
 											"index/*"
 										]
