@@ -1,0 +1,110 @@
+{
+    "paths": [
+        {
+            "name": "/v1/register",
+            "lambdaFunction": "visitors",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/v1/validate",
+            "lambdaFunction": "visitors",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/v1/checkin/{qrId}",
+            "lambdaFunction": "visitors",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/v1/gastro",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        },
+        {
+            "name": "/v1/admin",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "userPoolGroups": {
+                    "admin": [
+                        "/POST",
+                        "/GET",
+                        "/PUT",
+                        "/PATCH",
+                        "/DELETE"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "/v1/entry",
+            "lambdaFunction": "gastro",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "verifyGateway",
+    "apiName": "verifyGateway",
+    "authResourceName": "gastroverifyd8b8759f",
+    "functionArns": [
+        {
+            "lambdaFunction": "visitors"
+        },
+        {
+            "lambdaFunction": "gastro"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-gastroverify-dev-75918-authRole",
+        "unAuthRoleName": "amplify-gastroverify-dev-75918-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "visitors",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "gastro",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "auth",
+            "resourceName": "gastroverifyd8b8759f",
+            "attributes": [
+                "UserPoolId"
+            ]
+        },
+        {
+            "category": "auth",
+            "resourceName": "userPoolGroups",
+            "attributes": [
+                "adminGroupRole"
+            ]
+        }
+    ]
+}
