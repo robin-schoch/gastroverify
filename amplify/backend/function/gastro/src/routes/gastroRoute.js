@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 router.get('/', (req, res) => {
     getEntries('myBar', 2).then(data => {
         console.log(req.header('Authorization'))
-        res.json(jwt.decode(req.header('Authorization')))
+        res.json(data)
     }).catch(error => res.json(error))
 })
 

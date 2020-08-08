@@ -11,6 +11,12 @@
         "read",
         "update",
         "delete"
+      ],
+      "qrCodeStorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
       ]
     }
   },

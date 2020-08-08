@@ -6,8 +6,8 @@ const {getEntries} = require('./../db/entryStorage')
 router.get('/', (req, res) => {
     // getGastro()
     getEntries('myBar', 2).then(data => {
-        console.log(req.header('x-gastro'))
-        res.json(req.header('x-gastro'))
+        console.log(req.header('Authorization'))
+        res.json(req.header('Authorization'))
     }).catch(error => res.json(error))
 })
 

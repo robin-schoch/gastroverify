@@ -7,7 +7,7 @@ import {Auth} from 'aws-amplify';
 })
 export class EntryService {
 
-    apiName = 'v1';
+    apiName = 'verifyGateway';
     private myInit = { // OPTIONAL
 
     };

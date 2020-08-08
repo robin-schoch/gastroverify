@@ -1,137 +1,145 @@
 {
-    "function": {
-        "visitors": {
-            "build": true,
-            "providerPlugin": "awscloudformation",
-            "service": "Lambda",
-            "dependsOn": [
-                {
-                    "category": "storage",
-                    "resourceName": "validationStorage",
-                    "attributes": [
-                        "Name",
-                        "Arn"
-                    ]
-                },
-                {
-                    "category": "storage",
-                    "resourceName": "entryStorage",
-                    "attributes": [
-                        "Name",
-                        "Arn"
-                    ]
-                }
-            ]
-        },
-        "gastro": {
-            "build": true,
-            "providerPlugin": "awscloudformation",
-            "service": "Lambda",
-            "dependsOn": [
-                {
-                    "category": "storage",
-                    "resourceName": "gastroStorage",
-                    "attributes": [
-                        "Name",
-                        "Arn"
-                    ]
-                },
-                {
-                    "category": "storage",
-                    "resourceName": "entryStorage",
-                    "attributes": [
-                        "Name",
-                        "Arn"
-                    ]
-                },
-                {
-                    "category": "auth",
-                    "resourceName": "gastroverifyd8b8759f",
-                    "attributes": [
-                        "UserPoolId"
-                    ]
-                }
-            ]
-        }
-    },
-    "api": {
-        "v1": {
-            "service": "API Gateway",
-            "providerPlugin": "awscloudformation",
-            "dependsOn": [
-                {
-                    "category": "function",
-                    "resourceName": "visitors",
-                    "attributes": [
-                        "Name",
-                        "Arn"
-                    ]
-                },
-                {
-                    "category": "function",
-                    "resourceName": "gastro",
-                    "attributes": [
-                        "Name",
-                        "Arn"
-                    ]
-                },
-                {
-                    "category": "auth",
-                    "resourceName": "gastroverifyd8b8759f",
-                    "attributes": [
-                        "UserPoolId"
-                    ]
-                },
-                {
-                    "category": "auth",
-                    "resourceName": "userPoolGroups",
-                    "attributes": [
-                        "adminGroupRole"
-                    ]
-                }
-            ]
-        }
-    },
-    "storage": {
-        "validationStorage": {
-            "service": "DynamoDB",
-            "providerPlugin": "awscloudformation"
-        },
-        "gastroStorage": {
-            "service": "DynamoDB",
-            "providerPlugin": "awscloudformation"
-        },
-        "entryStorage": {
-            "service": "DynamoDB",
-            "providerPlugin": "awscloudformation"
-        },
-        "qrCodeStorage": {
-            "service": "DynamoDB",
-            "providerPlugin": "awscloudformation"
-        }
-    },
-    "auth": {
-        "gastroverifyd8b8759f": {
-            "service": "Cognito",
-            "providerPlugin": "awscloudformation",
-            "dependsOn": [],
-            "customAuth": false
-        },
-        "userPoolGroups": {
-            "service": "Cognito-UserPool-Groups",
-            "providerPlugin": "awscloudformation",
-            "dependsOn": [
-                {
-                    "category": "auth",
-                    "resourceName": "gastroverifyd8b8759f",
-                    "attributes": [
-                        "UserPoolId",
-                        "AppClientIDWeb",
-                        "AppClientID",
-                        "IdentityPoolId"
-                    ]
-                }
-            ]
-        }
-    }
+	"function": {
+		"visitors": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "validationStorage",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "storage",
+					"resourceName": "entryStorage",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "storage",
+					"resourceName": "qrCodeStorage",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
+		},
+		"gastro": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "gastroStorage",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "storage",
+					"resourceName": "entryStorage",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "gastroverifyd8b8759f",
+					"attributes": [
+						"UserPoolId"
+					]
+				}
+			]
+		}
+	},
+	"api": {
+		"verifyGateway": {
+			"service": "API Gateway",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "visitors",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "function",
+					"resourceName": "gastro",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "gastroverifyd8b8759f",
+					"attributes": [
+						"UserPoolId"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "userPoolGroups",
+					"attributes": [
+						"adminGroupRole"
+					]
+				}
+			]
+		}
+	},
+	"storage": {
+		"validationStorage": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"gastroStorage": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"entryStorage": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"qrCodeStorage": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		}
+	},
+	"auth": {
+		"gastroverifyd8b8759f": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		},
+		"userPoolGroups": {
+			"service": "Cognito-UserPool-Groups",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "auth",
+					"resourceName": "gastroverifyd8b8759f",
+					"attributes": [
+						"UserPoolId",
+						"AppClientIDWeb",
+						"AppClientID",
+						"IdentityPoolId"
+					]
+				}
+			]
+		}
+	}
 }
