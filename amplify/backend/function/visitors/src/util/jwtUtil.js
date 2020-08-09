@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 const secret = "notSAFEEEEE!!!" // where should it be??
 
-module.exports.generateJWT = (phoneNumber) => {
+module.exports.generateJWT = (phoneNumber, momentum) => {
     return jwt.sign({
-        phone: phoneNumber
+        phone: phoneNumber,
+        validation: momentum
     }, secret, {expiresIn: '3650d'})
 
 }

@@ -73,7 +73,7 @@ app.post('/v1/register', (req, res) => {
             })
         }).catch(error => {
             res.status(400)
-            res.json({timestamp: error.interval})
+            res.json({duration: error.interval, status: error.status})
         })
     } else {
         res.status(401)
@@ -121,30 +121,37 @@ app.post('/v1/validate', function (req, res) {
 
 app.post('/v1/checkin/:qrId', function (req, res) {
     console.log("checkIn...")
-    jwtUtil.verifyJWT(req.header('Authorization')).then(decoded => {
-        getQrCode(req.params.qrId).then(code => {
-            let cI = new CheckIn(code.barName, req.body.firstName, req.body.surName,
-                req.body.email, req.body.address, req.body.city, req.body.zipcode,
-                code.checkIn, moment().toISOString(), decoded.phone)
-            console.log("created user")
-            checkinStorage.addCheckIn(cI).then(elem => {
-                console.log("added")
-                if (code.checkIn) {
-                    res.json({checkIn: `welcome ${cI.FirstName} and enjoy your stay at ${code.barName}`})
-                } else {
-                    res.json({checkIn: `see you soon ${cI.FirstName}! We hope you enjoyed your stay at ${code.barName}`})
-                }
-            }).catch(error => {
-                res.status(401)
-                res.json({error: error})
+    jwtUtil.verifyJWT(req.header('Authorization')).then(async decoded => {
+        const valid = await validationStorage.validationSuccess(decoded.phone, decoded.validation)
+        if (valid) {
+            getQrCode(req.params.qrId).then(code => {
+                const timeIso = moment().toISOString()
+                let cI = new CheckIn(code.barName, req.body.firstName, req.body.surName,
+                    req.body.email, req.body.address, req.body.city, req.body.zipcode,
+                    code.checkIn, timeIso, decoded.phone, req.body.firstUse)
+                console.log("created user")
+                checkinStorage.addCheckIn(cI).then(elem => {
+                    res.json({
+                        entry: code.checkIn,
+                        time: timeIso,
+                        barId: code.barName,
+                    })
+                }).catch(error => {
+                    res.status(500)
+                    res.json({error: "internal error 69"})
+                })
+            }).catch(err => {
+                res.status(404)
+                console.log("error")
+                console.log(err)
+                res.json({error: "location not found"})
             })
-        }).catch(err => {
-            res.status(404)
-            console.log("error")
-            console.log(err)
-            res.json({error: "bar does not exist", err})
-        })
+        } else {
+            res.status(401)
+            res.json({error: "number is used to create other token"})
+        }
     }).catch(err => {
+        res.status(401)
         res.json(err)
     })
 });
@@ -155,8 +162,6 @@ app.get('/v1', function (req, res) {
         url: req.url
     });
 });
-
-
 
 
 app.listen(port, function () {

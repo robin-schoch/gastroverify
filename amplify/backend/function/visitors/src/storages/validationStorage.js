@@ -37,9 +37,11 @@ const insertValidationData = (item) => {
 module.exports.createValidation = (phoneNumber) => {
     const item = {
         phonenumberhash: crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'),
-        code: Math.floor(Math.random() * 10000 + 1000),
-        validation_requested: moment.utc().unix(),
-        validation_success: 0
+        code: Math.floor(10000 + Math.random() * 90000),
+        validation_requested: moment().toISOString(),
+        validation_success: "",
+        try: 5,
+        strikes: 0,
     }
 
     return Promise.all([
@@ -50,8 +52,32 @@ module.exports.createValidation = (phoneNumber) => {
 }
 
 
+module.exports.validationSuccess = (phonNumber, momentum) => {
+    var params = {};
+    params[partitionKeyName] = crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex');
+    let getItemParams = {
+        TableName: tableName,
+        Key: params
+    }
+    return new Promise((resolve, reject) => {
+        dynamodb.get(getItemParams, (err, data) => {
+            if (err || Object.keys(data).length === 0) {
+                resolve(false)
+            } else {
+                let w = data.Item ? data.Item : data
+                if (moment(w.validation_success).diff(momentum) === 0) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            }
+        })
+    })
+}
+
+
 module.exports.validateValidationRequest = (phoneNumber) => {
-    const now = moment.utc().unix()
+    const now = moment()
     var params = {};
     params[partitionKeyName] = crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex');
     let getItemParams = {
@@ -64,20 +90,20 @@ module.exports.validateValidationRequest = (phoneNumber) => {
                 resolve(true)
             } else {
                 let w = data.Item ? data.Item : data
-                let coolDown = (1 * 60 * 1000)
-                let registeredCoolDown = (24 * 60 * 60 * 1000)
-                if (w.validation_success === 0 && now - w.validation_requested > coolDown) {
+                let coolDown = 5 // min
+                let registeredCoolDown = 3 // days
+                let duration = moment.duration(now.diff(moment(w.validation_requested))).asMinutes()
+                let duration2 = moment.duration(now.diff(moment(w.validation_success))).asDays()
+                if (w.validation_success === "" && duration > coolDown) {
+                    resolve(true)
+                } else if (duration2 > registeredCoolDown) {
                     resolve(true)
                 } else {
-                    reject({interval: (coolDown - (now - w.validation_requested)), status: "cool down"})
-                }
-                if (now - w.validation_success > registeredCoolDown) {
-                    resolve(true)
-                } else {
-                    reject({
-                        interval: (registeredCoolDown - (now - w.validation_requested)),
-                        status: "phone number registered"
-                    })
+                    if (w.validation_requested === "") {
+                        reject({interval: coolDown - duration, status: "cool down"})
+                    } else {
+                        reject({interval: registeredCoolDown - duration2, status: "already registered"})
+                    }
                 }
             }
         })
@@ -97,11 +123,19 @@ module.exports.validateNumber = (phoneNumber, code) => {
                 reject({error: "validaiton request does not exist"})
             } else {
                 let w = data.Item ? data.Item : data
-                if (w.code === code && w.validation_success === 0) {
-                    w.validation_success = moment.utc().unix()
-                    insertValidationData(w).then(elem => resolve(jwtUtil.generateJWT(phoneNumber))).catch(err => reject(err))
+                if (w.code === code && w.validation_success === "" && w.try > 0) {
+                    w.validation_success = moment().toISOString()
+                    insertValidationData(w).then(elem => resolve(jwtUtil.generateJWT(phoneNumber, w.validation_success))).catch(err => reject(err))
                 } else {
-                    reject("invalid")
+                    if (w.try > 0) {
+                        w.try = w.try - 1
+                        insertValidationData(w).then(elem => {
+                            reject("invalid " + w.try + " remaining")
+                        })
+                    } else {
+                        reject("validation blocked")
+                    }
+
                 }
             }
         })

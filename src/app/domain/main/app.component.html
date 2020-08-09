@@ -1,8 +1,8 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" [(opened)]="opened">
         <mat-selection-list #shoes [multiple]="false">
-            <mat-list-option >
-                shoe
+            <mat-list-option appSignOut (click)="sidenav.toggle()">
+                Sign Out
             </mat-list-option>
         </mat-selection-list>
 

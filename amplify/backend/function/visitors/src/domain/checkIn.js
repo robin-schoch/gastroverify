@@ -9,7 +9,8 @@ class CheckIn {
         zipcode,
         checkIn,
         timestamp,
-        phonenumber
+        phonenumber,
+        firstUse
     ) {
         this.BarId = barid
         this.EntryTime = timestamp
@@ -21,6 +22,7 @@ class CheckIn {
         this.Zipcode = zipcode
         this.CheckIn = checkIn
         this.PhoneNumber = phonenumber
+        this.firstUse = firstUse
     }
 
 
