@@ -1,3 +1,44 @@
-<p>
-  entry-browser works!
-</p>
+<div class="mat-elevation-z8 " *ngIf="data$ | async as data">
+    <button mat-button (click)="exportCSV()">export</button>
+    <div class=" example-container" fxLayout="column">
+        <table mat-table [dataSource]="data.Data" fxFlex>
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> No.</th>
+                <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef> Weight</th>
+                <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="symbol">
+                <th mat-header-cell *matHeaderCellDef> Symbol</th>
+                <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+        <div fxFlex fxLayoutAlign="center center" *ngIf="data.LastEvaluatedKey" >
+            <button mat-icon-button (click)="onPageEvent(data.LastEvaluatedKey)" aria-label="Example icon button with a vertical three dot icon">
+                <mat-icon>expand_more</mat-icon>
+            </button>
+        </div>
+        <div fxFlex fxLayoutAlign="center center" *ngIf="!data.LastEvaluatedKey" >
+            <span>no more data</span>
+        </div>
+    </div>
+
+</div>

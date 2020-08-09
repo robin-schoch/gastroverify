@@ -31,9 +31,10 @@ const getPublicKeys = () => {
         data.data.keys.forEach(key => {
             pems[key.kid] = jwkToPem(key)
         })
-        console.log(pems)
+        //console.log(pems)
+        console.log('success')
     }).catch(data => {
-        console.log(data.data)
+        //console.log(data.data)
         console.log("error receiving pems!!")
         keys = data
     })

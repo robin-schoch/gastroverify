@@ -40,14 +40,20 @@ app.use(function (req, res, next) {
 });
 
 app.use((req, res, next) => {
-    verifyXIDToken(req.header('X-ID-Token')).then(token => {
-        req.xUser = token;
-        console.log(token)
-        next()
-    }).catch(error => {
+    if (!!req.header('X-ID-Token')){
+        verifyXIDToken(req.header('X-ID-Token')).then(token => {
+            req.xUser = token;
+           // console.log(token)
+            next()
+        }).catch(error => {
+            res.status(401)
+            res.json(error)
+        })
+    } else {
         res.status(401)
-        res.json(error)
-    })
+        res.json({error: 'unauthorized'})
+    }
+
 })
 
 

@@ -34,6 +34,7 @@ var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
+const {parse} = require('json2csv');
 
 const validationStorage = require('./storages/validationStorage')
 const jwtUtil = require('./util/jwtUtil')
@@ -154,6 +155,22 @@ app.get('/v1', function (req, res) {
         url: req.url
     });
 });
+
+app.get('/v1/test', (req, res) => {
+    const csv = parse([{name: "robin", lastname: "schoch"}, {name: "kathi", lastname: "rofka"}])
+    console.log(csv)
+    console.log('created')
+    res.header('Content-Type', 'text/csv');
+    res.attachment('fileName.csv');
+    res.send(csv);
+})
+
+app.get('/v1/h', (req, res) => {
+    res.json({
+        success: 'redirect to app',
+        url: req.url
+    });
+})
 
 
 app.listen(port, function () {

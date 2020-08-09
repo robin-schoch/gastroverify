@@ -16,9 +16,12 @@ export interface Entry {
     Zipcode
 }
 
-export interface Page {
-    data,
-
+export interface Page<T> {
+    Data: T[],
+    Limit: number,
+    Count: number,
+    ScannedCount: number
+    LastEvaluatedKey: T
 }
 
 @Injectable({
@@ -33,31 +36,52 @@ export class EntryService {
 
     constructor() { }
 
-
-    public getData() {
-        API.get(
-            this.apiName,
-            '/v1/entry',
+    public loadNextPage(bar: Bar, page?: Page<Entry>): Promise<Page<Entry>> {
+        const init = Object.assign(
+            {},
             this.myInit
-        ).then(res => console.log(res)).catch(err => console.log(err));
-        API.get(
-            this.apiName,
-            '/v1/gastro',
-            this.myInit
-        ).then(res => console.log(res)).catch(err => console.log(err));
-    }
+        );
 
-    public getEntriesPaged(bar: Bar) {
-        console.log(bar);
-        API.get(
+        if (!!page) {
+            console.log(page.LastEvaluatedKey);
+            init['queryStringParameters'] = {  // OPTIONAL
+                Limit: page.Limit,
+                LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey)
+            };
+        } else {
+            init['queryStringParameters'] = {  // OPTIONAL
+                Limit: 50,
+            };
+        }
+        return API.get(
             this.apiName,
             '/v1/entry/' + bar.barid,
-            this.myInit
-        ).then(elem => {
-            console.log(elem);
-        }).catch(error => {
-            console.log(error);
+            init
+        );
+    }
+
+    public exportCSV(bar: Bar) {
+        API.endpoint(this.apiName).then(url => {
+            const myInit = { // OPTIONAL
+                response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+                responseType: 'text/csv'
+            };
+            API.get(
+                this.apiName,
+                `/v1/entry/${bar.barid}/export`,
+                myInit
+            ).then(elem => {
+                const csvContent = 'data:text/csv;charset=utf-8,' + elem.data;
+                const encodedUri = encodeURI(csvContent);
+                console.log(encodedUri);
+                const hiddenElement = document.createElement('a');
+                hiddenElement.href =  encodedUri;
+                hiddenElement.target = '_blank';
+                hiddenElement.download = 'output.csv';
+                hiddenElement.click();
+            }).catch(error => console.log(error));
         });
+
     }
 
 }

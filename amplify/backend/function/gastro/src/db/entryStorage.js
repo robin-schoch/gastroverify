@@ -23,23 +23,23 @@ const query = (queryParams) => {
             if (err) {
                 reject(err)
             } else {
-                resolve(new Page(data.Items, data.Count, data.LastEvaluatedKey))
+                resolve(new Page(data.Items, queryParams.Limit, data.Count, data.ScannedCount, data.LastEvaluatedKey))
             }
         })
     })
 }
 
 const getEntries = (id, pageSize, LastEvaluatedKey) => {
-    console.log(tableName)
+    console.log(LastEvaluatedKey)
     const queryParams = {
         ExpressionAttributeValues: {
             ':bar': id,
             ':entry': moment().subtract(14, 'days').toISOString(),
         },
         KeyConditionExpression: `${partitionKeyName} = :bar and ${sortkeyName} >= :entry`,
-        ProjectionExpression: 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime',
+        ProjectionExpression: 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime, CheckIn',
         Limit: pageSize,
-        LastEvaluatedKey: LastEvaluatedKey,
+        ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     };
     return query(queryParams)
