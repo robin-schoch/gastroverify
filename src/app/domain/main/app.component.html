@@ -1,10 +1,11 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" [(opened)]="opened">
         <mat-selection-list #shoes [multiple]="false">
-            <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
-                {{shoe}}
+            <mat-list-option >
+                shoe
             </mat-list-option>
         </mat-selection-list>
+
 
     </mat-sidenav>
 
