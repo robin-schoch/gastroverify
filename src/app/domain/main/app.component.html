@@ -1,22 +1,27 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="over" [(opened)]="opened">
-    Sidenav content
-  </mat-sidenav>
+    <mat-sidenav #sidenav mode="over" [(opened)]="opened">
+        <mat-selection-list #shoes [multiple]="false">
+            <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+                {{shoe}}
+            </mat-list-option>
+        </mat-selection-list>
 
-  <mat-sidenav-content>
+    </mat-sidenav>
 
-    <mat-toolbar *ngIf="!(toolbarHidden$ | async)">
-      <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
+    <mat-sidenav-content>
 
-      <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
-    </mat-toolbar>
+        <mat-toolbar *ngIf="!(toolbarHidden$ | async)">
+            <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+
+            <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
+        </mat-toolbar>
 
 
-    <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
 
-  </mat-sidenav-content>
+    </mat-sidenav-content>
 </mat-sidenav-container>
 
 

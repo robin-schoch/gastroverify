@@ -31,6 +31,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {AddBarDialogComponent} from './domain/gastro-dashboard/add-bar-dialog/add-bar-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { EntryBrowserComponent } from './domain/entry-browser/entry-browser/entry-browser.component';
+import {MatListModule} from '@angular/material/list';
 
 Amplify.configure(awsconfig);
 
@@ -66,7 +67,8 @@ Amplify.configure(awsconfig);
         MatTableModule,
         MatPaginatorModule,
         MatDialogModule,
-        MatDialogModule
+        MatDialogModule,
+        MatListModule,
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [],
