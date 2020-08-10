@@ -4,6 +4,9 @@ const smsUtil = require('../util/smsUtil')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const moment = require('moment');
+const momentDurationFormatSetup = require("moment-duration-format");
+momentDurationFormatSetup(moment);
+
 const crypto = require('crypto');
 // add dev if local
 let tableName = "validation";
@@ -52,7 +55,7 @@ module.exports.createValidation = (phoneNumber) => {
 }
 
 
-module.exports.validationSuccess = (phonNumber, momentum) => {
+module.exports.validationSuccess = (phoneNumber, momentum) => {
     var params = {};
     params[partitionKeyName] = crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex');
     let getItemParams = {
@@ -92,17 +95,17 @@ module.exports.validateValidationRequest = (phoneNumber) => {
                 let w = data.Item ? data.Item : data
                 let coolDown = 5 // min
                 let registeredCoolDown = 3 // days
-                let duration = moment.duration(now.diff(moment(w.validation_requested))).asMinutes()
-                let duration2 = moment.duration(now.diff(moment(w.validation_success))).asDays()
-                if (w.validation_success === "" && duration > coolDown) {
+                let duration = moment.duration(now.diff(moment(w.validation_requested)))
+                let duration2 = moment.duration(now.diff(moment(w.validation_success)))
+                if (w.validation_success === "" && duration.asMinutes() > coolDown) {
                     resolve(true)
-                } else if (duration2 > registeredCoolDown) {
+                } else if (duration2.asDays() > registeredCoolDown) {
                     resolve(true)
                 } else {
                     if (w.validation_requested === "") {
-                        reject({interval: coolDown - duration, status: "cool down"})
+                        reject({interval: duration.format("h:mm"), status: "cool down"})
                     } else {
-                        reject({interval: registeredCoolDown - duration2, status: "already registered"})
+                        reject({interval: duration2.format("h:mm"), status: "already registered"})
                     }
                 }
             }
@@ -120,7 +123,7 @@ module.exports.validateNumber = (phoneNumber, code) => {
     return new Promise((resolve, reject) => {
         dynamodb.get(getItemParams, (err, data) => {
             if (err || Object.keys(data).length === 0) {
-                reject({error: "validaiton request does not exist"})
+                reject({error: "no validation request"})
             } else {
                 let w = data.Item ? data.Item : data
                 if (w.code === code && w.validation_success === "" && w.try > 0) {
@@ -130,10 +133,10 @@ module.exports.validateNumber = (phoneNumber, code) => {
                     if (w.try > 0) {
                         w.try = w.try - 1
                         insertValidationData(w).then(elem => {
-                            reject("invalid " + w.try + " remaining")
+                            reject({error: "invalid code", remaining: w.try})
                         })
                     } else {
-                        reject("validation blocked")
+                        reject({error: "validation blocked"})
                     }
 
                 }

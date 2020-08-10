@@ -50,7 +50,7 @@ export class EntryService {
             };
         } else {
             init['queryStringParameters'] = {  // OPTIONAL
-                Limit: 50,
+                Limit: 100,
             };
         }
         return API.get(

@@ -32,6 +32,8 @@ import {AddBarDialogComponent} from './domain/gastro-dashboard/add-bar-dialog/ad
 import {MatDialogModule} from '@angular/material/dialog';
 import { EntryBrowserComponent } from './domain/entry-browser/entry-browser/entry-browser.component';
 import {MatListModule} from '@angular/material/list';
+import { QrCodeGeneratorDialogComponent } from './domain/gastro-dashboard/qr-code-generator-dialog/qr-code-generator-dialog.component';
+import {AnQrcodeModule} from 'an-qrcode';
 
 Amplify.configure(awsconfig);
 
@@ -45,7 +47,8 @@ Amplify.configure(awsconfig);
         SigninComponent,
         SignOutDirective,
         AddBarDialogComponent,
-        EntryBrowserComponent
+        EntryBrowserComponent,
+        QrCodeGeneratorDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -69,6 +72,7 @@ Amplify.configure(awsconfig);
         MatDialogModule,
         MatDialogModule,
         MatListModule,
+        AnQrcodeModule,
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [],

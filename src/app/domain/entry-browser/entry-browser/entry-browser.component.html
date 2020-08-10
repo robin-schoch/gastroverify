@@ -1,42 +1,92 @@
-<div class="mat-elevation-z8 " *ngIf="data$ | async as data">
-    <button mat-button (click)="exportCSV()">export</button>
-    <div class=" example-container" fxLayout="column">
+<div class="mat-elevation-z8 " *ngIf="data$ | async as data" fxFill fxLayout="column">
+
+    <mat-toolbar>
+        <span>Check In / Check Out</span>
+        <span class="example-spacer"></span>
+        <button mat-icon-button (click)="exportCSV()" matTooltip="Herunterladen">
+            <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">cloud_download</mat-icon>
+        </button>
+    </mat-toolbar>
+    <div class=" example-container" fxLayout="column" fxFlex>
         <table mat-table [dataSource]="data.Data" fxFlex>
 
-            <!-- Position Column -->
-            <ng-container matColumnDef="position">
-                <th mat-header-cell *matHeaderCellDef> No.</th>
+
+            <ng-container matColumnDef="Checkin">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-icon *ngIf="element.CheckIn" [color]="'success'">local_bar</mat-icon>
+                    <mat-icon *ngIf="!element.CheckIn" [color]="'warn'">no_drinks</mat-icon>
+
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Zeit">
+                <th mat-header-cell *matHeaderCellDef> Zeit</th>
+                <td mat-cell *matCellDef="let element"> {{element.EntryTime | date:'short'}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef> Name</th>
                 <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
             </ng-container>
 
             <!-- Name Column -->
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Name</th>
+            <ng-container matColumnDef="Nachname">
+                <th mat-header-cell *matHeaderCellDef> Nachname</th>
                 <td mat-cell *matCellDef="let element"> {{element.LastName}} </td>
             </ng-container>
 
             <!-- Weight Column -->
-            <ng-container matColumnDef="weight">
-                <th mat-header-cell *matHeaderCellDef> Weight</th>
-                <td mat-cell *matCellDef="let element"> {{element.CheckIn}} </td>
+            <ng-container matColumnDef="Strasse">
+                <th mat-header-cell *matHeaderCellDef> Strasse</th>
+                <td mat-cell *matCellDef="let element"> {{element.Street}} </td>
             </ng-container>
 
             <!-- Symbol Column -->
-            <ng-container matColumnDef="symbol">
-                <th mat-header-cell *matHeaderCellDef> Symbol</th>
+            <ng-container matColumnDef="Ort">
+                <th mat-header-cell *matHeaderCellDef> Ort</th>
+                <td mat-cell *matCellDef="let element"> {{element.City}} </td>
+            </ng-container>
+
+            <!-- BarIdColumn  'Zeit',
+'Name',
+'Nachname',
+'Strasse',
+'Ort',
+'PZL',
+'Nr.',
+'Email'-->
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="PLZ">
+                <th mat-header-cell *matHeaderCellDef> PLZ</th>
+                <td mat-cell *matCellDef="let element"> {{element.Zipcode}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="Nr.">
+                <th mat-header-cell *matHeaderCellDef> Nr.</th>
                 <td mat-cell *matCellDef="let element"> {{element.PhoneNumber}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="Email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let element"> {{element.Email}} </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
         </table>
-        <div fxFlex fxLayoutAlign="center center" *ngIf="data.LastEvaluatedKey" >
-            <button mat-icon-button (click)="onPageEvent(data.LastEvaluatedKey)" aria-label="Example icon button with a vertical three dot icon">
+        <div fxFlex fxLayoutAlign="center center" *ngIf="data.LastEvaluatedKey">
+            <button mat-icon-button (click)="onPageEvent(data.LastEvaluatedKey)"
+                    aria-label="Example icon button with a vertical three dot icon">
                 <mat-icon>expand_more</mat-icon>
             </button>
         </div>
-        <div fxFlex fxLayoutAlign="center center" *ngIf="!data.LastEvaluatedKey" >
+        <div fxFlex fxLayoutAlign="center center" *ngIf="!data.LastEvaluatedKey">
             <span>no more data</span>
         </div>
     </div>

@@ -39,6 +39,7 @@ const getEntries = (id, pageSize, LastEvaluatedKey) => {
         KeyConditionExpression: `${partitionKeyName} = :bar and ${sortkeyName} >= :entry`,
         ProjectionExpression: 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime, CheckIn',
         Limit: pageSize,
+        ScanIndexForward: false,
         ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     };

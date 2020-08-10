@@ -1,4 +1,7 @@
 .example-container {
-  max-height: 400px;
   overflow: auto;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
 }

@@ -7,6 +7,10 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {AddBarDialogComponent, IAddBarData} from './add-bar-dialog/add-bar-dialog.component';
+import {
+    IQRCodeGeneratorData,
+    QrCodeGeneratorDialogComponent
+} from './qr-code-generator-dialog/qr-code-generator-dialog.component';
 
 @Component({
     selector: 'app-gastro-dashboard',
@@ -24,6 +28,8 @@ export class GastroDashboardComponent implements OnInit {
         'Name',
         'CheckOutCode',
         'CheckInCode',
+        'CheckIn',
+        'CheckOut',
         'Delete'
     ];
 
@@ -38,9 +44,11 @@ export class GastroDashboardComponent implements OnInit {
 
     ngOnInit() {
         this.gastro$ = this.gastroService.gastro$;
+        this.toolbarService.toolbarTitle = 'Dashboard';
         this.newGastro$ = this.gastroService.gastro$.pipe(map(g => !!g.email));
         this.toolbarService.toolbarHidden = false;
         this.gastroService.getGastro();
+
         //  this.authenticationService.signOut()
     }
 
@@ -55,6 +63,21 @@ export class GastroDashboardComponent implements OnInit {
                 height: '90vh',
                 width: '90vw',
                 data: <IAddBarData>{}
+            }
+        );
+    }
+
+    openQRCodeDialog(code: string, text: string) {
+        const url = 'https://k0h8b64v55.execute-api.eu-central-1.amazonaws.com/dev/v1/checkin/' + code
+        let dialogRef = this.dialog.open(
+            QrCodeGeneratorDialogComponent,
+            {
+                height: '90vh',
+                width: '90vw',
+                data: <IQRCodeGeneratorData>{
+                    url: url,
+                    text: text
+                }
             }
         );
     }

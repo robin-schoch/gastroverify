@@ -7,11 +7,11 @@
         </mat-selection-list>
 
 
-    </mat-sidenav>
+    </mat-sidenav >
 
-    <mat-sidenav-content>
+    <mat-sidenav-content fxFill fxLayout="column">
 
-        <mat-toolbar *ngIf="!(toolbarHidden$ | async)">
+        <mat-toolbar *ngIf="!(toolbarHidden$ | async)" color="primary">
             <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
@@ -19,8 +19,9 @@
             <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
         </mat-toolbar>
 
-
-        <router-outlet></router-outlet>
+        <div class="mainContainer"  fxFlex>
+            <router-outlet ></router-outlet>
+        </div>
 
     </mat-sidenav-content>
 </mat-sidenav-container>

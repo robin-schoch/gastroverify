@@ -17,12 +17,28 @@ export class EntryBrowserComponent implements OnInit {
     public data$: BehaviorSubject<Page<Entry>> = new BehaviorSubject<Page<Entry>>(null);
     public paginator$: Observable<Paginator>;
     displayedColumns = [
-        'position',
-        'name',
-        'weight',
-        'symbol'
+        'Checkin',
+        'Zeit',
+        'Name',
+        'Nachname',
+        'Strasse',
+        'Ort',
+        'PLZ',
+        'Nr.',
+        'Email'
     ];
-
+/*
+ BarId,
+ EntryTime,
+ CheckIn,
+ City,
+ Email,
+ FirstName,
+ LastName,
+ PhoneNumber,
+ Street,
+ Zipcode
+ */
 
     constructor(
         private entryService: EntryService
@@ -86,7 +102,7 @@ export class EntryBrowserComponent implements OnInit {
 
     onPageEvent(pagination: any) {
         const p = this.data$.getValue();
-        p.Limit = pagination.pageSize;
+        p.Limit = 100;
         this.loadPage(
             this._selectedBar$.getValue(),
             p

@@ -1,0 +1,5 @@
+<div mat-dialog-content  fxlayout="column" fxLayoutAlign="center center" *ngIf="qrUrl$ | async as qrUrl" f>
+
+    <qrcode [level]="1" [qrvalue]="qrUrl.url" [size]="800"></qrcode>
+    <h1>{{qrUrl.text}}</h1>
+</div>

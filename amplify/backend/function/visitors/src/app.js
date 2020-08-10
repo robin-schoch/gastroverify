@@ -90,15 +90,20 @@ app.post('/v1/register/noSMS', (req, res) => {
             }).catch(error => {
                 res.status(500)
                 console.log(error)
-                res.json({error: error})
+                res.json({error: "internal server error 69"})
             })
         }).catch(error => {
-            res.status(400)
-            res.json({timestamp: error.interval})
+            res.status(403)
+            res.json({
+                error: {
+                    duration: error.interval,
+                    status: error.status
+                }
+            })
         })
     } else {
-        res.status(401)
-        res.json({erorr: "missing parameter"})
+        res.status(400)
+        res.json({error: "missing parameter"})
     }
 });
 
@@ -110,8 +115,11 @@ app.post('/v1/validate', function (req, res) {
             res.status(200)
             res.json({token: token})
         }).catch(err => {
-            res.status(403)
-            res.json({error: err})
+            if (err.error === "no validation request") res.status(404)
+            if (err.error === "validation blocked") res.status(403)
+            if (err.error === "invalid code") res.status(401)
+
+            res.json(err)
         })
     } else {
         res.status(400)
@@ -123,6 +131,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
     console.log("checkIn...")
     jwtUtil.verifyJWT(req.header('Authorization')).then(async decoded => {
         const valid = await validationStorage.validationSuccess(decoded.phone, decoded.validation)
+        console.log("is valid: " + valid)
         if (valid) {
             getQrCode(req.params.qrId).then(code => {
                 const timeIso = moment().toISOString()
@@ -148,11 +157,11 @@ app.post('/v1/checkin/:qrId', function (req, res) {
             })
         } else {
             res.status(401)
-            res.json({error: "number is used to create other token"})
+            res.json({error: "token is expired"})
         }
     }).catch(err => {
-        res.status(401)
-        res.json(err)
+        res.status(402)
+        res.json({error: "token is invalid"})
     })
 });
 
