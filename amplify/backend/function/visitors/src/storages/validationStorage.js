@@ -93,19 +93,23 @@ module.exports.validateValidationRequest = (phoneNumber) => {
                 resolve(true)
             } else {
                 let w = data.Item ? data.Item : data
-                let coolDown = 5 // min
-                let registeredCoolDown = 3 // days
+                let coolDown = 1 // min
+                let registeredCoolDown = 20 // hours
                 let duration = moment.duration(now.diff(moment(w.validation_requested)))
                 let duration2 = moment.duration(now.diff(moment(w.validation_success)))
                 if (w.validation_success === "" && duration.asMinutes() > coolDown) {
+                    console.log(duration.asMinutes() > coolDown)
                     resolve(true)
-                } else if (duration2.asDays() > registeredCoolDown) {
+                } else if (duration2.asHours() > registeredCoolDown) {
+                    console.log(duration2.asHours() > registeredCoolDown)
                     resolve(true)
                 } else {
-                    if (w.validation_requested === "") {
-                        reject({interval: duration.format("h:mm"), status: "cool down"})
+                    console.log( moment.duration(coolDown, 'minutes').subtract(duration).format("hh:mm:ss"))
+                    console.log( moment.duration(registeredCoolDown, 'hours').subtract(duration2).format("hh:mm:ss"))
+                    if (w.validation_success === "") {
+                        reject({interval: moment.duration(coolDown, 'minutes').subtract(duration).format("hh:mm:ss"), status: "cool down"})
                     } else {
-                        reject({interval: duration2.format("h:mm"), status: "already registered"})
+                        reject({interval: moment.duration(registeredCoolDown, 'hours').subtract(duration2).format("hh:mm:ss"), status: "already registered"})
                     }
                 }
             }

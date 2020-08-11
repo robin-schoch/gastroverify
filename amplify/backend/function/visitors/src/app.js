@@ -63,9 +63,10 @@ app.use(function (req, res, next) {
 app.post('/v1/register', (req, res) => {
     const phoneNumber = req.body.phoneNr;
     if (phoneNumber) {
-        validationStorage.validateValidationRequest(phoneNumber).then(_ => {
+        validationStorage.validateValidationRequest(phoneNumber).then(b => {
             validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
-                res.json({timestamp: valid.validation_requested})
+                console.log(sms)
+                res.json({timestamp: valid.validation_requested, sms: sms})
             }).catch(error => {
                 res.status(500)
                 console.log(error)
