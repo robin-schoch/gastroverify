@@ -73,7 +73,7 @@ app.post('/v1/register', (req, res) => {
                 res.json({error: error})
             })
         }).catch(error => {
-            res.status(400)
+            res.status(403)
             res.json({duration: error.interval, status: error.status})
         })
     } else {
