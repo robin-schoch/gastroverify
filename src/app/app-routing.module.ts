@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {GastroDashboardComponent} from './domain/gastro-dashboard/gastro-dashboard.component';
 import {LandingComponent} from './domain/landing/landing.component';
 import {IsAuthenticatedGuard} from './domain/auth/guard/is-authenticated.guard';
+import { GtcComponent } from './gtc/gtc.component';
 
 const routes: Routes = [
     {
@@ -25,6 +26,11 @@ const routes: Routes = [
                 pathMatch: 'full'
             }
         ]
+    },
+    {
+        path: 'gtc',
+        component: GtcComponent,
+        pathMatch: 'full'
     }
 ];
 
