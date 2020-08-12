@@ -166,7 +166,14 @@ app.post('/v1/checkin/:qrId', function (req, res) {
     })
 });
 
-app.get('/v1', function (req, res) {
+app.get('/v1/checkin', function (req, res) {
+    res.json({
+        success: 'redirect to app',
+        url: req.url
+    });
+});
+
+app.get('/v1/checkin/:qrId', function (req, res) {
     res.json({
         success: 'redirect to app',
         url: req.url

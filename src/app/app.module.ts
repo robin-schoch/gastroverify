@@ -34,7 +34,7 @@ import { EntryBrowserComponent } from './domain/entry-browser/entry-browser/entr
 import {MatListModule} from '@angular/material/list';
 import { QrCodeGeneratorDialogComponent } from './domain/gastro-dashboard/qr-code-generator-dialog/qr-code-generator-dialog.component';
 import {AnQrcodeModule} from 'an-qrcode';
-import { GtcComponent } from './gtc/gtc.component';
+import { GtcComponent } from './domain/gtc/gtc.component';
 
 Amplify.configure(awsconfig);
 
