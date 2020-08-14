@@ -3,6 +3,7 @@ import {ToolbarService} from '../main/toolbar.service';
 import {AuthenticationService} from '../auth/authentication.service';
 import {Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
+import {GastroService} from '../gastro-dashboard/gastro.service';
 
 @Component({
     selector: 'app-landing',
@@ -19,6 +20,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private toolbarService: ToolbarService,
         private authenticationService: AuthenticationService,
+        private gastroService: GastroService,
         private router: Router
     ) { }
 
@@ -28,9 +30,10 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         const sub = this.isAuthenticated$.subscribe(is => {
             console.log('User logged in: ' + is);
             if (is) {
-                this.router.navigate(['gastro']);
+                this.router.navigate(['gastro/personal']);
             } else {
                 console.log('no user logged in');
+                this.router.navigate([''])
             }
         });
         this._subscritpion.push(sub);

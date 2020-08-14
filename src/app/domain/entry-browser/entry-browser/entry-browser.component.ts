@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Bar} from '../../gastro-dashboard/gastro.service';
 import {Entry, EntryService, Page} from '../entry.service';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {PageEvent} from '@angular/material/paginator';
 import {filter, map} from 'rxjs/operators';
 
 @Component({
@@ -27,18 +26,6 @@ export class EntryBrowserComponent implements OnInit {
         'Nr.',
         'Email'
     ];
-/*
- BarId,
- EntryTime,
- CheckIn,
- City,
- Email,
- FirstName,
- LastName,
- PhoneNumber,
- Street,
- Zipcode
- */
 
     constructor(
         private entryService: EntryService
@@ -67,10 +54,15 @@ export class EntryBrowserComponent implements OnInit {
     public set bar(bar: Bar) {
         if (!!bar) {
             console.log(bar);
-            this._selectedBar$.next(bar);
+            this.data$.next(null);
+            this._selectedBar$.next((bar));
             this.loadPage(bar);
 
         }
+    }
+
+    public get selectedBar$(): Observable<Bar> {
+        return this._selectedBar$.asObservable();
     }
 
     private loadPage(bar: Bar, page?: Page<Entry>) {
@@ -118,6 +110,9 @@ export class EntryBrowserComponent implements OnInit {
 
     }
 
+    reload(selectedbar: Bar) {
+        this.bar = selectedbar;
+    }
 }
 
 export interface Paginator {

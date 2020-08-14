@@ -22,6 +22,8 @@ export class AddBarDialogComponent implements OnInit {
 
     public newBar = <Bar>{};
 
+    public reg = new RegExp('^[A-z0-9]*')
+
     ngOnInit() {
     }
 

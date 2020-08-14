@@ -3,14 +3,15 @@
     <form #addBarForm="ngForm" fxLayout="column">
         <mat-form-field>
             <input [(ngModel)]="newBar.barid" class="cell" delayedFocus matInput name="firstname"
-                   ng-pattern="/^[a-zA-Z\d]+[^a-zA-Z\d]*$/"
-                   placeholder="Name"
+
+                   pattern="^[A-z0-9]*"
+                   placeholder="Bar ID"
                    required type="name">
         </mat-form-field>
         <mat-form-field>
 
             <input [(ngModel)]="newBar.name" class="cell" delayedFocus matInput name="lastname"
-                   placeholder="Nachname"
+                   placeholder="Name"
                    required type="name">
         </mat-form-field>
 
@@ -20,20 +21,20 @@
                    required type="Address">
         </mat-form-field>
 
-        <mat-form-field >
+        <mat-form-field>
             <input [(ngModel)]="newBar.city" class="cell" delayedFocus matInput name="city"
                    placeholder="Ort"
                    required type="city">
         </mat-form-field>
 
 
-        <mat-form-field >
+        <mat-form-field>
             <input [(ngModel)]="newBar.zipcode" class="cell" delayedFocus matInput name="zip"
                    placeholder="PLZ"
                    required type="zip">
         </mat-form-field>
 
-        <button mat-raised-button (click)="addBar()">Hinzufügen</button>
+        <button mat-raised-button type="button" [disabled]="addBarForm.invalid" (click)="addBar()">Hinzufügen</button>
     </form>
 
 </div>

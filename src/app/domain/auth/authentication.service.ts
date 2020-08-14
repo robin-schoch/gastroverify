@@ -36,7 +36,10 @@ export class AuthenticationService {
             this.activeUser = user;
             this.isAuthenticated = true;
             console.log('Active user: ' + user.username);
-        }).catch(elem => console.log('no active user'));
+        }).catch(elem => {
+            this.isAuthenticated = false;
+            console.log('no active user')
+        });
     }
 
     /***************************************************************************

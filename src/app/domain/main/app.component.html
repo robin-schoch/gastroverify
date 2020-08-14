@@ -1,13 +1,21 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" [(opened)]="opened">
+
+        <mat-toolbar color="primary"></mat-toolbar>
         <mat-selection-list #shoes [multiple]="false">
+            <mat-list-option routerLink="/gastro/dashboard" routerLinkActive="active" (click)="sidenav.toggle()">
+                Dashboard
+            </mat-list-option>
+            <mat-list-option routerLink="/gastro/personal" routerLinkActive="active" (click)="sidenav.toggle()">
+                Meine Informationen
+            </mat-list-option>
             <mat-list-option appSignOut (click)="sidenav.toggle()">
                 Sign Out
             </mat-list-option>
         </mat-selection-list>
 
 
-    </mat-sidenav >
+    </mat-sidenav>
 
     <mat-sidenav-content fxFill fxLayout="column">
 
@@ -19,8 +27,8 @@
             <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
         </mat-toolbar>
 
-        <div class="mainContainer"  fxFlex>
-            <router-outlet ></router-outlet>
+        <div class="mainContainer" fxFlex>
+            <router-outlet></router-outlet>
         </div>
 
     </mat-sidenav-content>

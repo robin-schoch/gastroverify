@@ -35,6 +35,8 @@ import {MatListModule} from '@angular/material/list';
 import { QrCodeGeneratorDialogComponent } from './domain/gastro-dashboard/qr-code-generator-dialog/qr-code-generator-dialog.component';
 import {AnQrcodeModule} from 'an-qrcode';
 import { GtcComponent } from './domain/gtc/gtc.component';
+import { PersonalComponent } from './domain/personal/personal.component';
+import {DatePipe} from '@angular/common';
 
 Amplify.configure(awsconfig);
 
@@ -50,7 +52,8 @@ Amplify.configure(awsconfig);
         AddBarDialogComponent,
         EntryBrowserComponent,
         QrCodeGeneratorDialogComponent,
-        GtcComponent
+        GtcComponent,
+        PersonalComponent
     ],
     imports: [
         BrowserModule,
@@ -77,7 +80,7 @@ Amplify.configure(awsconfig);
         AnQrcodeModule,
     ],
     entryComponents: [AddBarDialogComponent],
-    providers: [],
+    providers: [DatePipe],
     bootstrap: [AppComponent]
 })
 export class AppModule {

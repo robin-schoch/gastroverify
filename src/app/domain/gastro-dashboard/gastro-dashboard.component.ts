@@ -67,15 +67,14 @@ export class GastroDashboardComponent implements OnInit {
         );
     }
 
-    openQRCodeDialog(code: string, text: string) {
-        const url = 'https://k0h8b64v55.execute-api.eu-central-1.amazonaws.com/dev/v1/checkin/' + code
+    openQRCodeDialog(code: string, text: string,  buisnessname:string ) {
         let dialogRef = this.dialog.open(
             QrCodeGeneratorDialogComponent,
             {
                 height: '90vh',
                 width: '90vw',
                 data: <IQRCodeGeneratorData>{
-                    url: url,
+                    url: `${code}?businessName=${buisnessname}`,
                     text: text
                 }
             }

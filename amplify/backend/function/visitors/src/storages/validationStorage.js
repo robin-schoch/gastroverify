@@ -90,7 +90,7 @@ module.exports.validateValidationRequest = (phoneNumber) => {
     return new Promise((resolve, reject) => {
         dynamodb.get(getItemParams, (err, data) => {
             if (err || Object.keys(data).length === 0) {
-                resolve(true)
+                resolve({})
             } else {
                 let w = data.Item ? data.Item : data
                 let coolDown = 1 // min
@@ -99,13 +99,11 @@ module.exports.validateValidationRequest = (phoneNumber) => {
                 let duration2 = moment.duration(now.diff(moment(w.validation_success)))
                 if (w.validation_success === "" && duration.asMinutes() > coolDown) {
                     console.log(duration.asMinutes() > coolDown)
-                    resolve(true)
+                    resolve(w)
                 } else if (duration2.asHours() > registeredCoolDown) {
                     console.log(duration2.asHours() > registeredCoolDown)
-                    resolve(true)
+                    resolve(w)
                 } else {
-                    console.log( moment.duration(coolDown, 'minutes').subtract(duration).format("hh:mm:ss"))
-                    console.log( moment.duration(registeredCoolDown, 'hours').subtract(duration2).format("hh:mm:ss"))
                     if (w.validation_success === "") {
                         reject({interval: moment.duration(coolDown, 'minutes').subtract(duration).format("hh:mm:ss"), status: "cool down"})
                     } else {

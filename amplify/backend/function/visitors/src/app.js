@@ -84,8 +84,9 @@ app.post('/v1/register', (req, res) => {
 
 app.post('/v1/register/noSMS', (req, res) => {
     const phoneNumber = req.body.phoneNr;
+
     if (phoneNumber) {
-        validationStorage.validateValidationRequest(phoneNumber).then(_ => {
+        validationStorage.validateValidationRequest(phoneNumber).then( loaded => {
             validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
                 res.json({success: "check your phone"})
             }).catch(error => {

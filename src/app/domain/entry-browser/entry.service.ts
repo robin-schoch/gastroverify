@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import API from '@aws-amplify/api';
 import {BehaviorSubject} from 'rxjs';
 import {Bar} from '../gastro-dashboard/gastro.service';
+import {DatePipe} from '@angular/common';
 
 export interface Entry {
     BarId,
@@ -34,7 +35,9 @@ export class EntryService {
     private myInit = { // OPTIONAL
     };
 
-    constructor() { }
+    constructor(
+        private datepipe: DatePipe
+    ) { }
 
     public loadNextPage(bar: Bar, page?: Page<Entry>): Promise<Page<Entry>> {
         const init = Object.assign(
@@ -73,11 +76,13 @@ export class EntryService {
             ).then(elem => {
                 const csvContent = 'data:text/csv;charset=utf-8,' + elem.data;
                 const encodedUri = encodeURI(csvContent);
-                console.log(encodedUri);
                 const hiddenElement = document.createElement('a');
-                hiddenElement.href =  encodedUri;
+                hiddenElement.href = encodedUri;
                 hiddenElement.target = '_blank';
-                hiddenElement.download = 'output.csv';
+                hiddenElement.download = `${this.datepipe.transform(
+                    new Date(),
+                    'dd-MM-yyy-hh-mm'
+                )}_entry-check.csv`;
                 hiddenElement.click();
             }).catch(error => console.log(error));
         });

@@ -18,6 +18,7 @@ export interface IQRCodeGeneratorData {
 export class QrCodeGeneratorDialogComponent implements OnInit {
 
     public qrUrl$: BehaviorSubject<IQRCodeGeneratorData> = new BehaviorSubject<IQRCodeGeneratorData>(null);
+    private baseUrl: "https://api.entry-check.ch/v1/checkin/";
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: IQRCodeGeneratorData,
@@ -27,6 +28,11 @@ export class QrCodeGeneratorDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
+    }
+
+    generateUrl(code: string): string {
+        console.log("https://api.entry-check.ch/v1/checkin/" +  code)
+        return encodeURI("https://api.entry-check.ch/v1/checkin/" +  code)
     }
 
 }
