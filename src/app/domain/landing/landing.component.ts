@@ -24,7 +24,11 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         private router: Router
     ) { }
 
+
+
+
     ngOnInit() {
+        let a = ""
         this.isAuthenticated$ = this.authenticationService.isAuthenticated$;
         console.log('landing page...');
         const sub = this.isAuthenticated$.subscribe(is => {

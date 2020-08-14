@@ -86,7 +86,7 @@ app.post('/v1/register/noSMS', (req, res) => {
     const phoneNumber = req.body.phoneNr;
 
     if (phoneNumber) {
-        validationStorage.validateValidationRequest(phoneNumber).then( loaded => {
+        validationStorage.validateValidationRequest(phoneNumber).then(loaded => {
             validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
                 res.json({success: "check your phone"})
             }).catch(error => {
@@ -168,17 +168,12 @@ app.post('/v1/checkin/:qrId', function (req, res) {
 });
 
 app.get('/v1/checkin', function (req, res) {
-    res.json({
-        success: 'redirect to app',
-        url: req.url
-    });
+    res.redirect(`https://app.entry-check.ch/?qrCodeUrl=https%3A%2F%2Fapi.entry-check.ch%2Fv1%2Fcheckin%2${encodeURI(req.url)}`)
 });
 
 app.get('/v1/checkin/:qrId', function (req, res) {
-    res.json({
-        success: 'redirect to app',
-        url: req.url
-    });
+    // res.redirect(req.protocol + '://' + req.get('host') + req.originalUrl`)
+    res.redirect('https://app.entry-check.ch/?qrCodeUrl=https' + encodeURIComponent('://api.entry-check.ch' + req.originalUrl))
 });
 
 
