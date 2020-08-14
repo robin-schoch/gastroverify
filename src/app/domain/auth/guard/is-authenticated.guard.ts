@@ -22,6 +22,8 @@ export class IsAuthenticatedGuard implements CanActivate {
             if (!elem) this.router.navigate(['home']);
             console.log(elem);
         }));
+
+
     }
 
 }
