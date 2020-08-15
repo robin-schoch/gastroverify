@@ -42,6 +42,14 @@ const CheckIn = require('./domain/checkIn')
 const checkinStorage = require('./storages/checkInStorage')
 const {getQrCode} = require('./storages/qrCodeStorage')
 
+let redirectURL = "api.entry-check.ch"
+if (process.env.ENV && process.env.ENV !== "NONE") {
+    //redirectURL = "apidev" + redirectURL
+    if (process.env.ENV === "prod") redirectURL = "api" + redirectURL
+} else if (process.env.ENV === undefined) {
+   // redirectURL = "apidev" + redirectURL
+}
+
 // Enable CORS for all methods
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*")
@@ -173,7 +181,7 @@ app.get('/v1/checkin', function (req, res) {
 
 app.get('/v1/checkin/:qrId', function (req, res) {
     // res.redirect(req.protocol + '://' + req.get('host') + req.originalUrl`)
-    res.redirect('https://app.entry-check.ch/?qrCodeUrl=https' + encodeURIComponent('://api.entry-check.ch' + req.originalUrl))
+    res.redirect('https://app.entry-check.ch/?qrCodeUrl=https' + encodeURIComponent(`://${redirectURL}${req.originalUrl}` ))
 });
 
 

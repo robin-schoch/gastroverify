@@ -30,13 +30,16 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {AddBarDialogComponent} from './domain/gastro-dashboard/add-bar-dialog/add-bar-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { EntryBrowserComponent } from './domain/entry-browser/entry-browser/entry-browser.component';
+import {EntryBrowserComponent} from './domain/entry-browser/entry-browser/entry-browser.component';
 import {MatListModule} from '@angular/material/list';
-import { QrCodeGeneratorDialogComponent } from './domain/gastro-dashboard/qr-code-generator-dialog/qr-code-generator-dialog.component';
+import {QrCodeGeneratorDialogComponent} from './domain/gastro-dashboard/qr-code-generator-dialog/qr-code-generator-dialog.component';
 import {AnQrcodeModule} from 'an-qrcode';
-import { GtcComponent } from './domain/gtc/gtc.component';
-import { PersonalComponent } from './domain/personal/personal.component';
+import {GtcComponent} from './domain/gtc/gtc.component';
+import {PersonalComponent} from './domain/personal/personal.component';
 import {DatePipe} from '@angular/common';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 Amplify.configure(awsconfig);
 
@@ -78,10 +81,27 @@ Amplify.configure(awsconfig);
         MatDialogModule,
         MatListModule,
         AnQrcodeModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient]
+            }
+        }),
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],
     bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+
+
+export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
+    return new TranslateHttpLoader(
+        http,
+        './assets/i18n/',
+        '.json'
+    );
 }
