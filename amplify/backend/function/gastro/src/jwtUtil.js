@@ -1,6 +1,6 @@
 const cognitoPoolId = process.env.COGNITO_POOL_ID || 'eu-central-1_brxCRSgTn';
 const location = process.env.COGNITO_POOL_ID || 'eu-central-1';
-const cognitoIssuer = `https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn/.well-known/jwks.json`;
+
 const axios = require('axios').default;
 const jwkToPem = require('jwk-to-pem')
 const jwt = require('jsonwebtoken');
@@ -10,9 +10,27 @@ if (!cognitoPoolId) {
     console.log(cognitoPoolId)
 }
 const pems = {}
+let cognitoIssuer = `https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn/.well-known/jwks.json`;
+let iss = "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn"
+let aud = "7c0fj3mbd0529daf8gloevsmru"
+if (process.env.ENV && process.env.ENV !== "NONE") {
+    if(process.env.ENV === "prod"){
+        cognitoIssuer  = `https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_fAK4Gm0UP/.well-known/jwks.json`;
+        iss = "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_fAK4Gm0UP"
+        aud = "fa5a1mo0teojkosc5hb9bk08k"
+    } else if(process.env.ENV === "dev"){
+        cognitoIssuer = `https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn/.well-known/jwks.json`;
+        iss = "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn"
+        aud = "7c0fj3mbd0529daf8gloevsmru"
+    }
+}
 
-const iss = "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn"
-const aud = "7c0fj3mbd0529daf8gloevsmru"
+if (process.env.ENV && process.env.ENV !== "NONE") {
+    tableName = tableName + '-' + process.env.ENV;
+} else if (process.env.ENV === undefined) {
+    tableName = tableName + '-dev'
+}
+
 
 const verifyJWT = (token, secret) => {
     return new Promise(((resolve, reject) => {
