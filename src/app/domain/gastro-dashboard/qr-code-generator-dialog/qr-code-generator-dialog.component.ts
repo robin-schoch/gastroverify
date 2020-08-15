@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BehaviorSubject} from 'rxjs';
-
+import { environment } from './../../../../environments/environment';
 
 export interface IQRCodeGeneratorData {
     url: string,
@@ -31,8 +31,8 @@ export class QrCodeGeneratorDialogComponent implements OnInit {
     }
 
     generateUrl(code: string): string {
-        console.log("https://api.entry-check.ch/v1/checkin/" +  code)
-        return encodeURI("https://api.entry-check.ch/v1/checkin/" +  code)
+        console.log(environment.qrBaseURL +  code)
+        return encodeURI(environment.qrBaseURL +  code)
     }
 
 }
