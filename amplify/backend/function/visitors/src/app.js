@@ -42,7 +42,7 @@ const CheckIn = require('./domain/checkIn')
 const checkinStorage = require('./storages/checkInStorage')
 const {getQrCode} = require('./storages/qrCodeStorage')
 
-let redirectURL = "api.entry-check.ch"
+let redirectURL = ".entry-check.ch"
 if (process.env.ENV && process.env.ENV !== "NONE") {
     if (process.env.ENV === "dev") redirectURL = "apidev" + redirectURL
     if (process.env.ENV === "prod") redirectURL = "api" + redirectURL
