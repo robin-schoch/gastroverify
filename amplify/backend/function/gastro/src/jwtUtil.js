@@ -25,13 +25,6 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
     }
 }
 
-if (process.env.ENV && process.env.ENV !== "NONE") {
-    tableName = tableName + '-' + process.env.ENV;
-} else if (process.env.ENV === undefined) {
-    tableName = tableName + '-dev'
-}
-
-
 const verifyJWT = (token, secret) => {
     return new Promise(((resolve, reject) => {
         jwt.verify(token, secret, (err, decoded) => {
