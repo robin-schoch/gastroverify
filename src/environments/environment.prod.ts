@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+    production: true,
+    qrBaseURL: "https://api.entry-check.ch/v1/checkin/"
 };
