@@ -9,14 +9,14 @@ momentDurationFormatSetup(moment);
 
 const crypto = require('crypto');
 // add dev if local
-let tableName = "validation";
+let tableName = "Validation";
 console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
     tableName = tableName + '-dev'
 }
-const partitionKeyName = "phonenumberhash";
+const partitionKeyName = "phoneNumberHash";
 
 
 const insertValidationData = (item) => {
@@ -39,7 +39,7 @@ const insertValidationData = (item) => {
 
 module.exports.createValidation = (phoneNumber) => {
     const item = {
-        phonenumberhash: crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'),
+        phoneNumberHash: crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'),
         code: Math.floor(10000 + Math.random() * 90000),
         validation_requested: moment().toISOString(),
         validation_success: "",
@@ -105,9 +105,15 @@ module.exports.validateValidationRequest = (phoneNumber) => {
                     resolve(w)
                 } else {
                     if (w.validation_success === "") {
-                        reject({interval: moment.duration(coolDown, 'minutes').subtract(duration).format("hh:mm:ss"), status: "cool down"})
+                        reject({
+                            interval: moment.duration(coolDown, 'minutes').subtract(duration).format("hh:mm:ss"),
+                            status: "cool down"
+                        })
                     } else {
-                        reject({interval: moment.duration(registeredCoolDown, 'hours').subtract(duration2).format("hh:mm:ss"), status: "already registered"})
+                        reject({
+                            interval: moment.duration(registeredCoolDown, 'hours').subtract(duration2).format("hh:mm:ss"),
+                            status: "already registered"
+                        })
                     }
                 }
             }
@@ -128,7 +134,7 @@ module.exports.validateNumber = (phoneNumber, code) => {
                 reject({error: "no validation request"})
             } else {
                 let w = data.Item ? data.Item : data
-                if (w.code === code && w.validation_success === "" && w.try > 0) {
+                if (w.code === Number(code) && w.validation_success === "" && w.try > 0) {
                     w.validation_success = moment().toISOString()
                     insertValidationData(w).then(elem => resolve(jwtUtil.generateJWT(phoneNumber, w.validation_success))).catch(err => reject(err))
                 } else {

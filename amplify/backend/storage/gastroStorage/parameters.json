@@ -1,5 +1,0 @@
-{
-    "tableName": "gastro",
-    "partitionKeyName": "email",
-    "partitionKeyType": "S"
-}

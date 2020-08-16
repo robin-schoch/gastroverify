@@ -6,15 +6,14 @@ const moment = require('moment');
 
 
 // add dev if local
-let tableName = "qrCodeMapping";
+let tableName = "QRMapping";
 console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
     tableName = tableName + '-dev'
 }
-const partitionKeyName = "qrCodeId";
-const sortKeyName = "ownerId";
+const partitionKeyName = "qrId";
 
 const get = (getParams) => {
     return new Promise((resolve, reject) => {
@@ -38,7 +37,7 @@ const getQrCode = (qrCode) => {
             ':qrCode': qrCode,
         },
         KeyConditionExpression: `${partitionKeyName} = :qrCode`,
-        ProjectionExpression: 'checkIn, barName',
+        ProjectionExpression: 'checkIn, locationName, locationId',
         Limit: 1,
     }
     return get(getItemParams)

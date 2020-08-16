@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../auth/authentication.service';
 import {ToolbarService} from '../main/toolbar.service';
 import {EntryService} from '../entry-browser/entry.service';
-import {Gastro, GastroService} from '../gastro-dashboard/gastro.service';
+import {Partner, GastroService} from '../gastro-dashboard/gastro.service';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -16,7 +16,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class PersonalComponent implements OnInit {
 
-    public gastro$: Observable<Gastro>;
+    public partner$: Observable<Partner>;
     public newGastro$: Observable<boolean>;
 
     constructor(
@@ -28,7 +28,7 @@ export class PersonalComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.gastro$ = this.gastroService.gastro$;
+        this.partner$ = this.gastroService.gastro$;
         this.toolbarService.toolbarTitle = 'Dashboard';
         this.newGastro$ = this.gastroService.gastro$.pipe(map(g => !!g.email));
         this.toolbarService.toolbarHidden = false;

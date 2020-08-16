@@ -4,15 +4,14 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const moment = require('moment');
 const util = require('util');
 
-let tableName = "qrCodeMapping";
+let tableName = "QRMapping";
 console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
     tableName = tableName + '-dev'
 }
-const partitionKeyName = "qrCodeId";
-const sortKeyName = "ownerId";
+const partitionKeyName = "qrId";
 
 
 const addQrCodeMapping = (mapping) => {
@@ -37,8 +36,7 @@ const deleteQrMapping = (mapping, ownerId) => {
     let deleteItem = {
         TableName: tableName,
         Key: {
-            qrCodeId: mapping,
-            ownerId: ownerId
+            qrId: mapping
         },
     }
 

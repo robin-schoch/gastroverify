@@ -1,6 +1,6 @@
 class CheckIn {
     constructor(
-        barid,
+        locationId,
         firstName,
         surName,
         email,
@@ -12,16 +12,16 @@ class CheckIn {
         phonenumber,
         firstUse
     ) {
-        this.BarId = barid
-        this.EntryTime = timestamp
-        this.FirstName = firstName
-        this.LastName = surName
-        this.Email = email
-        this.Street = address
-        this.City = city
-        this.Zipcode = zipcode
-        this.CheckIn = checkIn
-        this.PhoneNumber = phonenumber
+        this.locationId = locationId
+        this.entryTime = timestamp
+        this.firstName = firstName
+        this.lastName = surName
+        this.email = email
+        this.street = address
+        this.city = city
+        this.zipCode = zipcode
+        this.checkIn = checkIn
+        this.phoneNumber = phonenumber
         this.firstUse = firstUse
     }
 

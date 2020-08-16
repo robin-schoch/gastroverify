@@ -7,7 +7,7 @@
 			"dependsOn": [
 				{
 					"category": "storage",
-					"resourceName": "validationStorage",
+					"resourceName": "Validation",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -15,7 +15,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "entryStorage",
+					"resourceName": "Partner",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -23,7 +23,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "qrEntryStorage",
+					"resourceName": "QRMapping",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -31,7 +31,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "qrCodeMappingStorage",
+					"resourceName": "Entrance",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -46,7 +46,7 @@
 			"dependsOn": [
 				{
 					"category": "storage",
-					"resourceName": "gastroStorage",
+					"resourceName": "Validation",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -54,7 +54,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "entryStorage",
+					"resourceName": "Partner",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -62,7 +62,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "qrEntryStorage",
+					"resourceName": "QRMapping",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -70,7 +70,7 @@
 				},
 				{
 					"category": "storage",
-					"resourceName": "qrCodeMappingStorage",
+					"resourceName": "Entrance",
 					"attributes": [
 						"Name",
 						"Arn"
@@ -125,34 +125,6 @@
 		}
 	},
 	"storage": {
-		"validationStorage": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"gastroStorage": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"entryStorage": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"qrCodeStorage": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"qrEntryStorage": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"qrCodeMappingStorage": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"Entry": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
 		"Validation": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
@@ -162,6 +134,10 @@
 			"providerPlugin": "awscloudformation"
 		},
 		"QRMapping": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"Entrance": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
 		}

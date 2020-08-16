@@ -1,7 +1,0 @@
-{
-    "tableName": "qrCodeMapping",
-    "partitionKeyName": "qrCodeId",
-    "partitionKeyType": "S",
-    "sortKeyName": "ownerId",
-    "sortKeyType": "S"
-}

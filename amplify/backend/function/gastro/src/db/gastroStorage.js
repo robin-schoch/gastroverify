@@ -2,8 +2,10 @@ const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const moment = require('moment');
-const {Gastro, Bar} = require('./../domain/gastro')
-let tableName = "gastro";
+const {Location, Partner} = require('../domain/partner')
+
+
+let tableName = "Partner";
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -52,7 +54,7 @@ const updateGastro = (gastro, create = false) => {
 
 
 const createGastro = (email, firstName, lastName, address, city, zipcode) => {
-    const g = new Gastro(email, firstName, lastName, address, city, zipcode)
+    const g = new Partner(email, firstName, lastName, address, city, zipcode)
     return updateGastro(g, true)
 }
 

@@ -1,7 +1,0 @@
-{
-    "tableName": "qrEntry",
-    "partitionKeyName": "ownerId",
-    "partitionKeyType": "S",
-    "sortKeyName": "qrId",
-    "sortKeyType": "S"
-}
