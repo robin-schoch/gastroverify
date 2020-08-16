@@ -153,7 +153,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                     res.json({
                         entry: code.checkIn,
                         time: timeIso,
-                        barId: code.locationName,
+                        locationName: code.locationName,
                     })
                 }).catch(error => {
                     res.status(500)
