@@ -1,0 +1,7 @@
+{
+    "tableName": "Entry",
+    "partitionKeyName": "locationId",
+    "partitionKeyType": "S",
+    "sortKeyName": "entryTime",
+    "sortKeyType": "S"
+}

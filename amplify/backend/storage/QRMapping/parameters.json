@@ -1,0 +1,5 @@
+{
+    "tableName": "QRMapping",
+    "partitionKeyName": "qrId",
+    "partitionKeyType": "S"
+}

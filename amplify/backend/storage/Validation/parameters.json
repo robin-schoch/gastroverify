@@ -1,0 +1,5 @@
+{
+    "tableName": "Validation",
+    "partitionKeyName": "phoneNumberHash",
+    "partitionKeyType": "S"
+}
