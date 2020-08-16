@@ -125,7 +125,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/visitors-6b686d71373433613848-build.zip"
+					"S3Key": "amplify-builds/visitors-4b4d69695a65366b7271-build.zip"
 				}
 			}
 		},
@@ -211,6 +211,16 @@
 							"Effect": "Allow",
 							"Action": [
 								"sns:Publish"
+							],
+							"Resource": "*"
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"secretsmanager:DescribeSecret",
+								"secretsmanager:GetSecretValue",
+								"secretsmanager:PutSecretValue",
+								"secretsmanager:UpdateSecretVersionStage"
 							],
 							"Resource": "*"
 						}
