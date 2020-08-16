@@ -1,7 +1,7 @@
 const express = require('express'), router = express.Router();
 const {getGastro} = require('./../db/gastroStorage')
 const {getEntries, updateGastro} = require('./../db/entryStorage')
-const {Gastro, Bar} = require('./../domain/gastro')
+const {Gastro, Bar} = require('../domain/partner')
 const {addQrCodeMapping} = require('./../db/qrCodeMappingStorage')
 const {uuid} = require('uuidv4');
 

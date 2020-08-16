@@ -13,27 +13,19 @@ const awsmobile = {
     "aws_dynamodb_all_tables_region": "eu-central-1",
     "aws_dynamodb_table_schemas": [
         {
-            "tableName": "validation-dev",
+            "tableName": "Validation-dev",
             "region": "eu-central-1"
         },
         {
-            "tableName": "gastro-dev",
+            "tableName": "Partner-dev",
             "region": "eu-central-1"
         },
         {
-            "tableName": "entry-dev",
+            "tableName": "QRMapping-dev",
             "region": "eu-central-1"
         },
         {
-            "tableName": "qrStorage-dev",
-            "region": "eu-central-1"
-        },
-        {
-            "tableName": "qrEntry-dev",
-            "region": "eu-central-1"
-        },
-        {
-            "tableName": "qrCodeMapping-dev",
+            "tableName": "Entrance-dev",
             "region": "eu-central-1"
         }
     ],

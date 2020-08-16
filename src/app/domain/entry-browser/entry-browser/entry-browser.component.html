@@ -17,56 +17,56 @@
             <ng-container matColumnDef="Checkin">
                 <th mat-header-cell *matHeaderCellDef> </th>
                 <td mat-cell *matCellDef="let element">
-                    <mat-icon *ngIf="element.CheckIn" [color]="'success'">local_bar</mat-icon>
-                    <mat-icon *ngIf="!element.CheckIn" [color]="'warn'">no_drinks</mat-icon>
+                    <mat-icon *ngIf="element.checkIn" [color]="'success'">local_bar</mat-icon>
+                    <mat-icon *ngIf="!element.checkIn" [color]="'warn'">no_drinks</mat-icon>
 
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="Zeit">
                 <th mat-header-cell *matHeaderCellDef> Zeit</th>
-                <td mat-cell *matCellDef="let element"> {{element.EntryTime | date:'short'}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.entryTime | date:'short'}} </td>
             </ng-container>
 
 
             <ng-container matColumnDef="Name">
                 <th mat-header-cell *matHeaderCellDef> Name</th>
-                <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="Nachname">
                 <th mat-header-cell *matHeaderCellDef> Nachname</th>
-                <td mat-cell *matCellDef="let element"> {{element.LastName}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
             </ng-container>
 
             <!-- Weight Column -->
             <ng-container matColumnDef="Strasse">
                 <th mat-header-cell *matHeaderCellDef> Strasse</th>
-                <td mat-cell *matCellDef="let element"> {{element.Street}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.street}} </td>
             </ng-container>
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="Ort">
                 <th mat-header-cell *matHeaderCellDef> Ort</th>
-                <td mat-cell *matCellDef="let element"> {{element.City}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.city}} </td>
             </ng-container>
 
             <ng-container matColumnDef="PLZ">
                 <th mat-header-cell *matHeaderCellDef> PLZ</th>
-                <td mat-cell *matCellDef="let element"> {{element.Zipcode}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.zipCode}} </td>
             </ng-container>
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="Nr.">
                 <th mat-header-cell *matHeaderCellDef> Nr.</th>
-                <td mat-cell *matCellDef="let element"> {{element.PhoneNumber}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
             </ng-container>
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="Email">
                 <th mat-header-cell *matHeaderCellDef>Email</th>
-                <td mat-cell *matCellDef="let element"> {{element.Email}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

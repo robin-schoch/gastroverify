@@ -33,7 +33,7 @@
                 "AttributeDefinitions": [
                   
                   {
-                      "AttributeName": "phonenumberhash",
+                      "AttributeName": "phoneNumberHash",
                       "AttributeType": "S"
                   } 
                   
@@ -41,7 +41,7 @@
                 "KeySchema": [
                   
                   {
-                    "AttributeName": "phonenumberhash",
+                    "AttributeName": "phoneNumberHash",
                     "KeyType": "HASH"
                   } 
                   

@@ -1,24 +1,25 @@
 {
   "permissions": {
     "storage": {
-      "validationStorage": [
-        "create",
-        "read",
-        "update"
-      ],
-      "entryStorage": [
+      "Validation": [
         "create",
         "read",
         "update",
         "delete"
       ],
-      "qrEntryStorage": [
+      "Partner": [
         "create",
         "read",
         "update",
         "delete"
       ],
-      "qrCodeMappingStorage": [
+      "QRMapping": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Entrance": [
         "create",
         "read",
         "update",

@@ -10,41 +10,41 @@
 		"env": {
 			"Type": "String"
 		},
-		"storagegastroStorageName": {
-			"Type": "String",
-			"Default": "storagegastroStorageName"
-		},
-		"storagegastroStorageArn": {
-			"Type": "String",
-			"Default": "storagegastroStorageArn"
-		},
 		"authgastroverifyd8b8759fUserPoolId": {
 			"Type": "String",
 			"Default": "authgastroverifyd8b8759fUserPoolId"
 		},
-		"storageqrEntryStorageName": {
+		"storageQRMappingName": {
 			"Type": "String",
-			"Default": "storageqrEntryStorageName"
+			"Default": "storageQRMappingName"
 		},
-		"storageqrEntryStorageArn": {
+		"storageQRMappingArn": {
 			"Type": "String",
-			"Default": "storageqrEntryStorageArn"
+			"Default": "storageQRMappingArn"
 		},
-		"storageqrCodeMappingStorageName": {
+		"storageValidationName": {
 			"Type": "String",
-			"Default": "storageqrCodeMappingStorageName"
+			"Default": "storageValidationName"
 		},
-		"storageqrCodeMappingStorageArn": {
+		"storageValidationArn": {
 			"Type": "String",
-			"Default": "storageqrCodeMappingStorageArn"
+			"Default": "storageValidationArn"
 		},
-		"storageentryStorageName": {
+		"storagePartnerName": {
 			"Type": "String",
-			"Default": "storageentryStorageName"
+			"Default": "storagePartnerName"
 		},
-		"storageentryStorageArn": {
+		"storagePartnerArn": {
 			"Type": "String",
-			"Default": "storageentryStorageArn"
+			"Default": "storagePartnerArn"
+		},
+		"storageEntranceName": {
+			"Type": "String",
+			"Default": "storageEntranceName"
+		},
+		"storageEntranceArn": {
+			"Type": "String",
+			"Default": "storageEntranceArn"
 		}
 	},
 	"Conditions": {
@@ -92,32 +92,32 @@
 						"REGION": {
 							"Ref": "AWS::Region"
 						},
-						"STORAGE_GASTROSTORAGE_NAME": {
-							"Ref": "storagegastroStorageName"
-						},
-						"STORAGE_GASTROSTORAGE_ARN": {
-							"Ref": "storagegastroStorageArn"
-						},
 						"AUTH_GASTROVERIFYD8B8759F_USERPOOLID": {
 							"Ref": "authgastroverifyd8b8759fUserPoolId"
 						},
-						"STORAGE_QRENTRYSTORAGE_NAME": {
-							"Ref": "storageqrEntryStorageName"
+						"STORAGE_QRMAPPING_NAME": {
+							"Ref": "storageQRMappingName"
 						},
-						"STORAGE_QRENTRYSTORAGE_ARN": {
-							"Ref": "storageqrEntryStorageArn"
+						"STORAGE_QRMAPPING_ARN": {
+							"Ref": "storageQRMappingArn"
 						},
-						"STORAGE_QRCODEMAPPINGSTORAGE_NAME": {
-							"Ref": "storageqrCodeMappingStorageName"
+						"STORAGE_VALIDATION_NAME": {
+							"Ref": "storageValidationName"
 						},
-						"STORAGE_QRCODEMAPPINGSTORAGE_ARN": {
-							"Ref": "storageqrCodeMappingStorageArn"
+						"STORAGE_VALIDATION_ARN": {
+							"Ref": "storageValidationArn"
 						},
-						"STORAGE_ENTRYSTORAGE_NAME": {
-							"Ref": "storageentryStorageName"
+						"STORAGE_PARTNER_NAME": {
+							"Ref": "storagePartnerName"
 						},
-						"STORAGE_ENTRYSTORAGE_ARN": {
-							"Ref": "storageentryStorageArn"
+						"STORAGE_PARTNER_ARN": {
+							"Ref": "storagePartnerArn"
+						},
+						"STORAGE_ENTRANCE_NAME": {
+							"Ref": "storageEntranceName"
+						},
+						"STORAGE_ENTRANCE_ARN": {
+							"Ref": "storageEntranceArn"
 						}
 					}
 				},
@@ -132,7 +132,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/gastro-4c4e475a326d6632735a-build.zip"
+					"S3Key": "amplify-builds/gastro-35304f4d79663774394b-build.zip"
 				}
 			}
 		},
@@ -251,14 +251,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storagegastroStorageArn"
+									"Ref": "storageValidationArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storagegastroStorageArn"
+												"Ref": "storageValidationArn"
 											},
 											"index/*"
 										]
@@ -284,14 +284,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageentryStorageArn"
+									"Ref": "storagePartnerArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageentryStorageArn"
+												"Ref": "storagePartnerArn"
 											},
 											"index/*"
 										]
@@ -317,14 +317,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageqrEntryStorageArn"
+									"Ref": "storageQRMappingArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageqrEntryStorageArn"
+												"Ref": "storageQRMappingArn"
 											},
 											"index/*"
 										]
@@ -350,14 +350,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageqrCodeMappingStorageArn"
+									"Ref": "storageEntranceArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageqrCodeMappingStorageArn"
+												"Ref": "storageEntranceArn"
 											},
 											"index/*"
 										]

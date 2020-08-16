@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {Bar} from '../../gastro-dashboard/gastro.service';
+import {Location} from '../../gastro-dashboard/gastro.service';
 import {Entry, EntryService, Page} from '../entry.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
@@ -12,7 +12,7 @@ import {filter, map} from 'rxjs/operators';
 })
 export class EntryBrowserComponent implements OnInit {
 
-    private _selectedBar$: BehaviorSubject<Bar> = new BehaviorSubject<Bar>(null);
+    private _selectedBar$: BehaviorSubject<Location> = new BehaviorSubject<Location>(null);
     public data$: BehaviorSubject<Page<Entry>> = new BehaviorSubject<Page<Entry>>(null);
     public paginator$: Observable<Paginator>;
     displayedColumns = [
@@ -51,7 +51,7 @@ export class EntryBrowserComponent implements OnInit {
     }
 
     @Input()
-    public set bar(bar: Bar) {
+    public set location(bar: Location) {
         if (!!bar) {
             console.log(bar);
             this.data$.next(null);
@@ -61,18 +61,18 @@ export class EntryBrowserComponent implements OnInit {
         }
     }
 
-    public get selectedBar$(): Observable<Bar> {
+    public get selectedBar$(): Observable<Location> {
         return this._selectedBar$.asObservable();
     }
 
-    private loadPage(bar: Bar, page?: Page<Entry>) {
+    private loadPage(bar: Location, page?: Page<Entry>) {
         this.entryService.loadNextPage(
             bar,
             page
         ).then(page => this.mergePages(page));
     }
 
-    public get bar$(): Observable<Bar> {
+    public get bar$(): Observable<Location> {
         return this._selectedBar$.asObservable();
     }
 
@@ -110,8 +110,8 @@ export class EntryBrowserComponent implements OnInit {
 
     }
 
-    reload(selectedbar: Bar) {
-        this.bar = selectedbar;
+    reload(selectedbar: Location) {
+        this.location = selectedbar;
     }
 }
 

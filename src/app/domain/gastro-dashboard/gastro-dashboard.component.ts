@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../auth/authentication.service';
 import {ToolbarService} from '../main/toolbar.service';
 import {EntryService} from '../entry-browser/entry.service';
-import {Bar, Gastro, GastroService} from './gastro.service';
+import {GastroService, Location, Partner} from './gastro.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
@@ -20,9 +20,9 @@ import {
 })
 export class GastroDashboardComponent implements OnInit {
 
-    public gastro$: Observable<Gastro>;
+    public partner$: Observable<Partner>;
     public newGastro$: Observable<boolean>;
-    public selectedBar$ = new BehaviorSubject<Bar>(null);
+    public selectedBar$ = new BehaviorSubject<Location>(null);
     displayedColumns: string[] = [
         'BarID',
         'Name',
@@ -43,7 +43,8 @@ export class GastroDashboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.gastro$ = this.gastroService.gastro$;
+        this.partner$ = this.gastroService.gastro$;
+        this.partner$.subscribe(elem => console.log(elem));
         this.toolbarService.toolbarTitle = 'Dashboard';
         this.newGastro$ = this.gastroService.gastro$.pipe(map(g => !!g.email));
         this.toolbarService.toolbarHidden = false;
@@ -67,7 +68,7 @@ export class GastroDashboardComponent implements OnInit {
         );
     }
 
-    openQRCodeDialog(code: string, text: string,  buisnessname:string ) {
+    openQRCodeDialog(code: string, text: string, buisnessname: string) {
         let dialogRef = this.dialog.open(
             QrCodeGeneratorDialogComponent,
             {
@@ -81,12 +82,12 @@ export class GastroDashboardComponent implements OnInit {
         );
     }
 
-    deleteBar(bar: Bar) {
+    deleteBar(bar: Location) {
         this.gastroService.removeBar(bar).then(elem => this.gastroService.gastro = elem).catch(error => console.log(error));
 
     }
 
-    selectBar(row: Bar) {
+    selectBar(row: Location) {
         this.selectedBar$.next(row);
     }
 }

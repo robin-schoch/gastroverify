@@ -3,19 +3,19 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import API from '@aws-amplify/api';
 import {AuthenticationService} from '../auth/authentication.service';
 
-export interface Gastro {
+export interface Partner {
     email: string,
     firstName: string,
     lastName: string,
     address: string,
     city: string
     zipcode: string,
-    bars: Bar[]
+    locations: Location[]
     bills: any[]
 }
 
-export interface Bar {
-    barid: string,
+export interface Location {
+    locationId: string,
     name: string,
     street: string,
     city: string,
@@ -31,7 +31,7 @@ export interface Bar {
 })
 export class GastroService {
 
-    private _gastro$: BehaviorSubject<Gastro> = new BehaviorSubject<Gastro>(null);
+    private _gastro$: BehaviorSubject<Partner> = new BehaviorSubject<Partner>(null);
 
     apiName = 'verifyGateway';
     private myInit = { // OPTIONAL
@@ -42,11 +42,11 @@ export class GastroService {
         private authService: AuthenticationService
     ) { }
 
-    public get gastro$(): Observable<Gastro> {
+    public get gastro$(): Observable<Partner> {
         return this._gastro$.asObservable();
     }
 
-    public set gastro(gastro: Gastro){
+    public set gastro(gastro: Partner){
         this._gastro$.next(gastro)
     }
     createGatro() {
@@ -78,11 +78,11 @@ export class GastroService {
             this._gastro$.next(elem);
         }).catch(error => {
             console.log(error);
-            this._gastro$.next(<Gastro>{});
+            this._gastro$.next(<Partner>{});
         });
     }
 
-    addBar(bar: Bar) {
+    addBar(bar: Location) {
 
         let body = Object.assign(
             {},
@@ -97,10 +97,10 @@ export class GastroService {
         )
     }
 
-    removeBar(bar: Bar) {
+    removeBar(location: Location) {
        return  API.del(
             this.apiName,
-            '/v1/gastro/me/bar/' + bar.barid,
+            '/v1/gastro/me/bar/' + location.locationId,
             this.myInit
         )
     }

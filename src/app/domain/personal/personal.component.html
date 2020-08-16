@@ -1,5 +1,5 @@
 <div class="mat-elevation-z8 " fxFlex fxLayout="column">
-    <form #signInFrom="ngForm" fxLayout="column" *ngIf="gastro$ | async as gastro" fxFlex>
+    <form #signInFrom="ngForm" fxLayout="column" *ngIf="partner$ | async as partner" fxFlex>
         <mat-toolbar>
             <span>Rechnungsaddresse</span>
             <span class="example-spacer"></span>
@@ -11,33 +11,33 @@
 
 
             <mat-form-field>
-                <input [(ngModel)]="gastro.firstName" class="cell"
+                <input [(ngModel)]="partner.firstName" class="cell"
                        delayedFocus matInput name="firstname"
                        placeholder="Name"
                        required type="name">
             </mat-form-field>
             <mat-form-field>
 
-                <input [(ngModel)]="gastro.lastName" class="cell" delayedFocus matInput name="lastname"
+                <input [(ngModel)]="partner.lastName" class="cell" delayedFocus matInput name="lastname"
                        placeholder="Nachname"
                        required type="name">
             </mat-form-field>
 
             <mat-form-field>
-                <input [(ngModel)]="gastro.address" class="cell" delayedFocus matInput name="address"
+                <input [(ngModel)]="partner.address" class="cell" delayedFocus matInput name="address"
                        placeholder="Strasse + Nummer"
                        required type="Address">
             </mat-form-field>
 
             <mat-form-field>
-                <input [(ngModel)]="gastro.city" class="cell" delayedFocus matInput name="city"
+                <input [(ngModel)]="partner.city" class="cell" delayedFocus matInput name="city"
                        placeholder="Ort"
                        required type="city">
             </mat-form-field>
 
 
             <mat-form-field>
-                <input [(ngModel)]="gastro.zipcode" class="cell" delayedFocus matInput name="zip"
+                <input [(ngModel)]="partner.zipcode" class="cell" delayedFocus matInput name="zip"
                        placeholder="PLZ"
                        required type="zip">
             </mat-form-field>

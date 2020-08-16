@@ -5,15 +5,15 @@ const moment = require('moment');
 
 
 // add dev if local
-let tableName = "entry";
+let tableName = "Entrance";
 console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
   tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
   tableName = tableName + '-dev'
 }
-const partitionKeyName = "BarId";
-const sortKeyName = "EntryTime";
+const partitionKeyName = "locationId";
+const sortKeyName = "entryTime";
 
 
 const insertCheckInData = (item) => {

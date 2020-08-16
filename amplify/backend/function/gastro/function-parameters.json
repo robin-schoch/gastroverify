@@ -1,25 +1,25 @@
 {
   "permissions": {
     "storage": {
-      "gastroStorage": [
+      "Validation": [
         "create",
         "read",
         "update",
         "delete"
       ],
-      "entryStorage": [
+      "Partner": [
         "create",
         "read",
         "update",
         "delete"
       ],
-      "qrEntryStorage": [
+      "QRMapping": [
         "create",
         "read",
         "update",
         "delete"
       ],
-      "qrCodeMappingStorage": [
+      "Entrance": [
         "create",
         "read",
         "update",

@@ -1,11 +1,12 @@
 const express = require('express'), router = express.Router();
 const jwt = require('jsonwebtoken');
-const {Bar} = require("../domain/gastro");
+const {Location} = require("../domain/partner");
 const {createGastro, getGastro, updateGastro} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
 const {v4: uuidv4} = require('uuid');
-
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
+
+
 router.get('/', (req, res) => {
     getGastro(req.xUser.email).then(gastro => {
         res.json(gastro)
@@ -25,29 +26,31 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/:id/bar', (req, res) => {
-    const bar = new Bar(req.body.barid, req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true)
-    console.log(bar)
-    if (!bar.barid) {
+    const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true)
+    console.log(location)
+    if (!location.locationId) {
         res.status(409)
-        res.json(bar)
+        res.json(location)
     }
     getGastro(req.xUser.email).then(gastor => {
-        if (gastor.bars.map(bars => bars.barid).includes(bar.barid)) {
-            res.json({error: 'bar id already exits'})
+        if (gastor.locations.map(l => l.locationId).includes(location.locationId)) {
+            res.json({error: 'location id already exits'})
         } else {
-            gastor.bars.push(bar)
+            gastor.locations.push(location)
             console.log(gastor)
             Promise.all([
                 updateGastro(gastor),
                 addQrCodeMapping({
-                    qrCodeId: bar.checkInCode,
+                    qrId: location.checkInCode,
                     ownerId: gastor.email,
-                    barName: bar.barid,
+                    locationId: location.locationId,
+                    locationName: location.name,
                     checkIn: true
                 }), addQrCodeMapping({
-                    qrCodeId: bar.checkOutCode,
+                    qrId: location.checkOutCode,
                     ownerId: gastor.email,
-                    barName: bar.barid,
+                    locationId: location.locationId,
+                    locationName: location.name,
                     checkIn: false
                 })]).then(([a, b, c]) => {
                 res.json(a)
@@ -60,13 +63,13 @@ router.post('/:id/bar', (req, res) => {
 })
 
 router.delete('/:id/bar/:barId', (req, res) => {
-    getGastro(req.xUser.email).then(gastor => {
+    getGastro(req.xUser.email).then(partner => {
         console.log(req.params.barId)
-        let bar = gastor.bars.filter(bars => bars.barid === req.params.barId)[0]
-        Promise.all([deleteQrMapping(bar.checkInCode, gastor.email), deleteQrMapping(bar.checkOutCode, gastor.email)])
+        let location = partner.locations.filter(l => l.locationId === req.params.barId)[0]
+        Promise.all([deleteQrMapping(location.checkInCode, partner.email), deleteQrMapping(location.checkOutCode, partner.email)])
             .then(elem => {
-                gastor.bars = gastor.bars.filter(bars => bars.barid !== req.params.barId)
-                updateGastro(gastor).then(success => {
+                partner.locations = partner.locations.filter(l => l.locationId !== req.params.barId)
+                updateGastro(partner).then(success => {
                     res.json(success)
                 }).catch(error => {
                     res.status(500)

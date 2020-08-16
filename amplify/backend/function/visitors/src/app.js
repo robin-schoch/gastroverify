@@ -1,14 +1,14 @@
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
-	STORAGE_ENTRYSTORAGE_ARN
-	STORAGE_ENTRYSTORAGE_NAME
-	STORAGE_QRCODEMAPPINGSTORAGE_ARN
-	STORAGE_QRCODEMAPPINGSTORAGE_NAME
-	STORAGE_QRENTRYSTORAGE_ARN
-	STORAGE_QRENTRYSTORAGE_NAME
-	STORAGE_VALIDATIONSTORAGE_ARN
-	STORAGE_VALIDATIONSTORAGE_NAME
+	STORAGE_ENTRANCE_ARN
+	STORAGE_ENTRANCE_NAME
+	STORAGE_PARTNER_ARN
+	STORAGE_PARTNER_NAME
+	STORAGE_QRMAPPING_ARN
+	STORAGE_QRMAPPING_NAME
+	STORAGE_VALIDATION_ARN
+	STORAGE_VALIDATION_NAME
 Amplify Params - DO NOT EDIT *//*
 Copyright 2017 - 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
@@ -86,7 +86,7 @@ app.post('/v1/register', (req, res) => {
         })
     } else {
         res.status(401)
-        res.json({erorr: "missing parameter"})
+        res.json({error: "missing parameter"})
     }
 });
 
@@ -145,7 +145,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
         if (valid) {
             getQrCode(req.params.qrId).then(code => {
                 const timeIso = moment().toISOString()
-                let cI = new CheckIn(code.barName, req.body.firstName, req.body.surName,
+                let cI = new CheckIn(code.locationId, req.body.firstName, req.body.surName,
                     req.body.email, req.body.address, req.body.city, req.body.zipcode,
                     code.checkIn, timeIso, decoded.phone, req.body.firstUse)
                 console.log("created user")
@@ -153,7 +153,8 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                     res.json({
                         entry: code.checkIn,
                         time: timeIso,
-                        barId: code.barName,
+                        locationName: code.locationName,
+
                     })
                 }).catch(error => {
                     res.status(500)

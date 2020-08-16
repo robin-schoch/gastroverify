@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import API from '@aws-amplify/api';
 import {BehaviorSubject} from 'rxjs';
-import {Bar} from '../gastro-dashboard/gastro.service';
+import {Location} from '../gastro-dashboard/gastro.service';
 import {DatePipe} from '@angular/common';
 
 export interface Entry {
@@ -39,7 +39,7 @@ export class EntryService {
         private datepipe: DatePipe
     ) { }
 
-    public loadNextPage(bar: Bar, page?: Page<Entry>): Promise<Page<Entry>> {
+    public loadNextPage(bar: Location, page?: Page<Entry>): Promise<Page<Entry>> {
         const init = Object.assign(
             {},
             this.myInit
@@ -58,12 +58,12 @@ export class EntryService {
         }
         return API.get(
             this.apiName,
-            '/v1/entry/' + bar.barid,
+            '/v1/entry/' + bar.locationId,
             init
         );
     }
 
-    public exportCSV(bar: Bar) {
+    public exportCSV(bar: Location) {
         API.endpoint(this.apiName).then(url => {
             const myInit = { // OPTIONAL
                 response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
@@ -71,7 +71,7 @@ export class EntryService {
             };
             API.get(
                 this.apiName,
-                `/v1/entry/${bar.barid}/export`,
+                `/v1/entry/${bar.locationId}/export`,
                 myInit
             ).then(elem => {
                 const csvContent = 'data:text/csv;charset=utf-8,' + elem.data;
