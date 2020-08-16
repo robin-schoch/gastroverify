@@ -4,8 +4,9 @@ const {Bar} = require("../domain/gastro");
 const {createGastro, getGastro, updateGastro} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
 const {v4: uuidv4} = require('uuid');
-
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
+
+
 router.get('/', (req, res) => {
     getGastro(req.xUser.email).then(gastro => {
         res.json(gastro)
