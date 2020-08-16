@@ -154,6 +154,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                         entry: code.checkIn,
                         time: timeIso,
                         locationName: code.locationName,
+
                     })
                 }).catch(error => {
                     res.status(500)
