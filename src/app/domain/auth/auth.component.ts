@@ -35,7 +35,9 @@ export class AuthComponent implements OnInit , OnDestroy{
     }
 
     ngOnInit() {
+
         onAuthUIStateChange((authState, authData) => {
+            console.log("hurra")
             console.log(authData);
             console.log(authState);
             if (authState === 'signedin') {
@@ -44,9 +46,13 @@ export class AuthComponent implements OnInit , OnDestroy{
             }
             this.ref.detectChanges();
         });
+
+
     }
 
     ngOnDestroy() {
         return onAuthUIStateChange;
     }
+
+
 }

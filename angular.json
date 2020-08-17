@@ -83,7 +83,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "verify-manager:build"
+            "browserTarget": "verify-manager:build",
+            "port": 4444
           },
           "configurations": {
             "production": {

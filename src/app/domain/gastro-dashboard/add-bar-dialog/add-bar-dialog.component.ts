@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Location, GastroService} from '../gastro.service';
+import {GastroService, Location} from '../gastro.service';
+import {SnackbarService} from '../../snackbar/snackbar.service';
 
 export interface IAddBarData {
 
@@ -17,12 +18,13 @@ export class AddBarDialogComponent implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: IAddBarData,
         public dialogRef: MatDialogRef<AddBarDialogComponent>,
-        private gastroService: GastroService
+        private gastroService: GastroService,
+        private snackBar: SnackbarService
     ) { }
 
     public newLocation = <Location>{};
 
-    public reg = new RegExp('^[A-z0-9]*')
+    public reg = new RegExp('^[A-z0-9]*');
 
     ngOnInit() {
     }
@@ -33,7 +35,9 @@ export class AddBarDialogComponent implements OnInit {
             this.gastroService.gastro = elem;
             this.dialogRef.close();
         }).catch(elem => {
+            this.snackBar.error(elem);
             console.log(elem);
+
         });
 
     }

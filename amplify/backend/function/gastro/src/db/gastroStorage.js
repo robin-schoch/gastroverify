@@ -33,8 +33,11 @@ const getGastro = (email) => {
     })
 }
 
+updatePartner = (partner) => {
 
-const updateGastro = (gastro, create = false) => {
+}
+
+const createPartner = (gastro, create = false) => {
     let putItemParams = {
         TableName: tableName,
         Item: gastro
@@ -55,13 +58,13 @@ const updateGastro = (gastro, create = false) => {
 
 const createGastro = (email, firstName, lastName, address, city, zipcode) => {
     const g = new Partner(email, firstName, lastName, address, city, zipcode)
-    return updateGastro(g, true)
+    return createPartner(g, true)
 }
 
 
 
 module.exports = {
     createGastro,
-    updateGastro,
+    createPartner,
     getGastro
 }

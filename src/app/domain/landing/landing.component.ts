@@ -29,11 +29,10 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         let a = '';
         this.isAuthenticated$ = this.authenticationService.isAuthenticated$;
-        console.log('landing page...');
         const sub = this.isAuthenticated$.subscribe(is => {
             console.log('User logged in: ' + is);
             if (is) {
-                this.ngZone.run(() => this.router.navigate(['gastro/personal']));
+                this.ngZone.run(() => this.router.navigate(['location/dashboard']));
             } else {
                 console.log('no user logged in');
                 this.router.navigate(['']);
