@@ -40,6 +40,7 @@ import {DatePipe} from '@angular/common';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {AmplifyUIAngularModule} from '@aws-amplify/ui-angular';
 
 Amplify.configure(awsconfig);
 
@@ -89,6 +90,7 @@ Amplify.configure(awsconfig);
                 deps: [HttpClient]
             }
         }),
+        AmplifyUIAngularModule,
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],

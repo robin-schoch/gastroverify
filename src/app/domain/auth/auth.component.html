@@ -1,6 +1,6 @@
-<div fxLayout="column" fxLayoutGap="10px">
+<div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="space-evenly center">
 
-    <div fxLayout="row" fxLayoutAlign="space-evenly center">
+    <!--<div fxLayout="row" fxLayoutAlign="space-evenly center">
         <mat-card fxFlex="40" class="sign-mat-card">
             <mat-tab-group fxFlex>
 
@@ -13,8 +13,15 @@
                     </mat-tab>
             </mat-tab-group>
         </mat-card>
-    </div>
-
+    </div> -->
+    <amplify-authenticator usernameAlias="email">
+        <amplify-sign-up
+                slot="sign-up"
+                usernameAlias="email"
+                [formFields]="formFields"
+        ></amplify-sign-up>
+        <amplify-sign-in slot="sign-in" usernameAlias="email"></amplify-sign-in>
+    </amplify-authenticator>
 
 </div>
 
