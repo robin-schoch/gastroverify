@@ -1,31 +1,19 @@
 <div fxLayout="column" fxLayoutGap="10px">
 
     <div fxLayout="row" fxLayoutAlign="space-evenly center">
-        <mat-card fxFlex="40">
-            <mat-card-header>
-                <mat-card-title>
-                <h1>
-                    Welcome To Verify Manager
-                </h1>
-                </mat-card-title>
-            </mat-card-header>
+        <mat-card fxFlex="40" class="sign-mat-card">
+            <mat-tab-group fxFlex>
+
+                    <mat-tab label="Sign In" >
+                        <app-signin></app-signin>
+                    </mat-tab>
+
+                    <mat-tab label="Sign Up" class="sign-tab">
+                        <app-signup></app-signup>
+                    </mat-tab>
+            </mat-tab-group>
         </mat-card>
     </div>
-
-    <div fxLayout="row" fxLayoutAlign="space-evenly center">
-        <mat-card fxFlex="40">
-        <mat-tab-group fxFlex>
-            <mat-tab label="Sign In">
-                <app-signin></app-signin>
-            </mat-tab>
-            <mat-tab label="Sign Up">
-                <app-signup></app-signup>
-            </mat-tab>
-
-        </mat-tab-group>
-        </mat-card>
-    </div>
-
 
 
 </div>

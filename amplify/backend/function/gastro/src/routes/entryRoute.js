@@ -37,6 +37,10 @@ const fields = [
         label: 'EntryTime',
         value: 'entryTime'
     },
+    {
+        label: 'Birthday',
+        value: 'birthday'
+    }
 ];
 // 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime'
 

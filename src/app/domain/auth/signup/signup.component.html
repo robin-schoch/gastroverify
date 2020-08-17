@@ -1,8 +1,8 @@
 <mat-horizontal-stepper linear #stepper xmlns="http://www.w3.org/1999/html">
-    <mat-step [editable]="true">
+    <mat-step [editable]="true"  class="sign-padding">
         <ng-template matStepLabel>Information</ng-template>
-        <form #signUpForm="ngForm" *ngIf="newUser$ | async as newUser" fxLayout="column">
-            <div>
+        <form #signUpForm="ngForm" *ngIf="newUser$ | async as newUser" fxLayout="column" >
+            <div class="sign-padding">
                 <div fxLayout="column">
 
                     <mat-form-field fxFlex="100">
@@ -45,7 +45,7 @@
 
     </mat-step>
 
-    <mat-step>
+    <mat-step class="sign-padding">
         <ng-template matStepLabel>Bestätigen</ng-template>
         <form #confirmFrom="ngForm" *ngIf="newUser$ | async as newUser" fxLayout="column">
             <div>

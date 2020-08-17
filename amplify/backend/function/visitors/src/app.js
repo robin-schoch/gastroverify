@@ -147,7 +147,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                 const timeIso = moment().toISOString()
                 let cI = new CheckIn(code.locationId, req.body.firstName, req.body.surName,
                     req.body.email, req.body.address, req.body.city, req.body.zipcode,
-                    code.checkIn, timeIso, decoded.phone, req.body.firstUse)
+                    code.checkIn, timeIso, decoded.phone, req.body.birthday, req.body.firstUse)
                 console.log("created user")
                 checkinStorage.addCheckIn(cI).then(elem => {
                     res.json({
