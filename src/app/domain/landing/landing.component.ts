@@ -25,10 +25,8 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     ) { }
 
 
-
-
     ngOnInit() {
-        let a = ""
+        let a = '';
         this.isAuthenticated$ = this.authenticationService.isAuthenticated$;
         console.log('landing page...');
         const sub = this.isAuthenticated$.subscribe(is => {
@@ -37,7 +35,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.router.navigate(['gastro/personal']);
             } else {
                 console.log('no user logged in');
-                this.router.navigate([''])
+                this.router.navigate(['']);
             }
         });
         this._subscritpion.push(sub);
@@ -50,6 +48,14 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this._subscritpion.forEach(sub => sub.unsubscribe());
+    }
+
+
+    public scrollToLogin(): void {
+        let valueInVh = 90;
+        console.log("scroll")
+        document.querySelector('mat-sidenav-content').scrollTop = valueInVh * window.innerHeight / 100;
+
     }
 
 }

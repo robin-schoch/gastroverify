@@ -1,5 +1,28 @@
-<div>
+<div class="main-landing" fxLayout="column">
 
+    <div class="top-banner" fxLayout="row" fxLayoutAlign="space-between center">
+        <span class="landing-banner-title">Entry Check</span>
+
+        <button mat-flat-button color="primary" class="login-button" (click)="scrollToLogin()">Login</button>
+    </div>
+
+    <div fxFill fxLayoutAlign="center center" fxlayout="column">
+        <h1 class="main-title">
+            Entry Check
+        </h1>
+
+
+
+        <h1>
+            Check your entries
+        </h1>
+
+    </div>
 
 </div>
-<app-auth></app-auth>
+<div class="second-landing">
+    <app-auth></app-auth>
+</div>
+<div class="footer-landing">
+
+</div>
