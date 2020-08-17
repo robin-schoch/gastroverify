@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {ToolbarService} from '../main/toolbar.service';
 import {AuthenticationService} from '../auth/authentication.service';
 import {Observable, Subscription} from 'rxjs';
@@ -21,7 +21,8 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         private toolbarService: ToolbarService,
         private authenticationService: AuthenticationService,
         private gastroService: GastroService,
-        private router: Router
+        private router: Router,
+        private ngZone: NgZone
     ) { }
 
 
@@ -32,7 +33,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         const sub = this.isAuthenticated$.subscribe(is => {
             console.log('User logged in: ' + is);
             if (is) {
-                this.router.navigate(['gastro/personal']);
+                this.ngZone.run(() => this.router.navigate(['gastro/personal']));
             } else {
                 console.log('no user logged in');
                 this.router.navigate(['']);
