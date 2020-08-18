@@ -58,7 +58,7 @@
             }
         },
         {
-            "name": "/register",
+            "name": "/v1/newpartner",
             "lambdaFunction": "gastro",
             "privacy": {
                 "private": true,
@@ -121,5 +121,5 @@
             ]
         }
     ],
-    "uuid": "a91ddd99"
+    "uuid": "968b57f1"
 }

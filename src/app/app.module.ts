@@ -47,6 +47,7 @@ import { ConfirmdialogComponent } from './domain/confirmdialog/confirmdialog.com
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 Amplify.configure(awsconfig);
 
@@ -102,7 +103,8 @@ Amplify.configure(awsconfig);
         AmplifyUIAngularModule,
         MatMenuModule,
         MatSnackBarModule,
-        MatSelectModule
+        MatSelectModule,
+        MatProgressSpinnerModule
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],

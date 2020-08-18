@@ -465,7 +465,7 @@
                               ]
                             },
                               "/POST",
-                            "/register/*"
+                            "/v1/newpartner/*"
                           ]
                         ]
                       },
@@ -496,7 +496,7 @@
                               ]
                             },
                               "/POST",
-                            "/register"
+                            "/v1/newpartner"
                           ]
                         ]
                       }
@@ -531,7 +531,7 @@
                               ]
                             },
                               "/GET",
-                            "/register/*"
+                            "/v1/newpartner/*"
                           ]
                         ]
                       },
@@ -562,7 +562,7 @@
                               ]
                             },
                               "/GET",
-                            "/register"
+                            "/v1/newpartner"
                           ]
                         ]
                       }
@@ -597,7 +597,7 @@
                               ]
                             },
                               "/PUT",
-                            "/register/*"
+                            "/v1/newpartner/*"
                           ]
                         ]
                       },
@@ -628,7 +628,7 @@
                               ]
                             },
                               "/PUT",
-                            "/register"
+                            "/v1/newpartner"
                           ]
                         ]
                       }
@@ -663,7 +663,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/register/*"
+                            "/v1/newpartner/*"
                           ]
                         ]
                       },
@@ -694,7 +694,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/register"
+                            "/v1/newpartner"
                           ]
                         ]
                       }
@@ -729,7 +729,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/register/*"
+                            "/v1/newpartner/*"
                           ]
                         ]
                       },
@@ -760,7 +760,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/register"
+                            "/v1/newpartner"
                           ]
                         ]
                       }
@@ -2424,7 +2424,7 @@
                 }
               },   
               
-              "/register": {
+              "/v1/newpartner": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -2529,7 +2529,7 @@
                   }
                 }
               },
-              "/register/{proxy+}": {
+              "/v1/newpartner/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -2747,7 +2747,7 @@
         
         
         
-      "DeploymentAPIGWverifyGatewaya91ddd99": {
+      "DeploymentAPIGWverifyGateway968b57f1": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
