@@ -19,7 +19,7 @@ export class AuthenticationService {
 
     private _isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
     private _activeUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
-    private _role$: BehaviorSubject<any> = new BehaviorSubject<any>(null)
+    private _role$: BehaviorSubject<string[]> = new BehaviorSubject<any>([]);
 
     private _signUpUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
 
@@ -35,11 +35,13 @@ export class AuthenticationService {
         Auth.currentAuthenticatedUser().then(user => {
             this.activeUser = <CognitoUser>user;
             this.isAuthenticated = true;
-            console.log(user.getSignInUserSession().getIdToken().decodePayload())
+
+
+            console.log(user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
             console.log('Active user: ' + user.username);
         }).catch(elem => {
             this.isAuthenticated = false;
-            console.log('no active user')
+            console.log('no active user');
         });
     }
 
@@ -145,6 +147,14 @@ export class AuthenticationService {
         this._signUpUser$.next(user);
     }
 
+    public get role$(): Observable<string[]> {
+        return this._role$.asObservable();
+    }
+
+    public set role(roles: string[]) {
+        this._role$.next([])
+    }
+
     /***************************************************************************
      *                                                                         *
      * Private methods                                                         *
@@ -161,5 +171,9 @@ export class AuthenticationService {
                 email: signUp.email
             }
         };
+    }
+
+    setRoles() {
+
     }
 }

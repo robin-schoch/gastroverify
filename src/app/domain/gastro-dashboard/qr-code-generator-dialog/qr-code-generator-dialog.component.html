@@ -1,8 +1,15 @@
-<div mat-dialog-content fxlayout="column" fxLayoutAlign="center center" *ngIf="qrUrl$ | async as qrUrl" f>
+<div mat-dialog-content fxlayout="column" fxLayoutGap="10px" fxLayoutAlign="center center" *ngIf="qrUrl$ | async as qrUrl" f>
 
-    <div fxLayout="column">
-        <h1>{{qrUrl.text}}</h1>
-        <qrcode [level]="1" [qrvalue]="generateUrl(qrUrl.url)" [size]="400"></qrcode>
-        <h1>{{generateUrl(qrUrl.url)}}</h1>
+    <div fxLayout="column" fxLayoutGap="10px">
+
+        <mat-form-field class="example-form-field" *ngIf="data.text === 'checkin'">
+            <mat-label>Tischnummer</mat-label>
+            <input matInput type="number" #tableinput  (keyup)="setTableNumber(tableinput.value)">
+        </mat-form-field>
+
+
+
+        <button mat-flat-button color="accent" (click)="download()">download</button>
     </div>
+    <canvas #canvas width="400" height="566"></canvas>
 </div>

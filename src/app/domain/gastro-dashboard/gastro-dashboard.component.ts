@@ -100,7 +100,8 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
                 width: '90vw',
                 data: <IQRCodeGeneratorData>{
                     url: `${code}?businessName=${buisnessname}`,
-                    text: text
+                    text: text,
+                    name: buisnessname
                 }
             }
         );

@@ -14,6 +14,12 @@
                 <mat-icon mat-list-icon color="accent">perm_identity</mat-icon>
                 <span>{{'context.profile' | translate}}</span>
             </mat-list-option>
+
+            <mat-list-option (click)="sidenav.toggle()" *ngIf="isAdmin$ | async">
+                <mat-icon mat-list-icon color="accent">admin</mat-icon>
+                <span>{{'context.admin' | translate}}</span>
+            </mat-list-option>
+
         </mat-selection-list>
 
 
