@@ -10,7 +10,7 @@ class CheckIn {
         checkIn,
         timestamp,
         phonenumber,
-        birthday,
+        birthdate,
         firstUse
     ) {
         this.locationId = locationId
@@ -23,7 +23,7 @@ class CheckIn {
         this.zipCode = zipcode
         this.checkIn = checkIn
         this.phoneNumber = phonenumber
-        this.birthday = birthday
+        this.birthdate = birthdate
         this.firstUse = firstUse
     }
 
