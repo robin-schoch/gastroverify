@@ -44,7 +44,7 @@
             }
         },
         {
-            "name": "/v1/gastro",
+            "name": "/v1/newpartner",
             "lambdaFunction": "gastro",
             "privacy": {
                 "private": true,
@@ -58,7 +58,7 @@
             }
         },
         {
-            "name": "/v1/newpartner",
+            "name": "/v1/gastro",
             "lambdaFunction": "gastro",
             "privacy": {
                 "private": true,
@@ -68,7 +68,23 @@
                     "/PUT",
                     "/PATCH",
                     "/DELETE"
-                ]
+                ],
+                "userPoolGroups": {
+                    "admin": [
+                        "/POST",
+                        "/GET",
+                        "/PUT",
+                        "/PATCH",
+                        "/DELETE"
+                    ],
+                    "gastro": [
+                        "/POST",
+                        "/GET",
+                        "/PUT",
+                        "/PATCH",
+                        "/DELETE"
+                    ]
+                }
             }
         }
     ],
@@ -119,7 +135,14 @@
             "attributes": [
                 "adminGroupRole"
             ]
+        },
+        {
+            "category": "auth",
+            "resourceName": "userPoolGroups",
+            "attributes": [
+                "gastroGroupRole"
+            ]
         }
     ],
-    "uuid": "968b57f1"
+    "uuid": "f814953e"
 }

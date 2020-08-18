@@ -120,6 +120,13 @@
                     "attributes": [
                         "adminGroupRole"
                     ]
+                },
+                {
+                    "category": "auth",
+                    "resourceName": "userPoolGroups",
+                    "attributes": [
+                        "gastroGroupRole"
+                    ]
                 }
             ]
         }

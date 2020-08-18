@@ -33,8 +33,32 @@ const getGastro = (email) => {
     })
 }
 
-updatePartner = (partner) => {
+updatePartner = (partner, email, body) => {
+    let updateItemParams = {
+        TableName: tableName,
+        Key: {
+            "email": email,
+        },
+        UpdateExpression: "set address = :address, city=:city, firstName=:first, lastName=:last, zipcode=:zip",
+        ExpressionAttributeValues: {
+            ":address": body.address,
+            ":city": body.city,
+            ":first": body.firstname,
+            ":last": body.lastname,
+            ":zip": body.zipcode
+        },
+        ReturnValues: "UPDATED_NEW"
+    }
 
+    return new Promise((resolve, reject) => {
+        dynamodb.update(updateItemParams, (err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(data)
+            }
+        })
+    })
 }
 
 const createPartner = (gastro, create = false) => {
@@ -60,7 +84,6 @@ const createNewPartner = (email, firstName, lastName, address, city, zipcode) =>
     const g = new Partner(email, firstName, lastName, address, city, zipcode)
     return createPartner(g, true)
 }
-
 
 
 module.exports = {
