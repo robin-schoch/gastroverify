@@ -1,7 +1,7 @@
 const express = require('express'), router = express.Router();
 const jwt = require('jsonwebtoken');
 const {Location} = require("../domain/partner");
-const {createGastro, getGastro, updateGastro} = require('./../db/gastroStorage')
+const {createGastro, getGastro, createPartner} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
 const {v4: uuidv4} = require('uuid');
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
@@ -39,7 +39,7 @@ router.post('/:id/bar', (req, res) => {
             gastor.locations.push(location)
             console.log(gastor)
             Promise.all([
-                updateGastro(gastor),
+                createPartner(gastor),
                 addQrCodeMapping({
                     qrId: location.checkInCode,
                     ownerId: gastor.email,
@@ -69,7 +69,7 @@ router.delete('/:id/bar/:barId', (req, res) => {
         Promise.all([deleteQrMapping(location.checkInCode, partner.email), deleteQrMapping(location.checkOutCode, partner.email)])
             .then(elem => {
                 partner.locations = partner.locations.filter(l => l.locationId !== req.params.barId)
-                updateGastro(partner).then(success => {
+                createPartner(partner).then(success => {
                     res.json(success)
                 }).catch(error => {
                     res.status(500)
@@ -91,7 +91,11 @@ router.post('/', (req, res) => {
 })
 
 router.put('/:id', ((req, res) => {
+    const g = new Partner(email, firstName, lastName, address, city, zipcode)
 
+    createPartner(g).then(success => {
+        res.json(success)
+    })
 }))
 
 

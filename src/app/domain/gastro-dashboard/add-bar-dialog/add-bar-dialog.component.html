@@ -2,13 +2,6 @@
 <div mat-dialog-content>
     <form #addBarForm="ngForm" fxLayout="column">
         <mat-form-field>
-            <input [(ngModel)]="newLocation.locationId" class="cell" delayedFocus matInput name="firstname"
-
-                   pattern="^[A-z0-9]*"
-                   placeholder="Bar ID"
-                   required type="name">
-        </mat-form-field>
-        <mat-form-field>
 
             <input [(ngModel)]="newLocation.name" class="cell" delayedFocus matInput name="lastname"
                    placeholder="Name"
@@ -34,7 +27,7 @@
                    required type="zip">
         </mat-form-field>
 
-        <button mat-raised-button type="button" [disabled]="addBarForm.invalid" (click)="addBar()">Hinzufügen</button>
+        <button mat-flat-button color="accent" type="button" [disabled]="addBarForm.invalid" (click)="addBar()">Hinzufügen</button>
     </form>
 
 </div>

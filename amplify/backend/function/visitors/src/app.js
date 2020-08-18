@@ -139,6 +139,7 @@ app.post('/v1/validate', function (req, res) {
 
 app.post('/v1/checkin/:qrId', function (req, res) {
     console.log("checkIn...")
+    console.log(req.body)
     jwtUtil.verifyJWT(req.header('Authorization')).then(async decoded => {
         const valid = await validationStorage.validationSuccess(decoded.phone, decoded.validation)
         console.log("is valid: " + valid)

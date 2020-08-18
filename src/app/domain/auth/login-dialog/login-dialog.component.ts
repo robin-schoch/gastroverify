@@ -1,19 +1,21 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
 import {FormFieldTypes, onAuthUIStateChange} from '@aws-amplify/ui-components';
-import {AuthenticationService} from './authentication.service';
-import {CognitoUser} from "amazon-cognito-identity-js";
-
+import {CognitoUser} from 'amazon-cognito-identity-js';
+import {AuthenticationService} from '../authentication.service';
 
 @Component({
-    selector: 'app-auth',
-    templateUrl: './auth.component.html',
-    styleUrls: ['./auth.component.scss'],
+    selector: 'app-login-dialog',
+    templateUrl: './login-dialog.component.html',
+    styleUrls: ['./login-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AuthComponent implements OnInit , OnDestroy{
+export class LoginDialogComponent implements OnInit, OnDestroy {
+
     formFields: FormFieldTypes;
 
     constructor(
+        public dialogRef: MatDialogRef<LoginDialogComponent>,
         private authService: AuthenticationService,
         private ref: ChangeDetectorRef
     ) {
@@ -31,23 +33,18 @@ export class AuthComponent implements OnInit , OnDestroy{
                 required: true,
             },
         ];
-
     }
 
-    ngOnInit() {
-
+    ngOnInit(): void {
         onAuthUIStateChange((authState, authData) => {
-            console.log("hurra")
-            console.log(authData);
-            console.log(authState);
+
             if (authState === 'signedin') {
+                this.dialogRef.close();
                 this.authService.isAuthenticated = true;
                 this.authService.activeUser = authData as CognitoUser;
             }
             this.ref.detectChanges();
         });
-
-
     }
 
     ngOnDestroy() {

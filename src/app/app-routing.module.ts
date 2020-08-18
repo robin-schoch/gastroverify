@@ -18,7 +18,7 @@ const routes: Routes = [
         pathMatch: 'full'
     },
     {
-        path: 'gastro',
+        path: 'location',
         canActivate: [IsAuthenticatedGuard],
         children: [
             {

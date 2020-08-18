@@ -41,6 +41,11 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AmplifyUIAngularModule} from '@aws-amplify/ui-angular';
+import {MatMenuModule} from '@angular/material/menu';
+import { PersonalAddDialogComponent } from './domain/personal/personal-add-dialog/personal-add-dialog.component';
+import { ConfirmdialogComponent } from './domain/confirmdialog/confirmdialog.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
 
 Amplify.configure(awsconfig);
 
@@ -57,7 +62,10 @@ Amplify.configure(awsconfig);
         EntryBrowserComponent,
         QrCodeGeneratorDialogComponent,
         GtcComponent,
-        PersonalComponent
+        PersonalComponent,
+        PersonalAddDialogComponent,
+        ConfirmdialogComponent,
+        LoginDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -91,6 +99,8 @@ Amplify.configure(awsconfig);
             }
         }),
         AmplifyUIAngularModule,
+        MatMenuModule,
+        MatSnackBarModule
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import API from '@aws-amplify/api';
 import {AuthenticationService} from '../auth/authentication.service';
 
@@ -33,6 +33,8 @@ export class GastroService {
 
     private _gastro$: BehaviorSubject<Partner> = new BehaviorSubject<Partner>(null);
 
+    private _error$: Subject<any> = new Subject<any>();
+
     apiName = 'verifyGateway';
     private myInit = { // OPTIONAL
 
@@ -46,17 +48,23 @@ export class GastroService {
         return this._gastro$.asObservable();
     }
 
-    public set gastro(gastro: Partner){
-        this._gastro$.next(gastro)
+    public set gastro(gastro: Partner) {
+        this._gastro$.next(gastro);
     }
-    createGatro() {
-        console.log(this._gastro$.getValue());
-        let gastro = this._gastro$.getValue();
+
+    public get error$(): any {
+        return this._error$.asObservable();
+    }
+
+    createGatro(partner: Partner) {
+        console.log(partner);
+
+
         let body = Object.assign(
             {},
             this.myInit
         );
-        body['body'] = gastro;
+        body['body'] = partner;
         API.post(
             this.apiName,
             '/v1/gastro',
@@ -65,6 +73,7 @@ export class GastroService {
             this._gastro$.next(elem);
 
         }).catch(elem => {
+            this._error$.next(elem);
             console.log(elem);
         });
     }
@@ -89,19 +98,19 @@ export class GastroService {
             this.myInit
         );
         body['body'] = bar;
-        console.log(body)
+        console.log(body);
         return API.post(
             this.apiName,
             '/v1/gastro/me/bar',
             body
-        )
+        );
     }
 
     removeBar(location: Location) {
-       return  API.del(
+        return API.del(
             this.apiName,
             '/v1/gastro/me/bar/' + location.locationId,
             this.myInit
-        )
+        );
     }
 }

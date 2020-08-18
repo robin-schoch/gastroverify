@@ -3,14 +3,14 @@
 
         <mat-toolbar color="primary"></mat-toolbar>
         <mat-selection-list #shoes [multiple]="false">
-            <mat-list-option routerLink="/gastro/dashboard" routerLinkActive="active" (click)="sidenav.toggle()">
-                Dashboard
+
+            <mat-list-option routerLink="/location/dashboard" routerLinkActive="active" (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon color="accent">apps</mat-icon>
+                <span>Dashboard</span>
             </mat-list-option>
-            <mat-list-option routerLink="/gastro/personal" routerLinkActive="active" (click)="sidenav.toggle()">
-                Meine Informationen
-            </mat-list-option>
-            <mat-list-option appSignOut (click)="sidenav.toggle()">
-                Sign Out
+            <mat-list-option routerLink="/location/personal" routerLinkActive="active" (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon color="accent">perm_identity</mat-icon>
+                <span>Meine Informationen</span>
             </mat-list-option>
         </mat-selection-list>
 
@@ -19,12 +19,24 @@
 
     <mat-sidenav-content fxFill fxLayout="column">
 
-        <mat-toolbar *ngIf="!(toolbarHidden$ | async)" color="primary">
-            <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
-                <mat-icon>menu</mat-icon>
-            </button>
+        <mat-toolbar *ngIf="!(toolbarHidden$ | async)" color="primary" fxLayoutAlign="space-between center">
+            <div fxLayoutAlign="center center" fxLayoutGap="10px">
+                <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
+                    <mat-icon>menu</mat-icon>
+                </button>
 
-            <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
+                <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
+            </div>
+            <div fxLayoutAlign="center center" fxLayoutGap="10px">
+
+                <span *ngIf="username$ | async as username">{{username}}</span>
+                <button mat-icon-button [matMenuTriggerFor]="userMenu">
+                    <mat-icon>account_circle</mat-icon>
+                </button>
+                <mat-menu #userMenu="matMenu">
+                    <button mat-menu-item appSignOut>Sign out</button>
+                </mat-menu>
+            </div>
         </mat-toolbar>
 
         <div class="mainContainer" fxFlex>

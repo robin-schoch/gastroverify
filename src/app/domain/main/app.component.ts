@@ -2,6 +2,8 @@ import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/c
 import {ToolbarService} from './toolbar.service';
 import {Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
+import {AuthenticationService} from '../auth/authentication.service';
+import {map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -12,16 +14,18 @@ export class AppComponent implements OnInit, AfterViewChecked {
     title = 'verify-manager';
     toolbarTitle$: Observable<string>;
     toolbarHidden$: Observable<boolean>;
-
+    username$: Observable<string>;
 
     opened: boolean;
 
     constructor(
         private toolbarService: ToolbarService,
         private changeDetect: ChangeDetectorRef,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private authService: AuthenticationService
     ) {
 
+        this.username$ = this.authService.activeUser$.pipe(map(user => user.getSignInUserSession().getIdToken().decodePayload().email));
         translate.addLangs([
             'de',
             'en'
@@ -38,9 +42,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
     ngOnInit(): void {
         this.toolbarTitle$ = this.toolbarService.toolbarTitle$.asObservable();
         this.toolbarHidden$ = this.toolbarService.toolbarHidden$.asObservable();
-
-        this.toolbarHidden$.subscribe(elem => console.log(elem));
-        this.toolbarService.toolbarHidden$.subscribe(elem => console.log('subject'));
     }
 
     ngAfterViewChecked() {
