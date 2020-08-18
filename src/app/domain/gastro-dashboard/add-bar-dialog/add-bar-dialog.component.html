@@ -1,33 +1,34 @@
-<h1 mat-dialog-title>Standort hinzufügen</h1>
+<h1 mat-dialog-title>{{'location.addlocation' | translate}}</h1>
 <div mat-dialog-content>
     <form #addBarForm="ngForm" fxLayout="column">
         <mat-form-field>
 
             <input [(ngModel)]="newLocation.name" class="cell" delayedFocus matInput name="lastname"
-                   placeholder="Name"
+                   placeholder="{{'form.name' | translate}}"
                    required type="name">
         </mat-form-field>
 
         <mat-form-field>
             <input [(ngModel)]="newLocation.street" class="cell" delayedFocus matInput name="address"
-                   placeholder="Strasse + Nummer"
+                   placeholder="{{'form.street' | translate}}"
                    required type="Address">
         </mat-form-field>
 
         <mat-form-field>
             <input [(ngModel)]="newLocation.city" class="cell" delayedFocus matInput name="city"
-                   placeholder="Ort"
+                   placeholder="{{'form.city' | translate}}"
                    required type="city">
         </mat-form-field>
 
 
         <mat-form-field>
             <input [(ngModel)]="newLocation.zipcode" class="cell" delayedFocus matInput name="zip"
-                   placeholder="PLZ"
+                   placeholder="{{'form.zip' | translate}}"
                    required type="zip">
         </mat-form-field>
 
-        <button mat-flat-button color="accent" type="button" [disabled]="addBarForm.invalid" (click)="addBar()">Hinzufügen</button>
+        <button mat-flat-button color="accent" type="button" [disabled]="addBarForm.invalid"
+                (click)="addBar()">{{'form.add' | translate}}</button>
     </form>
 
 </div>

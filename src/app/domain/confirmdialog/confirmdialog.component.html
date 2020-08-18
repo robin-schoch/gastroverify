@@ -1,9 +1,9 @@
-<h1 mat-dialog-title>Bestätigen</h1>
+<h1 mat-dialog-title>{{'confirm.title' | translate}}</h1>
 <div mat-dialog-content>
     <p>{{data.message}}</p>
 
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">No Thanks</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onNoClick()">{{'confirm.no' | translate}}</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>{{'confirm.yes' | translate}}</button>
 </div>

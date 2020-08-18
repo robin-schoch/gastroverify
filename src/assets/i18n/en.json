@@ -1,5 +1,45 @@
 {
   "context": {
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "profile": "My Profile",
+    "signout": "Sign Out",
+    "dashboard": "Dashboard",
+    "location": "Location"
+  },
+  "location": {
+    "id": "Location ID",
+    "name": "Name",
+    "street": "Street",
+    "city": "City",
+    "checkin": "Check In",
+    "checkout": "Check Out",
+    "delete": "Delete",
+    "addlocation": "Add location"
+  },
+  "form": {
+    "name": "Name",
+    "street": "Street + number",
+    "city": "City",
+    "zip": "Zipcode",
+    "add": "Add"
+  },
+  "entry": {
+    "title": "Entries",
+    "time": "Entry Time",
+    "name": "Name",
+    "lastname": "Lastname",
+    "street": "Street",
+    "city": "City",
+    "zip": "Zipcode",
+    "phonenr": "Phone Nr.",
+    "email": "Email",
+    "nomoredata": "No more entries",
+    "download": "Download",
+    "reload": "Reload"
+  },
+  "confirm": {
+    "title": "Confirm",
+    "yes": "Ok",
+    "no": "No"
   }
 }

@@ -5,6 +5,11 @@ import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../auth/authentication.service';
 import {map} from 'rxjs/operators';
 
+interface Language {
+    short: string,
+    name: string,
+}
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -18,6 +23,11 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
     opened: boolean;
 
+    languages: Language[] = [
+        {short: 'de', name: "Deutsch"},
+        {short:  'en', name: "English"}
+    ];
+
     constructor(
         private toolbarService: ToolbarService,
         private changeDetect: ChangeDetectorRef,
@@ -26,10 +36,8 @@ export class AppComponent implements OnInit, AfterViewChecked {
     ) {
 
         this.username$ = this.authService.activeUser$.pipe(map(user => user.getSignInUserSession().getIdToken().decodePayload().email));
-        translate.addLangs([
-            'de',
-            'en'
-        ]);
+        translate.addLangs(this.languages.map(lang => lang.short));
+
 
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang('de');
@@ -49,4 +57,9 @@ export class AppComponent implements OnInit, AfterViewChecked {
     }
 
 
+    changeLanguage(language: Language) {
+        this.translate.use(language.short);
+
+        console.log("changed language")
+    }
 }

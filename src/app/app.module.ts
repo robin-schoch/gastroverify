@@ -46,6 +46,7 @@ import { PersonalAddDialogComponent } from './domain/personal/personal-add-dialo
 import { ConfirmdialogComponent } from './domain/confirmdialog/confirmdialog.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
+import {MatSelectModule} from '@angular/material/select';
 
 Amplify.configure(awsconfig);
 
@@ -100,7 +101,8 @@ Amplify.configure(awsconfig);
         }),
         AmplifyUIAngularModule,
         MatMenuModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatSelectModule
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],
