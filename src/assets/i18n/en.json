@@ -4,7 +4,8 @@
     "profile": "My Profile",
     "signout": "Sign Out",
     "dashboard": "Dashboard",
-    "location": "Location"
+    "location": "Location",
+    "save": "Save"
   },
   "location": {
     "id": "Location ID",
@@ -14,7 +15,8 @@
     "checkin": "Check In",
     "checkout": "Check Out",
     "delete": "Delete",
-    "addlocation": "Add location"
+    "addlocation": "Add location",
+    "signin": "Login"
   },
   "form": {
     "name": "Name",
@@ -41,5 +43,14 @@
     "title": "Confirm",
     "yes": "Ok",
     "no": "No"
+  },
+  "personal": {
+    "toolbar": "Profil",
+    "billingaddress": "Billing Address",
+    "name": "Name",
+    "lastname": "Lastname",
+    "street": "Street + Number",
+    "city": "City",
+    "zipoce": "Zipcode"
   }
 }

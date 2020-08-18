@@ -56,7 +56,7 @@ const createPartner = (gastro, create = false) => {
 }
 
 
-const createGastro = (email, firstName, lastName, address, city, zipcode) => {
+const createNewPartner = (email, firstName, lastName, address, city, zipcode) => {
     const g = new Partner(email, firstName, lastName, address, city, zipcode)
     return createPartner(g, true)
 }
@@ -64,7 +64,7 @@ const createGastro = (email, firstName, lastName, address, city, zipcode) => {
 
 
 module.exports = {
-    createGastro,
+    createNewPartner,
     createPartner,
     getGastro
 }

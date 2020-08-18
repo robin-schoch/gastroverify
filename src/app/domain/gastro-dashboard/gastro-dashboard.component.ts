@@ -14,6 +14,7 @@ import {
 import {Router} from '@angular/router';
 import {ConfirmdialogComponent} from '../confirmdialog/confirmdialog.component';
 import {SnackbarService} from '../snackbar/snackbar.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-gastro-dashboard',
@@ -45,10 +46,16 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         private gastroService: GastroService,
         public dialog: MatDialog,
         private router: Router,
-        private snackbar: SnackbarService
+        private snackbar: SnackbarService,
+        private translat: TranslateService
     ) { }
 
     ngOnInit() {
+
+        const tsub = this.translat.get('context.dashboard').subscribe(elem => {
+            this.toolbarService.toolbarTitle = elem;
+        });
+        this._subs.push(tsub);
 
         this.partner$ = this.gastroService.gastro$;
         this.toolbarService.toolbarTitle = 'Dashboard';

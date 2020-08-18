@@ -67,6 +67,8 @@ app.use('/v1/admin', adminRoute)
 
 app.use('/v1/entry', entryRoute)
 
+app.use('/v1register', registerRoute)
+
 
 app.listen(3000, function () {
     console.log("App started")

@@ -1,9 +1,12 @@
 <div class="main-landing" fxLayout="column">
 
     <div class="top-banner" fxLayout="row" fxLayoutAlign="space-between center">
-        <span class="landing-banner-title">Entry Check</span>
-
-        <button mat-flat-button color="primary" class="login-button" (click)="scrollToLogin()">Login</button>
+        <div fxLayoutAlign="center center" fxLayoutGap="20px">
+            <img src="assets/circle-cropped.png" style="max-height: 40px">
+            <span class="landing-banner-title">Entry Check</span>
+        </div>
+        <button mat-flat-button color="primary" class="login-button"
+                (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
     </div>
 
     <div fxFill fxLayoutAlign="center center" fxlayout="column">
@@ -22,9 +25,9 @@
 <div class="second-landing">
 
     <div fxLayout="row" fxLayoutAlign="space-around center">
-        <mat-card ></mat-card>
-        <mat-card ></mat-card>
-        <mat-card ></mat-card>
+        <mat-card></mat-card>
+        <mat-card></mat-card>
+        <mat-card></mat-card>
 
     </div>
 </div>

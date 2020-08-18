@@ -4,7 +4,9 @@
     "profile": "Mein Profil",
     "signout": "Abmelden",
     "dashboard": "Dashboard",
-    "location": "Standort"
+    "location": "Standort",
+    "save": "Speichern",
+    "signin": "Anmelden"
   },
   "location": {
     "id": "Standort ID",
@@ -41,5 +43,14 @@
     "title": "Bestätigen",
     "yes": "Ok",
     "no": "Nein"
+  },
+  "personal": {
+    "toolbar": "Profil",
+    "billingaddress": "Rechnungsaddresse",
+    "name": "Name",
+    "lastname": "Nachname",
+    "street": "Strasse + Nummer",
+    "city": "Ort",
+    "zipoce": "PZL"
   }
 }
