@@ -1,8 +1,10 @@
 <svg width="1200" height="1200" viewBox="0 0 1274 1221" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="149.5" cy="300.5" r="194.5" fill="#F9F871"/>
-    <circle cx="400.384" cy="1004.0" r="228.55"  fill="#FFC75F"/>
-    <circle cx="466.076" cy="200" r="104.3342"  fill="#FFC75F"/>
+    <circle cx="149.5" cy="300.5" r="194.5" fill="#84DBDB"/>
+    <circle cx="400.384" cy="1004.0" r="228.55"  fill="#68DF68"/>
+    <circle cx="466.076" cy="200" r="104.3342"  fill="#68DF68"/>
+    <circle cx="1200.384" cy="1004.0" r="228.55"  fill="#68DF68"/>
+    <circle cx="1066.076" cy="100" r="104.3342"  fill="#84DBDB"/>
 
 
-    <circle cx="1070" cy="703" r="83" fill="#F9F871"/>
+    <circle cx="1070" cy="703" r="83" fill="#84DBDB"/>
 </svg>

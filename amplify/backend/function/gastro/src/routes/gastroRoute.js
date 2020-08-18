@@ -39,7 +39,7 @@ router.post('/:id/bar', (req, res) => {
             gastor.locations.push(location)
             console.log(gastor)
             Promise.all([
-                updateGastro(gastor),
+                createPartner(gastor),
                 addQrCodeMapping({
                     qrId: location.checkInCode,
                     ownerId: gastor.email,
@@ -69,7 +69,7 @@ router.delete('/:id/bar/:barId', (req, res) => {
         Promise.all([deleteQrMapping(location.checkInCode, partner.email), deleteQrMapping(location.checkOutCode, partner.email)])
             .then(elem => {
                 partner.locations = partner.locations.filter(l => l.locationId !== req.params.barId)
-                updateGastro(partner).then(success => {
+                createPartner(partner).then(success => {
                     res.json(success)
                 }).catch(error => {
                     res.status(500)

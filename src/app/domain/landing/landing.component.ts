@@ -4,6 +4,8 @@ import {AuthenticationService} from '../auth/authentication.service';
 import {Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {GastroService} from '../gastro-dashboard/gastro.service';
+import {MatDialog} from '@angular/material/dialog';
+import {LoginDialogComponent} from '../auth/login-dialog/login-dialog.component';
 
 @Component({
     selector: 'app-landing',
@@ -22,7 +24,8 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private gastroService: GastroService,
         private router: Router,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        public dialog: MatDialog,
     ) { }
 
 
@@ -52,10 +55,22 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     public scrollToLogin(): void {
-        let valueInVh = 90;
-        console.log("scroll")
-        document.querySelector('mat-sidenav-content').scrollTop = valueInVh * window.innerHeight / 100;
+        this.openConfirmDialog();
+        /*
+         let valueInVh = 90;
+         console.log('scroll');
+         document.querySelector('mat-sidenav-content').scrollTop = valueInVh * window.innerHeight / 100;
 
+         */
+
+    }
+
+
+    openConfirmDialog(): void {
+        const dialogRef = this.dialog.open(
+            LoginDialogComponent,
+            {panelClass: 'no-padding-dialog'}
+        );
     }
 
 }

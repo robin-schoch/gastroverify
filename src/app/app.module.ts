@@ -45,6 +45,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { PersonalAddDialogComponent } from './domain/personal/personal-add-dialog/personal-add-dialog.component';
 import { ConfirmdialogComponent } from './domain/confirmdialog/confirmdialog.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
 
 Amplify.configure(awsconfig);
 
@@ -63,7 +64,8 @@ Amplify.configure(awsconfig);
         GtcComponent,
         PersonalComponent,
         PersonalAddDialogComponent,
-        ConfirmdialogComponent
+        ConfirmdialogComponent,
+        LoginDialogComponent
     ],
     imports: [
         BrowserModule,
