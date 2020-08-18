@@ -19,6 +19,7 @@ export class AuthenticationService {
 
     private _isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
     private _activeUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
+    private _role$: BehaviorSubject<any> = new BehaviorSubject<any>(null)
 
     private _signUpUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
 
@@ -32,8 +33,9 @@ export class AuthenticationService {
         private router: Router
     ) {
         Auth.currentAuthenticatedUser().then(user => {
-            this.activeUser = user;
+            this.activeUser = <CognitoUser>user;
             this.isAuthenticated = true;
+            console.log(user.getSignInUserSession().getIdToken().decodePayload())
             console.log('Active user: ' + user.username);
         }).catch(elem => {
             this.isAuthenticated = false;
