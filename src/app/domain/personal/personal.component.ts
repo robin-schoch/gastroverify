@@ -7,6 +7,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
 import {filter, map, skip} from 'rxjs/operators';
 import {IPersonalAddDialogData, PersonalAddDialogComponent} from './personal-add-dialog/personal-add-dialog.component';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-personal',
@@ -27,7 +28,8 @@ export class PersonalComponent implements OnInit, OnDestroy {
         private toolbarService: ToolbarService,
         private entryService: EntryService,
         private gastroService: GastroService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private translet: TranslateService
     ) {
         this.partner$ = this.gastroService.gastro$;
         this.newPartner$ = this.gastroService.gastro$.pipe(
@@ -37,7 +39,10 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        this.toolbarService.toolbarTitle = 'Dashboard';
+        const tsub = this.translet.get('personal.toolbar').subscribe(elem => {
+            this.toolbarService.toolbarTitle = elem;
+        });
+        this._subs.push(tsub);
 
         this.toolbarService.toolbarHidden = false;
         this.gastroService.getGastro();

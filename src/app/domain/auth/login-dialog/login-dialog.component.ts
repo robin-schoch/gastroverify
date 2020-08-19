@@ -42,6 +42,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
                 this.dialogRef.close();
                 this.authService.isAuthenticated = true;
                 this.authService.activeUser = authData as CognitoUser;
+                this.authService.setRoles();
             }
             this.ref.detectChanges();
         });

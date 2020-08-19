@@ -1,17 +1,25 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" [(opened)]="opened">
 
-        <mat-toolbar color="primary"></mat-toolbar>
+        <mat-toolbar color="primary" style="min-height:200px" fxLayoutAlign="center center">
+            <img src="assets/circle-cropped.png" style="max-height: 150px">
+        </mat-toolbar>
         <mat-selection-list #shoes [multiple]="false">
 
             <mat-list-option routerLink="/location/dashboard" routerLinkActive="active" (click)="sidenav.toggle()">
                 <mat-icon mat-list-icon color="accent">apps</mat-icon>
-                <span>Dashboard</span>
+                <span>{{'context.dashboard' | translate}}</span>
             </mat-list-option>
             <mat-list-option routerLink="/location/personal" routerLinkActive="active" (click)="sidenav.toggle()">
                 <mat-icon mat-list-icon color="accent">perm_identity</mat-icon>
-                <span>Meine Informationen</span>
+                <span>{{'context.profile' | translate}}</span>
             </mat-list-option>
+
+            <mat-list-option (click)="sidenav.toggle()" *ngIf="isAdmin$ | async">
+                <mat-icon mat-list-icon color="accent">admin</mat-icon>
+                <span>{{'context.admin' | translate}}</span>
+            </mat-list-option>
+
         </mat-selection-list>
 
 
@@ -34,13 +42,25 @@
                     <mat-icon>account_circle</mat-icon>
                 </button>
                 <mat-menu #userMenu="matMenu">
-                    <button mat-menu-item appSignOut>Sign out</button>
+
+                    <button mat-menu-item appSignOut>{{'context.signout' | translate}}</button>
+
+                </mat-menu>
+
+                <button mat-icon-button [matMenuTriggerFor]="languageMenu">
+                    <mat-icon>language</mat-icon>
+                </button>
+                <mat-menu #languageMenu="matMenu">
+
+                    <button mat-menu-item *ngFor="let language of languages" (click)="changeLanguage(language)">{{language.name}}</button>
+
                 </mat-menu>
             </div>
         </mat-toolbar>
 
         <div class="mainContainer" fxFlex>
             <router-outlet></router-outlet>
+
         </div>
 
     </mat-sidenav-content>

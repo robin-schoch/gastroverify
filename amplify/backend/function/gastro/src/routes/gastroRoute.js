@@ -1,7 +1,7 @@
 const express = require('express'), router = express.Router();
 const jwt = require('jsonwebtoken');
 const {Location} = require("../domain/partner");
-const {createGastro, getGastro, createPartner} = require('./../db/gastroStorage')
+const {createNewPartner, getGastro, createPartner} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
 const {v4: uuidv4} = require('uuid');
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
@@ -84,7 +84,7 @@ router.delete('/:id/bar/:barId', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    createGastro(req.xUser.email, req.body.firstName, req.body.lastName, req.body.address, req.body.city, req.body.zipcode).then(success => {
+    createNewPartner(req.xUser.email, req.body.firstName, req.body.lastName, req.body.address, req.body.city, req.body.zipcode).then(success => {
         res.json(success)
     })
 

@@ -19,7 +19,7 @@ const fields = [
     },
     {
         label: 'City',
-        value: 'City'
+        value: 'city'
     },
     {
         label: 'Zipcode',
@@ -40,6 +40,10 @@ const fields = [
     {
         label: 'Birthday',
         value: 'birthday'
+    },
+    {
+        label: 'CheckIn',
+        value: 'checkIn'
     }
 ];
 // 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime'

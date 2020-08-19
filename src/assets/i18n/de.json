@@ -1,5 +1,56 @@
 {
   "context": {
-    "welcome": "Willkommen"
+    "welcome": "Willkommen",
+    "profile": "Mein Profil",
+    "signout": "Abmelden",
+    "dashboard": "Dashboard",
+    "location": "Standort",
+    "save": "Speichern",
+    "signin": "Anmelden"
+  },
+  "location": {
+    "id": "Standort ID",
+    "name": "Name",
+    "street": "Strasse",
+    "city": "Ort",
+    "checkin": "Check In",
+    "checkout": "Check Out",
+    "delete": "Löschen",
+    "addlocation": "Standort hinzufügen"
+  },
+  "form": {
+    "name": "Name",
+    "street": "Strasse + Nummer",
+    "city": "Ort",
+    "zip": "PLZ",
+    "add": "Hinzufügen"
+  },
+  "entry": {
+    "title": "Eintritte",
+    "time": "Eintrittszeit",
+    "name": "Name",
+    "lastname": "Nachname",
+    "street": "Strasse",
+    "city": "Ort",
+    "zip": "PLZ",
+    "phonenr": "Telefon Nr.",
+    "email": "Email",
+    "nomoredata": "Keine weitere Einträge",
+    "download": "Herunterladen",
+    "reload": "Neu laden"
+  },
+  "confirm": {
+    "title": "Bestätigen",
+    "yes": "Ok",
+    "no": "Nein"
+  },
+  "personal": {
+    "toolbar": "Profil",
+    "billingaddress": "Rechnungsaddresse",
+    "name": "Name",
+    "lastname": "Nachname",
+    "street": "Strasse + Nummer",
+    "city": "Ort",
+    "zipoce": "PZL"
   }
 }

@@ -14,7 +14,8 @@ export class SignOutDirective {
         ['$event']
     )
     onClick(e) {
-        this.authService.signOut()
+        this.authService.signOut();
+        this.authService.role = [];
     }
 
 }
