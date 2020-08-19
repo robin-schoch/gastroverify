@@ -37,6 +37,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
         null
     ];
     private loadingTracker: Subject<void> = new Subject<void>();
+    public isLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private tableNumber$: BehaviorSubject<number> = new BehaviorSubject<number>(null);
 
     constructor(
@@ -44,6 +45,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
         public dialogRef: MatDialogRef<QrCodeGeneratorDialogComponent>,
     ) {
         this.qrUrl$.next(data);
+
     }
 
     ngOnInit(): void {
@@ -51,6 +53,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
         this.loadingTracker.pipe(skip(2)).subscribe(elem => {
             this.generateImage();
             this.loadingTracker.complete();
+            this.isLoaded$.next(true)
         });
         this.tableNumber$.pipe(debounce(() => interval(200)))
             .subscribe(elem => this.generateImage(elem));

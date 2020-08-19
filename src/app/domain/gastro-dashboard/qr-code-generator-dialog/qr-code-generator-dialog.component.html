@@ -4,7 +4,7 @@
 
         <mat-form-field class="example-form-field" *ngIf="data.text === 'checkin'">
             <mat-label>Tischnummer</mat-label>
-            <input matInput type="number" #tableinput  (keyup)="setTableNumber(tableinput.value)">
+            <input matInput type="number" #tableinput [disabled]="!(isLoaded$ | async)"  (keyup)="setTableNumber(tableinput.value)">
         </mat-form-field>
 
 
