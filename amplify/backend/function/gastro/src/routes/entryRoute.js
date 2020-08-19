@@ -44,6 +44,10 @@ const fields = [
     {
         label: 'CheckIn',
         value: 'checkIn'
+    },
+    {
+        label: "Table",
+        value: 'table'
     }
 ];
 // 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime'
