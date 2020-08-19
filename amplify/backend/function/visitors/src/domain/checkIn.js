@@ -12,7 +12,7 @@ class CheckIn {
         phonenumber,
         birthdate,
         firstUse,
-        table = -1
+        tableNumber = -1
     ) {
         this.locationId = locationId
         this.entryTime = timestamp
@@ -26,7 +26,7 @@ class CheckIn {
         this.phoneNumber = phonenumber
         this.birthdate = birthdate
         this.firstUse = firstUse
-        this.table = table
+        this.tableNumber = tableNumber
     }
 
 

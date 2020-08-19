@@ -37,7 +37,7 @@ const getEntries = (id, pageSize, LastEvaluatedKey) => {
             ':entry': moment().subtract(14, 'days').toISOString(),
         },
         KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} >= :entry`,
-        ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, table',
+        ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',
         Limit: pageSize,
         ScanIndexForward: false,
         ExclusiveStartKey: LastEvaluatedKey,
