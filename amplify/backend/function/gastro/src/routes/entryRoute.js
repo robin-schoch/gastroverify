@@ -66,7 +66,7 @@ router.get('/:barId', (req, res) => {
                 }).catch(error => {
                 console.log(error)
                 res.status(503)
-                res.json(error)
+                res.json({error: "oh boy"})
             })
         } else {
             res.status(401)
