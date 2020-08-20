@@ -64,7 +64,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
         this.images[0] = baseImage;
 
         if (this.data.text === "checkin"){
-            baseImage.src = 'assets/checkIn_shape.jpeg';
+            baseImage.src = 'assets/checkIn_shape.png';
         } else {
             baseImage.src = 'assets/checkOut_shape.png';
         }
@@ -132,24 +132,24 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
             this.ctx.drawImage(
                 this.images[1],
                 35,
-                105
+                94.5
             );
 
             if (table) {
-                this.ctx.font = '30px Arial';
+                this.ctx.font = 'bold 40px Arial';
                 this.ctx.textAlign = 'center';
                 this.ctx.fillText(
                     'Tisch ' + table,
                     200,
-                    540
+                    545
                 );
             } else {
-                this.ctx.font = '30px Arial';
+                this.ctx.font = 'bold 40px Arial';
                 this.ctx.textAlign = 'center';
                 this.ctx.fillText(
                     this.data.name,
                     200,
-                    540
+                    545
                 );
             }
 
