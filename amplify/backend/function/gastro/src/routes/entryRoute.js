@@ -39,7 +39,7 @@ const fields = [
     },
     {
         label: 'Birthday',
-        value: 'birthday'
+        value: 'birthdate'
     },
     {
         label: 'CheckIn',
@@ -47,7 +47,7 @@ const fields = [
     },
     {
         label: "Table",
-        value: 'table'
+        value: 'tableNumber'
     }
 ];
 // 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime'
