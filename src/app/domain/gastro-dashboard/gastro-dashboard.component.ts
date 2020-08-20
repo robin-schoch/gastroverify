@@ -15,6 +15,7 @@ import {Router} from '@angular/router';
 import {ConfirmdialogComponent} from '../confirmdialog/confirmdialog.component';
 import {SnackbarService} from '../snackbar/snackbar.service';
 import {TranslateService} from '@ngx-translate/core';
+import { EntryBrowserComponent } from '../entry-browser/entry-browser/entry-browser.component';
 
 @Component({
     selector: 'app-gastro-dashboard',
@@ -29,10 +30,10 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
     public selectedBar$ = new BehaviorSubject<Location>(null);
     private _subs: Subscription[] = [];
     displayedColumns: string[] = [
-        'BarID',
         'Name',
         'CheckOutCode',
         'CheckInCode',
+        'Entries',
         'CheckIn',
         'CheckOut',
         'Delete'
@@ -58,7 +59,7 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         this._subs.push(tsub);
 
         this.partner$ = this.gastroService.gastro$;
-        this.toolbarService.toolbarTitle = 'Dashboard';
+        this.toolbarService.toolbarTitle = 'Übersicht';
         this.newPartner$ = this.gastroService.gastro$.pipe(
             skip(1),
             filter(g => !g?.email),
@@ -113,7 +114,15 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
     }
 
     selectBar(row: Location) {
-        this.selectedBar$.next(row);
+        this.dialog.open(
+            EntryBrowserComponent,
+            {
+                height: '90vh',
+                width: '90vw',
+                data: row,
+                panelClass: 'no-padding-dialog'
+            }
+        );
     }
 
     openConfirmDialog(location: Location): void {

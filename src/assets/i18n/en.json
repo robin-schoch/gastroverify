@@ -12,8 +12,9 @@
     "name": "Name",
     "street": "Street",
     "city": "City",
-    "checkin": "Check In",
-    "checkout": "Check Out",
+    "entries": "Entries",
+    "checkin": "Check-in code",
+    "checkout": "Check-out code",
     "delete": "Delete",
     "addlocation": "Add location",
     "signin": "Login"

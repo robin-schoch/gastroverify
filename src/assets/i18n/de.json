@@ -3,7 +3,7 @@
     "welcome": "Willkommen",
     "profile": "Mein Profil",
     "signout": "Abmelden",
-    "dashboard": "Dashboard",
+    "dashboard": "Übersicht",
     "location": "Standort",
     "save": "Speichern",
     "signin": "Anmelden"
@@ -13,8 +13,9 @@
     "name": "Name",
     "street": "Strasse",
     "city": "Ort",
-    "checkin": "Check In",
-    "checkout": "Check Out",
+    "entries": "Eintritte",
+    "checkin": "Check-in Code",
+    "checkout": "Check-out Code",
     "delete": "Löschen",
     "addlocation": "Standort hinzufügen"
   },

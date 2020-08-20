@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit, Inject} from '@angular/core';
 import {Location} from '../../gastro-dashboard/gastro.service';
 import {Entry, EntryService, Page} from '../entry.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-entry-browser',
@@ -28,6 +29,7 @@ export class EntryBrowserComponent implements OnInit {
     ];
 
     constructor(
+        @Inject(MAT_DIALOG_DATA) public location: Location,
         private entryService: EntryService
     ) {
         this.paginator$ = this.data$.pipe(
@@ -48,16 +50,18 @@ export class EntryBrowserComponent implements OnInit {
         this.paginator$.subscribe(elem => {
             console.log(elem);
         });
+
+        console.log("dialog ", location);
+
+        this.setLocation(location);
     }
 
-    @Input()
-    public set location(bar: Location) {
+    public setLocation(bar: Location) {
         if (!!bar) {
             console.log(bar);
             this.data$.next(null);
             this._selectedBar$.next((bar));
             this.loadPage(bar);
-
         }
     }
 
@@ -111,7 +115,7 @@ export class EntryBrowserComponent implements OnInit {
     }
 
     reload(selectedbar: Location) {
-        this.location = selectedbar;
+        this.setLocation(selectedbar);
     }
 }
 
