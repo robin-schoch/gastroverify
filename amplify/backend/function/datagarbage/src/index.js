@@ -6,7 +6,7 @@
 Amplify Params - DO NOT EDIT */
 const {scanPartner} = require('./storage/partnerStorage')
 const {getEntries} = require('./storage/entryStorage')
-const {updateBill, finishBill, createNewBill} = require('./storage/billingStorage')
+const {createNewDailyBill} = require('./storage/billingStorage')
 const moment = require('moment');
 
 const createBillForDayPartner = async (date, partner) => {
@@ -16,10 +16,10 @@ const createBillForDayPartner = async (date, partner) => {
 const createBillForDayLocation = async (date, location, isFirstOfMoth) => {
     let billDate = date.format('MM/YYYY')
     let d = date.format('DD')
-    if (isFirstOfMoth) {
-        finishBill(location.locationId, date.subtract(1, 'month').format('MM/YYYY')).catch(err => console.log(err))
-        createNewBill(location.locationId, d).catch(err => console.log(err))
-    }
+    /* if (isFirstOfMoth) {
+         finishBill(location.locationId, date.subtract(1, 'month').format('MM/YYYY')).catch(err => console.log(err))
+         createNewBill(location.locationId, d).catch(err => console.log(err))
+     }*/
     let vals = []
     let lastkey = null
     do {
@@ -29,7 +29,11 @@ const createBillForDayLocation = async (date, location, isFirstOfMoth) => {
     } while (lastkey === null)
     let count = new Set(vals).size
 
-    await updateBill(location.locationId, billDate, d, count).catch(err => console.log(err))
+    if (count > 0) {
+        await createNewDailyBill(location.locationId, date.toISOString(), count).catch(err => console.log(err))
+        //  await updateBill(location.locationId, billDate, d, count).catch(err => console.log(err))
+    }
+
 
 }
 
