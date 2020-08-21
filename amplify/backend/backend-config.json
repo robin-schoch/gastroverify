@@ -170,6 +170,10 @@
 		"Entrance": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
+		},
+		"Billing": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
 		}
 	},
 	"auth": {

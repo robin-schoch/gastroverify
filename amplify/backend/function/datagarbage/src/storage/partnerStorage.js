@@ -13,36 +13,16 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 
 const partitionKeyName = "email";
 
-const getGastro = (email) => {
-    var params = {};
-    params[partitionKeyName] = email;
-    let getItemParams = {
-        TableName: tableName,
-        Key: params
-    }
-    return new Promise((resolve, reject) => {
-        dynamodb.get(getItemParams, (err, data) => {
-            if (err || Object.keys(data).length === 0) {
-                reject(data)
-            } else {
-                let w = data.Item ? data.Item : data
-                resolve(w)
-            }
-        })
-    })
-}
-
 const scanPartner = (lastEvaluatedKey) => {
-    var params = {};
-    params[partitionKeyName] = email;
+
     let scanItem = {
         TableName: tableName,
         ExclusiveStartKey: lastEvaluatedKey,
-        Limit: 10
+        Limit: 1000000
     }
 
     return new Promise(((resolve, reject) => {
-        dynamodb.scan(params, ((err, data) => {
+        dynamodb.scan(scanItem, ((err, data) => {
             if (err) {
                 reject(err)
             } else {
