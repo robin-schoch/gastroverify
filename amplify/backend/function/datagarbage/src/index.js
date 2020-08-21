@@ -47,6 +47,7 @@ exports.handler = async (event) => {
         .milliseconds(0)
 
     console.log("handle bills usw.")
+    console.log(creationTime.toISOString())
 
     const isfirstOfTheMonth = Number(creationTime.format('DD')) === 1
 
