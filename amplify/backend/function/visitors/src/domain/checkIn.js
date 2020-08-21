@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 class CheckIn {
     constructor(
         locationId,
@@ -12,7 +14,8 @@ class CheckIn {
         phonenumber,
         birthdate,
         firstUse,
-        tableNumber = -1
+        tableNumber = -1,
+        ttl
     ) {
         this.locationId = locationId
         this.entryTime = timestamp
@@ -27,6 +30,7 @@ class CheckIn {
         this.birthdate = birthdate
         this.firstUse = firstUse
         this.tableNumber = tableNumber
+        this.ttl = moment().unix()
     }
 
 
