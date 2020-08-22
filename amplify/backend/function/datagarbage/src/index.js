@@ -33,7 +33,7 @@ const createReportForLocation = async (date, location) => {
             lastkey = lastEvaluatedKey ? lastEvaluatedKey : null
         }
     } while (lastkey !== null)
-    // console.log(vals)
+    console.log(vals)
     let count = new Set(vals).size
     let totalCount = vals.length
     console.log("count " + count + " total " + totalCount)

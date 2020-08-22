@@ -36,6 +36,7 @@ const createNewReport = (locationId, billdate, distinctTotal, total) => {
         TableName: tableName,
         Item: new DailyReport(locationId, billdate, distinctTotal, total)
     }
+    console.log(new DailyReport(locationId, billdate, distinctTotal, total))
     return putBill(putItemParams)
 }
 
