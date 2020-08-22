@@ -17,8 +17,8 @@ const {createNewReport} = require('./storage/reportStorage')
 const moment = require('moment');
 
 const createReportForPartner = async (date, partner) => {
-
-    partner.locations.forEach(location => createReportForLocation(date, location))
+    console.log(date.toISOString())
+    partner.locations.forEach(location => createReportForLocation(date.clone(), location))
 }
 
 const createReportForLocation = async (date, location) => {
@@ -27,7 +27,7 @@ const createReportForLocation = async (date, location) => {
     let vals = []
     let lastkey = null
     do {
-        let {value, lastEvaluatedKey} = await getEntries(location.locationId, date, 10000, lastkey).catch(err => console.log(err))
+        let {value, lastEvaluatedKey} = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => console.log(err))
         if (!!value) {
             vals = [...value.map(elem => elem.phoneNumber), ...vals]
             lastkey = lastEvaluatedKey ? lastEvaluatedKey : null
@@ -38,6 +38,7 @@ const createReportForLocation = async (date, location) => {
     let totalCount = vals.length
     console.log("count " + count + " total " + totalCount)
     if (count > 0) {
+
         await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
         console.log("Report create for : " + location.locationId)
     } else {
@@ -59,8 +60,12 @@ exports.handler = async (event) => {
 
     console.log("handle bills usw.")
     console.log(creationTime.toISOString())
+    const dat = creationTime.clone()
 
-    const isSecondDayOfMonth = Number(creationTime.format('DD')) === 2
+
+    const date = Object.assign({}, creationTime)
+
+    const isSecondDayOfMonth = Number(dat.format('DD')) === 2
 
     if (isSecondDayOfMonth) {
         createMonthlyBill()
