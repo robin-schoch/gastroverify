@@ -28,11 +28,8 @@ const createReportForLocation = async (date, location) => {
     let lastkey = null
     do {
         let {value, lastEvaluatedKey} = await getEntries(location.locationId, date, 10000, lastkey).catch(err => console.log(err))
-        console.log(value, lastEvaluatedKey)
-        console.log(!!value)
         if (!!value) {
             vals = [...value.map(elem => elem.phoneNumber), ...vals]
-            console.log(vals)
             lastkey = lastEvaluatedKey ? lastEvaluatedKey : null
         }
     } while (lastkey !== null)
