@@ -17,20 +17,29 @@ const {createNewReport} = require('./storage/reportStorage')
 const moment = require('moment');
 
 const createReportForPartner = async (date, partner) => {
+
     partner.locations.forEach(location => createReportForLocation(date, location))
 }
 
 const createReportForLocation = async (date, location) => {
-
+    console.log("next location")
+    console.log(location)
     let vals = []
     let lastkey = null
     do {
-        let data = await getEntries(location.locationId, date, 10000, lastkey).catch(err => console.log(err))
-        vals = [...data.Items, ...vals]
-        lastkey = data.LastEvaluatedKey
-    } while (lastkey === null)
+        let {value, lastEvaluatedKey} = await getEntries(location.locationId, date, 10000, lastkey).catch(err => console.log(err))
+        console.log(value, lastEvaluatedKey)
+        console.log(!!value)
+        if (!!value) {
+            vals = [...value.map(elem => elem.phoneNumber), ...vals]
+            console.log(vals)
+            lastkey = lastEvaluatedKey ? lastEvaluatedKey : null
+        }
+    } while (lastkey !== null)
+    // console.log(vals)
     let count = new Set(vals).size
     let totalCount = vals.length
+    console.log("count " + count + " total " + totalCount)
     if (count > 0) {
         await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
         console.log("Report create for : " + location.locationId)
@@ -64,8 +73,8 @@ exports.handler = async (event) => {
     let lastEvaluatedPartnerKey = null
 
     do {
-        let partners = await scanPartner(lastEvaluatedPartnerKey)
-        lastEvaluatedPartnerKey = partners.LastEvaluatedKey
+        let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => console.log(err))
+        lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null
         partners.Items.forEach(partner => createReportForPartner(creationTime, partner))
 
     } while (!!lastEvaluatedPartnerKey)

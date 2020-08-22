@@ -11,3 +11,7 @@ class DailyReport {
         this.total = total
     }
 }
+
+module.exports = {
+    DailyReport
+}

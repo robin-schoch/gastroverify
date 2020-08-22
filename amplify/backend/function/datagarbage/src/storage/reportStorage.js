@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-
+const {DailyReport} = require('./../domain/DailyReport')
 const moment = require('moment');
 
 

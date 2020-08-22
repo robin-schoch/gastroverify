@@ -20,15 +20,17 @@ const query = (queryParams) => {
     return new Promise((resolve, reject) => {
         dynamodb.query(queryParams, (err, data) => {
             if (err) {
+                console.log(err)
                 reject(err)
             } else {
-                resolve({val: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
+               // console.log(data)
+                resolve({value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
             }
         })
     })
 }
 
-const getEntries = (id, creationtime,  pageSize, LastEvaluatedKey) => {
+const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
     console.log(LastEvaluatedKey)
     const queryParams = {
         ExpressionAttributeValues: {
@@ -42,7 +44,7 @@ const getEntries = (id, creationtime,  pageSize, LastEvaluatedKey) => {
         ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     };
-    return query(queryParams)
+    return query(queryParams).catch(err => console.log(err))
 }
 
 module.exports = {
