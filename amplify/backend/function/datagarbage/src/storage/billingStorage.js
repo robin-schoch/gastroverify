@@ -117,7 +117,7 @@ const updateBill = (locationId, billDate, date, total) => {
 const createNewDailyBill = (locationId, billdate, total) => {
     let putItemParams = {
         TableName: tableName,
-        Item: new DailyBill(locationId, billdate, total)
+        Item: new DailyReport(locationId, billdate, total)
     }
     return putBill(putItemParams)
 }
