@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "storage": {
+      "Partner": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Entrance": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Billing": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "DailyReport": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

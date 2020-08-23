@@ -1,6 +1,4 @@
 /* Amplify Params - DO NOT EDIT
-	ENV
-	REGION
 	STORAGE_BILLING_ARN
 	STORAGE_BILLING_NAME
 	STORAGE_DAILYREPORT_ARN
@@ -10,9 +8,9 @@
 	STORAGE_PARTNER_ARN
 	STORAGE_PARTNER_NAME
 Amplify Params - DO NOT EDIT */
+
 const {scanPartner} = require('./storage/partnerStorage')
 const {getEntries} = require('./storage/entryStorage')
-const {createNewDailyBill} = require('./storage/billingStorage')
 const {createNewReport} = require('./storage/reportStorage')
 const moment = require('moment');
 
@@ -30,7 +28,7 @@ const createReportForLocation = async (date, location) => {
         console.log("getting data")
         let data  = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => console.log(err))
         console.log(data.value)
-        if (!!value) {
+        if (!!data.value) {
             vals = [...data.value.map(elem => elem.phoneNumber), ...vals]
             lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null
         }
@@ -50,10 +48,6 @@ const createReportForLocation = async (date, location) => {
     }
 }
 
-const createMonthlyBill = () => {
-    console.log("create bill")
-}
-
 
 exports.handler = async (event) => {
 
@@ -71,13 +65,8 @@ exports.handler = async (event) => {
 
     const isSecondDayOfMonth = Number(dat.format('DD')) === 2
 
-    if (isSecondDayOfMonth) {
-        createMonthlyBill()
-    }
-
 
     let lastEvaluatedPartnerKey = null
-
     do {
         let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => console.log(err))
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null
