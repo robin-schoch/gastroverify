@@ -54,11 +54,7 @@ const fields = [
 
 router.get('/:barId', (req, res) => {
     getGastro(req.xUser.email).then(user => {
-        console.log(user)
         const location = user.locations.filter(l => l.locationId === req.params.barId)[0]
-        console.log(location)
-        console.log(req.query)
-        console.log(req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : "no last key")
         if (location !== null) {
             getEntries(location.locationId, req.query.Limit ? req.query.Limit : 10, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
                 .then(elems => {

@@ -77,6 +77,22 @@
                     ]
                 },
                 {
+                    "category": "storage",
+                    "resourceName": "Billing",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "DailyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
                     "category": "auth",
                     "resourceName": "gastroverifyd8b8759f",
                     "attributes": [

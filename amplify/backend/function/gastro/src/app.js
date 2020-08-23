@@ -11,6 +11,10 @@ See the License for the specific language governing permissions and limitations 
 	AUTH_GASTROVERIFYD8B8759F_USERPOOLID
 	ENV
 	REGION
+	STORAGE_BILLING_ARN
+	STORAGE_BILLING_NAME
+	STORAGE_DAILYREPORT_ARN
+	STORAGE_DAILYREPORT_NAME
 	STORAGE_ENTRANCE_ARN
 	STORAGE_ENTRANCE_NAME
 	STORAGE_PARTNER_ARN
@@ -27,6 +31,7 @@ var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware'
 const gastroRoute = require('./routes/gastroRoute')
 const adminRoute = require('./routes/adminRoute')
 const entryRoute = require('./routes/entryRoute')
+const reportRoute = require('./routes/reportRoute')
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
@@ -66,6 +71,8 @@ app.use('/v1/gastro', gastroRoute)
 app.use('/v1/admin', adminRoute)
 
 app.use('/v1/entry', entryRoute)
+
+app.use('/v1/report', reportRoute)
 
 // app.use('/v1register', registerRoute)
 
