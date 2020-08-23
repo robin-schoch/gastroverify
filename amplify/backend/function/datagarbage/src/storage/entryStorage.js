@@ -16,14 +16,33 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 const partitionKeyName = "locationId";
 const sortkeyName = "entryTime";
 
-const query = (queryParams) => {
+const queryEntries = (queryParams) => {
+
     return new Promise((resolve, reject) => {
+        console.log("i am called too")
         dynamodb.query(queryParams, (err, data) => {
+            console.log("i am called too too")
             if (err) {
                 console.log(err)
                 reject(err)
             } else {
-               // console.log(data)
+                // console.log(data)
+
+                resolve({value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
+            }
+        })
+    })
+}
+
+const query = (queryParams) => {
+    console.log(queryParams)
+    return new Promise((resolve, reject) => {
+        console.log("i am called too")
+        dynamodb.query(queryParams, (err, data) => {
+            console.log("i am called too too")
+            if (err) {
+                reject(err)
+            } else {
                 resolve({value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
             }
         })
@@ -31,6 +50,7 @@ const query = (queryParams) => {
 }
 
 const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
+    console.log("i am called")
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': id,
@@ -43,7 +63,9 @@ const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
         ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     };
-    return query(queryParams).catch(err => console.log(err))
+    let a = query(queryParams)
+    console.log(a)
+    return a
 }
 
 module.exports = {
