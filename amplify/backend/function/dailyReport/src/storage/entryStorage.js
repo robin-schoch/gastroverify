@@ -18,17 +18,7 @@ const sortkeyName = "entryTime";
 
 const query = (queryParams) => {
     console.log(queryParams)
-    return new Promise((resolve, reject) => {
-        console.log("i am called too")
-        dynamodb.query(queryParams, (err, data) => {
-            console.log("i am called too too")
-            if (err) {
-                reject(err)
-            } else {
-                resolve({value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
-            }
-        })
-    })
+
 }
 
 const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
@@ -45,9 +35,18 @@ const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
         ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     };
-    let a = query(queryParams)
-    console.log(a)
-    return a
+    return new Promise((resolve, reject) => {
+        console.log("i am called too")
+        dynamodb.query(queryParams, (err, data) => {
+            console.log("i am called too too")
+            if (err) {
+                reject(err)
+            } else {
+                console.log(data)
+                resolve({value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
+            }
+        })
+    })
 }
 
 module.exports = {

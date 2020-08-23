@@ -15,37 +15,42 @@ const {createNewReport} = require('./storage/reportStorage')
 const moment = require('moment');
 
 const createReportForPartner = async (date, partner) => {
-    console.log(date.toISOString())
-    partner.locations.forEach(location => createReportForLocation(date.clone(), location))
+    return Promise.all(partner.locations.map(location => createReportForLocation(date.clone(), location)))
+
+
 }
 
 const createReportForLocation = async (date, location) => {
-    console.log("next location")
-    console.log(location)
-    let vals = []
-    let lastkey = null
-    do {
-        console.log("getting data")
-        let data  = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => console.log(err))
-        console.log(data.value)
-        if (!!data.value) {
-            vals = [...data.value.map(elem => elem.phoneNumber), ...vals]
-            lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null
+    return new Promise(async (resolve, reject) => {
+        console.log("next location")
+        console.log(location)
+        let vals = []
+        let lastkey = null
+        do {
+            console.log("getting data")
+            let data = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => console.log(err))
+            console.log(data.value)
+            if (!!data.value) {
+                vals = [...data.value.map(elem => elem.phoneNumber), ...vals]
+                lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null
+            }
+            console.log("loop done")
+        } while (lastkey !== null)
+        console.log("hurra done")
+        console.log(vals)
+        let count = new Set(vals).size
+        let totalCount = vals.length
+        console.log("count " + count + " total " + totalCount)
+        if (count > 0) {
+            await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
+            resolve(true)
+            console.log("Report create for : " + location.locationId)
+        } else {
+            console.log("no entries for : " + location.locationId)
+            resolve(true)
         }
-        console.log("loop done")
-    } while (lastkey !== null)
-    console.log("hurra done")
-    console.log(vals)
-    let count = new Set(vals).size
-    let totalCount = vals.length
-    console.log("count " + count + " total " + totalCount)
-    if (count > 0) {
+    })
 
-        await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
-        console.log("Report create for : " + location.locationId)
-    } else {
-        console.log("no entries for : " + location.locationId)
-    }
 }
 
 
@@ -67,12 +72,13 @@ exports.handler = async (event) => {
 
 
     let lastEvaluatedPartnerKey = null
+    let partnerList = []
     do {
         let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => console.log(err))
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null
-        partners.Items.forEach(partner => createReportForPartner(creationTime, partner))
-
+        partnerList = [...partnerList, ...partners.Items.map(p => createReportForPartner(creationTime, p))]
     } while (!!lastEvaluatedPartnerKey)
+    await Promise.all(partnerList)
     const response = {
         statusCode: 200,
         body: JSON.stringify('Hello from Lambda!'),
