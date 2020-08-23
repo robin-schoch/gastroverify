@@ -1,0 +1,7 @@
+{
+    "tableName": "DailyReport",
+    "partitionKeyName": "locationId",
+    "partitionKeyType": "S",
+    "sortKeyName": "reportDate",
+    "sortKeyType": "S"
+}

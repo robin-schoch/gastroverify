@@ -27,6 +27,14 @@ const awsmobile = {
         {
             "tableName": "Entrance-dev",
             "region": "eu-central-1"
+        },
+        {
+            "tableName": "Billing-dev",
+            "region": "eu-central-1"
+        },
+        {
+            "tableName": "DailyReport-dev",
+            "region": "eu-central-1"
         }
     ],
     "aws_cognito_identity_pool_id": "eu-central-1:a7d92f2e-88b2-4fe7-85fe-1c88242a52a8",

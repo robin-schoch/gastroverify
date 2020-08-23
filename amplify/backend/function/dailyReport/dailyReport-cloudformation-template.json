@@ -10,22 +10,6 @@
 		"env": {
 			"Type": "String"
 		},
-		"storageQRMappingName": {
-			"Type": "String",
-			"Default": "storageQRMappingName"
-		},
-		"storageQRMappingArn": {
-			"Type": "String",
-			"Default": "storageQRMappingArn"
-		},
-		"storageValidationName": {
-			"Type": "String",
-			"Default": "storageValidationName"
-		},
-		"storageValidationArn": {
-			"Type": "String",
-			"Default": "storageValidationArn"
-		},
 		"storagePartnerName": {
 			"Type": "String",
 			"Default": "storagePartnerName"
@@ -41,6 +25,22 @@
 		"storageEntranceArn": {
 			"Type": "String",
 			"Default": "storageEntranceArn"
+		},
+		"storageBillingName": {
+			"Type": "String",
+			"Default": "storageBillingName"
+		},
+		"storageBillingArn": {
+			"Type": "String",
+			"Default": "storageBillingArn"
+		},
+		"storageDailyReportName": {
+			"Type": "String",
+			"Default": "storageDailyReportName"
+		},
+		"storageDailyReportArn": {
+			"Type": "String",
+			"Default": "storageDailyReportArn"
 		}
 	},
 	"Conditions": {
@@ -65,12 +65,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"visitors",
+						"dailyReport",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"visitors",
+									"dailyReport",
 									"-",
 									{
 										"Ref": "env"
@@ -88,18 +88,6 @@
 						"REGION": {
 							"Ref": "AWS::Region"
 						},
-						"STORAGE_QRMAPPING_NAME": {
-							"Ref": "storageQRMappingName"
-						},
-						"STORAGE_QRMAPPING_ARN": {
-							"Ref": "storageQRMappingArn"
-						},
-						"STORAGE_VALIDATION_NAME": {
-							"Ref": "storageValidationName"
-						},
-						"STORAGE_VALIDATION_ARN": {
-							"Ref": "storageValidationArn"
-						},
 						"STORAGE_PARTNER_NAME": {
 							"Ref": "storagePartnerName"
 						},
@@ -111,6 +99,18 @@
 						},
 						"STORAGE_ENTRANCE_ARN": {
 							"Ref": "storageEntranceArn"
+						},
+						"STORAGE_BILLING_NAME": {
+							"Ref": "storageBillingName"
+						},
+						"STORAGE_BILLING_ARN": {
+							"Ref": "storageBillingArn"
+						},
+						"STORAGE_DAILYREPORT_NAME": {
+							"Ref": "storageDailyReportName"
+						},
+						"STORAGE_DAILYREPORT_ARN": {
+							"Ref": "storageDailyReportArn"
 						}
 					}
 				},
@@ -125,7 +125,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/visitors-74426237496255776237-build.zip"
+					"S3Key": "amplify-builds/dailyReport-4b363647375a56484766-build.zip"
 				}
 			}
 		},
@@ -135,12 +135,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"gastroverifyLambdaRole7a59d0ec",
+						"gastroverifyLambdaRole50d4c420",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"gastroverifyLambdaRole7a59d0ec",
+									"gastroverifyLambdaRole50d4c420",
 									"-",
 									{
 										"Ref": "env"
@@ -206,23 +206,6 @@
 									}
 								]
 							}
-						},
-						{
-							"Effect": "Allow",
-							"Action": [
-								"sns:Publish"
-							],
-							"Resource": "*"
-						},
-						{
-							"Effect": "Allow",
-							"Action": [
-								"secretsmanager:DescribeSecret",
-								"secretsmanager:GetSecretValue",
-								"secretsmanager:PutSecretValue",
-								"secretsmanager:UpdateSecretVersionStage"
-							],
-							"Resource": "*"
 						}
 					]
 				}
@@ -243,39 +226,6 @@
 				"PolicyDocument": {
 					"Version": "2012-10-17",
 					"Statement": [
-						{
-							"Effect": "Allow",
-							"Action": [
-								"dynamodb:Put*",
-								"dynamodb:Create*",
-								"dynamodb:BatchWriteItem",
-								"dynamodb:Get*",
-								"dynamodb:BatchGetItem",
-								"dynamodb:List*",
-								"dynamodb:Describe*",
-								"dynamodb:Scan",
-								"dynamodb:Query",
-								"dynamodb:Update*",
-								"dynamodb:RestoreTable*",
-								"dynamodb:Delete*"
-							],
-							"Resource": [
-								{
-									"Ref": "storageValidationArn"
-								},
-								{
-									"Fn::Join": [
-										"/",
-										[
-											{
-												"Ref": "storageValidationArn"
-											},
-											"index/*"
-										]
-									]
-								}
-							]
-						},
 						{
 							"Effect": "Allow",
 							"Action": [
@@ -327,14 +277,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageQRMappingArn"
+									"Ref": "storageEntranceArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageQRMappingArn"
+												"Ref": "storageEntranceArn"
 											},
 											"index/*"
 										]
@@ -360,14 +310,47 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageEntranceArn"
+									"Ref": "storageBillingArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageEntranceArn"
+												"Ref": "storageBillingArn"
+											},
+											"index/*"
+										]
+									]
+								}
+							]
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:Put*",
+								"dynamodb:Create*",
+								"dynamodb:BatchWriteItem",
+								"dynamodb:Get*",
+								"dynamodb:BatchGetItem",
+								"dynamodb:List*",
+								"dynamodb:Describe*",
+								"dynamodb:Scan",
+								"dynamodb:Query",
+								"dynamodb:Update*",
+								"dynamodb:RestoreTable*",
+								"dynamodb:Delete*"
+							],
+							"Resource": [
+								{
+									"Ref": "storageDailyReportArn"
+								},
+								{
+									"Fn::Join": [
+										"/",
+										[
+											{
+												"Ref": "storageDailyReportArn"
 											},
 											"index/*"
 										]
@@ -375,6 +358,45 @@
 								}
 							]
 						}
+					]
+				}
+			}
+		},
+		"CloudWatchEvent": {
+			"Type": "AWS::Events::Rule",
+			"Properties": {
+				"Description": "Schedule rule for Lambda",
+				"ScheduleExpression": {
+					"Ref": "CloudWatchRule"
+				},
+				"State": "ENABLED",
+				"Targets": [
+					{
+						"Arn": {
+							"Fn::GetAtt": [
+								"LambdaFunction",
+								"Arn"
+							]
+						},
+						"Id": {
+							"Ref": "LambdaFunction"
+						}
+					}
+				]
+			}
+		},
+		"PermissionForEventsToInvokeLambda": {
+			"Type": "AWS::Lambda::Permission",
+			"Properties": {
+				"FunctionName": {
+					"Ref": "LambdaFunction"
+				},
+				"Action": "lambda:InvokeFunction",
+				"Principal": "events.amazonaws.com",
+				"SourceArn": {
+					"Fn::GetAtt": [
+						"CloudWatchEvent",
+						"Arn"
 					]
 				}
 			}
@@ -402,6 +424,11 @@
 		"LambdaExecutionRole": {
 			"Value": {
 				"Ref": "LambdaExecutionRole"
+			}
+		},
+		"CloudWatchEventRule": {
+			"Value": {
+				"Ref": "CloudWatchEvent"
 			}
 		}
 	}

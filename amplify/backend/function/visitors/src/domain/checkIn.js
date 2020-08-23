@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 class CheckIn {
     constructor(
         locationId,
@@ -27,6 +29,7 @@ class CheckIn {
         this.birthdate = birthdate
         this.firstUse = firstUse
         this.tableNumber = tableNumber
+        this.ttl = moment().add(14, "days").unix()
     }
 
 

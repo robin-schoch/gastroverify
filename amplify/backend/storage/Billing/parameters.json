@@ -1,0 +1,7 @@
+{
+    "tableName": "Billing",
+    "partitionKeyName": "locationId",
+    "partitionKeyType": "S",
+    "sortKeyName": "billingDate",
+    "sortKeyType": "S"
+}
