@@ -31,7 +31,6 @@ const query = (queryParams) => {
 }
 
 const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
-    console.log(LastEvaluatedKey)
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': id,
