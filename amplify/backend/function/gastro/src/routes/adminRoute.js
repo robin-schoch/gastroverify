@@ -1,5 +1,4 @@
-import {getEntries} from "../db/entryStorage";
-
+const {getEntries} = require("../db/entryStorage");
 const express = require('express'), router = express.Router();
 const {getReports} = require("../db/reportStorage");
 const {getGastro, getAllPartner} = require('./../db/gastroStorage')

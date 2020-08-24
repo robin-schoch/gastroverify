@@ -152,7 +152,7 @@ export class AuthenticationService {
     }
 
     public set role(roles: string[]) {
-        this._role$.next([])
+        this._role$.next([]);
     }
 
     /***************************************************************************
@@ -173,7 +173,7 @@ export class AuthenticationService {
         };
     }
 
-    setRoles() {
-
+    setRoles(decodePayloadElement: any) {
+        this.role = decodePayloadElement;
     }
 }

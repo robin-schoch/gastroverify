@@ -39,10 +39,14 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
         onAuthUIStateChange((authState, authData) => {
 
             if (authState === 'signedin') {
+                let a = authData as CognitoUser;
                 this.dialogRef.close();
                 this.authService.isAuthenticated = true;
-                this.authService.activeUser = authData as CognitoUser;
-                this.authService.setRoles();
+                this.authService.activeUser = a
+                if ( !!a.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']){
+                    this.authService.setRoles(a.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
+                }
+
             }
             this.ref.detectChanges();
         });
