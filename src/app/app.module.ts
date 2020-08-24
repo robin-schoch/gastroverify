@@ -48,6 +48,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { ChooseQrCodeDialogComponent } from './domain/gastro-dashboard/choose-qr-code-dialog/choose-qr-code-dialog.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 Amplify.configure(awsconfig);
 
@@ -67,7 +69,8 @@ Amplify.configure(awsconfig);
         PersonalComponent,
         PersonalAddDialogComponent,
         ConfirmdialogComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
+        ChooseQrCodeDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -88,6 +91,7 @@ Amplify.configure(awsconfig);
         MatStepperModule,
         MatTableModule,
         MatPaginatorModule,
+        MatCheckboxModule,
         MatDialogModule,
         MatDialogModule,
         MatListModule,

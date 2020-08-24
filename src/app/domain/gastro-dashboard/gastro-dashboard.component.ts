@@ -16,6 +16,7 @@ import {ConfirmdialogComponent} from '../confirmdialog/confirmdialog.component';
 import {SnackbarService} from '../snackbar/snackbar.service';
 import {TranslateService} from '@ngx-translate/core';
 import { EntryBrowserComponent } from '../entry-browser/entry-browser/entry-browser.component';
+import { ChooseQrCodeDialogComponent } from './choose-qr-code-dialog/choose-qr-code-dialog.component';
 
 @Component({
     selector: 'app-gastro-dashboard',
@@ -31,11 +32,8 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
     private _subs: Subscription[] = [];
     displayedColumns: string[] = [
         'Name',
-        'CheckOutCode',
-        'CheckInCode',
         'Entries',
-        'CheckIn',
-        'CheckOut',
+        'QRCodes',
         'Delete'
     ];
 
@@ -86,37 +84,35 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(
             AddBarDialogComponent,
             {
-                height: '90vh',
+                autoFocus: false,
                 width: '90vw',
                 data: <IAddBarData>{}
             }
         );
     }
 
-    openQRCodeDialog(code: string, text: string, buisnessname: string) {
-        let dialogRef = this.dialog.open(
-            QrCodeGeneratorDialogComponent,
+    openQRCodeDialog(element: Location) {        
+        this.dialog.open(
+            ChooseQrCodeDialogComponent,
             {
-                height: '90vh',
-                width: '90vw',
-                data: <IQRCodeGeneratorData>{
-                    url: `${code}?businessName=${buisnessname}`,
-                    text: text,
-                    name: buisnessname
-                }
+                autoFocus: false,
+                width: '300px',
+                data: element
             }
-        );
+        )/*url: `${code}?businessName=${buisnessname}`,
+                    text: text,
+                    name: buisnessname*/
     }
 
     deleteLocation(location: Location) {
         this.gastroService.removeBar(location).then(elem => this.gastroService.gastro = elem).catch(error => console.log(error));
-
     }
 
     selectBar(row: Location) {
         this.dialog.open(
             EntryBrowserComponent,
             {
+                autoFocus: false,
                 height: '90vh',
                 width: '90vw',
                 data: row,
@@ -129,8 +125,9 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(
             ConfirmdialogComponent,
             {
+                autoFocus: false,
                 width: '250px',
-                data: {message: 'Standort ' + location.name + ' löschen?'}
+                data: {message: 'Standort ' + location.name + ' löschen? Alle gespeicherten Eintritte gehen verloren!'}
             }
         );
         dialogRef.afterClosed().subscribe(result => {
