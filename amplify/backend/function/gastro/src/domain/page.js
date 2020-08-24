@@ -9,7 +9,7 @@ class Page {
     }
 }
 
-const pageBuilder = (data) => {
+const pageBuilder = (data, queryParams) => {
     return new Page(data.Items, queryParams.Limit, data.Count, data.ScannedCount, data.LastEvaluatedKey)
 }
 

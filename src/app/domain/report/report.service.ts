@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {BehaviorSubject, Observable} from 'rxjs';
 import API from '@aws-amplify/api';
+import {Page} from '../entry-browser/entry.service';
 
 export interface Report {
     locationId: string;
@@ -42,7 +43,7 @@ export class ReportService {
      *                                                                         *
      **************************************************************************/
 
-    public loadReports(location, page): Promise<Report[]> {
+    public loadReports(location, page): Promise<Page<Report>> {
         const init = Object.assign(
             {},
             this.myInit
@@ -61,7 +62,7 @@ export class ReportService {
         }
         return API.get(
             this.apiName,
-            '/v1/report/daily' + location.locationId,
+            '/v1/report/daily/' + location.locationId,
             init
         );
     }

@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {GastroService, Location} from '../gastro-dashboard/gastro.service';
 import {filter, map} from 'rxjs/operators';
 import {ToolbarService} from '../main/toolbar.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-report',
@@ -20,9 +21,11 @@ export class ReportComponent implements OnInit {
     public reports$: Observable<Report[]>;
 
     displayedColumns = [
+        'date',
         'distinctTotal',
         'total',
-        'date',
+        'estimatedCost'
+
     ];
 
     constructor(
@@ -54,7 +57,11 @@ export class ReportComponent implements OnInit {
         this.reportService.loadReports(
             location,
             null
-        ).then(r => this.reportService.reports = r).catch(err => console.log(err));
+        ).then(r => this.reportService.reports = r.Data).catch(err => console.log(err));
+    }
+
+    subtractDay(isoTime: string): string {
+        return moment(isoTime).subtract(1, 'day').toISOString()
     }
 
     /***************************************************************************

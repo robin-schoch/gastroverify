@@ -8,9 +8,9 @@ const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorag
 
 
 
-router.get('/daily', ((req, res) => {
+router.get('/daily/:locationId', ((req, res) => {
     getGastro(req.xUser.email).then(user => {
-        const location = user.locations.filter(l => l.locationId === req.params.barId)[0]
+        const location = user.locations.filter(l => l.locationId === req.params.locationId)[0]
         if (location !== null) {
             getReports(location.locationId, req.query.Limit ? req.query.Limit : 12, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
                 .then(elems => {
@@ -22,7 +22,7 @@ router.get('/daily', ((req, res) => {
             })
         } else {
             res.status(401)
-            res.json({barid: req.params.barId, bars: user.bars, cond: !!location, location: location})
+            res.json({locationId: req.params.locationId,  cond: !!location, location: location})
         }
 
     }).catch(error => {

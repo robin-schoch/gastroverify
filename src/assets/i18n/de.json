@@ -52,5 +52,14 @@
     "street": "Strasse + Nummer",
     "city": "Ort",
     "zipoce": "PZL"
+  },
+  "report": {
+    "toolbar": "Report",
+    "title": "Report",
+    "date": "Reportdatum",
+    "count": "Verschiedene Einträge",
+    "total": "Totale Enträge",
+    "select": "Standort",
+    "estimatedPrice": "Geschätzte Kosten"
   }
 }

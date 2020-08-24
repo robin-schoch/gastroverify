@@ -52,5 +52,14 @@
     "street": "Street + Number",
     "city": "City",
     "zipoce": "Zipcode"
+  },
+  "report": {
+    "toolbar": "Report",
+    "title": "Report",
+    "date": "Report date",
+    "count": "Distinct entries",
+    "total": "Total entries",
+    "select": "Location",
+    "estimatedPrice": "Estimated cost"
   }
 }
