@@ -5,7 +5,8 @@
     "signout": "Sign Out",
     "dashboard": "Dashboard",
     "location": "Location",
-    "save": "Save"
+    "save": "Save",
+    "report": "Report"
   },
   "location": {
     "id": "Location ID",

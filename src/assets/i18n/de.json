@@ -6,7 +6,8 @@
     "dashboard": "Dashboard",
     "location": "Standort",
     "save": "Speichern",
-    "signin": "Anmelden"
+    "signin": "Anmelden",
+    "report": "Report"
   },
   "location": {
     "id": "Standort ID",

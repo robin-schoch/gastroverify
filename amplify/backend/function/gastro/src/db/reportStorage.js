@@ -20,7 +20,6 @@ const partitionKeyName = "locationId";
 const sortkeyName = "reportDate";
 const query = (queryParams) => {
     return new Promise((resolve, reject) => {
-        console.log(queryParams)
         dynamodb.query(queryParams, (err, data) => {
             if (err) {
                 reject(err)
@@ -44,7 +43,6 @@ const getReports = (locationId, pageSize, LastEvaluatedKey) => {
         ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     }
-    console.log(queryParams)
     return query(queryParams)
 }
 module.exports = {

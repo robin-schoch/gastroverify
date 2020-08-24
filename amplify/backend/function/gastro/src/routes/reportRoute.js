@@ -12,7 +12,7 @@ router.get('/daily/:locationId', ((req, res) => {
     getGastro(req.xUser.email).then(user => {
         const location = user.locations.filter(l => l.locationId === req.params.locationId)[0]
         if (location !== null) {
-            getReports(location.locationId, req.query.Limit ? req.query.Limit : 12, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
+            getReports(location.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
                 .then(elems => {
                     res.json(elems)
                 }).catch(error => {
