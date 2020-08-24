@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
         this.isAdmin$ = this.authService.role$.pipe(
             tap(elem => console.log(elem)),
             filter(roles => roles.includes('admin')),
-            map(roles => true)
+            map(roles => roles.length > 0)
         );
 
     }
