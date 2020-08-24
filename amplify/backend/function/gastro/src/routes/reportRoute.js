@@ -7,11 +7,6 @@ const {v4: uuidv4} = require('uuid');
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
 
 
-router.post('/', (req, res) => {
-    createNewPartner(req.xUser.email, req.body.firstName, req.body.lastName, req.body.address, req.body.city, req.body.zipcode).then(success => {
-        res.json(success)
-    })
-})
 
 router.get('/daily', ((req, res) => {
     getGastro(req.xUser.email).then(user => {

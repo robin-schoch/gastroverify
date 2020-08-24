@@ -5,6 +5,7 @@ import {LandingComponent} from './domain/landing/landing.component';
 import {IsAuthenticatedGuard} from './domain/auth/guard/is-authenticated.guard';
 import {GtcComponent} from './domain/gtc/gtc.component';
 import {PersonalComponent} from './domain/personal/personal.component';
+import {ReportComponent} from './domain/report/report.component';
 
 const routes: Routes = [
     {
@@ -30,6 +31,12 @@ const routes: Routes = [
             {
                 path: 'personal',
                 component: PersonalComponent,
+                canActivate: [IsAuthenticatedGuard],
+                pathMatch: 'full'
+            },
+            {
+                path: 'report',
+                component: ReportComponent,
                 canActivate: [IsAuthenticatedGuard],
                 pathMatch: 'full'
             }

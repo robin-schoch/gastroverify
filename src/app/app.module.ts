@@ -48,6 +48,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { ReportComponent } from './domain/report/report.component';
 
 Amplify.configure(awsconfig);
 
@@ -67,7 +68,8 @@ Amplify.configure(awsconfig);
         PersonalComponent,
         PersonalAddDialogComponent,
         ConfirmdialogComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
+        ReportComponent
     ],
     imports: [
         BrowserModule,
