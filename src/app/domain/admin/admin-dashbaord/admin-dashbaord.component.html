@@ -5,7 +5,10 @@
         <span class="example-spacer"></span>
 
     </mat-toolbar>
+
     <div  fxLayout="column" fxFlex *ngIf="partners$ | async as partnerPage">
+
+
         <table mat-table  [dataSource]="partnerPage.Data" fxFlex >
 
 
@@ -70,3 +73,4 @@
     </div>
 
 </div>
+

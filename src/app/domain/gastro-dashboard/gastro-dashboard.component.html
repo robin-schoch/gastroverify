@@ -1,5 +1,7 @@
 <div fxFill fxLayoutGap="10px"  fxLayout="column">
 
+    <app-spinner [data$]="partner$"></app-spinner>
+
     <div fxLayout="row" fxFlex fxLayoutGap="10px" *ngIf="partner$ | async as partner">
 
 

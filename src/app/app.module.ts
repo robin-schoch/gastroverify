@@ -54,6 +54,7 @@ import { AdminReportComponent } from './domain/admin/admin-report/admin-report.c
 import { PartnerOverviewComponent } from './domain/admin/partner-overview/partner-overview.component';
 import { ChooseQrCodeDialogComponent } from './domain/gastro-dashboard/choose-qr-code-dialog/choose-qr-code-dialog.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { SpinnerComponent } from './domain/spinner/spinner.component';
 
 Amplify.configure(awsconfig);
 
@@ -79,7 +80,8 @@ Amplify.configure(awsconfig);
         AdminReportComponent,
         PartnerOverviewComponent,
         LoginDialogComponent,
-        ChooseQrCodeDialogComponent
+        ChooseQrCodeDialogComponent,
+        SpinnerComponent
     ],
     imports: [
         BrowserModule,
