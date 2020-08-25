@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {FormFieldTypes, onAuthUIStateChange} from '@aws-amplify/ui-components';
-import {CognitoUser} from 'amazon-cognito-identity-js';
 import {AuthenticationService} from '../authentication.service';
 
 @Component({
@@ -39,13 +38,16 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
         onAuthUIStateChange((authState, authData) => {
 
             if (authState === 'signedin') {
-                let a = authData as CognitoUser;
+                /* let a = authData as CognitoUser;
+
+                 this.authService.isAuthenticated = true;
+                 this.authService.activeUser = a
+
+                 this.authService.setRoles(a.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
+                 */
+                this.authService.setUser();
                 this.dialogRef.close();
-                this.authService.isAuthenticated = true;
-                this.authService.activeUser = a
-                if ( !!a.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']){
-                    this.authService.setRoles(a.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
-                }
+
 
             }
             this.ref.detectChanges();

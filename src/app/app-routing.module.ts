@@ -6,6 +6,7 @@ import {IsAuthenticatedGuard} from './domain/auth/guard/is-authenticated.guard';
 import {GtcComponent} from './domain/gtc/gtc.component';
 import {PersonalComponent} from './domain/personal/personal.component';
 import {ReportComponent} from './domain/report/report.component';
+import {AdminDashbaordComponent} from './domain/admin/admin-dashbaord/admin-dashbaord.component';
 
 const routes: Routes = [
     {
@@ -45,6 +46,11 @@ const routes: Routes = [
     {
         path: 'gtc',
         component: GtcComponent,
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin',
+        component: AdminDashbaordComponent,
         pathMatch: 'full'
     }
 ];

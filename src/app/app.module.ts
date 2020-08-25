@@ -49,6 +49,9 @@ import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.co
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ReportComponent } from './domain/report/report.component';
+import { AdminDashbaordComponent } from './domain/admin/admin-dashbaord/admin-dashbaord.component';
+import { AdminReportComponent } from './domain/admin/admin-report/admin-report.component';
+import { PartnerOverviewComponent } from './domain/admin/partner-overview/partner-overview.component';
 
 Amplify.configure(awsconfig);
 
@@ -69,7 +72,10 @@ Amplify.configure(awsconfig);
         PersonalAddDialogComponent,
         ConfirmdialogComponent,
         LoginDialogComponent,
-        ReportComponent
+        ReportComponent,
+        AdminDashbaordComponent,
+        AdminReportComponent,
+        PartnerOverviewComponent
     ],
     imports: [
         BrowserModule,

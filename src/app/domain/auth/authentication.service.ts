@@ -32,17 +32,8 @@ export class AuthenticationService {
     constructor(
         private router: Router
     ) {
-        Auth.currentAuthenticatedUser().then(user => {
-            this.activeUser = <CognitoUser>user;
-            this.isAuthenticated = true;
 
-
-            console.log(user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
-            console.log('Active user: ' + user.username);
-        }).catch(elem => {
-            this.isAuthenticated = false;
-            console.log('no active user');
-        });
+        this.setUser();
     }
 
     /***************************************************************************
@@ -50,6 +41,23 @@ export class AuthenticationService {
      * Public API                                                              *
      *                                                                         *
      **************************************************************************/
+
+    public setUser() {
+        Auth.currentAuthenticatedUser().then(user => {
+            this.activeUser = <CognitoUser>user;
+            console.log(user);
+            this.isAuthenticated = true;
+
+            console.log(user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
+            const r = user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups'];
+
+            this.role = !!r ? r : ["no_role"];
+            console.log('Active user: ' + user.username);
+        }).catch(elem => {
+            this.isAuthenticated = false;
+            console.log('no active user');
+        });
+    }
 
     public signOut(): void {
         Auth.signOut({global: true}).then(logout => {
@@ -152,7 +160,8 @@ export class AuthenticationService {
     }
 
     public set role(roles: string[]) {
-        this._role$.next([]);
+        console.log('devoded : ' + roles);
+        this._role$.next(roles);
     }
 
     /***************************************************************************
@@ -174,6 +183,7 @@ export class AuthenticationService {
     }
 
     setRoles(decodePayloadElement: any) {
+
         this.role = decodePayloadElement;
     }
 }

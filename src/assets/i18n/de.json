@@ -7,7 +7,8 @@
     "location": "Standort",
     "save": "Speichern",
     "signin": "Anmelden",
-    "report": "Report"
+    "report": "Report",
+    "admin": "Administration"
   },
   "location": {
     "id": "Standort ID",

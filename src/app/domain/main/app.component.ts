@@ -1,9 +1,9 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ToolbarService} from './toolbar.service';
-import {Observable, pipe} from 'rxjs';
+import {Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../auth/authentication.service';
-import {filter, map, tap} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 
 interface Language {
     short: string,
@@ -46,10 +46,15 @@ export class AppComponent implements OnInit, AfterViewChecked {
         // Set Browser Language as Init Language
         translate.use(translate.getBrowserLang());
         this.isAdmin$ = this.authService.role$.pipe(
-            tap(elem => console.log(elem)),
-            filter(roles => roles.includes('admin')),
-            map(roles => roles.length > 0)
+            tap(elem => console.log('this is working ' + elem)),
+            map(roles => roles.filter(elem => elem === 'admin')),
+            map(roles => roles.length > 0),
+            tap(elem => console.log('this is working too' + elem)),
         );
+
+
+        console.log('hulla');
+        this.isAdmin$.subscribe(elem => console.log('admin = ' + elem));
 
     }
 

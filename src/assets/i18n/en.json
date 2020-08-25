@@ -6,7 +6,8 @@
     "dashboard": "Dashboard",
     "location": "Location",
     "save": "Save",
-    "report": "Report"
+    "report": "Report",
+    "admin": "Administration"
   },
   "location": {
     "id": "Location ID",
