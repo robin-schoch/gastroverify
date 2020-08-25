@@ -1,6 +1,8 @@
-<div fxFill fxLayoutGap="10px" fxLayout="column">
+<div fxFill fxLayoutGap="10px"  fxLayout="column">
 
-    <div fxLayout="row" fxFlex="30" fxLayoutGap="10px" *ngIf="partner$ | async as partner">
+    <app-spinner [data$]="partner$"></app-spinner>
+
+    <div fxLayout="row" fxFlex fxLayoutGap="10px" *ngIf="partner$ | async as partner">
 
 
 
@@ -12,71 +14,54 @@
                     <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">add</mat-icon>
                 </button>
             </mat-toolbar>
-
-            <div fxFlex fxLayout="column">
+            <div *ngIf="partner.locations?.length == 0" style="height: 100%; text-align: center; padding:  10px;">
+                <p style="margin-bottom: 30px;">Es wurde noch kein Standrot hinzugefügt.</p>
+                <div (click)="openAddDialog()">
+                    <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">add</mat-icon>
+                    <p style="margin: 0px">Hinzufügen</p>
+                </div>
+            </div>
+            <div fxFlex *ngIf="partner.locations?.length > 0">
                 <div *ngIf="!!partner.locations || partner.locations?.length > 0" class="example-container" fxFlex>
                     <table mat-table [dataSource]="partner.locations" fxFlex>
-
-                        <!-- Bar ID Column -->
-                        <ng-container matColumnDef="BarID">
-                            <th mat-header-cell *matHeaderCellDef> {{'location.id' | translate}}</th>
-                            <td mat-cell *matCellDef="let element"> {{element.locationId}} </td>
-                        </ng-container>
-
                         <!-- Name Column -->
                         <ng-container matColumnDef="Name">
                             <th mat-header-cell *matHeaderCellDef> {{'location.name' | translate}}</th>
                             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                         </ng-container>
 
-                        <!-- Weight Column -->
-                        <ng-container matColumnDef="CheckOutCode">
-                            <th mat-header-cell *matHeaderCellDef> {{'location.street' | translate}}</th>
-                            <td mat-cell *matCellDef="let element"> {{element.street}} </td>
-                        </ng-container>
-
-                        <!-- Symbol Column -->
-                        <ng-container matColumnDef="CheckInCode">
-                            <th mat-header-cell *matHeaderCellDef> {{'location.city' | translate}}</th>
-                            <td mat-cell *matCellDef="let element"> {{element.city}} </td>
-                        </ng-container>
-
                         <!-- Delete Column -->
-                        <ng-container matColumnDef="CheckIn">
-                            <th mat-header-cell *matHeaderCellDef> {{'location.checkin' | translate}}</th>
+                        <ng-container matColumnDef="Entries">
+                            <th mat-header-cell *matHeaderCellDef>{{'location.entries' | translate}}</th>
                             <td mat-cell *matCellDef="let element">
-                                <button mat-mini-fab color="primary"
-                                        (click)="openQRCodeDialog(element.checkInCode, 'checkin', element.name)">
-                                    <mat-icon>local_bar</mat-icon>
+                                <button mat-raised-button color="primary" (click)="selectBar(element)">
+                                    {{'location.entries' | translate}}
                                 </button>
 
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="CheckOut">
-                            <th mat-header-cell *matHeaderCellDef> {{'location.checkout' | translate}}</th>
+                        <ng-container matColumnDef="QRCodes">
+                            <th mat-header-cell *matHeaderCellDef>{{'location.qrcode' | translate}}</th>
                             <td mat-cell *matCellDef="let element">
-                                <button mat-mini-fab color="primary"
-                                        (click)="openQRCodeDialog(element.checkOutCode, 'cehckout', element.name)">
-                                    <mat-icon>no_drinks</mat-icon>
+                                <button mat-raised-button color="primary"
+                                        (click)="openQRCodeDialog(element)">
+                                    <mat-icon>qr_code_2</mat-icon>
                                 </button>
-
                             </td>
                         </ng-container>
-
 
                         <ng-container matColumnDef="Delete">
-                            <th mat-header-cell *matHeaderCellDef> {{'location.delete' | translate}}</th>
+                            <th mat-header-cell *matHeaderCellDef></th>
                             <td mat-cell *matCellDef="let element">
-                                <button mat-mini-fab color="primary" (click)="openConfirmDialog(element)">
+                                <button mat-icon-button color="warn" (click)="openConfirmDialog(element)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
-
                             </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectBar(row)"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
 
                 </div>
@@ -84,9 +69,4 @@
         </div>
 
     </div>
-
-    <div fxFlex>
-        <app-entry-browser [location]="(selectedBar$ | async)"></app-entry-browser>
-    </div>
-
 </div>

@@ -2,6 +2,8 @@ const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const moment = require('moment');
+const {Page, pageBuilder} = require("../domain/page");
+
 const {Location, Partner} = require('../domain/partner')
 
 
@@ -32,6 +34,20 @@ const getGastro = (email) => {
         })
     })
 }
+
+const scanPartner = (scanItem) => {
+
+    return new Promise(((resolve, reject) => {
+        dynamodb.scan(scanItem, ((err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(pageBuilder(data, scanItem))
+            }
+        }))
+    }))
+}
+
 
 updatePartner = (partner, email, body) => {
     let updateItemParams = {
@@ -85,9 +101,19 @@ const createNewPartner = (email, firstName, lastName, address, city, zipcode) =>
     return createPartner(g, true)
 }
 
+const getAllPartner = (lastEvaluatedKey) => {
+    let scanItem = {
+        TableName: tableName,
+        ExclusiveStartKey: lastEvaluatedKey,
+        Limit: 100
+    }
+    return scanPartner(scanItem)
+}
+
 
 module.exports = {
     createNewPartner,
     createPartner,
-    getGastro
+    getGastro,
+    getAllPartner
 }

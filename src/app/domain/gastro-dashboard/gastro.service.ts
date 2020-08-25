@@ -31,6 +31,8 @@ export interface Location {
 })
 export class GastroService {
 
+    private _loaded = false;
+
     private _gastro$: BehaviorSubject<Partner> = new BehaviorSubject<Partner>(null);
 
     private _error$: Subject<any> = new Subject<any>();
@@ -79,16 +81,20 @@ export class GastroService {
     }
 
     getGastro() {
-        API.get(
-            this.apiName,
-            '/v1/gastro/me',
-            this.myInit
-        ).then(elem => {
-            this._gastro$.next(elem);
-        }).catch(error => {
-            console.log(error);
-            this._gastro$.next(<Partner>{});
-        });
+        if (!this._loaded) {
+            API.get(
+                this.apiName,
+                '/v1/gastro/me',
+                this.myInit
+            ).then(elem => {
+                this._gastro$.next(elem);
+                this._loaded = true;
+            }).catch(error => {
+                console.log(error);
+                this._gastro$.next(<Partner>{});
+            });
+        }
+
     }
 
     addBar(bar: Location) {

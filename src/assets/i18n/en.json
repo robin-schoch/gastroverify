@@ -5,18 +5,22 @@
     "signout": "Sign Out",
     "dashboard": "Dashboard",
     "location": "Location",
-    "save": "Save"
+    "save": "Save",
+    "report": "Report",
+    "admin": "Administration"
   },
   "location": {
     "id": "Location ID",
     "name": "Name",
     "street": "Street",
     "city": "City",
-    "checkin": "Check In",
-    "checkout": "Check Out",
+    "entries": "Entries",
+    "checkin": "Check-in code",
+    "checkout": "Check-out code",
     "delete": "Delete",
     "addlocation": "Add location",
-    "signin": "Login"
+    "signin": "Login",
+    "qrcode": "QR Codes"
   },
   "form": {
     "name": "Name",
@@ -52,5 +56,14 @@
     "street": "Street + Number",
     "city": "City",
     "zipoce": "Zipcode"
+  },
+  "report": {
+    "toolbar": "Report",
+    "title": "Report",
+    "date": "Report date",
+    "count": "Distinct entries",
+    "total": "Total entries",
+    "select": "Location",
+    "estimatedPrice": "Estimated cost"
   }
 }

@@ -1,0 +1,10 @@
+.example-container {
+  overflow: auto;
+}
+.mat-column-detail, .mat-column-email,
+.mat-column-firstName, .mat-column-lastName,
+.mat-column-address, .mat-column-city,
+.mat-column-zip, .mat-column-Email,
+.mat-column-Nr- {
+  min-width: 70px;
+}

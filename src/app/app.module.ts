@@ -48,6 +48,13 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { ReportComponent } from './domain/report/report.component';
+import { AdminDashbaordComponent } from './domain/admin/admin-dashbaord/admin-dashbaord.component';
+import { AdminReportComponent } from './domain/admin/admin-report/admin-report.component';
+import { PartnerOverviewComponent } from './domain/admin/partner-overview/partner-overview.component';
+import { ChooseQrCodeDialogComponent } from './domain/gastro-dashboard/choose-qr-code-dialog/choose-qr-code-dialog.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { SpinnerComponent } from './domain/spinner/spinner.component';
 
 Amplify.configure(awsconfig);
 
@@ -67,7 +74,14 @@ Amplify.configure(awsconfig);
         PersonalComponent,
         PersonalAddDialogComponent,
         ConfirmdialogComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
+        ReportComponent,
+        AdminDashbaordComponent,
+        AdminReportComponent,
+        PartnerOverviewComponent,
+        LoginDialogComponent,
+        ChooseQrCodeDialogComponent,
+        SpinnerComponent
     ],
     imports: [
         BrowserModule,
@@ -88,6 +102,7 @@ Amplify.configure(awsconfig);
         MatStepperModule,
         MatTableModule,
         MatPaginatorModule,
+        MatCheckboxModule,
         MatDialogModule,
         MatDialogModule,
         MatListModule,

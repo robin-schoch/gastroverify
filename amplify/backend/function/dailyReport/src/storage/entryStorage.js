@@ -22,7 +22,6 @@ const query = (queryParams) => {
 }
 
 const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
-    console.log("i am called")
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': id,
@@ -36,13 +35,10 @@ const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
         TableName: tableName
     };
     return new Promise((resolve, reject) => {
-        console.log("i am called too")
         dynamodb.query(queryParams, (err, data) => {
-            console.log("i am called too too")
             if (err) {
                 reject(err)
             } else {
-                console.log(data)
                 resolve({value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
             }
         })

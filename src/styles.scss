@@ -1,8 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
 
-html { height: 100%; overflow:auto; }
-body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.filters {
+  mat-form-field {
+    height: 10px;
+
+    div.mat-form-field-flex .mat-form-field-label-wrapper {
+      padding-top: 0;
+    }
+
+    div.mat-from-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    div.mat-form-field-underline {
+      bottom: 0;
+    }
+
+    div.mat-form-field-infix {
+      border-top: 0;
+    }
+  }
+}
 
 /******************************
 Mat Dialog
@@ -13,7 +46,6 @@ Mat Dialog
   padding: 0;
   margin: 0;
 }
-
 
 
 .no-padding-dialog .mat-dialog-container {

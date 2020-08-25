@@ -1,0 +1,12 @@
+<!--TRANSLATE-->
+<button mat-icon-button class="close-button" [mat-dialog-close]="true">
+    <mat-icon class="close-icon">close</mat-icon>
+</button>
+
+<h1 mat-dialog-title>QR-Codes</h1>
+<div mat-dialog-content>
+        <button mat-raised-button color="primary" type="button" style="width: 100%; margin-bottom: 10px;"
+                (click)="openCheckIn()" [mat-dialog-close]="true">Check-in</button>
+        <button mat-raised-button color="primary" type="button" style="width: 100%;"
+                (click)="openCheckOut()" [mat-dialog-close]="true">Check-out</button>
+</div>

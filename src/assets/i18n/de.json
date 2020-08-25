@@ -3,20 +3,24 @@
     "welcome": "Willkommen",
     "profile": "Mein Profil",
     "signout": "Abmelden",
-    "dashboard": "Dashboard",
+    "dashboard": "Übersicht",
     "location": "Standort",
     "save": "Speichern",
-    "signin": "Anmelden"
+    "signin": "Anmelden",
+    "report": "Report",
+    "admin": "Administration"
   },
   "location": {
     "id": "Standort ID",
     "name": "Name",
     "street": "Strasse",
     "city": "Ort",
-    "checkin": "Check In",
-    "checkout": "Check Out",
+    "entries": "Eintritte",
+    "checkin": "Check-in Code",
+    "checkout": "Check-out Code",
     "delete": "Löschen",
-    "addlocation": "Standort hinzufügen"
+    "addlocation": "Standort hinzufügen",
+    "qrcode": "QR Codes"
   },
   "form": {
     "name": "Name",
@@ -52,5 +56,14 @@
     "street": "Strasse + Nummer",
     "city": "Ort",
     "zipoce": "PZL"
+  },
+  "report": {
+    "toolbar": "Report",
+    "title": "Report",
+    "date": "Reportdatum",
+    "count": "Verschiedene Einträge",
+    "total": "Totale Enträge",
+    "select": "Standort",
+    "estimatedPrice": "Geschätzte Kosten"
   }
 }

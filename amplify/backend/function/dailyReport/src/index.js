@@ -34,21 +34,13 @@ const createReportForLocation = async (date, location) => {
                 vals = [...data.value.map(elem => elem.phoneNumber), ...vals]
                 lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null
             }
-            console.log("loop done")
         } while (lastkey !== null)
-        console.log("hurra done")
-        console.log(vals)
         let count = new Set(vals).size
         let totalCount = vals.length
         console.log("count " + count + " total " + totalCount)
-        if (count > 0) {
-            await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
-            resolve(true)
-            console.log("Report create for : " + location.locationId)
-        } else {
-            console.log("no entries for : " + location.locationId)
-            resolve(true)
-        }
+        count > 0 ? console.log("Report create for : " + location.locationId + " ") : console.log("no entries for : " + location.locationId)
+        await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
+        resolve(true)
     })
 
 }
