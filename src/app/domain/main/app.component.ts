@@ -58,6 +58,10 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
     }
 
+    setOpened(opened: boolean): void {
+        this.opened = opened;
+    }
+
     ngOnInit(): void {
         this.toolbarTitle$ = this.toolbarService.toolbarTitle$.asObservable();
         this.toolbarHidden$ = this.toolbarService.toolbarHidden$.asObservable();

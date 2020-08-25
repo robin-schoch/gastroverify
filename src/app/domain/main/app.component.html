@@ -24,6 +24,11 @@
                 <span>{{'context.admin' | translate}}</span>
             </mat-list-option>
 
+            <mat-list-option appSignOut (click)="setOpened(false)">
+                <mat-icon mat-list-icon color="accent">power_settings_new</mat-icon>
+                <span>{{'context.signout' | translate}}</span>
+            </mat-list-option>
+
         </mat-selection-list>
 
 
@@ -40,16 +45,6 @@
                 <span *ngIf="toolbarTitle$ | async as toolbarTitle">{{toolbarTitle}}</span>
             </div>
             <div fxLayoutAlign="center center" fxLayoutGap="10px">
-
-                <span *ngIf="username$ | async as username">{{username}}</span>
-                <button mat-icon-button [matMenuTriggerFor]="userMenu">
-                    <mat-icon>account_circle</mat-icon>
-                </button>
-                <mat-menu #userMenu="matMenu">
-
-                    <button mat-menu-item appSignOut>{{'context.signout' | translate}}</button>
-
-                </mat-menu>
 
                 <button mat-icon-button [matMenuTriggerFor]="languageMenu">
                     <mat-icon>language</mat-icon>

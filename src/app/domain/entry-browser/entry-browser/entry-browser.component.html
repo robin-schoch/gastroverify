@@ -1,13 +1,13 @@
 <div class="mat-elevation-z8 " *ngIf="selectedBar$ | async as selectedbar" fxFill fxLayout="column">
 
     <mat-toolbar>
-        <span>{{'entry.title' | translate}}</span>
+        <span>{{selectedbar.name}}</span>
         <span class="example-spacer"></span>
-        <button mat-icon-button (click)="exportCSV()" matTooltip="{{'entry.download' | translate}}">
-            <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">cloud_download</mat-icon>
+        <button mat-icon-button (click)="reload(selectedbar)" matTooltip="{{'entry.reload' | translate}}">
+            <mat-icon>replay</mat-icon>
         </button>
-        <button mat-icon-button (click)="reload(selectedbar)" matTooltip="{{'entry.reload' | translate}}" >
-            <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">replay</mat-icon>
+        <button mat-icon-button (click)="reload(selectedbar)" [mat-dialog-close]="true">
+            <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar>
     <div class=" example-container" fxLayout="column" fxFlex *ngIf="data$ | async as data">
@@ -83,5 +83,7 @@
             <span>{{'entry.nomoredata' | translate}}</span>
         </div>
     </div>
-
+    <button *ngIf="data$ | async as data" mat-raised-button (click)="exportCSV()" matTooltip="{{'entry.download' | translate}}" color="warn">
+        {{'entry.download' | translate}}
+    </button>
 </div>

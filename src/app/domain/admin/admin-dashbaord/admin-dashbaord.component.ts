@@ -34,8 +34,10 @@ export class AdminDashbaordComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.adminService.partners = null;
         this.adminService.loadPartners();
         this.partners$ = this.adminService.partners$;
+
     }
 
     onPageEvent(page: Page<Partner>) {

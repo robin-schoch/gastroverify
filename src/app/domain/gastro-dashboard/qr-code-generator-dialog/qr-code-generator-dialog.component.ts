@@ -39,6 +39,8 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
     private loadingTracker: Subject<void> = new Subject<void>();
     public isLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private tableNumber$: BehaviorSubject<number> = new BehaviorSubject<number>(null);
+    public tableEnabled: boolean = false;
+    public tableNr: string = "";
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: IQRCodeGeneratorData,
@@ -77,6 +79,17 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
 
     }
 
+    tableCheckboxChanged(): void {
+        console.log(this.tableEnabled);
+        if(!this.tableEnabled){
+            this.setTableNumber(null);
+            this.tableNr = "";
+        } else {
+            this.setTableNumber("1");
+            this.tableNr = "1";
+        }
+    }
+
     generateCode(table?: number) {
 
         let sub = new Subject();
@@ -86,7 +99,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
         );
         this.images[1] = null;
         this.images[1] = qrCodeImage;
-        let a = table ?
+        let a = table && this.tableEnabled ?
                 this.generateUrlWithTable(
                     this.data.url,
                     table

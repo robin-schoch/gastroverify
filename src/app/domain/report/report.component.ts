@@ -44,10 +44,11 @@ export class ReportComponent implements OnInit {
 
     ngOnInit(): void {
 
+
     }
 
     selectLocation(location) {
-        console.log("hello")
+        console.log('hello');
         this.selectedLocation = location;
         this.loadReport(location);
 
@@ -61,7 +62,10 @@ export class ReportComponent implements OnInit {
     }
 
     subtractDay(isoTime: string): string {
-        return moment(isoTime).subtract(1, 'day').toISOString()
+        return moment(isoTime).subtract(
+            1,
+            'day'
+        ).toISOString();
     }
 
     /***************************************************************************
