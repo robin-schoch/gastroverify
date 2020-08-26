@@ -81,8 +81,9 @@ app.post('/v1/register', (req, res) => {
             let senderID = "EntryCheck"
             console.log(b.length)
             if (b.length === 2 && b[0].hasOwnProperty("senderID")){
-                senderID = b[1].senderID
-                console.log(b[1].senderID)
+
+                senderID = b[0].senderID
+                console.log(b[0].senderID)
                 console.log(senderID)
             }
             validationStorage.createValidation(phoneNumber, senderID).then(([valid, sms]) => {
