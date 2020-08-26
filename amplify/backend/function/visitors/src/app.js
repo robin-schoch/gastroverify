@@ -75,11 +75,15 @@ app.post('/v1/register', (req, res) => {
         if (req.body.qrCodeId) {
             p.push(getQrCode(req.body.qrCodeId))
         }
+        console.log(req.body.qrCodeId)
         p.push(validationStorage.validateValidationRequest(phoneNumber))
         Promise.all(p).then(b => {
             let senderID = "EntryCheck"
-            if (b.length === 2 && b[1].hasOwnProperty("senderID")){
+            console.log(b.length)
+            if (b.length === 2 && b[0].hasOwnProperty("senderID")){
                 senderID = b[1].senderID
+                console.log(b[1].senderID)
+                console.log(senderID)
             }
             validationStorage.createValidation(phoneNumber, senderID).then(([valid, sms]) => {
                 res.json({timestamp: valid.validation_requested, sms: sms})

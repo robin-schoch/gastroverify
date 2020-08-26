@@ -1,4 +1,4 @@
-<mat-sidenav-container>
+<mat-sidenav-container fxFill>
     <mat-sidenav #sidenav mode="over" [(opened)]="opened">
 
         <mat-toolbar color="primary" style="min-height:200px" fxLayoutAlign="center center">
@@ -34,7 +34,7 @@
 
     </mat-sidenav>
 
-    <mat-sidenav-content fxFill fxLayout="column">
+    <mat-sidenav-content  fxFlex fxLayout="column">
 
         <mat-toolbar *ngIf="!(toolbarHidden$ | async)" color="primary" fxLayoutAlign="space-between center">
             <div fxLayoutAlign="center center" fxLayoutGap="10px">

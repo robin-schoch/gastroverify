@@ -12,7 +12,7 @@
     </mat-toolbar>
     <app-spinner [data$]="data$"></app-spinner>
     <div class=" example-container" fxLayout="column" fxFlex *ngIf="data$ | async as data">
-        <table mat-table [dataSource]="data.Data" fxFlex>
+        <mat-table [dataSource]="data.Data" >
 
 
             <ng-container matColumnDef="Checkin">
@@ -73,7 +73,7 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-        </table>
+        </mat-table>
         <div fxFlex fxLayoutAlign="center center" *ngIf="data.LastEvaluatedKey">
             <button mat-icon-button (click)="onPageEvent(data.LastEvaluatedKey)"
                     aria-label="Example icon button with a vertical three dot icon">
