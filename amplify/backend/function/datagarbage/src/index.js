@@ -11,79 +11,62 @@
 	STORAGE_PARTNER_NAME
 Amplify Params - DO NOT EDIT */
 const {scanPartner} = require('./storage/partnerStorage')
-const {getEntries} = require('./storage/entryStorage')
-const {createNewDailyBill} = require('./storage/billingStorage')
-const {createNewReport} = require('./storage/reportStorage')
+const {getReports} = require('./storage/reportStorage')
+const {createBill} = require('./storage/billingStorage')
 const moment = require('moment');
+const {billBuilder} = require("./domain/bill");
 
-const createReportForPartner = async (date, partner) => {
-    console.log(date.toISOString())
-    partner.locations.forEach(location => createReportForLocation(date.clone(), location))
+const createBillForPartner = async (from, to, partner) => {
+    return new Promise((async (resolve, reject) => {
+        const reports = await Promise.all(partner.locations.map(location => createBillForLocation(from, to, location)))
+        const billInfo = reports.reduce((acc, report) => reportReducer(acc, report), {distinctTotal: 0, total: 0})
+        const bill = billBuilder(partner.email, from.toISOString(), to.toISOString(), billInfo.total, billInfo.distinctTotal)
+        createBill(bill).then(elem => {
+            resolve(true)
+        })
+    }))
+
+
 }
 
-const createReportForLocation = async (date, location) => {
-    console.log("next location")
-    console.log(location)
-    let vals = []
-    let lastkey = null
-    do {
-        console.log("getting data")
-        let data  = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => console.log(err))
-        console.log(data.value)
-        if (!!value) {
-            vals = [...data.value.map(elem => elem.phoneNumber), ...vals]
-            lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null
-        }
-        console.log("loop done")
-    } while (lastkey !== null)
-    console.log("hurra done")
-    console.log(vals)
-    let count = new Set(vals).size
-    let totalCount = vals.length
-    console.log("count " + count + " total " + totalCount)
-    if (count > 0) {
+const createBillForLocation = async (from, to, location) => {
+    return new Promise(async (resolve, reject) => {
+        console.log("next location")
+        console.log(location)
+        let data = await getReports(location.locationId, from, to).catch(err => console.log(err))
+        resolve(data.Items.reduce((acc, item) => reportReducer(acc, item), {distinctTotal: 0, total: 0}))
 
-        await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
-        console.log("Report create for : " + location.locationId)
-    } else {
-        console.log("no entries for : " + location.locationId)
-    }
+    })
+
 }
 
-const createMonthlyBill = () => {
-    console.log("create bill")
+const reportReducer = (report, acc) => {
+    return {distinctTotal: acc.distinctTotal + report.distinctTotal, total: acc.distinctTotal + report.distinctTotal}
 }
 
 
 exports.handler = async (event) => {
 
     const creationTime = moment()
+        .subtract(1, 'month')
+        .hours(0)
         .minutes(0)
         .seconds(0)
         .milliseconds(0)
 
     console.log("handle bills usw.")
     console.log(creationTime.toISOString())
-    const dat = creationTime.clone()
-
-
-    const date = Object.assign({}, creationTime)
-
-    const isSecondDayOfMonth = Number(dat.format('DD')) === 2
-
-    if (isSecondDayOfMonth) {
-        createMonthlyBill()
-    }
-
-
+    let a = moment().subtract(1, 'month')
+    let startOfBillingDuration = moment().subtract(1, 'month').startOf('month')
+    let endOfBillingDuration = moment().subtract(1, 'month').endOf('month')
     let lastEvaluatedPartnerKey = null
-
+    let partnerList = []
     do {
         let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => console.log(err))
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null
-        partners.Items.forEach(partner => createReportForPartner(creationTime, partner))
-
+        partnerList = [...partnerList, ...partners.Items.map(p => createBillForPartner(startOfBillingDuration.clone(), endOfBillingDuration.clone(), p))]
     } while (!!lastEvaluatedPartnerKey)
+    await Promise.all(partnerList)
     const response = {
         statusCode: 200,
         body: JSON.stringify('Hello from Lambda!'),

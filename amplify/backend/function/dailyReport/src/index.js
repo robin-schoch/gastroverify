@@ -53,14 +53,9 @@ exports.handler = async (event) => {
         .seconds(0)
         .milliseconds(0)
 
-    console.log("handle bills usw.")
+    console.log("handle reports usw.")
     console.log(creationTime.toISOString())
     const dat = creationTime.clone()
-
-
-    const date = Object.assign({}, creationTime)
-
-    const isSecondDayOfMonth = Number(dat.format('DD')) === 2
 
 
     let lastEvaluatedPartnerKey = null

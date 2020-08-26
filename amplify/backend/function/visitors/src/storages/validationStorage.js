@@ -37,7 +37,7 @@ const insertValidationData = (item) => {
 }
 
 
-module.exports.createValidation = (phoneNumber) => {
+module.exports.createValidation = (phoneNumber, senderID) => {
     const item = {
         phoneNumberHash: crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'),
         code: Math.floor(10000 + Math.random() * 90000),
@@ -49,7 +49,7 @@ module.exports.createValidation = (phoneNumber) => {
 
     return Promise.all([
         insertValidationData(item),
-        smsUtil.sendVerifactionSMS(phoneNumber, item.code)
+        smsUtil.sendVerifactionSMS(phoneNumber, item.code, senderID)
     ])
 
 }

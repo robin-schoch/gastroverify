@@ -71,9 +71,17 @@ app.use(function (req, res, next) {
 app.post('/v1/register', (req, res) => {
     const phoneNumber = req.body.phoneNr;
     if (phoneNumber) {
-        validationStorage.validateValidationRequest(phoneNumber).then(b => {
-            validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
-                console.log(sms)
+        const p = []
+        if (req.body.qrCodeId) {
+            p.push(getQrCode(req.body.qrCodeId))
+        }
+        p.push(validationStorage.validateValidationRequest(phoneNumber))
+        Promise.all(p).then(b => {
+            let senderID = "EntryCheck"
+            if (b.length === 2 && b[1].hasOwnProperty("senderID")){
+                senderID = b[1].senderID
+            }
+            validationStorage.createValidation(phoneNumber, senderID).then(([valid, sms]) => {
                 res.json({timestamp: valid.validation_requested, sms: sms})
             }).catch(error => {
                 res.status(500)
@@ -94,6 +102,7 @@ app.post('/v1/register/noSMS', (req, res) => {
     const phoneNumber = req.body.phoneNr;
 
     if (phoneNumber) {
+
         validationStorage.validateValidationRequest(phoneNumber).then(loaded => {
             validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
                 res.json({success: "check your phone"})
