@@ -22,7 +22,8 @@ export interface Location {
     zipcode: string,
     checkOutCode: string,
     checkInCode: string,
-    active: boolean
+    active: boolean,
+    senderID: string
 }
 
 

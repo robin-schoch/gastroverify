@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/:id/bar', (req, res) => {
-    const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true)
+    const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true, req.body.senderID)
     console.log(location)
     if (!location.locationId) {
         res.status(409)
@@ -45,7 +45,8 @@ router.post('/:id/bar', (req, res) => {
                     ownerId: gastor.email,
                     locationId: location.locationId,
                     locationName: location.name,
-                    checkIn: true
+                    checkIn: true,
+                    senderID: location.senderID
                 }), addQrCodeMapping({
                     qrId: location.checkOutCode,
                     ownerId: gastor.email,

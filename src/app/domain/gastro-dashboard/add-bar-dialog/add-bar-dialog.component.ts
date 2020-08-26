@@ -25,6 +25,7 @@ export class AddBarDialogComponent implements OnInit {
     public newLocation = <Location>{};
 
     public reg = new RegExp('^[A-z0-9]*');
+    enablePremium: boolean = false;
 
     ngOnInit() {
     }

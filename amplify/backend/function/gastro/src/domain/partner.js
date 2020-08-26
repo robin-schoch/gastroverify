@@ -29,7 +29,8 @@ class Location {
         zipcode,
         checkOutCode,
         checkInCode,
-        active
+        active,
+        senderID
     ) {
         this.locationId = locationId
         this.name = name
@@ -39,6 +40,7 @@ class Location {
         this.checkOutCode = checkOutCode
         this.checkInCode = checkInCode
         this.active = active
+        this.senderID = senderID
 
     }
 
