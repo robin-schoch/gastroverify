@@ -37,7 +37,7 @@ const getQrCode = (qrCode) => {
             ':qrCode': qrCode,
         },
         KeyConditionExpression: `${partitionKeyName} = :qrCode`,
-        ProjectionExpression: 'checkIn, locationName, locationId',
+        ProjectionExpression: 'checkIn, locationName, locationId, senderID',
         Limit: 1,
     }
     return get(getItemParams)
