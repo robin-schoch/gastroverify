@@ -26,7 +26,8 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/:id/bar', (req, res) => {
-    const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true, req.body.senderID)
+    let payment = !!req.body.senderID ? "default" : "premium"
+    const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true, payment , req.body.senderID)
     console.log(location)
     if (!location.locationId) {
         res.status(409)
