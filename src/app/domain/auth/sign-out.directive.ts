@@ -19,9 +19,11 @@ export class SignOutDirective {
         ['$event']
     )
     onClick(e) {
-        this.locationService.gastro = null;
+
         this.authService.signOut();
         this.authService.role = [];
+        this.locationService.clearPartner();
+        this.locationService.loaded = false;
     }
 
 }
