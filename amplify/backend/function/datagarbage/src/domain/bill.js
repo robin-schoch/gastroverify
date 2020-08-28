@@ -1,18 +1,32 @@
 class Bill {
     constructor(
-        locationId,
-        billingDate,
+        partnerId,
+        from,
+        to,
         complete,
         paidAt,
         total,
-        entriesPerDay,
+        distinctTotal,
+        price
     ) {
-        this.locationId = locationId
-        this.billingDate = billingDate
+        this.partnerId = partnerId
+        this.billingDate = to
+        this.from = from
+        this.to = to
         this.complete = complete
         this.paidAt = paidAt
         this.total = total
-        this.entriesPerDay = entriesPerDay
+        this.distinctTotal = distinctTotal
+        this.price = price
     }
 
+}
+
+const billBuilder = (partnerId, from, to, total, distinct, price) => {
+    return new Bill(partnerId, from, to, false, "", total, distinct, price)
+}
+
+module.exports = {
+    Bill,
+    billBuilder
 }

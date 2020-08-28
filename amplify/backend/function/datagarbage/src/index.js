@@ -7,83 +7,86 @@
 	STORAGE_DAILYREPORT_NAME
 	STORAGE_ENTRANCE_ARN
 	STORAGE_ENTRANCE_NAME
+	STORAGE_MONTHLYREPORT_ARN
+	STORAGE_MONTHLYREPORT_NAME
 	STORAGE_PARTNER_ARN
 	STORAGE_PARTNER_NAME
 Amplify Params - DO NOT EDIT */
 const {scanPartner} = require('./storage/partnerStorage')
-const {getEntries} = require('./storage/entryStorage')
-const {createNewDailyBill} = require('./storage/billingStorage')
-const {createNewReport} = require('./storage/reportStorage')
+const {getReports} = require('./storage/reportStorage')
+const {createBill} = require('./storage/monthlyReportStorage')
 const moment = require('moment');
+const {billBuilder} = require("./domain/bill");
 
-const createReportForPartner = async (date, partner) => {
-    console.log(date.toISOString())
-    partner.locations.forEach(location => createReportForLocation(date.clone(), location))
+const createBillForPartner = async (from, to, partner) => {
+    return new Promise((async (resolve, reject) => {
+        const reports = await Promise.all(partner.locations.map(location => createBillForLocation(from, to, location)))
+        const billInfo = reports.reduce((acc, report) => billReducer(acc, report), {
+            distinctTotal: 0,
+            total: 0,
+            price: 0
+        })
+        const bill = billBuilder(partner.email, from.toISOString(), to.toISOString(), billInfo.total, billInfo.distinctTotal, billInfo.price)
+        console.log(bill)
+        createBill(bill).then(elem => {
+            resolve(true)
+        })
+    }))
+
+
 }
 
-const createReportForLocation = async (date, location) => {
-    console.log("next location")
-    console.log(location)
-    let vals = []
-    let lastkey = null
-    do {
-        console.log("getting data")
-        let data  = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => console.log(err))
-        console.log(data.value)
-        if (!!value) {
-            vals = [...data.value.map(elem => elem.phoneNumber), ...vals]
-            lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null
-        }
-        console.log("loop done")
-    } while (lastkey !== null)
-    console.log("hurra done")
-    console.log(vals)
-    let count = new Set(vals).size
-    let totalCount = vals.length
-    console.log("count " + count + " total " + totalCount)
-    if (count > 0) {
+const createBillForLocation = async (from, to, location) => {
+    return new Promise(async (resolve, reject) => {
+        console.log("next location")
+        console.log(location.locationId)
+        let data = await getReports(location.locationId, from, to).catch(err => console.log(err))
+        resolve(data.Items.reduce((acc, item) => reportReducer(acc, item), {distinctTotal: 0, total: 0, price: 0}))
 
-        await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
-        console.log("Report create for : " + location.locationId)
-    } else {
-        console.log("no entries for : " + location.locationId)
+    })
+
+}
+
+const reportReducer = (acc, report) => {
+    return {
+        distinctTotal: acc.distinctTotal + report.distinctTotal,
+        total: acc.total + report.total,
+        price: acc.price + (report.distinctTotal * (Math.round((!!report.pricePerEntry ? report.pricePerEntry : 0.15) * 100) / 100).toFixed(2))
+    };
+}
+
+const billReducer = (acc, bill) => {
+    return {
+        distinctTotal: acc.distinctTotal + bill.distinctTotal,
+        total: acc.total + bill.total,
+        price: (Math.round(acc.price + bill.price * 100) / 100).toFixed(2)
     }
 }
-
-const createMonthlyBill = () => {
-    console.log("create bill")
-}
-
 
 exports.handler = async (event) => {
 
     const creationTime = moment()
+        .subtract(1, 'month')
+        .hours(0)
         .minutes(0)
         .seconds(0)
         .milliseconds(0)
 
     console.log("handle bills usw.")
     console.log(creationTime.toISOString())
-    const dat = creationTime.clone()
-
-
-    const date = Object.assign({}, creationTime)
-
-    const isSecondDayOfMonth = Number(dat.format('DD')) === 2
-
-    if (isSecondDayOfMonth) {
-        createMonthlyBill()
-    }
-
-
+    let a = moment().subtract(1, 'month')
+    //let startOfBillingDuration = moment().subtract(1, 'month').startOf('month')
+    //let endOfBillingDuration = moment().subtract(1, 'month').endOf('month')
+    let startOfBillingDuration = moment().startOf('month')
+    let endOfBillingDuration = moment().endOf('month')
     let lastEvaluatedPartnerKey = null
-
+    let partnerList = []
     do {
         let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => console.log(err))
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null
-        partners.Items.forEach(partner => createReportForPartner(creationTime, partner))
-
+        partnerList = [...partnerList, ...partners.Items.map(p => createBillForPartner(startOfBillingDuration.clone(), endOfBillingDuration.clone(), p))]
     } while (!!lastEvaluatedPartnerKey)
+    await Promise.all(partnerList)
     const response = {
         statusCode: 200,
         body: JSON.stringify('Hello from Lambda!'),

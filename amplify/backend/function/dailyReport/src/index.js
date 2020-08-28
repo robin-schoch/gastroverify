@@ -14,10 +14,13 @@ const {getEntries} = require('./storage/entryStorage')
 const {createNewReport} = require('./storage/reportStorage')
 const moment = require('moment');
 
+const prices = {
+    premium: 0.3,
+    default: 0.15
+}
+
 const createReportForPartner = async (date, partner) => {
     return Promise.all(partner.locations.map(location => createReportForLocation(date.clone(), location)))
-
-
 }
 
 const createReportForLocation = async (date, location) => {
@@ -39,7 +42,7 @@ const createReportForLocation = async (date, location) => {
         let totalCount = vals.length
         console.log("count " + count + " total " + totalCount)
         count > 0 ? console.log("Report create for : " + location.locationId + " ") : console.log("no entries for : " + location.locationId)
-        await createNewReport(location.locationId, date.toISOString(), count, totalCount).catch(err => console.log(err))
+        await createNewReport(location.locationId, date.toISOString(), count, totalCount, !!location.senderID ? prices.premium : prices.default ).catch(err => console.log(err))
         resolve(true)
     })
 
@@ -53,14 +56,9 @@ exports.handler = async (event) => {
         .seconds(0)
         .milliseconds(0)
 
-    console.log("handle bills usw.")
+    console.log("handle reports usw.")
     console.log(creationTime.toISOString())
     const dat = creationTime.clone()
-
-
-    const date = Object.assign({}, creationTime)
-
-    const isSecondDayOfMonth = Number(dat.format('DD')) === 2
 
 
     let lastEvaluatedPartnerKey = null

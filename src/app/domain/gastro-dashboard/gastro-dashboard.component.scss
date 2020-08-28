@@ -5,3 +5,10 @@
 .example-spacer {
   flex: 1 1 auto;
 }
+
+
+.mat-column-Entries, .mat-column-QRCodes,
+.mat-column-Delete, .mat-column-Name{
+  min-width: 200px;
+
+}

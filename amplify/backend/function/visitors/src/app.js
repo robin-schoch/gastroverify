@@ -71,9 +71,25 @@ app.use(function (req, res, next) {
 app.post('/v1/register', (req, res) => {
     const phoneNumber = req.body.phoneNr;
     if (phoneNumber) {
-        validationStorage.validateValidationRequest(phoneNumber).then(b => {
-            validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
-                console.log(sms)
+        const p = []
+        if (req.body.qrCodeId) {
+            p.push(getQrCode(req.body.qrCodeId))
+        }
+        console.log(req.body.qrCodeId)
+        p.push(validationStorage.validateValidationRequest(phoneNumber))
+        Promise.all(p).then(b => {
+            let senderID = "EntryCheck"
+            let text = 'Dein Verifikationcode ist:'
+
+            console.log(b.length)
+            if (b.length === 2 && b[0].hasOwnProperty("senderID")){
+                console.log(b[0])
+                senderID = b[0].senderID
+            }
+            if (b.length === 2 && b[0].hasOwnProperty("smsText")){
+                text = b[0].smsText
+            }
+            validationStorage.createValidation(phoneNumber, senderID, text).then(([valid, sms]) => {
                 res.json({timestamp: valid.validation_requested, sms: sms})
             }).catch(error => {
                 res.status(500)
@@ -81,8 +97,13 @@ app.post('/v1/register', (req, res) => {
                 res.json({error: error})
             })
         }).catch(error => {
-            res.status(403)
-            res.json({duration: error.interval, status: error.status})
+            if (error.hasOwnProperty('interval')){
+                res.status(403)
+                res.json({duration: error.interval, status: error.status})
+            } else {
+                res.status(403)
+                res.json({duration: 60, status: 'premium'})
+            }
         })
     } else {
         res.status(401)
@@ -94,6 +115,7 @@ app.post('/v1/register/noSMS', (req, res) => {
     const phoneNumber = req.body.phoneNr;
 
     if (phoneNumber) {
+
         validationStorage.validateValidationRequest(phoneNumber).then(loaded => {
             validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
                 res.json({success: "check your phone"})
@@ -147,7 +169,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
             getQrCode(req.params.qrId).then(code => {
                 const timeIso = moment().toISOString()
                 let cI = new CheckIn(code.locationId, req.body.firstName, req.body.surName,
-                    req.body.email, req.body.address, req.body.city, req.body.zipcode,
+                    !!req.body.email ? req.body.email : "no email", req.body.address, req.body.city, req.body.zipcode,
                     code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table)
                 console.log("created user")
                 checkinStorage.addCheckIn(cI).then(elem => {

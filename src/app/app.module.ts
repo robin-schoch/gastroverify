@@ -55,6 +55,7 @@ import { PartnerOverviewComponent } from './domain/admin/partner-overview/partne
 import { ChooseQrCodeDialogComponent } from './domain/gastro-dashboard/choose-qr-code-dialog/choose-qr-code-dialog.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SpinnerComponent } from './domain/spinner/spinner.component';
+import { UpdateLocationDialogComponent } from './domain/gastro-dashboard/update-location-dialog/update-location-dialog.component';
 
 Amplify.configure(awsconfig);
 
@@ -81,7 +82,8 @@ Amplify.configure(awsconfig);
         PartnerOverviewComponent,
         LoginDialogComponent,
         ChooseQrCodeDialogComponent,
-        SpinnerComponent
+        SpinnerComponent,
+        UpdateLocationDialogComponent
     ],
     imports: [
         BrowserModule,

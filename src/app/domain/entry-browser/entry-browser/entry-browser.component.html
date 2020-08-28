@@ -11,69 +11,73 @@
         </button>
     </mat-toolbar>
     <app-spinner [data$]="data$"></app-spinner>
+
     <div class=" example-container" fxLayout="column" fxFlex *ngIf="data$ | async as data">
-        <table mat-table [dataSource]="data.Data" fxFlex>
+        <!--     -->
+        <mat-table [dataSource]="data.Data" >
 
 
             <ng-container matColumnDef="Checkin">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
+                <mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element">
                     <mat-icon *ngIf="element.checkIn" [color]="'success'">local_bar</mat-icon>
                     <mat-icon *ngIf="!element.checkIn" [color]="'warn'">no_drinks</mat-icon>
 
-                </td>
+                </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="Zeit">
-                <th mat-header-cell *matHeaderCellDef> Zeit</th>
-                <td mat-cell *matCellDef="let element"> {{element.entryTime | date:'short'}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef> Zeit</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.entryTime | date:'short'}} </mat-cell>
             </ng-container>
 
 
             <ng-container matColumnDef="Name">
-                <th mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.firstName}} </mat-cell>
             </ng-container>
 
-            <!-- Name Column -->
+
             <ng-container matColumnDef="Nachname">
-                <th mat-header-cell *matHeaderCellDef> {{'entry.name' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.name' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.lastName}} </mat-cell>
             </ng-container>
 
-            <!-- Weight Column -->
+
             <ng-container matColumnDef="Strasse">
-                <th mat-header-cell *matHeaderCellDef> {{'entry.lastname' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.street}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.lastname' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.street}} </mat-cell>
             </ng-container>
 
-            <!-- Symbol Column -->
+
             <ng-container matColumnDef="Ort">
-                <th mat-header-cell *matHeaderCellDef>{{'entry.city' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.city' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.city}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="PLZ">
-                <th mat-header-cell *matHeaderCellDef>{{'entry.zip' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.zipCode}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.zip' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.zipCode}} </mat-cell>
             </ng-container>
 
-            <!-- Symbol Column -->
+
             <ng-container matColumnDef="Nr.">
-                <th mat-header-cell *matHeaderCellDef>{{'entry.phonenr' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.phonenr' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.phoneNumber}} </mat-cell>
             </ng-container>
 
-            <!-- Symbol Column -->
+
             <ng-container matColumnDef="Email">
-                <th mat-header-cell *matHeaderCellDef>{{'entry.email' | translate}}</th>
-                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.email' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-        </table>
+        </mat-table>
+
+
         <div fxFlex fxLayoutAlign="center center" *ngIf="data.LastEvaluatedKey">
             <button mat-icon-button (click)="onPageEvent(data.LastEvaluatedKey)"
                     aria-label="Example icon button with a vertical three dot icon">

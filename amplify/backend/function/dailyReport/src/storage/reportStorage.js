@@ -31,12 +31,12 @@ const putBill = (bill) => {
 }
 
 
-const createNewReport = (locationId, billdate, distinctTotal, total) => {
+const createNewReport = (locationId, billdate, distinctTotal, total, pricePerEntry) => {
     let putItemParams = {
         TableName: tableName,
-        Item: new DailyReport(locationId, billdate, distinctTotal, total)
+        Item: new DailyReport(locationId, billdate, distinctTotal, total, pricePerEntry)
     }
-    console.log(new DailyReport(locationId, billdate, distinctTotal, total))
+    console.log(new DailyReport(locationId, billdate, distinctTotal, total, pricePerEntry))
     return putBill(putItemParams)
 }
 

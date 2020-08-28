@@ -114,10 +114,10 @@ const updateBill = (locationId, billDate, date, total) => {
     })
 }
 
-const createNewDailyBill = (locationId, billdate, total) => {
+const createBill = (bill) => {
     let putItemParams = {
         TableName: tableName,
-        Item: new DailyReport(locationId, billdate, total)
+        Item: bill
     }
     return putBill(putItemParams)
 }
@@ -125,5 +125,5 @@ const createNewDailyBill = (locationId, billdate, total) => {
 
 module.exports = {
     updateBill,
-    createNewDailyBill
+    createBill
 }

@@ -1,0 +1,7 @@
+{
+    "tableName": "MonthlyReport",
+    "partitionKeyName": "partnerId",
+    "partitionKeyType": "S",
+    "sortKeyName": "billingDate",
+    "sortKeyType": "S"
+}

@@ -22,7 +22,9 @@ export interface Location {
     zipcode: string,
     checkOutCode: string,
     checkInCode: string,
-    active: boolean
+    active: boolean,
+    senderID: string,
+    smsText: string
 }
 
 
@@ -46,16 +48,24 @@ export class GastroService {
         private authService: AuthenticationService
     ) { }
 
+    public set loaded (loaded: boolean){
+        this._loaded = loaded
+    }
     public get gastro$(): Observable<Partner> {
         return this._gastro$.asObservable();
     }
 
     public set gastro(gastro: Partner) {
+        console.log(gastro)
         this._gastro$.next(gastro);
     }
 
     public get error$(): any {
         return this._error$.asObservable();
+    }
+
+    public clearPartner () {
+        this._gastro$ = new BehaviorSubject<Partner>(null);
     }
 
     createGatro(partner: Partner) {

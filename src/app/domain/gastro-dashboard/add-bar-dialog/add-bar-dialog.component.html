@@ -30,7 +30,25 @@
                    placeholder="{{'form.zip' | translate}}"
                    required type="zip">
         </mat-form-field>
+        <!--
+                <section class="example-section">
+                    <mat-checkbox class="example-margin" name="premiumcheckbox" [(ngModel)]="enablePremium">Checked</mat-checkbox>
+                </section>
 
+                <span>Achtung eigne Sender ID ist optional. Eine eigene Sender ID kostet 0.40.- pro Eintritt</span>
+                <div   [hidden]="!enablePremium" fxFlex>
+                <mat-form-field [hidden]="!enablePremium">
+                    <input [(ngModel)]="newLocation.senderID" class="cell" delayedFocus matInput name="senderID"
+                           placeholder="{{'form.senderID' | translate}}"
+                           [maxLength]="11"
+
+
+                           [minlength]="3"
+                           [required]="enablePremium"
+                            type="text">
+                </mat-form-field>
+                 </div>
+                 -->
         <button mat-flat-button color="accent" type="button" [disabled]="addBarForm.invalid"
                 (click)="addBar()">{{'form.add' | translate}}</button>
     </form>

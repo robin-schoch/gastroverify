@@ -20,6 +20,7 @@ const sortkeyName = "reportDate";
 const putBill = (bill) => {
     return new Promise(((resolve, reject) => {
         dynamodb.put(bill, ((err, data) => {
+
             if (err) {
                 reject(err)
             } else {
@@ -28,6 +29,35 @@ const putBill = (bill) => {
         }))
     }))
 
+}
+
+const getReports = (id, dateFrom, dateTo) => {
+    console.log(id)
+    const queryParams = {
+        ExpressionAttributeValues: {
+            ':location': id,
+            ':from': dateFrom.toISOString(),
+            ':to': dateTo.toISOString()
+        },
+        KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`,
+        Limit: 31,
+        ScanIndexForward: false,
+        TableName: tableName
+    };
+    return queryBill(queryParams)
+}
+
+const queryBill = (queryParams) => {
+    return new Promise((resolve, reject) => {
+        dynamodb.query(queryParams, (err, data) => {
+            console.log(err)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(data)
+            }
+        })
+    })
 }
 
 
@@ -42,5 +72,6 @@ const createNewReport = (locationId, billdate, distinctTotal, total) => {
 
 
 module.exports = {
-    createNewReport
+    createNewReport,
+    getReports
 }

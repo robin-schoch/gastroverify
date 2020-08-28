@@ -1,13 +1,6 @@
 {
     "paths": [
         {
-            "name": "/v1/register",
-            "lambdaFunction": "visitors",
-            "privacy": {
-                "open": true
-            }
-        },
-        {
             "name": "/v1/validate",
             "lambdaFunction": "visitors",
             "privacy": {
@@ -108,6 +101,13 @@
                     ]
                 }
             }
+        },
+        {
+            "name": "/v1/register",
+            "lambdaFunction": "visitors",
+            "privacy": {
+                "open": true
+            }
         }
     ],
     "resourceName": "verifyGateway",
@@ -166,5 +166,5 @@
             ]
         }
     ],
-    "uuid": "6f3a6c36"
+    "uuid": "43e8de5d"
 }

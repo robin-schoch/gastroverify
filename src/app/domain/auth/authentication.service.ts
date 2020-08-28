@@ -64,6 +64,7 @@ export class AuthenticationService {
             this.isAuthenticated = false;
             this.activeUser = null;
             this.router.navigate(['/']);
+
         });
     }
 
