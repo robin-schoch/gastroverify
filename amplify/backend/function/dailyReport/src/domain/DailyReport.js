@@ -3,12 +3,14 @@ class DailyReport {
         locationId,
         reportDate,
         distinctTotal,
-        total
+        total,
+        pricePerEntry
     ) {
         this.locationId = locationId
         this.reportDate = reportDate
         this.distinctTotal = distinctTotal
         this.total = total
+        this.pricePerEntry = pricePerEntry
     }
 }
 

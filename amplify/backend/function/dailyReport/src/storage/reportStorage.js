@@ -31,7 +31,7 @@ const putBill = (bill) => {
 }
 
 
-const createNewReport = (locationId, billdate, distinctTotal, total) => {
+const createNewReport = (locationId, billdate, distinctTotal, total, pricePerEntry) => {
     let putItemParams = {
         TableName: tableName,
         Item: new DailyReport(locationId, billdate, distinctTotal, total)

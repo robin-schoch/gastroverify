@@ -137,6 +137,14 @@
                         "Name",
                         "Arn"
                     ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "MonthlyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
                 }
             ]
         },
@@ -247,6 +255,10 @@
             "providerPlugin": "awscloudformation"
         },
         "DailyReport": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "MonthlyReport": {
             "service": "DynamoDB",
             "providerPlugin": "awscloudformation"
         }

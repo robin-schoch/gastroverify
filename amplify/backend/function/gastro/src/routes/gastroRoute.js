@@ -38,7 +38,6 @@ router.post('/:id/bar', (req, res) => {
             res.json({error: 'location id already exits'})
         } else {
             gastor.locations.push(location)
-            console.log(gastor)
             Promise.all([
                 createPartner(gastor),
                 addQrCodeMapping({
