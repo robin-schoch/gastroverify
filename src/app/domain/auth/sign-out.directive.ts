@@ -1,19 +1,25 @@
 import {Directive, HostListener} from '@angular/core';
 import {AuthenticationService} from './authentication.service';
 import {Router} from '@angular/router';
+import {GastroService} from '../gastro-dashboard/gastro.service';
 
 @Directive({
     selector: '[appSignOut]'
 })
 export class SignOutDirective {
 
-    constructor(private authService: AuthenticationService, private router: Router) { }
+    constructor(
+        private authService: AuthenticationService,
+        private router: Router,
+        private locationService: GastroService
+    ) { }
 
     @HostListener(
         'click',
         ['$event']
     )
     onClick(e) {
+        this.locationService.gastro = null;
         this.authService.signOut();
         this.authService.role = [];
     }
