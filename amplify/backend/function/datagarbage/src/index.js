@@ -27,7 +27,7 @@ const createBillForPartner = async (from, to, partner) => {
             price: 0
         })
         const bill = billBuilder(partner.email, from.toISOString(), to.toISOString(), billInfo.total, billInfo.distinctTotal, billInfo.price)
-       // console.log(bill)
+        console.log(bill)
         createBill(bill).then(elem => {
             resolve(true)
         })
@@ -51,7 +51,7 @@ const reportReducer = (acc, report) => {
     return {
         distinctTotal: acc.distinctTotal + report.distinctTotal,
         total: acc.total + report.total,
-        price: acc.price + (report.distinctTotal * (Math.round((!!report.price ? report.price : 0.15) * 100) / 100).toFixed(2))
+        price: acc.price + (report.distinctTotal * (Math.round((!!report.pricePerEntry ? report.pricePerEntry : 0.15) * 100) / 100).toFixed(2))
     };
 }
 
@@ -75,8 +75,10 @@ exports.handler = async (event) => {
     console.log("handle bills usw.")
     console.log(creationTime.toISOString())
     let a = moment().subtract(1, 'month')
-    let startOfBillingDuration = moment().subtract(1, 'month').startOf('month')
-    let endOfBillingDuration = moment().subtract(1, 'month').endOf('month')
+    //let startOfBillingDuration = moment().subtract(1, 'month').startOf('month')
+    //let endOfBillingDuration = moment().subtract(1, 'month').endOf('month')
+    let startOfBillingDuration = moment().startOf('month')
+    let endOfBillingDuration = moment().endOf('month')
     let lastEvaluatedPartnerKey = null
     let partnerList = []
     do {
