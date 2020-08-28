@@ -36,8 +36,7 @@ const getReports = (locationId, pageSize, LastEvaluatedKey) => {
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': locationId,
-            ':reportDate': moment().toISOString(),
-            ':to': locationId,
+            ':to': moment().toISOString(),
             ':from': moment().startOf('month').toISOString(),
         },
         KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`,
