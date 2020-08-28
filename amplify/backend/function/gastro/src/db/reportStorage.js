@@ -37,8 +37,8 @@ const getReports = (locationId, pageSize, LastEvaluatedKey) => {
         ExpressionAttributeValues: {
             ':location': locationId,
             ':reportDate': moment().toISOString(),
-            ':from': locationId,
-            ':to': moment().startOf('month').toISOString(),
+            ':to': locationId,
+            ':from': moment().startOf('month').toISOString(),
         },
         KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`,
         // ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',
