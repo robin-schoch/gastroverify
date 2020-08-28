@@ -27,7 +27,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/:id/bar', (req, res) => {
     let payment = !!req.body.senderID ? "default" : "premium"
-    const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true, payment , req.body.senderID)
+    const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true, payment , req.body.senderID,  req.body.smsText)
     console.log(location)
     if (!location.locationId) {
         res.status(409)
@@ -46,7 +46,8 @@ router.post('/:id/bar', (req, res) => {
                     locationId: location.locationId,
                     locationName: location.name,
                     checkIn: true,
-                    senderID: location.senderID
+                    senderID: location.senderID,
+                    smsText: location.smsText
                 }), addQrCodeMapping({
                     qrId: location.checkOutCode,
                     ownerId: gastor.email,
@@ -62,6 +63,53 @@ router.post('/:id/bar', (req, res) => {
         }
     })
 })
+/*
+router.put('/:id/bar/:locationId', (req, res) => {
+   let payment = !!req.body.senderID ? "default" : "premium"
+
+   if (!req.params.locationId) {
+       res.status(409)
+       res.json({error: "no location"})
+   }
+   getGastro(req.xUser.email).then(gastor => {
+       if (gastor.locations.map(l => l.locationId).includes(location.locationId)) {
+           let location = gastor.locations.filter(l => l.locationId)[0]
+           let a = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true, payment , req.body.senderID, req.body.smsText)
+           a.
+           location.name = req.body.name
+           location.zipcode = req.body.zipcode
+           location.senderID = req.body.senderID
+           location.smsText = req.body.smsText
+           location.city = req.body.city
+           location.street = req.body.street
+
+           res.json({error: 'location id already exits'})
+       } else {
+         gastor.locations.push(location)
+           Promise.all([
+               createPartner(gastor),
+               addQrCodeMapping({
+                   qrId: location.checkInCode,
+                   ownerId: gastor.email,
+                   locationId: location.locationId,
+                   locationName: location.name,
+                   checkIn: true,
+                   senderID: location.senderID
+               }), addQrCodeMapping({
+                   qrId: location.checkOutCode,
+                   ownerId: gastor.email,
+                   locationId: location.locationId,
+                   locationName: location.name,
+                   checkIn: false
+               })]).then(([a, b, c]) => {
+               res.json(a)
+            }).catch(error => {
+                res.status(500)
+                res.json(error)
+            })
+        }
+    })
+})*/
 
 router.delete('/:id/bar/:barId', (req, res) => {
     getGastro(req.xUser.email).then(partner => {

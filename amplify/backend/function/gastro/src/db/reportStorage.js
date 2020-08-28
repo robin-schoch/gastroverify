@@ -31,12 +31,16 @@ const query = (queryParams) => {
 }
 
 const getReports = (locationId, pageSize, LastEvaluatedKey) => {
+
+    `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': locationId,
-            ':reportDate': moment().subtract(365, 'days').toISOString(),
+            ':reportDate': moment().toISOString(),
+            ':from': locationId,
+            ':to': moment().startOf('month').toISOString(),
         },
-        KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} >= :reportDate`,
+        KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`,
         // ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',
         Limit: pageSize,
         ScanIndexForward: false,

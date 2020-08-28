@@ -31,7 +31,8 @@ class Location {
         checkInCode,
         active,
         payment,
-        senderID
+        senderID,
+        smsText
     ) {
         this.locationId = locationId
         this.name = name
@@ -44,6 +45,7 @@ class Location {
         this.active = active
         this.payment = payment
         this.senderID = senderID
+        this.smsText = smsText
 
     }
 
