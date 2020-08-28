@@ -10,6 +10,7 @@ class Bill {
         price
     ) {
         this.partnerId = partnerId
+        this.billingDate = to
         this.from = from
         this.to = to
         this.complete = complete

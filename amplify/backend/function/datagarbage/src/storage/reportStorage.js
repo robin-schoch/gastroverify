@@ -44,7 +44,6 @@ const getReports = (id, dateFrom, dateTo) => {
         ScanIndexForward: false,
         TableName: tableName
     };
-    console.log(queryParams)
     return queryBill(queryParams)
 }
 

@@ -21,8 +21,13 @@ const {billBuilder} = require("./domain/bill");
 const createBillForPartner = async (from, to, partner) => {
     return new Promise((async (resolve, reject) => {
         const reports = await Promise.all(partner.locations.map(location => createBillForLocation(from, to, location)))
-        const billInfo = reports.reduce((acc, report) => billReducer(acc, report), {distinctTotal: 0, total: 0, price: 0})
+        const billInfo = reports.reduce((acc, report) => billReducer(acc, report), {
+            distinctTotal: 0,
+            total: 0,
+            price: 0
+        })
         const bill = billBuilder(partner.email, from.toISOString(), to.toISOString(), billInfo.total, billInfo.distinctTotal, billInfo.price)
+       // console.log(bill)
         createBill(bill).then(elem => {
             resolve(true)
         })
@@ -34,7 +39,7 @@ const createBillForPartner = async (from, to, partner) => {
 const createBillForLocation = async (from, to, location) => {
     return new Promise(async (resolve, reject) => {
         console.log("next location")
-        console.log(location)
+        console.log(location.locationId)
         let data = await getReports(location.locationId, from, to).catch(err => console.log(err))
         resolve(data.Items.reduce((acc, item) => reportReducer(acc, item), {distinctTotal: 0, total: 0, price: 0}))
 
@@ -42,12 +47,20 @@ const createBillForLocation = async (from, to, location) => {
 
 }
 
-const reportReducer = (report, acc) => {
-    return {distinctTotal: acc.distinctTotal + report.distinctTotal, total: acc.distinctTotal + report.distinctTotal, price:  acc.price + (report.distinctTotal * (!!report.price ? report.price : 0.15))}
+const reportReducer = (acc, report) => {
+    return {
+        distinctTotal: acc.distinctTotal + report.distinctTotal,
+        total: acc.total + report.total,
+        price: acc.price + (report.distinctTotal * (Math.round((!!report.price ? report.price : 0.15) * 100) / 100).toFixed(2))
+    };
 }
 
-const billReducer = (bill, acc) => {
-    return {distinctTotal: acc.distinctTotal + bill.distinctTotal, total: acc.distinctTotal + bill.distinctTotal, price:  acc.price +  bill.price}
+const billReducer = (acc, bill) => {
+    return {
+        distinctTotal: acc.distinctTotal + bill.distinctTotal,
+        total: acc.total + bill.total,
+        price: (Math.round(acc.price + bill.price * 100) / 100).toFixed(2)
+    }
 }
 
 exports.handler = async (event) => {
