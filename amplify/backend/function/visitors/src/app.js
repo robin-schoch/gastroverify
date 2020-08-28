@@ -80,12 +80,14 @@ app.post('/v1/register', (req, res) => {
         Promise.all(p).then(b => {
             let senderID = "EntryCheck"
             let text = 'Dein Verifikationcode ist:'
+
             console.log(b.length)
             if (b.length === 2 && b[0].hasOwnProperty("senderID")){
+                console.log(b[0])
                 senderID = b[0].senderID
             }
             if (b.length === 2 && b[0].hasOwnProperty("smsText")){
-                senderID = b[0].smsText
+                text = b[0].smsText
             }
             validationStorage.createValidation(phoneNumber, senderID, text).then(([valid, sms]) => {
                 res.json({timestamp: valid.validation_requested, sms: sms})
