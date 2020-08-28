@@ -5,7 +5,7 @@ const SNS = new AWS.SNS()
 module.exports.sendVerifactionSMS = (phoneNumber, code, senderId="EntryCheck", text= 'Dein Verifikationcode ist:', language = "de") => {
     const params = {
         PhoneNumber: phoneNumber,
-        Message: `${text}: ${code}`,
+        Message: `${text} ${code}`,
         MessageAttributes: {
             "AWS.SNS.SMS.SenderID" : {
                 DataType: "String",

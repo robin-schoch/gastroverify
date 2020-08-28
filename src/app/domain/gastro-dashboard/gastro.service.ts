@@ -23,7 +23,8 @@ export interface Location {
     checkOutCode: string,
     checkInCode: string,
     active: boolean,
-    senderID: string
+    senderID: string,
+    smsText: string
 }
 
 
