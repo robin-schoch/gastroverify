@@ -43,12 +43,13 @@ export class ReportComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.reportService.reports = []
 
 
     }
 
     selectLocation(location) {
-        console.log('hello');
+
         this.selectedLocation = location;
         this.loadReport(location);
 
