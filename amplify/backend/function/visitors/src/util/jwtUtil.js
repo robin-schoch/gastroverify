@@ -37,11 +37,12 @@ const getSecret = async () => {
 
 getSecret()
 
-module.exports.generateJWT = (phoneNumber, momentum) => {
+module.exports.generateJWT = async (phoneNumber, momentum) => {
+    const sec = await getSecret()
     return jwt.sign({
         phone: phoneNumber,
         validation: momentum
-    }, secret, {expiresIn: '3650d'})
+    }, sec, {expiresIn: '3650d'})
 
 }
 
