@@ -64,4 +64,12 @@ export class AdminReportComponent implements OnInit {
             'day'
         ).toISOString();
     }
+
+    getPrice(element: any) {
+        if (element.hasOwnProperty('pricePerEntry')) {
+            return element.distinctTotal * element.pricePerEntry;
+        } else {
+            return element.distinctTotal * 0.15;
+        }
+    }
 }
