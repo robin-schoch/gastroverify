@@ -1,9 +1,10 @@
 <div fxFill fxLayout="column">
     <mat-form-field appearance="outline">
         <mat-label>{{'report.select' | translate}}</mat-label>
-        <mat-select>
+        <mat-select [disabled]="partner.locations.length < 1"  (selectionChange)="selectLocation($event.value)">
             <mat-option *ngFor="let location of partner.locations"
-                        (onSelectionChange)="selectLocation(location)"
+
+
                         [value]="location">
                 {{location.name}}
             </mat-option>

@@ -36,6 +36,7 @@ export class AdminReportComponent implements OnInit {
     public location: Location;
 
     ngOnInit(): void {
+        this.adminService.reports = null
     }
 
     loadReports(location: string, page: Page<Report> = null) {
@@ -49,6 +50,8 @@ export class AdminReportComponent implements OnInit {
     }
 
     selectLocation(location: Location) {
+        console.log("location changed")
+        console.log(location)
         if (location != this.location) {
             this.location = location;
             this.adminService.reports = null;

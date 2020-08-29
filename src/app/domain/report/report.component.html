@@ -2,9 +2,9 @@
     <div>
         <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
             <mat-label>{{'report.select' | translate}}</mat-label>
-            <mat-select>
+            <mat-select (selectionChange)="selectLocation($event.value)">
                 <mat-option *ngFor="let location of locations"
-                            (onSelectionChange)="selectLocation(location)"
+
                             [value]="location">
                     {{location.name}}
                 </mat-option>

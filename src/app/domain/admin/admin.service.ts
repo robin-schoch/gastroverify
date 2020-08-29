@@ -90,7 +90,7 @@ export class AdminService {
     private mergeReports(page: Page<Report>) {
         console.log(page)
         const old = this.reports;
-        if (false) {
+        if (!false) {
             this.reports = page;
         } else {
             page.Data = [
