@@ -146,11 +146,13 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                     code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table)
                 console.log("created user")
                 checkinStorage.addCheckIn(cI).then(elem => {
+                    console.log(code)
                     res.json({
                         entry: code.checkIn,
                         time: timeIso,
                         locationName: code.locationName,
-
+                        barId: code.locationId,
+                        locationId: code.locationId
                     })
                 }).catch(error => {
                     res.status(500)
