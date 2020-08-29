@@ -47,8 +47,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         this.toolbarService.toolbarHidden = false;
         this.gastroService.getGastro();
         const sub = this.newPartner$.pipe(
-            tap(elem => console.log(elem) ),
-            skip(1),
+            tap(elem => console.log("new? " + elem) ),
             filter(t => t)
         ).subscribe(elem => this.openAddDialog());
         this._subs.push(sub);

@@ -6,15 +6,16 @@
         <button mat-icon-button (click)="reload(selectedbar)" matTooltip="{{'entry.reload' | translate}}">
             <mat-icon>replay</mat-icon>
         </button>
+
         <button mat-icon-button (click)="reload(selectedbar)" [mat-dialog-close]="true">
             <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar>
     <app-spinner [data$]="data$"></app-spinner>
 
-    <div class=" example-container" fxLayout="column" fxFlex *ngIf="data$ | async as data">
+    <div class="example-container" fxLayout="column"  *ngIf="data$ | async as data">
         <!--     -->
-        <mat-table [dataSource]="data.Data" >
+        <mat-table [dataSource]="data.Data" fxFlex>
 
 
             <ng-container matColumnDef="Checkin">
@@ -27,37 +28,24 @@
             </ng-container>
 
             <ng-container matColumnDef="Zeit">
-                <mat-header-cell mat-header-cell *matHeaderCellDef> Zeit</mat-header-cell>
+                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</mat-header-cell>
                 <mat-cell mat-cell *matCellDef="let element"> {{element.entryTime | date:'short'}} </mat-cell>
             </ng-container>
 
 
             <ng-container matColumnDef="Name">
-                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.firstName}} </mat-cell>
-            </ng-container>
-
-
-            <ng-container matColumnDef="Nachname">
                 <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.name' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.lastName}} </mat-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.firstName}} {{element.lastName}} </mat-cell>
             </ng-container>
 
 
             <ng-container matColumnDef="Strasse">
-                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.lastname' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.street}} </mat-cell>
-            </ng-container>
-
-
-            <ng-container matColumnDef="Ort">
-                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.city' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.city}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="PLZ">
-                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.zip' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.zipCode}} </mat-cell>
+                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.street' | translate}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element">
+                    <div fxLayout="column">
+                        <span>  {{element.street}} </span> <span>{{element.zipCode}} {{element.city}} </span>
+                    </div>
+                </mat-cell>
             </ng-container>
 
 

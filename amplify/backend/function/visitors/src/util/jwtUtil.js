@@ -26,26 +26,31 @@ const loadSecret = () => {
     })
 }
 
-const getSecret =   () => {
+const getSecret = async () => {
     if (!secret) {
         console.log("loading secret")
-        loadSecret().then(sec => secret = sec)
+        let sec = await loadSecret()
+        secret = sec
     }
+    return secret
 }
 
 getSecret()
 
-module.exports.generateJWT = (phoneNumber, momentum) => {
+module.exports.generateJWT = async (phoneNumber, momentum) => {
+    const sec = await getSecret()
     return jwt.sign({
         phone: phoneNumber,
         validation: momentum
-    }, secret, {expiresIn: '3650d'})
+    }, sec, {expiresIn: '3650d'})
 
 }
 
-module.exports.verifyJWT = (token) => {
+module.exports.verifyJWT = async (token) => {
+     const sec = await getSecret()
+    console.log(sec)
     return new Promise(((resolve, reject) => {
-        jwt.verify(token, secret, (err, decoded) => {
+        jwt.verify(token, sec , (err, decoded) => {
             if (err) reject(err)
             resolve(decoded)
         })

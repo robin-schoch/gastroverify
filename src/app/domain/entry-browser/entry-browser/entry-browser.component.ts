@@ -41,10 +41,7 @@ export class EntryBrowserComponent implements OnInit {
         'Checkin',
         'Zeit',
         'Name',
-        'Nachname',
         'Strasse',
-        'Ort',
-        'PLZ',
         'Nr.',
         'Email'
     ];

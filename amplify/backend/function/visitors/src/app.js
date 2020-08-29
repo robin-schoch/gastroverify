@@ -82,11 +82,11 @@ app.post('/v1/register', (req, res) => {
             let text = 'Dein Verifikationcode ist:'
 
             console.log(b.length)
-            if (b.length === 2 && b[0].hasOwnProperty("senderID")){
+            if (b.length === 2 && b[0].hasOwnProperty("senderID")) {
                 console.log(b[0])
                 senderID = b[0].senderID
             }
-            if (b.length === 2 && b[0].hasOwnProperty("smsText")){
+            if (b.length === 2 && b[0].hasOwnProperty("smsText")) {
                 text = b[0].smsText
             }
             validationStorage.createValidation(phoneNumber, senderID, text).then(([valid, sms]) => {
@@ -97,7 +97,7 @@ app.post('/v1/register', (req, res) => {
                 res.json({error: error})
             })
         }).catch(error => {
-            if (error.hasOwnProperty('interval')){
+            if (error.hasOwnProperty('interval')) {
                 res.status(403)
                 res.json({duration: error.interval, status: error.status})
             } else {
@@ -111,33 +111,6 @@ app.post('/v1/register', (req, res) => {
     }
 });
 
-app.post('/v1/register/noSMS', (req, res) => {
-    const phoneNumber = req.body.phoneNr;
-
-    if (phoneNumber) {
-
-        validationStorage.validateValidationRequest(phoneNumber).then(loaded => {
-            validationStorage.createValidation(phoneNumber).then(([valid, sms]) => {
-                res.json({success: "check your phone"})
-            }).catch(error => {
-                res.status(500)
-                console.log(error)
-                res.json({error: "internal server error 69"})
-            })
-        }).catch(error => {
-            res.status(403)
-            res.json({
-                error: {
-                    duration: error.interval,
-                    status: error.status
-                }
-            })
-        })
-    } else {
-        res.status(400)
-        res.json({error: "missing parameter"})
-    }
-});
 
 app.post('/v1/validate', function (req, res) {
     const phoneNumber = req.body.phoneNr;
@@ -173,11 +146,13 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                     code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table)
                 console.log("created user")
                 checkinStorage.addCheckIn(cI).then(elem => {
+                    console.log(code)
                     res.json({
                         entry: code.checkIn,
                         time: timeIso,
                         locationName: code.locationName,
-
+                        barId: code.locationId,
+                        locationId: code.locationId
                     })
                 }).catch(error => {
                     res.status(500)
@@ -194,6 +169,9 @@ app.post('/v1/checkin/:qrId', function (req, res) {
             res.json({error: "token is expired"})
         }
     }).catch(err => {
+        console.log(402)
+        console.log(err)
+
         res.status(402)
         res.json({error: "token is invalid"})
     })
