@@ -26,11 +26,13 @@ const loadSecret = () => {
     })
 }
 
-const getSecret =   () => {
+const getSecret = async () => {
     if (!secret) {
         console.log("loading secret")
-        loadSecret().then(sec => secret = sec)
+        let sec = await loadSecret()
+        secret = sec
     }
+    return secret
 }
 
 getSecret()
@@ -43,9 +45,11 @@ module.exports.generateJWT = (phoneNumber, momentum) => {
 
 }
 
-module.exports.verifyJWT = (token) => {
+module.exports.verifyJWT = async (token) => {
+     const sec = await getSecret()
+    console.log(sec)
     return new Promise(((resolve, reject) => {
-        jwt.verify(token, secret, (err, decoded) => {
+        jwt.verify(token, sec , (err, decoded) => {
             if (err) reject(err)
             resolve(decoded)
         })
