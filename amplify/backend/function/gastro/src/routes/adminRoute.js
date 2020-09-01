@@ -44,11 +44,12 @@ router.get('/partner/:id/report/:locationId', (req, res) => {
 
 })
 
-router.get('partner/:id/bill', (req, res) => {
+router.get('/partner/:partnerId/bill', (req, res) => {
 
     getBills(req.params.partnerId).then(elem => {
         res.json(elem)
     }).catch(err => {
+        console.log(err)
         res.status(500)
         res.json({error: "ob boy"})
     })

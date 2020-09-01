@@ -93,6 +93,14 @@
                     ]
                 },
                 {
+                    "category": "storage",
+                    "resourceName": "MonthlyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
                     "category": "auth",
                     "resourceName": "gastroverifyd8b8759f",
                     "attributes": [

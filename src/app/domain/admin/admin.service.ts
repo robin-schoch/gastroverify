@@ -59,7 +59,7 @@ export class AdminService {
 
         API.get(
             this.apiName,
-            'v1/admin/partner/' + partenrId + '/bill',
+            '/v1/admin/partner/' + partenrId + '/bill',
             init
         ).then(page => {
             this._bill$.next(page)

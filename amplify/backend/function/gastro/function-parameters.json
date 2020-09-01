@@ -36,6 +36,12 @@
         "read",
         "update",
         "delete"
+      ],
+      "MonthlyReport": [
+        "create",
+        "read",
+        "update",
+        "delete"
       ]
     },
     "auth": {

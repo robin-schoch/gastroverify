@@ -20,6 +20,7 @@ const partitionKeyName = "partnerId";
 const sortkeyName = "billingDate";
 const query = (queryParams) => {
     return new Promise((resolve, reject) => {
+        console.log(queryParams)
         dynamodb.query(queryParams, (err, data) => {
             if (err) {
                 reject(err)
@@ -38,7 +39,7 @@ const getBills = (partnerId) => {
         },
         KeyConditionExpression: `${partitionKeyName} = :partner `,
         // ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',
-        Limit: 12,
+        Limit: 122,
         ScanIndexForward: false,
         TableName: tableName
     }
