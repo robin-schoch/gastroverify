@@ -57,6 +57,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SpinnerComponent } from './domain/spinner/spinner.component';
 import { UpdateLocationDialogComponent } from './domain/gastro-dashboard/update-location-dialog/update-location-dialog.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { AdminBillComponent } from './domain/admin/admin-bill/admin-bill.component';
+import { BillComponent } from './domain/bill/bill.component';
 
 Amplify.configure(awsconfig);
 
@@ -84,47 +87,50 @@ Amplify.configure(awsconfig);
         LoginDialogComponent,
         ChooseQrCodeDialogComponent,
         SpinnerComponent,
-        UpdateLocationDialogComponent
+        UpdateLocationDialogComponent,
+        AdminBillComponent,
+        BillComponent
     ],
-    imports: [
-        BrowserModule,
-        FlexLayoutModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatSliderModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        FormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatTooltipModule,
-        MatCardModule,
-        MatTabsModule,
-        MatStepperModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatCheckboxModule,
-        MatDialogModule,
-        MatDialogModule,
-        MatListModule,
-        AnQrcodeModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: createTranslateLoader,
-                deps: [HttpClient]
-            }
-        }),
-        AmplifyUIAngularModule,
-        MatMenuModule,
-        MatSnackBarModule,
-        MatSelectModule,
-        MatProgressSpinnerModule,
-        MatGridListModule
-    ],
+  imports: [
+    BrowserModule,
+    FlexLayoutModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSliderModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatCardModule,
+    MatTabsModule,
+    MatStepperModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatDialogModule,
+    MatListModule,
+    AnQrcodeModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
+    AmplifyUIAngularModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
+    MatGridListModule,
+    MatButtonToggleModule
+  ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],
     bootstrap: [AppComponent]

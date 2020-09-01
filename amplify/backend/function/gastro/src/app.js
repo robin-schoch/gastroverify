@@ -17,6 +17,8 @@ See the License for the specific language governing permissions and limitations 
 	STORAGE_DAILYREPORT_NAME
 	STORAGE_ENTRANCE_ARN
 	STORAGE_ENTRANCE_NAME
+	STORAGE_MONTHLYREPORT_ARN
+	STORAGE_MONTHLYREPORT_NAME
 	STORAGE_PARTNER_ARN
 	STORAGE_PARTNER_NAME
 	STORAGE_QRMAPPING_ARN
@@ -73,6 +75,7 @@ app.use('/v1/admin', adminRoute)
 app.use('/v1/entry', entryRoute)
 
 app.use('/v1/report', reportRoute)
+app.use('/v1/bill', reportRoute)
 
 // app.use('/v1register', registerRoute)
 

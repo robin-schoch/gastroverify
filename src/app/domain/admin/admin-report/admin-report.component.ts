@@ -4,7 +4,8 @@ import {Report} from '../../report/report.service';
 import {Page} from '../../entry-browser/entry.service';
 import {AdminService} from '../admin.service';
 import * as moment from 'moment';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-admin-report',
@@ -14,10 +15,29 @@ import {Observable} from 'rxjs';
 })
 export class AdminReportComponent implements OnInit {
 
+    public totalReports$: Observable<any>;
     constructor(
         private adminService: AdminService
     ) {
         this.reports$ = this.adminService.reports$;
+
+        this.totalReports$ = this.reports$.pipe(filter(elem => !!elem),map(reports => {
+            return {
+
+                distinctTotal: reports.Data.reduce(
+                    (acc, elem) => acc + elem.distinctTotal,
+                    0
+                ),
+                total: reports.Data.reduce(
+                    (acc, elem) => acc + elem.total,
+                    0
+                ),
+                price: reports.Data.reduce(
+                    (acc, elem) => acc + this.getPrice(elem),
+                    0
+                )
+            };
+        }));
     }
 
     displayedColumns = [
@@ -29,6 +49,8 @@ export class AdminReportComponent implements OnInit {
     ];
 
     public reports$: Observable<Page<Report>>;
+
+    public date$ = new BehaviorSubject(moment());
 
     @Input()
     public partner: Partner;
@@ -43,6 +65,7 @@ export class AdminReportComponent implements OnInit {
         this.adminService.loadReports(
             location,
             this.partner.email,
+            this.date$.value,
             page
         );
 
@@ -75,4 +98,29 @@ export class AdminReportComponent implements OnInit {
             return element.distinctTotal * 0.15;
         }
     }
+
+    public dateForward() {
+        this.date$.next(Object.assign(
+            moment(),
+            this.date$.value.add(
+                1,
+                'month'
+            )
+        ));
+        if (this.location) this.loadReports(this.location.locationId);
+    }
+
+    public dateBackwards() {
+
+        const newDate = this.date$.value.subtract(
+            1,
+            'month'
+        );
+        this.date$.next(Object.assign(
+            moment(),
+            newDate
+        ));
+        if (this.location) this.loadReports(this.location.locationId);
+    }
+
 }

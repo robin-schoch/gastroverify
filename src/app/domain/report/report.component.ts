@@ -15,10 +15,13 @@ import * as moment from 'moment';
 export class ReportComponent implements OnInit {
 
     public locations$: Observable<Location[]>;
+    public date$ = new BehaviorSubject(moment());
+
 
     public _selectedLocation$: BehaviorSubject<Location> = new BehaviorSubject<Location>(null);
 
     public reports$: Observable<Report[]>;
+    public totalReports$: Observable<any>;
 
     displayedColumns = [
         'date',
@@ -39,11 +42,29 @@ export class ReportComponent implements OnInit {
             map(p => p.locations)
         );
         this.reports$ = this.reportService.reports$;
+        this.totalReports$ = this.reports$.pipe(map(reports => {
+            return {
+
+                distinctTotal: reports.reduce(
+                    (acc, elem) => acc + elem.distinctTotal,
+                    0
+                ),
+                total: reports.reduce(
+                    (acc, elem) => acc + elem.total,
+                    0
+                ),
+                price: reports.reduce(
+                    (acc, elem) => acc + this.getPrice(elem),
+                    0
+                )
+            };
+        }));
         this.toolbarService.toolbarTitle = 'Report';
     }
 
     ngOnInit(): void {
-        this.reportService.reports = []
+        this.reportService.reports = [];
+        this.date$.subscribe(elem => console.log(elem));
 
 
     }
@@ -58,7 +79,8 @@ export class ReportComponent implements OnInit {
     loadReport(location) {
         this.reportService.loadReports(
             location,
-            null
+            null,
+            this.date$.value
         ).then(r => this.reportService.reports = r.Data).catch(err => console.log(err));
     }
 
@@ -67,6 +89,31 @@ export class ReportComponent implements OnInit {
             1,
             'day'
         ).toISOString();
+    }
+
+
+    public dateForward() {
+        this.date$.next(Object.assign(
+            moment(),
+            this.date$.value.add(
+                1,
+                'month'
+            )
+        ));
+        if (this._selectedLocation$.value) this.loadReport(this._selectedLocation$.value);
+    }
+
+    public dateBackwards() {
+
+        const newDate = this.date$.value.subtract(
+            1,
+            'month'
+        );
+        this.date$.next(Object.assign(
+            moment(),
+            newDate
+        ));
+        if (this._selectedLocation$.value) this.loadReport(this._selectedLocation$.value);
     }
 
     /***************************************************************************
@@ -83,11 +130,13 @@ export class ReportComponent implements OnInit {
         this._selectedLocation$.next(location);
     }
 
-    getPrice(element: any) {
+    getPrice(element: any): number {
         if (element.hasOwnProperty('pricePerEntry')) {
             return element.distinctTotal * element.pricePerEntry;
         } else {
             return element.distinctTotal * 0.15;
         }
     }
+
+
 }
