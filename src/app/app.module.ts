@@ -56,6 +56,7 @@ import { ChooseQrCodeDialogComponent } from './domain/gastro-dashboard/choose-qr
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SpinnerComponent } from './domain/spinner/spinner.component';
 import { UpdateLocationDialogComponent } from './domain/gastro-dashboard/update-location-dialog/update-location-dialog.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 Amplify.configure(awsconfig);
 
@@ -121,7 +122,8 @@ Amplify.configure(awsconfig);
         MatMenuModule,
         MatSnackBarModule,
         MatSelectModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatGridListModule
     ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],

@@ -33,7 +33,6 @@
 
 .second-landing{
   background-color: #FFC1C1;
-  height: 50vh;
   margin: -10px;
   max-width: 100vw;
 }
@@ -51,4 +50,22 @@
 .main-title {
   font-size: 100px;
   color: white;
+}
+.mat-grid-tile {
+  padding: 10px;
+}
+
+.example-card {
+  max-width: 600px;
+  height: 100%;
+  width: 100%;
+
+}
+
+.info-grid {
+  margin: 30px;
+}
+
+.example-header-image {
+
 }
