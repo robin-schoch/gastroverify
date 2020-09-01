@@ -5,11 +5,14 @@ const {createGastro, getGastro, createNewPartner} = require('./../db/gastroStora
 const {getReports} = require('./../db/reportStorage')
 const {v4: uuidv4} = require('uuid');
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
-
+const moment = require('moment');
 
 
 router.get('/daily/:locationId', ((req, res) => {
+    console.log("new request")
+    console.log(req.query)
     getGastro(req.xUser.email).then(user => {
+        console.log(req.xUser.email)
         const location = user.locations.filter(l => l.locationId === req.params.locationId)[0]
         if (location !== null) {
             getReports(location.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null, req.query.date ? moment(req.query.date) : moment())
@@ -26,6 +29,7 @@ router.get('/daily/:locationId', ((req, res) => {
         }
 
     }).catch(error => {
+        console.log(error)
         res.status(404)
         res.json(error)
     })

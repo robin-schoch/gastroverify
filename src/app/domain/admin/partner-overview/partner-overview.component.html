@@ -11,6 +11,7 @@
             <app-admin-report [partner]="data.partner"></app-admin-report>
         </mat-tab>
         <mat-tab label="Entries">
+            <app-admin-bill [partnerId]="data.partner.email"></app-admin-bill>
         </mat-tab>
     </mat-tab-group>
 

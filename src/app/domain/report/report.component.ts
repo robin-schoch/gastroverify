@@ -21,6 +21,7 @@ export class ReportComponent implements OnInit {
     public _selectedLocation$: BehaviorSubject<Location> = new BehaviorSubject<Location>(null);
 
     public reports$: Observable<Report[]>;
+    public totalReports$: Observable<any>;
 
     displayedColumns = [
         'date',
@@ -41,6 +42,23 @@ export class ReportComponent implements OnInit {
             map(p => p.locations)
         );
         this.reports$ = this.reportService.reports$;
+        this.totalReports$ = this.reports$.pipe(map(reports => {
+            return {
+
+                distinctTotal: reports.reduce(
+                    (acc, elem) => acc + elem.distinctTotal,
+                    0
+                ),
+                total: reports.reduce(
+                    (acc, elem) => acc + elem.total,
+                    0
+                ),
+                price: reports.reduce(
+                    (acc, elem) => acc + this.getPrice(elem),
+                    0
+                )
+            };
+        }));
         this.toolbarService.toolbarTitle = 'Report';
     }
 
@@ -75,10 +93,6 @@ export class ReportComponent implements OnInit {
 
 
     public dateForward() {
-        console.log(this.date$.value.add(
-            1,
-            'month'
-        ));
         this.date$.next(Object.assign(
             moment(),
             this.date$.value.add(
@@ -116,11 +130,13 @@ export class ReportComponent implements OnInit {
         this._selectedLocation$.next(location);
     }
 
-    getPrice(element: any) {
+    getPrice(element: any): number {
         if (element.hasOwnProperty('pricePerEntry')) {
             return element.distinctTotal * element.pricePerEntry;
         } else {
             return element.distinctTotal * 0.15;
         }
     }
+
+
 }

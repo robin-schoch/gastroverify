@@ -73,6 +73,7 @@ app.use('/v1/admin', adminRoute)
 app.use('/v1/entry', entryRoute)
 
 app.use('/v1/report', reportRoute)
+app.use('/v1/bill', reportRoute)
 
 // app.use('/v1register', registerRoute)
 

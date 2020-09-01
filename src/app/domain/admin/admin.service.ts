@@ -4,6 +4,7 @@ import {Partner} from '../gastro-dashboard/gastro.service';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import API from '@aws-amplify/api';
 import {Report} from '../report/report.service';
+import {Bill} from '../bill/bill.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +12,10 @@ import {Report} from '../report/report.service';
 export class AdminService {
 
     private _partners$: BehaviorSubject<Page<Partner>> = new BehaviorSubject(null);
+
+    private _bill$: BehaviorSubject<Page<Bill>> = new BehaviorSubject<Page<Bill>>(null);
+
+
 
     private _reports$: BehaviorSubject<Page<Report>> = new BehaviorSubject<Page<Report>>(null);
     apiName = 'verifyGateway';
@@ -45,20 +50,42 @@ export class AdminService {
         });
         return sub.asObservable();
     }
-    public loadReports(locationId: string, partnerId: string, page: Page<Report> = null) {
+
+
+    public loadBills(partenrId: string) {
+        const sub = new Subject();
+        const init = {
+        }
+
+        API.get(
+            this.apiName,
+            'v1/admin/partner/' + partenrId + '/bill',
+            init
+        ).then(page => {
+            this._bill$.next(page)
+            sub.next('done')
+            sub.complete()
+        })
+        return sub.asObservable()
+    }
+
+    public loadReports(locationId: string, partnerId: string,  date,  page: Page<Report> = null) {
         const sub = new Subject();
 
+        const iso = date.toISOString()
         const init = {};
 
         if (!!page) {
             console.log(page.LastEvaluatedKey);
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: page.Limit,
-                LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey)
+                LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey),
+                date: iso
             };
         } else {
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: 100,
+                date: iso
             };
         }
 
@@ -103,8 +130,16 @@ export class AdminService {
     }
 
 
+
+
     get partners$(): Observable<Page<Partner>> {
         return this._partners$.asObservable();
+    }
+
+
+
+    get bills$(): Observable<Page<Bill>> {
+        return this._bill$.asObservable();
     }
 
     set partners(partnerPage: Page<Partner>) {

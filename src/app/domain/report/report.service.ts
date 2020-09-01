@@ -46,6 +46,7 @@ export class ReportService {
      **************************************************************************/
 
     public loadReports(location, page, date): Promise<Page<Report>> {
+        let iso = date.toISOString()
         const init = Object.assign(
             {},
             this.myInit
@@ -56,11 +57,12 @@ export class ReportService {
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: page.Limit,
                 LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey),
-                date: date.value.toISOString()
+                date: iso
             };
         } else {
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: 100,
+                date: iso
             };
         }
         return API.get(

@@ -1,8 +1,9 @@
 const {getEntries} = require("../db/entryStorage");
 const express = require('express'), router = express.Router();
 const {getReports} = require("../db/reportStorage");
+const {getBills} = require("../db/monthlyReport");
 const {getGastro, getAllPartner} = require('./../db/gastroStorage')
-
+const moment = require('moment');
 
 router.get('/partner', (req, res) => {
     getAllPartner(req.query.LastEvaluatedKey).then(data => {
@@ -31,13 +32,25 @@ router.get('/partner/:id/entries/:locationId', (req, res) => {
 
 
 router.get('/partner/:id/report/:locationId', (req, res) => {
-    getReports(req.params.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
+
+    getReports(req.params.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null, moment(req.query.date))
         .then(elems => {
             res.json(elems)
         }).catch(error => {
         console.log(error)
         res.status(503)
         res.json({error: "oh boy"})
+    })
+
+})
+
+router.get('partner/:id/bill', (req, res) => {
+
+    getBills(req.params.partnerId).then(elem => {
+        res.json(elem)
+    }).catch(err => {
+        res.status(500)
+        res.json({error: "ob boy"})
     })
 
 })

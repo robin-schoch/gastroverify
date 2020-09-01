@@ -7,7 +7,7 @@ const moment = require('moment');
 
 
 // add dev if local
-let tableName = "DailyReport";
+let tableName = "MonthlyReport";
 console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
@@ -16,13 +16,12 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 }
 
 
-const partitionKeyName = "locationId";
-const sortkeyName = "reportDate";
+const partitionKeyName = "partnerId";
+const sortkeyName = "billingDate";
 const query = (queryParams) => {
     return new Promise((resolve, reject) => {
         dynamodb.query(queryParams, (err, data) => {
             if (err) {
-                console.log(err)
                 reject(err)
             } else {
                 resolve(pageBuilder(data, queryParams))
@@ -31,25 +30,20 @@ const query = (queryParams) => {
     })
 }
 
-const getReports = (locationId, pageSize, LastEvaluatedKey, date) => {
+const getBills = (partnerId) => {
 
-    `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`
     const queryParams = {
         ExpressionAttributeValues: {
-            ':location': locationId,
-            ':to': date.clone().endOf('month').toISOString(),
-            ':from': date.clone().startOf('month').toISOString(),
+            ':partner': partnerId,
         },
-        KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`,
+        KeyConditionExpression: `${partitionKeyName} = :partner `,
         // ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',
-        Limit: pageSize,
+        Limit: 12,
         ScanIndexForward: false,
-        ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     }
-    console.log(queryParams)
     return query(queryParams)
 }
 module.exports = {
-    getReports
+    getBills
 }

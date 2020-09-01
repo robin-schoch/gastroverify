@@ -1,4 +1,5 @@
 <div fxFill fxLayout="column">
+    <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field appearance="outline">
         <mat-label>{{'report.select' | translate}}</mat-label>
         <mat-select [disabled]="partner.locations.length < 1"  (selectionChange)="selectLocation($event.value)">
@@ -10,6 +11,25 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Datum</mat-label>
+        <input matInput [value]="(date$ | async) | date: 'MMMM  yyyy'" disabled="true">
+    </mat-form-field>
+
+    <div class="example-button-container" >
+        <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon"
+                (click)="dateBackwards()">
+            <mat-icon>arrow_circle_down</mat-icon>
+        </button>
+    </div>
+    <div class="example-button-container" >
+        <button mat-mini-fab color="accent" aria-label="Example icon button with a filter list icon"
+                (click)="dateForward()">
+            <mat-icon>arrow_circle_up</mat-icon>
+        </button>
+    </div>
+    </div>
     <div class=" example-container" fxLayout="column" fxFlex *ngIf="reports$ | async as report">
         <mat-table [dataSource]="report.Data" fxFlex>
 
@@ -18,29 +38,39 @@
                 <mat-header-cell *matHeaderCellDef>{{'report.date' | translate}}</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{subtractDay(element.reportDate)  |  date:'dd:MM:yyyy'}}
                     - {{element.reportDate | date:'dd:MM:yyyy'}} </mat-cell>
+                <mat-footer-cell *matFooterCellDef><span *ngIf="totalReports$ | async as totalReport">Total</span></mat-footer-cell>
             </ng-container>
 
 
             <ng-container matColumnDef="distinctTotal">
                 <mat-header-cell *matHeaderCellDef> {{'report.count' | translate}}</mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.distinctTotal}} </mat-cell>
+                <mat-footer-cell *matFooterCellDef><span
+                        *ngIf="totalReports$ | async as totalReport">{{totalReport.distinctTotal}}</span>
+                </mat-footer-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="total">
                 <mat-header-cell *matHeaderCellDef> {{'report.total' | translate}}</mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.total}} </mat-cell>
+                <mat-footer-cell *matFooterCellDef><span
+                        *ngIf="totalReports$ | async as totalReport">{{totalReport.total}}</span></mat-footer-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="estimatedCost">
                 <mat-header-cell *matHeaderCellDef> {{'report.estimatedPrice' | translate}}</mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{getPrice(element) |  currency: 'CHF'}} </mat-cell>
+                <mat-footer-cell *matFooterCellDef><span
+                        *ngIf="totalReports$ | async as totalReport">{{totalReport.price | currency: 'CHF'}}</span>
+                </mat-footer-cell>
             </ng-container>
 
 
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
 
         </mat-table>
     </div>
