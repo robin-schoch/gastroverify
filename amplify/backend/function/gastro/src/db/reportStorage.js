@@ -30,14 +30,14 @@ const query = (queryParams) => {
     })
 }
 
-const getReports = (locationId, pageSize, LastEvaluatedKey) => {
+const getReports = (locationId, pageSize, LastEvaluatedKey, date) => {
 
     `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': locationId,
-            ':to': moment().toISOString(),
-            ':from': moment().startOf('month').toISOString(),
+            ':to': date.clone.endOf('month').toISOString(),
+            ':from': date.clone.startOf('month').toISOString(),
         },
         KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`,
         // ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',

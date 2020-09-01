@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import API from '@aws-amplify/api';
 import {Page} from '../entry-browser/entry.service';
 
+
 export interface Report {
     locationId: string;
     reportDate: string;
@@ -23,6 +24,7 @@ export class ReportService {
      **************************************************************************/
 
     private _reports$: BehaviorSubject<Report[]> = new BehaviorSubject<Report[]>([]);
+
     private myInit = { // OPTIONAL
     };
     private apiName: string = "verifyGateway";
@@ -43,7 +45,7 @@ export class ReportService {
      *                                                                         *
      **************************************************************************/
 
-    public loadReports(location, page): Promise<Page<Report>> {
+    public loadReports(location, page, date): Promise<Page<Report>> {
         const init = Object.assign(
             {},
             this.myInit
@@ -53,7 +55,8 @@ export class ReportService {
             console.log(page.LastEvaluatedKey);
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: page.Limit,
-                LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey)
+                LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey),
+                date: date.value.toISOString()
             };
         } else {
             init['queryStringParameters'] = {  // OPTIONAL
@@ -66,6 +69,7 @@ export class ReportService {
             init
         );
     }
+
 
     /***************************************************************************
      *                                                                         *

@@ -15,6 +15,8 @@ import * as moment from 'moment';
 export class ReportComponent implements OnInit {
 
     public locations$: Observable<Location[]>;
+    public date$ = new BehaviorSubject(moment());
+
 
     public _selectedLocation$: BehaviorSubject<Location> = new BehaviorSubject<Location>(null);
 
@@ -43,7 +45,8 @@ export class ReportComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.reportService.reports = []
+        this.reportService.reports = [];
+        this.date$.subscribe(elem => console.log(elem));
 
 
     }
@@ -58,7 +61,8 @@ export class ReportComponent implements OnInit {
     loadReport(location) {
         this.reportService.loadReports(
             location,
-            null
+            null,
+            this.date$.value
         ).then(r => this.reportService.reports = r.Data).catch(err => console.log(err));
     }
 
@@ -67,6 +71,35 @@ export class ReportComponent implements OnInit {
             1,
             'day'
         ).toISOString();
+    }
+
+
+    public dateForward() {
+        console.log(this.date$.value.add(
+            1,
+            'month'
+        ));
+        this.date$.next(Object.assign(
+            moment(),
+            this.date$.value.add(
+                1,
+                'month'
+            )
+        ));
+        if (this._selectedLocation$.value) this.loadReport(this._selectedLocation$.value);
+    }
+
+    public dateBackwards() {
+
+        const newDate = this.date$.value.subtract(
+            1,
+            'month'
+        );
+        this.date$.next(Object.assign(
+            moment(),
+            newDate
+        ));
+        if (this._selectedLocation$.value) this.loadReport(this._selectedLocation$.value);
     }
 
     /***************************************************************************
