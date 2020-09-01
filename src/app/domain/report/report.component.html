@@ -33,30 +33,34 @@
                     <mat-header-cell *matHeaderCellDef>{{'report.date' | translate}}</mat-header-cell>
                     <mat-cell *matCellDef="let element">{{subtractDay(element.reportDate)  |  date:'dd:MM:yyyy'}}
                         - {{element.reportDate | date:'dd:MM:yyyy'}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>
                 </ng-container>
 
 
                 <ng-container matColumnDef="distinctTotal">
                     <mat-header-cell *matHeaderCellDef> {{'report.count' | translate}}</mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.distinctTotal}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>
                 </ng-container>
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="total">
                     <mat-header-cell *matHeaderCellDef> {{'report.total' | translate}}</mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.total}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>
                 </ng-container>
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="estimatedCost">
                     <mat-header-cell *matHeaderCellDef> {{'report.estimatedPrice' | translate}}</mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{getPrice(element) |  currency: 'CHF'}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>
                 </ng-container>
 
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
+                <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
             </mat-table>
         </div>
 
