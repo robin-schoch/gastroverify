@@ -27,6 +27,10 @@ var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const moment = require('moment');
 
+var bunyan = require('bunyan');
+var log = bunyan.createLogger({name: "app"});
+log.info("hi from app");
+
 const port = 3030;
 
 // declare a new express app
