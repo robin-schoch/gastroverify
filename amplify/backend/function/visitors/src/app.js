@@ -75,15 +75,14 @@ app.post('/v1/register', (req, res) => {
         if (req.body.qrCodeId) {
             p.push(getQrCode(req.body.qrCodeId))
         }
+        console.log("new register")
         console.log(req.body.qrCodeId)
         p.push(validationStorage.validateValidationRequest(phoneNumber))
         Promise.all(p).then(b => {
             let senderID = "EntryCheck"
             let text = 'Dein Verifikationcode ist:'
 
-            console.log(b.length)
             if (b.length === 2 && b[0].hasOwnProperty("senderID")) {
-                console.log(b[0])
                 senderID = b[0].senderID
             }
             if (b.length === 2 && b[0].hasOwnProperty("smsText")) {
@@ -134,7 +133,6 @@ app.post('/v1/validate', function (req, res) {
 
 app.post('/v1/checkin/:qrId', function (req, res) {
     console.log("checkIn...")
-    console.log(req.body)
     jwtUtil.verifyJWT(req.header('Authorization')).then(async decoded => {
         const valid = await validationStorage.validationSuccess(decoded.phone, decoded.validation)
         console.log("is valid: " + valid)
@@ -144,7 +142,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                 let cI = new CheckIn(code.locationId, req.body.firstName, req.body.surName,
                     !!req.body.email ? req.body.email : "no email", req.body.address, req.body.city, req.body.zipcode,
                     code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table)
-                console.log("created user")
+                console.log("created new Checkin for " + code.locationId + " is checkin = " + code.checkIn)
                 checkinStorage.addCheckIn(cI).then(elem => {
                     console.log(code)
                     res.json({
@@ -155,6 +153,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                         locationId: code.locationId
                     })
                 }).catch(error => {
+                    console.log("500 we are fucked")
                     res.status(500)
                     res.json({error: "internal error 69"})
                 })
@@ -165,6 +164,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                 res.json({error: "location not found"})
             })
         } else {
+            console.log("token is expired!")
             res.status(401)
             res.json({error: "token is expired"})
         }
