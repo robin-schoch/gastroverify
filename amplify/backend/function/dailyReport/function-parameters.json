@@ -13,12 +13,6 @@
         "update",
         "delete"
       ],
-      "Billing": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
       "DailyReport": [
         "create",
         "read",
