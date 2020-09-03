@@ -89,7 +89,8 @@ Amplify.configure(awsconfig);
         SpinnerComponent,
         UpdateLocationDialogComponent,
         AdminBillComponent,
-        BillComponent
+        BillComponent,
+
     ],
   imports: [
     BrowserModule,

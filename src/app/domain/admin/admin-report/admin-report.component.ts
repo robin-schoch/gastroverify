@@ -16,28 +16,32 @@ import {filter, map} from 'rxjs/operators';
 export class AdminReportComponent implements OnInit {
 
     public totalReports$: Observable<any>;
+
     constructor(
         private adminService: AdminService
     ) {
         this.reports$ = this.adminService.reports$;
 
-        this.totalReports$ = this.reports$.pipe(filter(elem => !!elem),map(reports => {
-            return {
+        this.totalReports$ = this.reports$.pipe(
+            filter(elem => !!elem),
+            map(reports => {
+                return {
 
-                distinctTotal: reports.Data.reduce(
-                    (acc, elem) => acc + elem.distinctTotal,
-                    0
-                ),
-                total: reports.Data.reduce(
-                    (acc, elem) => acc + elem.total,
-                    0
-                ),
-                price: reports.Data.reduce(
-                    (acc, elem) => acc + this.getPrice(elem),
-                    0
-                )
-            };
-        }));
+                    distinctTotal: reports.Data.reduce(
+                        (acc, elem) => acc + elem.distinctTotal,
+                        0
+                    ),
+                    total: reports.Data.reduce(
+                        (acc, elem) => acc + elem.total,
+                        0
+                    ),
+                    price: reports.Data.reduce(
+                        (acc, elem) => acc + this.getPrice(elem),
+                        0
+                    )
+                };
+            })
+        );
     }
 
     displayedColumns = [
@@ -58,7 +62,7 @@ export class AdminReportComponent implements OnInit {
     public location: Location;
 
     ngOnInit(): void {
-        this.adminService.reports = null
+        this.adminService.reports = null;
     }
 
     loadReports(location: string, page: Page<Report> = null) {
@@ -67,14 +71,16 @@ export class AdminReportComponent implements OnInit {
             this.partner.email,
             this.date$.value,
             page
-        );
+        ).subscribe(elem => {
+            this.adminService.mergeReports(elem)
+        });
 
 
     }
 
     selectLocation(location: Location) {
-        console.log("location changed")
-        console.log(location)
+        console.log('location changed');
+        console.log(location);
         if (location != this.location) {
             this.location = location;
             this.adminService.reports = null;

@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {Page} from '../entry-browser/entry.service';
 import {Partner} from '../gastro-dashboard/gastro.service';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import API from '@aws-amplify/api';
 import {Report} from '../report/report.service';
 import {Bill} from '../bill/bill.service';
+import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,19 +16,16 @@ export class AdminService {
     private _bill$: BehaviorSubject<Page<Bill>> = new BehaviorSubject<Page<Bill>>(null);
 
 
-
     private _reports$: BehaviorSubject<Page<Report>> = new BehaviorSubject<Page<Report>>(null);
     apiName = 'verifyGateway';
 
-    constructor() { }
+    constructor(
+        private amplifyHttpClient: AmplifyHttpClientService
+    ) { }
 
-    public loadPartners(page: Page<Partner> = null) {
-        const sub = new Subject();
-
+    public loadPartners(page: Page<Partner> = null): Observable<Page<Partner>> {
         const init = {};
-
         if (!!page) {
-            console.log(page.LastEvaluatedKey);
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: page.Limit,
                 LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey)
@@ -38,45 +35,26 @@ export class AdminService {
                 Limit: 100,
             };
         }
-
-        API.get(
+        return this.amplifyHttpClient.get<Page<Partner>>(
             this.apiName,
             '/v1/admin/partner',
             init
-        ).then(page => {
-            this.mergePartners(page);
-            sub.next('done');
-            sub.complete();
-        });
-        return sub.asObservable();
+        )
     }
 
 
-    public loadBills(partenrId: string) {
-        const sub = new Subject();
-        const init = {
-        }
+    public loadBills(partnerId: string) {
 
-        API.get(
+        return this.amplifyHttpClient.get<Page<Bill>>(
             this.apiName,
-            '/v1/admin/partner/' + partenrId + '/bill',
-            init
-        ).then(page => {
-            this._bill$.next(page)
-            sub.next('done')
-            sub.complete()
-        })
-        return sub.asObservable()
+            '/v1/admin/partner/' + partnerId + '/bill'
+        )
     }
 
-    public loadReports(locationId: string, partnerId: string,  date,  page: Page<Report> = null) {
-        const sub = new Subject();
-
-        const iso = date.toISOString()
+    public loadReports(locationId: string, partnerId: string, date, page: Page<Report> = null):Observable<Page<Report>> {
+        const iso = date.toISOString();
         const init = {};
-
         if (!!page) {
-            console.log(page.LastEvaluatedKey);
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: page.Limit,
                 LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey),
@@ -88,20 +66,14 @@ export class AdminService {
                 date: iso
             };
         }
-
-        API.get(
+        return this.amplifyHttpClient.get<Page<Report>>(
             this.apiName,
             '/v1/admin/partner/' + partnerId + '/report/' + locationId,
             init
-        ).then(page => {
-            this.mergeReports(page);
-            sub.next('done');
-            sub.complete();
-        });
-        return sub.asObservable();
+        )
     }
 
-    private mergePartners(page: Page<Partner>) {
+    public mergePartners(page: Page<Partner>) {
         const old = this.partners;
         if (!old) {
             this.partners = page;
@@ -114,8 +86,9 @@ export class AdminService {
         }
 
     }
-    private mergeReports(page: Page<Report>) {
-        console.log(page)
+
+    public mergeReports(page: Page<Report>) {
+        console.log(page);
         const old = this.reports;
         if (!false) {
             this.reports = page;
@@ -130,16 +103,17 @@ export class AdminService {
     }
 
 
-
-
     get partners$(): Observable<Page<Partner>> {
         return this._partners$.asObservable();
     }
 
 
-
     get bills$(): Observable<Page<Bill>> {
         return this._bill$.asObservable();
+    }
+
+    set bills(bills: Page<Bill>){
+        this._bill$.next(bills)
     }
 
     set partners(partnerPage: Page<Partner>) {
@@ -149,6 +123,7 @@ export class AdminService {
     get partners(): Page<Partner> {
         return this._partners$.value;
     }
+
     get reports$(): Observable<Page<Report>> {
         return this._reports$.asObservable();
     }

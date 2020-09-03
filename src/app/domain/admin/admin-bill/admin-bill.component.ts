@@ -34,7 +34,7 @@ export class AdminBillComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.adminService.loadBills(this.partnerId)
+        this.adminService.loadBills(this.partnerId).subscribe(elem => this.adminService.bills = elem)
     }
 
 }
