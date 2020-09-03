@@ -45,7 +45,20 @@ export class PersonalAddDialogComponent implements OnInit, OnDestroy {
     }
 
     registerNewPartner() {
-        this.gastroService.createGatro(this.partner);
+        this.gastroService.createPartner(this.partner).subscribe(
+            elem => this.gastroService.gastro = elem,
+            error => this.gastroService.error = error
+        );
     }
 
 }
+
+/*
+ .then(elem => {
+ this._gastro$.next(elem);
+
+ }).catch(elem => {
+ this._error$.next(elem);
+ console.log(elem);
+ });
+ */

@@ -6,7 +6,8 @@ export interface IOptionalRequestParams {
     headers?: any
     queryStringParameters?: any
     response?: boolean
-    body?: any
+    body?: any,
+    responseType?: string
 }
 
 
@@ -19,7 +20,7 @@ export class AmplifyHttpClientService {
         headers: {},
         queryStringParameters: {},
         response: false,
-        body: {}
+        body: {},
     };
 
     constructor() { }
@@ -33,6 +34,7 @@ export class AmplifyHttpClientService {
         init['headers'] = optionalRequestParams.headers;
         init['queryStringParameters'] = optionalRequestParams.queryStringParameters;
         init['response'] = optionalRequestParams.response;
+        init['responseType'] = optionalRequestParams.responseType
 
         return new Observable((observer: Observer<T>) => {
             RestApi.get(
@@ -76,7 +78,6 @@ export class AmplifyHttpClientService {
     public post<T>(
         api: string,
         path: string,
-        body: any,
         optionalRequestParams: IOptionalRequestParams = this.initOptionalRequestParams,
     ): Observable<T> {
         const init = {};
@@ -84,7 +85,6 @@ export class AmplifyHttpClientService {
         init['queryStringParameters'] = optionalRequestParams.queryStringParameters;
         init['response'] = optionalRequestParams.response;
         init['body'] = optionalRequestParams.body;
-
         return new Observable((observer: Observer<T>) => {
             RestApi.post(
                 api,
@@ -116,7 +116,7 @@ export class AmplifyHttpClientService {
                 init
             ).then(
                 res => {
-                    observer.next(res.data);
+                    observer.next(res);
                     observer.complete();
                 }
             ).catch(error => observer.error(error));
@@ -140,7 +140,7 @@ export class AmplifyHttpClientService {
                 init
             ).then(
                 res => {
-                    observer.next(res.data);
+                    observer.next(res);
                     observer.complete();
                 }
             ).catch(error => observer.error(error));

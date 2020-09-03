@@ -95,7 +95,7 @@ export class EntryBrowserComponent implements OnInit {
         this.entryService.loadNextPage(
             bar,
             page
-        ).then(page => this.mergePages(page));
+        ).subscribe(page => this.mergePages(page));
     }
 
     public get bar$(): Observable<Location> {

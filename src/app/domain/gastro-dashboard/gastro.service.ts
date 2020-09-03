@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import API from '@aws-amplify/api';
 import {AuthenticationService} from '../auth/authentication.service';
+import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
 
 export interface Partner {
     email: string,
@@ -45,18 +45,21 @@ export class GastroService {
     };
 
     constructor(
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private amplifyHttpClient: AmplifyHttpClientService
     ) { }
 
-    public set loaded (loaded: boolean){
-        this._loaded = loaded
+    public set loaded(loaded: boolean) {
+        this._loaded = loaded;
     }
+
     public get gastro$(): Observable<Partner> {
         return this._gastro$.asObservable();
     }
 
+
     public set gastro(gastro: Partner) {
-        console.log(gastro)
+
         this._gastro$.next(gastro);
     }
 
@@ -64,69 +67,56 @@ export class GastroService {
         return this._error$.asObservable();
     }
 
-    public clearPartner () {
+    public set error(err: any) {
+        this._error$.next(err);
+    }
+
+    public clearPartner() {
         this._gastro$ = new BehaviorSubject<Partner>(null);
     }
 
-    createGatro(partner: Partner) {
-        console.log(partner);
-
+    public createPartner(partner: Partner): Observable<Partner> {
 
         let body = Object.assign(
             {},
             this.myInit
         );
         body['body'] = partner;
-        API.post(
+        return this.amplifyHttpClient.post<Partner>(
             this.apiName,
             '/v1/gastro',
             body
-        ).then(elem => {
-            this._gastro$.next(elem);
-
-        }).catch(elem => {
-            this._error$.next(elem);
-            console.log(elem);
-        });
+        );
     }
 
-    getGastro() {
+    getPartner(): Observable<Partner> {
         if (!this._loaded) {
-            API.get(
+            return this.amplifyHttpClient.get<Partner>(
                 this.apiName,
                 '/v1/gastro/me',
                 this.myInit
-            ).then(elem => {
-                this._gastro$.next(elem);
-                this._loaded = true;
-            }).catch(error => {
-                console.log(error);
-                this._gastro$.next(<Partner>{});
-            });
+            );
         }
-
     }
 
-    addBar(bar: Location) {
+    addBar(location: Location): Observable<Partner> {
 
         let body = Object.assign(
             {},
             this.myInit
         );
-        body['body'] = bar;
-        console.log(body);
-        return API.post(
+        body['body'] = location;
+        return this.amplifyHttpClient.post<Partner>(
             this.apiName,
             '/v1/gastro/me/bar',
             body
         );
     }
 
-    removeBar(location: Location) {
-        return API.del(
+    removeBar(location: Location): Observable<Partner> {
+        return this.amplifyHttpClient.delete<Partner>(
             this.apiName,
             '/v1/gastro/me/bar/' + location.locationId,
-            this.myInit
         );
     }
 }

@@ -7,16 +7,12 @@ import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, skip, tap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {AddBarDialogComponent, IAddBarData} from './add-bar-dialog/add-bar-dialog.component';
-import {
-    IQRCodeGeneratorData,
-    QrCodeGeneratorDialogComponent
-} from './qr-code-generator-dialog/qr-code-generator-dialog.component';
 import {Router} from '@angular/router';
 import {ConfirmdialogComponent} from '../confirmdialog/confirmdialog.component';
 import {SnackbarService} from '../snackbar/snackbar.service';
 import {TranslateService} from '@ngx-translate/core';
-import { EntryBrowserComponent } from '../entry-browser/entry-browser/entry-browser.component';
-import { ChooseQrCodeDialogComponent } from './choose-qr-code-dialog/choose-qr-code-dialog.component';
+import {EntryBrowserComponent} from '../entry-browser/entry-browser/entry-browser.component';
+import {ChooseQrCodeDialogComponent} from './choose-qr-code-dialog/choose-qr-code-dialog.component';
 
 @Component({
     selector: 'app-gastro-dashboard',
@@ -65,7 +61,10 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
             map(g => !!g?.email)
         );
         this.toolbarService.toolbarHidden = false;
-        this.gastroService.getGastro();
+        this.gastroService.getPartner().subscribe(
+            elem => this.gastroService.gastro = elem,
+            error => this.gastroService.error = error
+        );
         let sub = this.newPartner$.subscribe(elem => {
             this.router.navigate([
                 'location',
@@ -91,7 +90,7 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    openQRCodeDialog(element: Location) {        
+    openQRCodeDialog(element: Location) {
         this.dialog.open(
             ChooseQrCodeDialogComponent,
             {
@@ -99,13 +98,16 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
                 width: '300px',
                 data: element
             }
-        )/*url: `${code}?businessName=${buisnessname}`,
-                    text: text,
-                    name: buisnessname*/
+        );/*url: `${code}?businessName=${buisnessname}`,
+         text: text,
+         name: buisnessname*/
     }
 
     deleteLocation(location: Location) {
-        this.gastroService.removeBar(location).then(elem => this.gastroService.gastro = elem).catch(error => console.log(error));
+        this.gastroService.removeBar(location).subscribe(
+            elem => this.gastroService.gastro = elem,
+            error => console.log(error)
+        );
     }
 
     selectBar(row: Location) {

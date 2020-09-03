@@ -25,7 +25,7 @@ const fields = [
         value: 'city'
     },
     {
-        label: 'PZL',
+        label: 'PLZ',
         value: 'zipCode'
     },
     {
@@ -80,7 +80,7 @@ router.get('/:barId', (req, res) => {
 
 const downloadResource = (res, fileName, fields, data) => {
     const csv = parse(data, {fields})
-    log.info({csv: csv}, 'creating csv')
+    log.info('created csv')
 
     res.header('Content-Type', 'text/csv');
     res.attachment(fileName);
@@ -115,8 +115,8 @@ const mapEntries = (data) => {
             lastName: values.lastName,
             street: values.street,
             city: values.city,
-            zipcode: values.zipcode,
-            email: !!values.email ? values.email : "Keine email addresse",
+            zipCode: values.zipCode,
+            email: !!values.email ? values.email : "Keine Email",
             phoneNumber: values.phoneNumber,
             entryTime: values.entryTime,
             checkIn: values.checkIn ? "Standort betreten" : "Standort verlassen",

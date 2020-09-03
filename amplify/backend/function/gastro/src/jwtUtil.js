@@ -1,14 +1,15 @@
 const cognitoPoolId = process.env.COGNITO_POOL_ID || 'eu-central-1_brxCRSgTn';
 const location = process.env.COGNITO_POOL_ID || 'eu-central-1';
 
+
 const axios = require('axios').default;
 const jwkToPem = require('jwk-to-pem')
 const jwt = require('jsonwebtoken');
-if (!cognitoPoolId) {
-    console.log("no cognito id")
-} else {
-    console.log(cognitoPoolId)
-}
+
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "partner-express", src: true});
+
+
 const pems = {}
 let cognitoIssuer = `https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn/.well-known/jwks.json`;
 let iss = "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_brxCRSgTn"
@@ -35,18 +36,16 @@ const verifyJWT = (token, secret) => {
 }
 
 const getPublicKeys = () => {
-    console.log("request pems..")
+
+    log.info("reqeust pems...")
 
     return axios.get(cognitoIssuer).then(data => {
-        console.log(data.data)
         data.data.keys.forEach(key => {
             pems[key.kid] = jwkToPem(key)
         })
-        //console.log(pems)
-        console.log('success')
+        log.info("found pems")
     }).catch(data => {
-        //console.log(data.data)
-        console.log("error receiving pems!!")
+        log.fatal("no pems found ")
         keys = data
     })
 }
@@ -58,7 +57,6 @@ const _verify = (token, token_use) => {
         myPEM = pems[decoded.header.kid]
         if (myPEM !== undefined) {
             verifyJWT(token, myPEM).then(success => {
-                // console.log(success)
                 if (success.aud === aud && success.iss === iss && token_use === success.token_use) {
                     resolve(success)
                 } else {
@@ -77,7 +75,7 @@ const verifyXIDToken = (token, token_use = "id") => {
     if (Object.keys(pems).length === 0) {
         return getPublicKeys().then(keys => {
             return _verify(token, token_use)
-        }).catch(error => console.log(error))
+        }).catch(error => log.error(error))
     } else {
         return _verify(token, token_use)
     }
