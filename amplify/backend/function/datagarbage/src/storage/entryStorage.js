@@ -7,7 +7,7 @@ const moment = require('moment');
 
 // add dev if local
 let tableName = "Entrance";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -17,11 +17,11 @@ const partitionKeyName = "locationId";
 const sortkeyName = "entryTime";
 
 const query = (queryParams) => {
-    console.log(queryParams)
+
     return new Promise((resolve, reject) => {
-        console.log("i am called too")
+
         dynamodb.query(queryParams, (err, data) => {
-            console.log("i am called too too")
+
             if (err) {
                 reject(err)
             } else {
@@ -32,7 +32,7 @@ const query = (queryParams) => {
 }
 
 const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
-    console.log("i am called")
+
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': id,
@@ -46,7 +46,7 @@ const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
         TableName: tableName
     };
     let a = query(queryParams)
-    console.log(a)
+
     return a
 }
 

@@ -7,6 +7,6 @@ const log = bunyan.createLogger({name: "visitor-index", src: true});
 
 
 exports.handler = (event, context) => {
-    log.info(event)
+    log.trace(event)
     return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };

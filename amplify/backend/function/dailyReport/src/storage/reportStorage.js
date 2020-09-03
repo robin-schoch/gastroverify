@@ -7,7 +7,7 @@ const moment = require('moment');
 
 // add dev if local
 let tableName = "DailyReport";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -36,7 +36,7 @@ const createNewReport = (locationId, billdate, distinctTotal, total, pricePerEnt
         TableName: tableName,
         Item: new DailyReport(locationId, billdate, distinctTotal, total, pricePerEntry)
     }
-    console.log(new DailyReport(locationId, billdate, distinctTotal, total, pricePerEntry))
+
     return putBill(putItemParams)
 }
 

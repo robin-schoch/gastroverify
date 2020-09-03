@@ -5,16 +5,25 @@ const {getBills} = require("../db/monthlyReport");
 const {getGastro, getAllPartner} = require('./../db/gastroStorage')
 const moment = require('moment');
 
+
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "adminRoute", src: true});
+
+
 router.get('/partner', (req, res) => {
     getAllPartner(req.query.LastEvaluatedKey).then(data => {
         res.json(data)
     }).catch(err => {
+        log.error(err)
         res.json(err)
     })
 })
 
 router.get('/partner/:id', (req, res) => {
-    getGastro(req.params.id).then(elem => res.json(elem)).catch(err => res.json(err))
+    getGastro(req.params.id).then(elem => res.json(elem)).catch(err => {
+        log.error(err)
+        res.json(err)
+    })
 
 })
 
@@ -23,7 +32,7 @@ router.get('/partner/:id/entries/:locationId', (req, res) => {
         .then(elems => {
             res.json(elems)
         }).catch(error => {
-        console.log(error)
+        log.error(error)
         res.status(503)
         res.json({error: "oh boy"})
     })
@@ -37,7 +46,7 @@ router.get('/partner/:id/report/:locationId', (req, res) => {
         .then(elems => {
             res.json(elems)
         }).catch(error => {
-        console.log(error)
+        log.error(error)
         res.status(503)
         res.json({error: "oh boy"})
     })
@@ -49,7 +58,7 @@ router.get('/partner/:partnerId/bill', (req, res) => {
     getBills(req.params.partnerId).then(elem => {
         res.json(elem)
     }).catch(err => {
-        console.log(err)
+        log.error(err)
         res.status(500)
         res.json({error: "ob boy"})
     })

@@ -7,7 +7,7 @@ const moment = require('moment');
 
 // add dev if local
 let tableName = "DailyReport";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -32,7 +32,7 @@ const putBill = (bill) => {
 }
 
 const getReports = (id, dateFrom, dateTo) => {
-    console.log(id)
+
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': id,
@@ -50,7 +50,7 @@ const getReports = (id, dateFrom, dateTo) => {
 const queryBill = (queryParams) => {
     return new Promise((resolve, reject) => {
         dynamodb.query(queryParams, (err, data) => {
-            console.log(err)
+
             if (err) {
                 reject(err)
             } else {
@@ -66,7 +66,7 @@ const createNewReport = (locationId, billdate, distinctTotal, total) => {
         TableName: tableName,
         Item: new DailyReport(locationId, billdate, distinctTotal, total)
     }
-    console.log(new DailyReport(locationId, billdate, distinctTotal, total))
+
     return putBill(putItemParams)
 }
 

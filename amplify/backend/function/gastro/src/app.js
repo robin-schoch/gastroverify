@@ -37,6 +37,10 @@ var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 const {verifyXIDToken} = require('./jwtUtil')
+
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "partner-express", src: true});
+
 // Enable CORS for all methods
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*")
@@ -48,14 +52,16 @@ app.use((req, res, next) => {
     if (!!req.header('X-ID-Token')){
         verifyXIDToken(req.header('X-ID-Token')).then(token => {
             req.xUser = token;
-           // console.log(token)
+            log.trace(token)
             next()
         }).catch(error => {
             res.status(401)
+            log.error(error, "token error")
             res.json(error)
         })
     } else {
         res.status(401)
+        log.error("no x-id-token")
         res.json({error: 'unauthorized'})
     }
 
@@ -67,11 +73,8 @@ app.use((req, res, next) => {
  **********************/
 
 app.use('/v1/gastro', gastroRoute)
-
 app.use('/v1/admin', adminRoute)
-
 app.use('/v1/entry', entryRoute)
-
 app.use('/v1/report', reportRoute)
 app.use('/v1/bill', reportRoute)
 
@@ -79,7 +82,7 @@ app.use('/v1/bill', reportRoute)
 
 
 app.listen(3000, function () {
-    console.log("App started")
+    log.info("App started")
 });
 
 // Export the app object. When executing the application local this does nothing. However,

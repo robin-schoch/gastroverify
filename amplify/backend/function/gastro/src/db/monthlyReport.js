@@ -5,10 +5,13 @@ const {DailyReport} = require('./../domain/DailyReport')
 const {pageBuilder} = require('./../domain/page')
 const moment = require('moment');
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "monthlyStorage", src: true});
+
 
 // add dev if local
 let tableName = "MonthlyReport";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -20,7 +23,7 @@ const partitionKeyName = "partnerId";
 const sortkeyName = "billingDate";
 const query = (queryParams) => {
     return new Promise((resolve, reject) => {
-        console.log(queryParams)
+
         dynamodb.query(queryParams, (err, data) => {
             if (err) {
                 reject(err)

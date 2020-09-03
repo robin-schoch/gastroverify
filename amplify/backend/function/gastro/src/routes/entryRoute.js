@@ -4,25 +4,28 @@ const {getGastro} = require('./../db/gastroStorage')
 const {getEntries} = require('./../db/entryStorage')
 const {parse} = require('json2csv');
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "entryRoute", src: true});
+
 const fields = [
     {
-        label: 'First Name',
+        label: 'Vorname',
         value: 'firstName'
     },
     {
-        label: 'Last Name',
+        label: 'Nachname',
         value: 'lastName'
     },
     {
-        label: 'Street',
+        label: 'Strasse',
         value: 'street'
     },
     {
-        label: 'City',
+        label: 'Ort',
         value: 'city'
     },
     {
-        label: 'Zipcode',
+        label: 'PZL',
         value: 'zipCode'
     },
     {
@@ -30,23 +33,23 @@ const fields = [
         value: 'email'
     },
     {
-        label: 'PhoneNumber',
+        label: 'Handynummer',
         value: 'phoneNumber'
     },
     {
-        label: 'EntryTime',
+        label: 'Zeit',
         value: 'entryTime'
     },
     {
-        label: 'Birthday',
+        label: 'Geburtstag',
         value: 'birthdate'
     },
     {
-        label: 'CheckIn',
+        label: 'Status',
         value: 'checkIn'
     },
     {
-        label: "Table",
+        label: "Tisch",
         value: 'tableNumber'
     }
 ];
@@ -60,7 +63,7 @@ router.get('/:barId', (req, res) => {
                 .then(elems => {
                     res.json(elems)
                 }).catch(error => {
-                console.log(error)
+                log.error(error)
                 res.status(503)
                 res.json({error: "oh boy"})
             })
@@ -77,8 +80,8 @@ router.get('/:barId', (req, res) => {
 
 const downloadResource = (res, fileName, fields, data) => {
     const csv = parse(data, {fields})
-    console.log('createt elem')
-    console.log(csv)
+    log.info({csv: csv}, 'creating csv')
+
     res.header('Content-Type', 'text/csv');
     res.attachment(fileName);
     res.send(csv);
@@ -92,17 +95,36 @@ router.get('/:barId/export', (req, res) => {
             let lastKey = null
             let data = []
             do {
-                entries = await getEntries(location.locationId, 1000, lastKey)
-                console.log(entries)
-                data = [...data, ...entries.Data]
+                const entries = await getEntries(location.locationId, 5000, lastKey)
+                // 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',
+                const mappedValues = mapEntries(entries.Data)
+                data = [...data, ...mappedValues]
                 lastKey = entries.LastEvaluatedKey
-                console.log("added element to csv")
             }
             while (!!lastKey)
-            console.log("we have so many datapoints " + data.length)
+            log.info("csv is " + data.length + " elements long")
             downloadResource(res, "besucherliste.csv", fields, data)
         }
     })
 })
+
+const mapEntries = (data) => {
+    return data.map(values => {
+        return {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            street: values.street,
+            city: values.city,
+            zipcode: values.zipcode,
+            email: !!values.email ? values.email : "Keine email addresse",
+            phoneNumber: values.phoneNumber,
+            entryTime: values.entryTime,
+            checkIn: values.checkIn ? "Standort betreten" : "Standort verlassen",
+            birthdate: values.birthdate,
+            tableNumber: values.tableNumber === -1 ? "Kein Tisch" : values.tableNumber
+
+        }
+    })
+}
 
 module.exports = router;
