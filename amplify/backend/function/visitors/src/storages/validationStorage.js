@@ -7,10 +7,13 @@ const moment = require('moment');
 const momentDurationFormatSetup = require("moment-duration-format");
 momentDurationFormatSetup(moment);
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "validationStorage", src: true});
+
+
 const crypto = require('crypto');
 // add dev if local
 let tableName = "Validation";
-console.log(process.env.ENV)
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -19,12 +22,13 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 const partitionKeyName = "phoneNumberHash";
 
 
+
+
 const insertValidationData = (item) => {
     let putItemParams = {
         TableName: tableName,
         Item: item
     }
-    console.log(putItemParams)
     return new Promise((resolve, reject) => {
         dynamodb.put(putItemParams, (err, data) => {
             if (err) {
@@ -98,10 +102,10 @@ module.exports.validateValidationRequest = (phoneNumber) => {
                 let duration = moment.duration(now.diff(moment(w.validation_requested)))
                 let duration2 = moment.duration(now.diff(moment(w.validation_success)))
                 if (w.validation_success === "" && duration.asMinutes() > coolDown) {
-                    console.log(duration.asMinutes() > coolDown)
+
                     resolve(w)
                 } else if (duration2.asHours() > registeredCoolDown) {
-                    console.log(duration2.asHours() > registeredCoolDown)
+
                     resolve(w)
                 } else {
                     if (w.validation_success === "") {
