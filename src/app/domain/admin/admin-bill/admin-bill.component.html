@@ -33,11 +33,11 @@
             <mat-header-cell *matHeaderCellDef> {{'bill.price' | translate}}</mat-header-cell>
 
             <mat-cell *matCellDef="let element">
-                <button *ngIf="element.complete" mat-icon-button (click)="completeBill(element)">
+                <button *ngIf="!element.complete" mat-icon-button (click)="completeBill(element)">
                     <mat-icon>attach_money</mat-icon>
                 </button>
 
-                <div *ngIf="!element.complete" (click)="incompleteBill(element)">
+                <div *ngIf="element.complete" (click)="incompleteBill(element)">
                     <mat-icon>done</mat-icon>
                     {{element.paidAt}}
                 </div>
