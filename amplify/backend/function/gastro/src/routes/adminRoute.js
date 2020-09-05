@@ -1,7 +1,7 @@
 const {getEntries} = require("../db/entryStorage");
 const express = require('express'), router = express.Router();
 const {getReports} = require("../db/reportStorage");
-const {getBills} = require("../db/monthlyReport");
+const {getBills, completeBill, incompleteBill} = require("../db/monthlyReport");
 const {getGastro, getAllPartner} = require('./../db/gastroStorage')
 const moment = require('moment');
 
@@ -61,6 +61,20 @@ router.get('/partner/:partnerId/bill', (req, res) => {
         log.error(err)
         res.status(500)
         res.json({error: "ob boy"})
+    })
+
+})
+
+router.put('/partner/:partnerId/bill/:billingDate', (req, res) => {
+    const operation = req.body.complete ?
+        completeBill(req.params.partnerId, req.params.billingDate) :
+        incompleteBill(req.params.partnerId, req.params.billingDate)
+
+    operation.then(elem => {
+        res.json(elem)
+    }).catch(err => {
+        res.status(500)
+        res.json({err})
     })
 
 })

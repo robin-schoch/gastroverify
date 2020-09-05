@@ -102,6 +102,18 @@ export class AdminService {
 
     }
 
+    public payBill(bill:Bill, complete: boolean): Observable<any> {
+        return this.amplifyHttpClient.put(
+            this.apiName,
+            '/v1/admin/partner/' + bill.partnerId + '/bill/' + bill.billingDate,
+            {
+                body: {
+                    complete: complete
+                }
+            }
+        )
+    }
+
 
     get partners$(): Observable<Page<Partner>> {
         return this._partners$.asObservable();

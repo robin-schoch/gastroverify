@@ -21,6 +21,8 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 
 const partitionKeyName = "partnerId";
 const sortkeyName = "billingDate";
+
+
 const query = (queryParams) => {
     return new Promise((resolve, reject) => {
 
@@ -32,6 +34,18 @@ const query = (queryParams) => {
             }
         })
     })
+}
+
+const update = (updateParams) => {
+    return new Promise(((resolve, reject) => {
+        dynamodb.update(updateParams, ((err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(data)
+            }
+        }))
+    }))
 }
 
 const getBills = (partnerId) => {
@@ -48,6 +62,43 @@ const getBills = (partnerId) => {
     }
     return query(queryParams)
 }
+
+const completeBill = (partnerId, billingDate) => {
+    const updateParams = {
+        TableName: tableName,
+        Key: {
+            partnerId: partnerId,
+            billingDate: billingDate
+        },
+        UpdateExpression: "set complete = :complete, paidAt=:paidAt",
+        ExpressionAttributeValues: {
+            ":complete": true,
+            ":paidAt": moment().toISOString(),
+        }
+    }
+
+    return update(updateParams)
+}
+
+const incompleteBill = (partnerId, billingDate) => {
+    const updateParams = {
+        TableName: tableName,
+        Key: {
+            partnerId: partnerId,
+            billingDate: billingDate
+        },
+        UpdateExpression: "set complete = :complete, paidAt=:paidAt",
+        ExpressionAttributeValues: {
+            ":complete": false,
+            ":paidAt": "",
+        }
+    }
+
+    return update(updateParams)
+}
+
 module.exports = {
-    getBills
+    getBills,
+    completeBill,
+    incompleteBill
 }

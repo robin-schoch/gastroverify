@@ -23,4 +23,6 @@ router.get('/:partnerId', ((req, res) => {
 ))
 
 
+
+
 module.exports = router;
