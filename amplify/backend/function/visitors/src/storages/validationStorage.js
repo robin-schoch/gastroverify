@@ -98,13 +98,13 @@ module.exports.validateValidationRequest = (phoneNumber) => {
             } else {
                 let w = data.Item ? data.Item : data
                 let coolDown = 1 // min
-                let registeredCoolDown = 20 // hours
+                let registeredCoolDown = 20 // min
                 let duration = moment.duration(now.diff(moment(w.validation_requested)))
                 let duration2 = moment.duration(now.diff(moment(w.validation_success)))
                 if (w.validation_success === "" && duration.asMinutes() > coolDown) {
 
                     resolve(w)
-                } else if (duration2.asHours() > registeredCoolDown) {
+                } else if (duration2.asMinutes() > registeredCoolDown) {
 
                     resolve(w)
                 } else {
@@ -115,7 +115,7 @@ module.exports.validateValidationRequest = (phoneNumber) => {
                         })
                     } else {
                         reject({
-                            interval: moment.duration(registeredCoolDown, 'hours').subtract(duration2).format("hh:mm:ss"),
+                            interval: moment.duration(registeredCoolDown, 'minutes').subtract(duration2).format("hh:mm:ss"),
                             status: "already registered"
                         })
                     }
