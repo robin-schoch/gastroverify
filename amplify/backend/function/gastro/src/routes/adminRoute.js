@@ -71,10 +71,12 @@ router.put('/partner/:partnerId/bill/:billingDate', (req, res) => {
         incompleteBill(req.params.partnerId, req.params.billingDate)
 
     operation.then(elem => {
+        log.info(elem, "updated bill")
         res.json(elem)
     }).catch(err => {
         res.status(500)
-        res.json({err})
+        log.error(err)
+        res.json({error: err})
     })
 
 })

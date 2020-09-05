@@ -40,6 +40,7 @@ const update = (updateParams) => {
     return new Promise(((resolve, reject) => {
         dynamodb.update(updateParams, ((err, data) => {
             if (err) {
+
                 reject(err)
             } else {
                 resolve(data)
