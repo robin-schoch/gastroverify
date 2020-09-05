@@ -3,28 +3,45 @@
 
 
         <ng-container matColumnDef="date">
-            <mat-header-cell *matHeaderCellDef>{{'report.date' | translate}}</mat-header-cell>
-            <mat-cell *matCellDef="let element">asdff</mat-cell>
+            <mat-header-cell *matHeaderCellDef>{{'bill.date' | translate}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.billingDate | date: 'short'}}</mat-cell>
         </ng-container>
 
 
         <ng-container matColumnDef="distinctTotal">
-            <mat-header-cell *matHeaderCellDef> {{'report.count' | translate}}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef> {{'bill.count' | translate}}</mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.distinctTotal}} </mat-cell>
 
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="total">
-            <mat-header-cell *matHeaderCellDef> {{'report.total' | translate}}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef> {{'bill.total' | translate}}</mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.total}} </mat-cell>
 
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="price">
-            <mat-header-cell *matHeaderCellDef> {{'report.price' | translate}}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef> {{'bill.price' | translate}}</mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.price|  currency: 'CHF'}} </mat-cell>
+
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="paid">
+            <mat-header-cell *matHeaderCellDef> {{'bill.price' | translate}}</mat-header-cell>
+
+            <mat-cell *matCellDef="let element">
+                <button *ngIf="element.complete" mat-icon-button>
+                    <mat-icon>attach_money</mat-icon>
+                </button>
+
+                <div *ngIf="!element.complete">
+                    <mat-icon>done</mat-icon>
+                    {{element.paidAt}}
+                </div>
+            </mat-cell>
 
         </ng-container>
 

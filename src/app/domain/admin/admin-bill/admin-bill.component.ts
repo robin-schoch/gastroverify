@@ -18,7 +18,8 @@ export class AdminBillComponent implements OnInit {
         'date',
         'distinctTotal',
         'total',
-        'price'
+        'price',
+        'paid'
 
     ];
 
