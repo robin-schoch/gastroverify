@@ -98,7 +98,7 @@ module.exports.validateValidationRequest = (phoneNumber) => {
             } else {
                 let w = data.Item ? data.Item : data
                 let coolDown = 1 // min
-                let registeredCoolDown = 20 // min
+                let registeredCoolDown = 10 // min
                 let duration = moment.duration(now.diff(moment(w.validation_requested)))
                 let duration2 = moment.duration(now.diff(moment(w.validation_success)))
                 if (w.validation_success === "" && duration.asMinutes() > coolDown) {
