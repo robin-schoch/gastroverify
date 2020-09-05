@@ -15,6 +15,7 @@ export class AdminBillComponent implements OnInit {
     public bills$: Observable<Page<Bill>>;
 
     displayedColumns = [
+        'icon',
         'date',
         'distinctTotal',
         'total',
@@ -42,14 +43,14 @@ export class AdminBillComponent implements OnInit {
         this.adminService.payBill(
             bill,
             true
-        ).subscribe(elem => console.log(elem));
+        ).subscribe(attributes => this.adminService.updateBill(bill, attributes ));
     }
 
     public incompleteBill(bill: Bill) {
         this.adminService.payBill(
             bill,
             false
-        ).subscribe(elem => console.log(elem));
+        ).subscribe(attributes => this.adminService.updateBill(bill, attributes));
     }
 
 

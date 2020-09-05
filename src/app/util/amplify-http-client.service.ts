@@ -34,7 +34,7 @@ export class AmplifyHttpClientService {
         init['headers'] = optionalRequestParams.headers;
         init['queryStringParameters'] = optionalRequestParams.queryStringParameters;
         init['response'] = optionalRequestParams.response;
-        init['responseType'] = optionalRequestParams.responseType
+        init['responseType'] = optionalRequestParams.responseType;
 
         return new Observable((observer: Observer<T>) => {
             RestApi.get(
@@ -108,7 +108,7 @@ export class AmplifyHttpClientService {
         init['headers'] = optionalRequestParams.headers;
         init['queryStringParameters'] = optionalRequestParams.queryStringParameters;
         init['response'] = optionalRequestParams.response;
-
+        init['body'] = optionalRequestParams.body;
         return new Observable((observer: Observer<T>) => {
             RestApi.put(
                 api,

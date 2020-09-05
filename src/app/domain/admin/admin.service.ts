@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Page} from '../entry-browser/entry.service';
 import {Partner} from '../gastro-dashboard/gastro.service';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Report} from '../report/report.service';
 import {Bill} from '../bill/bill.service';
 import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
@@ -39,7 +39,7 @@ export class AdminService {
             this.apiName,
             '/v1/admin/partner',
             init
-        )
+        );
     }
 
 
@@ -48,10 +48,15 @@ export class AdminService {
         return this.amplifyHttpClient.get<Page<Bill>>(
             this.apiName,
             '/v1/admin/partner/' + partnerId + '/bill'
-        )
+        );
     }
 
-    public loadReports(locationId: string, partnerId: string, date, page: Page<Report> = null):Observable<Page<Report>> {
+    public loadReports(
+        locationId: string,
+        partnerId: string,
+        date,
+        page: Page<Report> = null
+    ): Observable<Page<Report>> {
         const iso = date.toISOString();
         const init = {};
         if (!!page) {
@@ -70,7 +75,7 @@ export class AdminService {
             this.apiName,
             '/v1/admin/partner/' + partnerId + '/report/' + locationId,
             init
-        )
+        );
     }
 
     public mergePartners(page: Page<Partner>) {
@@ -102,7 +107,7 @@ export class AdminService {
 
     }
 
-    public payBill(bill:Bill, complete: boolean): Observable<any> {
+    public payBill(bill: Bill, complete: boolean): Observable<any> {
         return this.amplifyHttpClient.put(
             this.apiName,
             '/v1/admin/partner/' + bill.partnerId + '/bill/' + bill.billingDate,
@@ -111,7 +116,7 @@ export class AdminService {
                     complete: complete
                 }
             }
-        )
+        );
     }
 
 
@@ -124,8 +129,12 @@ export class AdminService {
         return this._bill$.asObservable();
     }
 
-    set bills(bills: Page<Bill>){
-        this._bill$.next(bills)
+    get bills(): Page<Bill> {
+        return this._bill$.value;
+    }
+
+    set bills(bills: Page<Bill>) {
+        this._bill$.next(bills);
     }
 
     set partners(partnerPage: Page<Partner>) {
@@ -146,5 +155,20 @@ export class AdminService {
 
     get reports(): Page<Report> {
         return this._reports$.value;
+    }
+
+    updateBill(bill: Bill, attributes: any) {
+        const b = this.bills.Data.filter(elem => elem === bill)[0];
+        const updatedBill = Object.assign(
+            {},
+            b,
+            attributes.Attributes
+        );
+        const index = this.bills.Data.indexOf(bill);
+        if (index !== -1) {
+            this.bills.Data[index] = updatedBill;
+        }
+        this.bills = JSON.parse(JSON.stringify(this.bills));
+
     }
 }

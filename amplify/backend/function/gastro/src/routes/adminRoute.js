@@ -10,6 +10,12 @@ const bunyan = require('bunyan');
 const log = bunyan.createLogger({name: "adminRoute", src: true});
 
 
+/***************************************************************************
+ *                                                                         *
+ * partner                                                                 *
+ *                                                                         *
+ **************************************************************************/
+
 router.get('/partner', (req, res) => {
     getAllPartner(req.query.LastEvaluatedKey).then(data => {
         res.json(data)
@@ -66,6 +72,7 @@ router.get('/partner/:partnerId/bill', (req, res) => {
 })
 
 router.put('/partner/:partnerId/bill/:billingDate', (req, res) => {
+    log.info(req)
     const operation = req.body.complete ?
         completeBill(req.params.partnerId, req.params.billingDate) :
         incompleteBill(req.params.partnerId, req.params.billingDate)
@@ -78,6 +85,17 @@ router.put('/partner/:partnerId/bill/:billingDate', (req, res) => {
         log.error(err)
         res.json({error: err})
     })
+
+})
+
+/***************************************************************************
+ *                                                                         *
+ * bills                                                                   *
+ *                                                                         *
+ **************************************************************************/
+
+
+router.get('/bill', (req, res) => {
 
 })
 

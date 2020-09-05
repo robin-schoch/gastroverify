@@ -75,7 +75,8 @@ const completeBill = (partnerId, billingDate) => {
         ExpressionAttributeValues: {
             ":complete": true,
             ":paidAt": moment().toISOString(),
-        }
+        },
+        ReturnValues: "UPDATED_NEW"
     }
 
     return update(updateParams)
@@ -92,8 +93,11 @@ const incompleteBill = (partnerId, billingDate) => {
         ExpressionAttributeValues: {
             ":complete": false,
             ":paidAt": "",
-        }
+        },
+        ReturnValues: "UPDATED_NEW"
     }
+    log.info(updateParams)
+
 
     return update(updateParams)
 }
