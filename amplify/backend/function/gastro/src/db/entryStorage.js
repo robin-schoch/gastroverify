@@ -5,10 +5,12 @@ const {Page} = require('./../domain/page')
 
 const moment = require('moment');
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "entryStorage", src: true});
 
 // add dev if local
 let tableName = "Entrance";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -30,7 +32,6 @@ const query = (queryParams) => {
 }
 
 const getEntries = (id, pageSize, LastEvaluatedKey) => {
-    console.log(LastEvaluatedKey)
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': id,

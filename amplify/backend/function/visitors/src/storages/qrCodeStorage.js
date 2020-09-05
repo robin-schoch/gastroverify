@@ -3,11 +3,13 @@ AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 const moment = require('moment');
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "qrCodeStorage", src: true});
 
 
 // add dev if local
 let tableName = "QRMapping";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -18,7 +20,6 @@ const partitionKeyName = "qrId";
 const get = (getParams) => {
     return new Promise((resolve, reject) => {
         dynamodb.query(getParams, (err, data) => {
-            console.log(data)
             if (err || !data.Items || data.Items.length < 1) {
                 reject(err)
             } else {

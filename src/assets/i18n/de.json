@@ -65,5 +65,12 @@
     "total": "Totale Enträge",
     "select": "Standort",
     "estimatedPrice": "Geschätzte Kosten"
+  },
+  "bill": {
+    "date": "Rechnungsdatum",
+    "count": "Verschiedene Einträge",
+    "total": "Total",
+    "price": "Kosten",
+    "paidAt": "Gezahtl am"
   }
 }

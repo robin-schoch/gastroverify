@@ -6,11 +6,15 @@ const {getEntries} = require('./../db/entryStorage')
 const {v4: uuidv4} = require('uuid');
 const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "partnerRoute", src: true});
+
 
 router.get('/', (req, res) => {
     getGastro(req.xUser.email).then(gastro => {
         res.json(gastro)
     }).catch(error => {
+        log.error(error)
         res.json(error)
     })
 
@@ -20,6 +24,7 @@ router.get('/:id', (req, res) => {
     getGastro(req.xUser.email).then(gastro => {
         res.json(gastro)
     }).catch(error => {
+        log.error(error)
         res.json(error)
     })
 
@@ -28,13 +33,14 @@ router.get('/:id', (req, res) => {
 router.post('/:id/bar', (req, res) => {
     let payment = !req.body.senderID ? "default" : "premium"
     const location = new Location(uuidv4(), req.body.name, req.body.street, req.body.city, req.body.zipcode, uuidv4(), uuidv4(), true, payment, req.body.senderID, req.body.smsText)
-    console.log(location)
+    log.info(location)
     if (!location.locationId) {
         res.status(409)
         res.json(location)
     }
     getGastro(req.xUser.email).then(gastor => {
         if (gastor.locations.map(l => l.locationId).includes(location.locationId)) {
+            log.error("location does not exist")
             res.json({error: 'location id already exits'})
         } else {
             gastor.locations.push(location)
@@ -55,9 +61,11 @@ router.post('/:id/bar', (req, res) => {
                     locationName: location.name,
                     checkIn: false
                 })]).then(([a, b, c]) => {
+                log.info( "create qr codes")
                 res.json(a)
             }).catch(error => {
                 res.status(500)
+                log.error(error)
                 res.json(error)
             })
         }
@@ -69,6 +77,7 @@ router.put('/:id/bar/:locationId', (req, res) => {
     let id = req.password.locationId
     if (!id) {
         res.status(409)
+        log.error("no location")
         res.json({error: "no location"})
     }
     getGastro(req.xUser.email).then(gastor => {
@@ -104,9 +113,9 @@ router.put('/:id/bar/:locationId', (req, res) => {
                     locationName: location.name,
                     checkIn: false
                 })]).then(([a, b]) => {
-                    createPartner(gastor).then( elem => {
-                        res.json(gastor)
-                    })
+                createPartner(gastor).then(elem => {
+                    res.json(gastor)
+                })
             }).catch(error => {
                 res.status(500)
                 res.json(error)
@@ -121,7 +130,7 @@ router.put('/:id/bar/:locationId', (req, res) => {
 
 router.delete('/:id/bar/:barId', (req, res) => {
     getGastro(req.xUser.email).then(partner => {
-        console.log(req.params.barId)
+        log.error("deleting location " + req.params.barId)
         let location = partner.locations.filter(l => l.locationId === req.params.barId)[0]
         Promise.all([deleteQrMapping(location.checkInCode, partner.email), deleteQrMapping(location.checkOutCode, partner.email)])
             .then(elem => {

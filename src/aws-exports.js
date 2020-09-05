@@ -29,10 +29,6 @@ const awsmobile = {
             "region": "eu-central-1"
         },
         {
-            "tableName": "Billing-dev",
-            "region": "eu-central-1"
-        },
-        {
             "tableName": "DailyReport-dev",
             "region": "eu-central-1"
         },

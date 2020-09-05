@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import API from '@aws-amplify/api';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Location} from '../gastro-dashboard/gastro.service';
 import {DatePipe} from '@angular/common';
+import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
 
 export interface Entry {
     BarId,
@@ -36,17 +37,13 @@ export class EntryService {
     };
 
     constructor(
-        private datepipe: DatePipe
+        private datepipe: DatePipe,
+        private amplifyHttpClient: AmplifyHttpClientService
     ) { }
 
-    public loadNextPage(bar: Location, page?: Page<Entry>): Promise<Page<Entry>> {
-        const init = Object.assign(
-            {},
-            this.myInit
-        );
-
+    public loadNextPage(location: Location, page?: Page<Entry>): Observable<Page<Entry>> {
+        const init = {}
         if (!!page) {
-            console.log(page.LastEvaluatedKey);
             init['queryStringParameters'] = {  // OPTIONAL
                 Limit: page.Limit,
                 LastEvaluatedKey: JSON.stringify(page.LastEvaluatedKey)
@@ -56,46 +53,27 @@ export class EntryService {
                 Limit: 100,
             };
         }
-        return API.get(
-            this.apiName,
-            '/v1/entry/' + bar.locationId,
-            init
-        );
+        return this.amplifyHttpClient.get<Page<Entry>>(this.apiName, `/v1/entry/${location.locationId}`, init)
+
     }
 
     public exportCSV(bar: Location) {
-        API.endpoint(this.apiName).then(url => {
-            const myInit = { // OPTIONAL
-                response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
-                responseType: 'text/csv'
-            };
-            API.get(
-                this.apiName,
-                `/v1/entry/${bar.locationId}/export`,
-                myInit
-            ).then(elem => {
-                const csvContent = 'data:text/csv;charset=utf-8,' + elem.data;
-                const encodedUri = encodeURI(csvContent);
-                const hiddenElement = document.createElement('a');
-                hiddenElement.href = encodedUri;
-                hiddenElement.target = '_blank';
-                hiddenElement.download = `${this.datepipe.transform(
-                    new Date(),
-                    'dd-MM-yyy-hh-mm'
-                )}_entry-check.csv`;
-                hiddenElement.click();
-            }).catch(error => console.log(error));
-        });
-
+        const myInit = { // OPTIONAL
+            response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+            responseType: 'text/csv'
+        };
+        this.amplifyHttpClient.get<any>(this.apiName,`/v1/entry/${bar.locationId}/export`, myInit).subscribe(elem => {
+            const csvContent = 'data:text/csv;charset=utf-8,' + elem.data;
+            const encodedUri = encodeURI(csvContent);
+            const hiddenElement = document.createElement('a');
+            hiddenElement.href = encodedUri;
+            hiddenElement.target = '_blank';
+            hiddenElement.download = `${this.datepipe.transform(
+                new Date(),
+                'dd-MM-yyy-hh-mm'
+            )}_entry-check.csv`;
+            hiddenElement.click();
+        }, error => console.log(error))
     }
 
 }
-
-/*
- API.get(
- this.apiName,
- '/v1/entry',
- this.myInit
- ).then(res => console.log(res)).catch(error => console.log(error));
- });
- */

@@ -35,13 +35,13 @@ export class AdminDashbaordComponent implements OnInit {
 
     ngOnInit(): void {
         this.adminService.partners = null;
-        this.adminService.loadPartners();
+        this.adminService.loadPartners().subscribe(elem => this.adminService.mergePartners(elem));
         this.partners$ = this.adminService.partners$;
 
     }
 
     onPageEvent(page: Page<Partner>) {
-        this.adminService.loadPartners(page);
+        this.adminService.loadPartners(page).subscribe(elem => this.adminService.mergePartners(elem));
     }
 
     openPartnerDetail(parnter: Partner) {

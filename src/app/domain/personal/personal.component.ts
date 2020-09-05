@@ -5,7 +5,7 @@ import {EntryService} from '../entry-browser/entry.service';
 import {GastroService, Partner} from '../gastro-dashboard/gastro.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
-import {filter, map, skip, tap} from 'rxjs/operators';
+import {filter, map, tap} from 'rxjs/operators';
 import {IPersonalAddDialogData, PersonalAddDialogComponent} from './personal-add-dialog/personal-add-dialog.component';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -45,9 +45,12 @@ export class PersonalComponent implements OnInit, OnDestroy {
         this._subs.push(tsub);
 
         this.toolbarService.toolbarHidden = false;
-        this.gastroService.getGastro();
+        this.gastroService.getPartner().subscribe(
+            elem => this.gastroService.gastro = elem,
+            error => this.gastroService.error = error
+        );
         const sub = this.newPartner$.pipe(
-            tap(elem => console.log("new? " + elem) ),
+            tap(elem => console.log('new? ' + elem)),
             filter(t => t)
         ).subscribe(elem => this.openAddDialog());
         this._subs.push(sub);

@@ -4,8 +4,13 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const moment = require('moment');
 const util = require('util');
 
+
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "qrCodeMappingStorage", src: true});
+
+
 let tableName = "QRMapping";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -20,7 +25,7 @@ const addQrCodeMapping = (mapping) => {
         Item: mapping
     }
     // if (create) putItemParams['ConditionExpression'] = 'attribute_not_exists(email)'
-    console.log(putItemParams)
+
     return new Promise((resolve, reject) => {
         dynamodb.put(putItemParams, (err, data) => {
             if (err) {
@@ -43,10 +48,10 @@ const deleteQrMapping = (mapping, ownerId) => {
     return new Promise(((resolve, reject) => {
         dynamodb.delete(deleteItem, (err, data) => {
             if (err) {
-                console.log(err)
+
                 reject(err)
             } else {
-                console.log(data)
+
                 resolve(data)
             }
         })

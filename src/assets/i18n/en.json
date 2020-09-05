@@ -65,5 +65,12 @@
     "total": "Total entries",
     "select": "Location",
     "estimatedPrice": "Estimated cost"
+  },
+  "bill": {
+    "date": "Billing Date",
+    "count": "Distinct total",
+    "total": "Total",
+    "price": "Cost",
+    "paidAt": "Paid at"
   }
 }

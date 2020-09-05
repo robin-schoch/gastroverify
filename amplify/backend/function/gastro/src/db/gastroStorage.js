@@ -6,6 +6,9 @@ const {Page, pageBuilder} = require("../domain/page");
 
 const {Location, Partner} = require('../domain/partner')
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "partnerStorage", src: true});
+
 
 let tableName = "Partner";
 if (process.env.ENV && process.env.ENV !== "NONE") {
@@ -83,7 +86,7 @@ const createPartner = (gastro, create = false) => {
         Item: gastro
     }
     if (create) putItemParams['ConditionExpression'] = 'attribute_not_exists(email)'
-    console.log(putItemParams)
+
     return new Promise((resolve, reject) => {
         dynamodb.put(putItemParams, (err, data) => {
             if (err) {

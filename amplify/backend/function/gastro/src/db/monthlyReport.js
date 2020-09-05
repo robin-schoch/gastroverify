@@ -5,10 +5,13 @@ const {DailyReport} = require('./../domain/DailyReport')
 const {pageBuilder} = require('./../domain/page')
 const moment = require('moment');
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "monthlyStorage", src: true});
+
 
 // add dev if local
 let tableName = "MonthlyReport";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -18,9 +21,11 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 
 const partitionKeyName = "partnerId";
 const sortkeyName = "billingDate";
+
+
 const query = (queryParams) => {
     return new Promise((resolve, reject) => {
-        console.log(queryParams)
+
         dynamodb.query(queryParams, (err, data) => {
             if (err) {
                 reject(err)
@@ -29,6 +34,19 @@ const query = (queryParams) => {
             }
         })
     })
+}
+
+const update = (updateParams) => {
+    return new Promise(((resolve, reject) => {
+        dynamodb.update(updateParams, ((err, data) => {
+            if (err) {
+
+                reject(err)
+            } else {
+                resolve(data)
+            }
+        }))
+    }))
 }
 
 const getBills = (partnerId) => {
@@ -45,6 +63,47 @@ const getBills = (partnerId) => {
     }
     return query(queryParams)
 }
+
+const completeBill = (partnerId, billingDate) => {
+    const updateParams = {
+        TableName: tableName,
+        Key: {
+            partnerId: partnerId,
+            billingDate: billingDate
+        },
+        UpdateExpression: "set complete = :complete, paidAt=:paidAt",
+        ExpressionAttributeValues: {
+            ":complete": true,
+            ":paidAt": moment().toISOString(),
+        },
+        ReturnValues: "UPDATED_NEW"
+    }
+
+    return update(updateParams)
+}
+
+const incompleteBill = (partnerId, billingDate) => {
+    const updateParams = {
+        TableName: tableName,
+        Key: {
+            partnerId: partnerId,
+            billingDate: billingDate
+        },
+        UpdateExpression: "set complete = :complete, paidAt=:paidAt",
+        ExpressionAttributeValues: {
+            ":complete": false,
+            ":paidAt": "",
+        },
+        ReturnValues: "UPDATED_NEW"
+    }
+    log.info(updateParams)
+
+
+    return update(updateParams)
+}
+
 module.exports = {
-    getBills
+    getBills,
+    completeBill,
+    incompleteBill
 }

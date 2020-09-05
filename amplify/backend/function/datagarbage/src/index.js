@@ -1,8 +1,6 @@
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
-	STORAGE_BILLING_ARN
-	STORAGE_BILLING_NAME
 	STORAGE_DAILYREPORT_ARN
 	STORAGE_DAILYREPORT_NAME
 	STORAGE_ENTRANCE_ARN
@@ -18,19 +16,23 @@ const {createBill} = require('./storage/monthlyReportStorage')
 const moment = require('moment');
 const {billBuilder} = require("./domain/bill");
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "monthlyReport", src: true});
+
+
 const createBillForPartner = async (from, to, partner) => {
     return new Promise((async (resolve, reject) => {
         const reports = await Promise.all(partner.locations.map(location => createBillForLocation(from, to, location)))
-       // console.log(reports)
+
         const billInfo = reports.reduce((acc, report) => billReducer(acc, report), {
             distinctTotal: 0,
             total: 0,
             price: 0,
             location: ""
         })
-        console.log(billInfo)
+
         const bill = billBuilder(partner.email, from.toISOString(), to.toISOString(), billInfo.total, billInfo.distinctTotal, billInfo.price)
-        console.log(bill)
+        log.info(bill)
        createBill(bill).then(elem => {
             resolve(true)
         })
@@ -42,7 +44,7 @@ const createBillForPartner = async (from, to, partner) => {
 const createBillForLocation = async (from, to, location) => {
     return new Promise(async (resolve, reject) => {
 
-        let data = await getReports(location.locationId, from, to).catch(err => console.log(err))
+        let data = await getReports(location.locationId, from, to).catch(err => log.error(err))
 
         resolve(data.Items.reduce((acc, item) => reportReducer(acc, item), {distinctTotal: 0, total: 0, price: 0, location: ""}))
 
@@ -87,7 +89,7 @@ exports.handler = async (event) => {
     let lastEvaluatedPartnerKey = null
     let partnerList = []
     do {
-        let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => console.log(err))
+        let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err))
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null
         partnerList = [...partnerList, ...partners.Items.map(p => createBillForPartner(startOfBillingDuration.clone(), endOfBillingDuration.clone(), p))]
     } while (!!lastEvaluatedPartnerKey)

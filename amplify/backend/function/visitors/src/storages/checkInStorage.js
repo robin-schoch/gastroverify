@@ -3,10 +3,12 @@ AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const moment = require('moment');
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "checkInStorage", src: true});
 
 // add dev if local
 let tableName = "Entrance";
-console.log(process.env.ENV)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
   tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
@@ -21,15 +23,15 @@ const insertCheckInData = (item) => {
     TableName: tableName,
     Item: item
   }
-  console.log(putItemParams)
+
   // return new Promise(((resolve, reject) => resolve(putItemParams)))
   return new Promise((resolve, reject) => {
     dynamodb.put(putItemParams, (err, data) => {
       if (err) {
-        console.log(err)
+
         reject(err)
       } else {
-        console.log(item)
+
         resolve(putItemParams.Item)
       }
     });

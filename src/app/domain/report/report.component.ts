@@ -34,9 +34,12 @@ export class ReportComponent implements OnInit {
     constructor(
         private reportService: ReportService,
         private partnerService: GastroService,
-        private toolbarService: ToolbarService
+        private toolbarService: ToolbarService,
     ) {
-        this.partnerService.getGastro();
+        this.partnerService.getPartner().subscribe(
+            elem => this.partnerService.gastro = elem,
+            error => this.partnerService.error = error
+        );
         this.locations$ = this.partnerService.gastro$.pipe(
             filter(p => !!p),
             map(p => p.locations)
@@ -81,7 +84,10 @@ export class ReportComponent implements OnInit {
             location,
             null,
             this.date$.value
-        ).then(r => this.reportService.reports = r.Data).catch(err => console.log(err));
+        ).subscribe(
+            r => this.reportService.reports = r.Data,
+            err => console.log(err)
+        );
     }
 
     subtractDay(isoTime: string): string {
@@ -104,7 +110,6 @@ export class ReportComponent implements OnInit {
     }
 
     public dateBackwards() {
-
         const newDate = this.date$.value.subtract(
             1,
             'month'

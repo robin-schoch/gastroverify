@@ -1,6 +1,6 @@
 /* Amplify Params - DO NOT EDIT
-	STORAGE_BILLING_ARN
-	STORAGE_BILLING_NAME
+	ENV
+	REGION
 	STORAGE_DAILYREPORT_ARN
 	STORAGE_DAILYREPORT_NAME
 	STORAGE_ENTRANCE_ARN
@@ -13,6 +13,8 @@ const {scanPartner} = require('./storage/partnerStorage')
 const {getEntries} = require('./storage/entryStorage')
 const {createNewReport} = require('./storage/reportStorage')
 const moment = require('moment');
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "reportStorage", src: true});
 
 const prices = {
     premium: 0.3,
@@ -25,14 +27,13 @@ const createReportForPartner = async (date, partner) => {
 
 const createReportForLocation = async (date, location) => {
     return new Promise(async (resolve, reject) => {
-        console.log("next location")
-        console.log(location)
+        log.info(location)
         let vals = []
         let lastkey = null
         do {
-            console.log("getting data")
-            let data = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => console.log(err))
-            console.log(data.value)
+
+            let data = await getEntries(location.locationId, date.clone(), 10000, lastkey).catch(err => log.error(err))
+
             if (!!data.value) {
                 vals = [...data.value.map(elem => elem.phoneNumber), ...vals]
                 lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null
@@ -40,9 +41,7 @@ const createReportForLocation = async (date, location) => {
         } while (lastkey !== null)
         let count = new Set(vals).size
         let totalCount = vals.length
-        console.log("count " + count + " total " + totalCount)
-        count > 0 ? console.log("Report create for : " + location.locationId + " ") : console.log("no entries for : " + location.locationId)
-        await createNewReport(location.locationId, date.toISOString(), count, totalCount, !!location.senderID ? prices.premium : prices.default ).catch(err => console.log(err))
+        await createNewReport(location.locationId, date.toISOString(), count, totalCount, !!location.senderID ? prices.premium : prices.default).catch(err => log.error(err))
         resolve(true)
     })
 
@@ -56,15 +55,15 @@ exports.handler = async (event) => {
         .seconds(0)
         .milliseconds(0)
 
-    console.log("handle reports usw.")
-    console.log(creationTime.toISOString())
+    log.info("create reports: " + creationTime.toISOString())
+
     const dat = creationTime.clone()
 
 
     let lastEvaluatedPartnerKey = null
     let partnerList = []
     do {
-        let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => console.log(err))
+        let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err))
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null
         partnerList = [...partnerList, ...partners.Items.map(p => createReportForPartner(creationTime, p))]
     } while (!!lastEvaluatedPartnerKey)

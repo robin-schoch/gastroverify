@@ -27,6 +27,9 @@ var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const moment = require('moment');
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "visitor-express", src: true});
+
 const port = 3030;
 
 // declare a new express app
@@ -75,15 +78,15 @@ app.post('/v1/register', (req, res) => {
         if (req.body.qrCodeId) {
             p.push(getQrCode(req.body.qrCodeId))
         }
-        console.log(req.body.qrCodeId)
+        log.info({
+            qrCodeId: req.body.qrCodeId
+        }, "new registration");
         p.push(validationStorage.validateValidationRequest(phoneNumber))
         Promise.all(p).then(b => {
             let senderID = "EntryCheck"
             let text = 'Dein Verifikationcode ist:'
 
-            console.log(b.length)
             if (b.length === 2 && b[0].hasOwnProperty("senderID")) {
-                console.log(b[0])
                 senderID = b[0].senderID
             }
             if (b.length === 2 && b[0].hasOwnProperty("smsText")) {
@@ -93,19 +96,22 @@ app.post('/v1/register', (req, res) => {
                 res.json({timestamp: valid.validation_requested, sms: sms})
             }).catch(error => {
                 res.status(500)
-                console.log(error)
+                log.fatal({err: error})
                 res.json({error: error})
             })
         }).catch(error => {
             if (error.hasOwnProperty('interval')) {
+                log.error({err: error}, "user is blocked and must wait")
                 res.status(403)
                 res.json({duration: error.interval, status: error.status})
             } else {
+                log.error({err: error}, "could not find qr code premium mapping")
                 res.status(403)
                 res.json({duration: 60, status: 'premium'})
             }
         })
     } else {
+        log.error({err: error}, "no phonenumber")
         res.status(401)
         res.json({error: "missing parameter"})
     }
@@ -123,30 +129,34 @@ app.post('/v1/validate', function (req, res) {
             if (err.error === "no validation request") res.status(404)
             if (err.error === "validation blocked") res.status(403)
             if (err.error === "invalid code") res.status(401)
-
+            log.error({err: err}, "error validating")
             res.json(err)
         })
     } else {
+        log.error({err: `missing phonenumber? ${!phoneNumber} - missing code? ${!code}` }, "missing code or phone number")
         res.status(400)
         res.json({erorr: "missing parameter"})
     }
 });
 
 app.post('/v1/checkin/:qrId', function (req, res) {
-    console.log("checkIn...")
-    console.log(req.body)
+    log.info("new checkin...")
     jwtUtil.verifyJWT(req.header('Authorization')).then(async decoded => {
         const valid = await validationStorage.validationSuccess(decoded.phone, decoded.validation)
-        console.log("is valid: " + valid)
+        log.info(`user has valid token = ${valid}`)
         if (valid) {
             getQrCode(req.params.qrId).then(code => {
                 const timeIso = moment().toISOString()
                 let cI = new CheckIn(code.locationId, req.body.firstName, req.body.surName,
                     !!req.body.email ? req.body.email : "no email", req.body.address, req.body.city, req.body.zipcode,
                     code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table)
-                console.log("created user")
+                log.info({
+                    locationId: code.locationId,
+                    locationName: code.locationName,
+                    checkIn: code.checkIn
+                }, "new checkin entry")
                 checkinStorage.addCheckIn(cI).then(elem => {
-                    console.log(code)
+                    log.info("checkIn suceeded")
                     res.json({
                         entry: code.checkIn,
                         time: timeIso,
@@ -155,23 +165,22 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                         locationId: code.locationId
                     })
                 }).catch(error => {
+                    log.fatal({err: error}, "shit")
                     res.status(500)
                     res.json({error: "internal error 69"})
                 })
             }).catch(err => {
                 res.status(404)
-                console.log("error")
-                console.log(err)
+                log.error({err: err}, "location not found")
                 res.json({error: "location not found"})
             })
         } else {
+            log.error({err: "token expired"}, "token")
             res.status(401)
             res.json({error: "token is expired"})
         }
     }).catch(err => {
-        console.log(402)
-        console.log(err)
-
+        log.error({err: err}, "token could not be validaded")
         res.status(402)
         res.json({error: "token is invalid"})
     })
@@ -188,7 +197,7 @@ app.get('/v1/checkin/:qrId', function (req, res) {
 
 
 app.listen(port, function () {
-    console.log(`App started on port ${port}`)
+    log.info(`App started on port ${port}`)
 });
 
 // Export the app object. When executing the application local this does nothing. However,

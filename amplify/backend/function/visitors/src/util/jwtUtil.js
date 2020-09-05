@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken');
 
+
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "jwtUtil", src: true});
+
 var AWS = require('aws-sdk'),
     region = "eu-central-1",
     secretName = "JWT_SECRET",
@@ -10,7 +14,7 @@ var client = new AWS.SecretsManager({
     region: region
 });
 let env = 'dev'
-console.log("env = == = + " + env)
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     env = process.env.ENV;
 }
@@ -28,14 +32,16 @@ const loadSecret = () => {
 
 const getSecret = async () => {
     if (!secret) {
-        console.log("loading secret")
+        log.info("loading secrets from secretmanager")
         let sec = await loadSecret()
         secret = sec
     }
     return secret
 }
 
-getSecret()
+getSecret().then(elem => {
+    log.info("loaded secret ready to verify users")
+})
 
 module.exports.generateJWT = async (phoneNumber, momentum) => {
     const sec = await getSecret()
@@ -47,10 +53,9 @@ module.exports.generateJWT = async (phoneNumber, momentum) => {
 }
 
 module.exports.verifyJWT = async (token) => {
-     const sec = await getSecret()
-    console.log(sec)
+    const sec = await getSecret()
     return new Promise(((resolve, reject) => {
-        jwt.verify(token, sec , (err, decoded) => {
+        jwt.verify(token, sec, (err, decoded) => {
             if (err) reject(err)
             resolve(decoded)
         })

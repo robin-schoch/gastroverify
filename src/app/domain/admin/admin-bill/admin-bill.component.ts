@@ -12,13 +12,15 @@ import {Page} from '../../entry-browser/entry.service';
 })
 export class AdminBillComponent implements OnInit {
 
-    public bills$: Observable<Page<Bill>>
+    public bills$: Observable<Page<Bill>>;
 
     displayedColumns = [
+        'icon',
         'date',
         'distinctTotal',
         'total',
-        'price'
+        'price',
+        'paid'
 
     ];
 
@@ -34,7 +36,22 @@ export class AdminBillComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.adminService.loadBills(this.partnerId)
+        this.adminService.loadBills(this.partnerId).subscribe(elem => this.adminService.bills = elem);
     }
+
+    public completeBill(bill: Bill) {
+        this.adminService.payBill(
+            bill,
+            true
+        ).subscribe(attributes => this.adminService.updateBill(bill, attributes ));
+    }
+
+    public incompleteBill(bill: Bill) {
+        this.adminService.payBill(
+            bill,
+            false
+        ).subscribe(attributes => this.adminService.updateBill(bill, attributes));
+    }
+
 
 }

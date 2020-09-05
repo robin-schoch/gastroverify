@@ -3,6 +3,7 @@ import {DatePipe} from '@angular/common';
 import {BehaviorSubject, Observable} from 'rxjs';
 import API from '@aws-amplify/api';
 import {Page} from '../entry-browser/entry.service';
+import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
 
 
 export interface Report {
@@ -36,7 +37,8 @@ export class ReportService {
      **************************************************************************/
 
     constructor(
-        private datepipe: DatePipe
+        private datepipe: DatePipe,
+        private amplifyHttpClient: AmplifyHttpClientService
     ) { }
 
     /***************************************************************************
@@ -45,13 +47,10 @@ export class ReportService {
      *                                                                         *
      **************************************************************************/
 
-    public loadReports(location, page, date): Promise<Page<Report>> {
+    public loadReports(location, page, date): Observable<Page<Report>> {
         let iso = date.toISOString()
-        const init = Object.assign(
-            {},
-            this.myInit
-        );
-
+        const init = {
+        }
         if (!!page) {
             console.log(page.LastEvaluatedKey);
             init['queryStringParameters'] = {  // OPTIONAL
@@ -65,11 +64,10 @@ export class ReportService {
                 date: iso
             };
         }
-        return API.get(
-            this.apiName,
+        return this.amplifyHttpClient.get<Page<Report>>(this.apiName,
             '/v1/report/daily/' + location.locationId,
-            init
-        );
+            init)
+
     }
 
 

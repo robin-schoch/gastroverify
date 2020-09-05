@@ -31,15 +31,15 @@ export class AddBarDialogComponent implements OnInit {
     }
 
     addBar() {
-        console.log(this.newLocation);
-        this.gastroService.addBar(this.newLocation).then(elem => {
-            this.gastroService.gastro = elem;
-            this.dialogRef.close();
-        }).catch(elem => {
-            this.snackBar.error(elem);
-            console.log(elem);
-
-        });
-
+        this.gastroService.addBar(this.newLocation).subscribe(
+            elem => {
+                this.gastroService.gastro = elem;
+                this.dialogRef.close();
+            },
+            error => {
+                this.snackBar.error(error);
+                console.log(error);
+            }
+        );
     }
 }
