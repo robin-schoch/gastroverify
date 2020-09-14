@@ -1,21 +1,25 @@
-const express = require('express'), router = express.Router();
-const jwt = require('jsonwebtoken');
-const {Location} = require("../domain/partner");
-const {createGastro, getGastro, createNewPartner} = require('./../db/gastroStorage')
-const {getReports} = require('./../db/reportStorage')
-const {v4: uuidv4} = require('uuid');
-const {addQrCodeMapping, deleteQrMapping} = require('./../db/qrCodeMappingStorage')
-const moment = require('moment');
+import express from "express";
 
-const bunyan = require('bunyan');
+import jwt  from 'jsonwebtoken';
+import {getGastro} from '../db/gastroStorage'
+import {getReports} from '../db/reportStorage'
+import {v4} from 'uuid';
+import moment from 'moment';
+import bunyan from 'bunyan'
+
+
 const log = bunyan.createLogger({name: "reportRoute", src: true});
+export const router = express.Router();
 
 
 router.get('/daily/:locationId', ((req, res) => {
     log.info({query: req.query},"request daily report")
+
+    // @ts-ignore
     getGastro(req.xUser.email).then(user => {
         const location = user.locations.filter(l => l.locationId === req.params.locationId)[0]
         if (location !== null) {
+            // @ts-ignore
             getReports(location.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null, req.query.date ? moment(req.query.date) : moment())
                 .then(elems => {
                     res.json(elems)
@@ -37,5 +41,3 @@ router.get('/daily/:locationId', ((req, res) => {
     })
 }))
 
-
-module.exports = router;

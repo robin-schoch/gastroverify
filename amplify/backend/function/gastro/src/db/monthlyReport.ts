@@ -1,11 +1,11 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const {DailyReport} = require('./../domain/DailyReport')
-const {pageBuilder} = require('./../domain/page')
-const moment = require('moment');
+const {DailyReport} = require('../domain/DailyReport')
+import {Page} from '../domain/page'
+import moment from 'moment';
 
-const bunyan = require('bunyan');
+import bunyan from 'bunyan';
 const log = bunyan.createLogger({name: "monthlyStorage", src: true});
 
 
@@ -30,7 +30,7 @@ const query = (queryParams) => {
             if (err) {
                 reject(err)
             } else {
-                resolve(pageBuilder(data, queryParams))
+                resolve(Page.pageBuilder(data, queryParams))
             }
         })
     })

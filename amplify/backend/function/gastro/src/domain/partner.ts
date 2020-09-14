@@ -1,4 +1,14 @@
-class Partner {
+export class Partner {
+
+    public email;
+    public firstName;
+    public lastName;
+    public address;
+    public city;
+    public zipcode;
+    public locations;
+    public bills;
+
     constructor(
         email,
         firstName,
@@ -20,8 +30,21 @@ class Partner {
     }
 }
 
-class Location {
-    constructor(
+export class Location {
+
+    public locationId;
+    public name;
+    public street;
+    public city;
+    public zipcode;
+    public checkOutCode;
+    public checkInCode;
+    public active;
+    public payment;
+    public senderID;
+    public smsText;
+
+    public constructor(
         locationId,
         name,
         street,
@@ -49,9 +72,4 @@ class Location {
 
     }
 
-}
-
-module.exports = {
-    Partner: Partner,
-    Location: Location
 }

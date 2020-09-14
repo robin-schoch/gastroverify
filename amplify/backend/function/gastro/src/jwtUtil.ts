@@ -3,6 +3,7 @@ const location = process.env.COGNITO_POOL_ID || 'eu-central-1';
 
 
 const axios = require('axios').default;
+
 const jwkToPem = require('jwk-to-pem')
 const jwt = require('jsonwebtoken');
 
@@ -26,7 +27,7 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
     }
 }
 
-const verifyJWT = (token, secret) => {
+const verifyJWT = (token, secret): Promise<any> => {
     return new Promise(((resolve, reject) => {
         jwt.verify(token, secret, (err, decoded) => {
             if (err) reject(err)
@@ -35,7 +36,7 @@ const verifyJWT = (token, secret) => {
     }))
 }
 
-const getPublicKeys = () => {
+export const getPublicKeys = () => {
 
     log.info("reqeust pems...")
 
@@ -46,7 +47,6 @@ const getPublicKeys = () => {
         log.info("found pems")
     }).catch(data => {
         log.fatal("no pems found ")
-        keys = data
     })
 }
 
@@ -54,7 +54,7 @@ const getPublicKeys = () => {
 const _verify = (token, token_use) => {
     return new Promise(((resolve, reject) => {
         const decoded = jwt.decode(token, {complete: true})
-        myPEM = pems[decoded.header.kid]
+        let myPEM = pems[decoded.header.kid]
         if (myPEM !== undefined) {
             verifyJWT(token, myPEM).then(success => {
                 if (success.aud === aud && success.iss === iss && token_use === success.token_use) {
@@ -71,7 +71,7 @@ const _verify = (token, token_use) => {
     }))
 }
 
-const verifyXIDToken = (token, token_use = "id") => {
+export const verifyXIDToken = (token, token_use = "id") => {
     if (Object.keys(pems).length === 0) {
         return getPublicKeys().then(keys => {
             return _verify(token, token_use)
@@ -82,9 +82,4 @@ const verifyXIDToken = (token, token_use = "id") => {
 
 }
 
-
-module.exports = {
-    verifyXIDToken,
-    getPublicKeys
-}
 

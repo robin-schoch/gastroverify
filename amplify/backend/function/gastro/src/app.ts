@@ -25,6 +25,8 @@ See the License for the specific language governing permissions and limitations 
 	STORAGE_VALIDATION_NAME
 Amplify Params - DO NOT EDIT */
 
+
+
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -36,7 +38,7 @@ const reportRoute = require('./routes/reportRoute')
 var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
-const {verifyXIDToken} = require('./jwtUtil')
+import {verifyXIDToken} from './jwtUtil';
 
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({name: "partner-express", src: true});

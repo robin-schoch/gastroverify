@@ -1,14 +1,17 @@
+import {from} from 'rxjs';
+
 const {getEntries} = require("../db/entryStorage");
-const express = require('express'), router = express.Router();
+import express from 'express';
+
 const {getReports} = require("../db/reportStorage");
 const {getBills, completeBill, incompleteBill} = require("../db/monthlyReport");
-const {getGastro, getAllPartner} = require('./../db/gastroStorage')
-const moment = require('moment');
+const {getGastro, getAllPartner} = require('../db/gastroStorage')
+import moment from 'moment';
 
 
-const bunyan = require('bunyan');
+import bunyan  from 'bunyan';
 const log = bunyan.createLogger({name: "adminRoute", src: true});
-
+export const router = express.Router();
 
 /***************************************************************************
  *                                                                         *
@@ -34,6 +37,7 @@ router.get('/partner/:id', (req, res) => {
 })
 
 router.get('/partner/:id/entries/:locationId', (req, res) => {
+    // @ts-ignore
     getEntries(req.params.locationId, req.query.Limit ? req.query.Limit : 100, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
         .then(elems => {
             res.json(elems)
@@ -48,6 +52,7 @@ router.get('/partner/:id/entries/:locationId', (req, res) => {
 
 router.get('/partner/:id/report/:locationId', (req, res) => {
 
+    // @ts-ignore
     getReports(req.params.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null, moment(req.query.date))
         .then(elems => {
             res.json(elems)
@@ -107,6 +112,3 @@ router.post('/', (req, res) => {
 router.put('/:id', ((req, res) => {
 
 }))
-
-
-module.exports = router;

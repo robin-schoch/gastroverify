@@ -1,11 +1,11 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const moment = require('moment');
+import moment from 'moment';
 const util = require('util');
 
 
-const bunyan = require('bunyan');
+import bunyan from 'bunyan';
 const log = bunyan.createLogger({name: "qrCodeMappingStorage", src: true});
 
 

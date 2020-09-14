@@ -1,11 +1,11 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const {Page} = require('./../domain/page')
+const {Page} = require('../domain/page')
 
-const moment = require('moment');
+import moment  from 'moment';
 
-const bunyan = require('bunyan');
+import bunyan from 'bunyan';
 const log = bunyan.createLogger({name: "entryStorage", src: true});
 
 // add dev if local

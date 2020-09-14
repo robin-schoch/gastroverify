@@ -1,11 +1,12 @@
-const express = require('express'), router = express.Router();
+import express from 'express';
 const jwt = require('jsonwebtoken');
-const {getGastro} = require('./../db/gastroStorage')
-const {getEntries} = require('./../db/entryStorage')
+const {getGastro} = require('../db/gastroStorage')
+const {getEntries} = require('../db/entryStorage')
 const {parse} = require('json2csv');
 
-const bunyan = require('bunyan');
+import bunyan from 'bunyan';
 const log = bunyan.createLogger({name: "entryRoute", src: true});
+export const router = express.Router();
 
 const fields = [
     {
@@ -56,9 +57,11 @@ const fields = [
 // 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime'
 
 router.get('/:barId', (req, res) => {
+    // @ts-ignore
     getGastro(req.xUser.email).then(user => {
         const location = user.locations.filter(l => l.locationId === req.params.barId)[0]
         if (location !== null) {
+            // @ts-ignore
             getEntries(location.locationId, req.query.Limit ? req.query.Limit : 10, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
                 .then(elems => {
                     res.json(elems)
@@ -89,6 +92,7 @@ const downloadResource = (res, fileName, fields, data) => {
 
 
 router.get('/:barId/export', (req, res) => {
+    // @ts-ignore
     getGastro(req.xUser.email).then(async (user) => {
         const location = user.locations.filter(l => l.locationId === req.params.barId)[0]
         if (location !== null) {
@@ -126,5 +130,3 @@ const mapEntries = (data) => {
         }
     })
 }
-
-module.exports = router;
