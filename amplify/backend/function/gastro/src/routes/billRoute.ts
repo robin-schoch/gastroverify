@@ -1,10 +1,14 @@
 import {Router} from 'express';
 
 
-import {getBills} from '../db/monthlyReport';
+import {monthlyReport} from '../db/monthlyReport';
 
 
 import {createLogger} from 'bunyan';
+import {isNotDynamodbError, Page} from '../util/dynamoDbDriver';
+import {MonthlyReport} from '../domain/monthlyReport';
+
+const monthlyStorage = new monthlyReport();
 
 const log = createLogger({name: 'billRoute', src: true});
 export const router = Router();
@@ -12,12 +16,12 @@ router.get(
     '/:partnerId',
     ((req, res) => {
             // @ts-ignore
-            getBills(req.xUser.email).then(elem => {
+            monthlyStorage.findPaged(req.xUser.email).subscribe(elem => {
+                if (isNotDynamodbError<Page<MonthlyReport>>(elem)) {
+                    res.status(500);
+                    log.error(elem);
+                }
                 res.json(elem);
-            }).catch(err => {
-                log.error(err);
-                res.status(401);
-                res.json({error: err});
             });
 
         }

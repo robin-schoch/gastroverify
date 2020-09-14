@@ -36,7 +36,7 @@ export interface UpdateItemParams {
     TableName: string,
     Key: Record<string, any>,
     UpdateExpression: string,
-    ExpressionAttributeValues: Record<string, string>,
+    ExpressionAttributeValues: Record<string, any>,
     ReturnValues?: string
 
 }

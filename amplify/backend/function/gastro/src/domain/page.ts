@@ -1,5 +1,5 @@
-export class Page {
-    public Data;
+export class Page<T> {
+    public Data: T;
     public Limit;
     public Count;
     public ScannedCount;

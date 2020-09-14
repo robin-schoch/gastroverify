@@ -1,43 +1,48 @@
 import {Router} from 'express';
-
-import jwt  from 'jsonwebtoken';
-import {getGastro} from '../db/gastroStorage'
-import {getReports} from '../db/reportStorage'
-import {v4} from 'uuid';
+import {partnerStorage} from '../db/partnerStorage';
+import {reportStorage} from '../db/reportStorage';
 import * as moment from 'moment';
-import {createLogger} from 'bunyan'
+import {createLogger} from 'bunyan';
+import {isNotDynamodbError, Page} from '../util/dynamoDbDriver';
+import {filter, map, mergeMap} from 'rxjs/operators';
+import {DailyReport} from '../domain/DailyReport';
 
 
-const log = createLogger({name: "reportRoute", src: true});
+const log = createLogger({name: 'reportRoute', src: true});
 export const router = Router();
+const storage = new reportStorage();
+const partStorage = new partnerStorage();
+
+router.get(
+    '/daily/:locationId',
+    ((req, res) => {
+        log.info(
+            {query: req.query},
+            'request daily report'
+        );
+
+        // @ts-ignore
+        partStorage.findPartner(req.xUser.email).pipe(
+            filter(isNotDynamodbError),
+            map(partner => partner.locations.filter(l => l.locationId === req.params.locationId)[0]),
+            filter(location => !!location),
+            mergeMap(location => storage.findPaged(
+                location.locationId,
+                req.query.Limit ? req.query.Limit : 31,
+                // @ts-ignore
+                req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null,
+                // @ts-ignore
+                req.query.date ? moment(req.query.date) : moment()
+            ))
+        ).subscribe(value => {
+            if (!isNotDynamodbError<Page<DailyReport>>(value)) {
+                log.error(value);
+                res.status(503);
+            }
+            res.json(value);
+
+        });
 
 
-router.get('/daily/:locationId', ((req, res) => {
-    log.info({query: req.query},"request daily report")
-
-    // @ts-ignore
-    getGastro(req.xUser.email).then(user => {
-        const location = user.locations.filter(l => l.locationId === req.params.locationId)[0]
-        if (location !== null) {
-            // @ts-ignore
-            getReports(location.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null, req.query.date ? moment(req.query.date) : moment())
-                .then(elems => {
-                    res.json(elems)
-                }).catch(error => {
-                log.error(error)
-                res.status(503)
-                res.json({error: "oh boy"})
-            })
-        } else {
-            res.status(401)
-            log.error("no location set")
-            res.json({locationId: req.params.locationId,  cond: !!location, location: location})
-        }
-
-    }).catch(error => {
-        log.error(error)
-        res.status(404)
-        res.json(error)
-    })
 }))
 
