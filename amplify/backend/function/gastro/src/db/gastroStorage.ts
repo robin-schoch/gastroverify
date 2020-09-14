@@ -19,7 +19,7 @@ if (process.env.ENV && process.env.ENV !== 'NONE') {
 
 const partitionKeyName = 'email';
 
-export const getGastro = (email) => {
+export const getGastro = (email): Promise<any> => {
     var params = {};
     params[partitionKeyName] = email;
     let getItemParams = {

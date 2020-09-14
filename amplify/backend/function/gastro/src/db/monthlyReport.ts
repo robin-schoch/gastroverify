@@ -49,7 +49,7 @@ const update = (updateParams) => {
     }))
 }
 
-const getBills = (partnerId) => {
+export const getBills = (partnerId) => {
 
     const queryParams = {
         ExpressionAttributeValues: {
@@ -64,7 +64,7 @@ const getBills = (partnerId) => {
     return query(queryParams)
 }
 
-const completeBill = (partnerId, billingDate) => {
+export const completeBill = (partnerId, billingDate) => {
     const updateParams = {
         TableName: tableName,
         Key: {
@@ -82,7 +82,7 @@ const completeBill = (partnerId, billingDate) => {
     return update(updateParams)
 }
 
-const incompleteBill = (partnerId, billingDate) => {
+export const incompleteBill = (partnerId, billingDate) => {
     const updateParams = {
         TableName: tableName,
         Key: {
@@ -102,8 +102,3 @@ const incompleteBill = (partnerId, billingDate) => {
     return update(updateParams)
 }
 
-module.exports = {
-    getBills,
-    completeBill,
-    incompleteBill
-}

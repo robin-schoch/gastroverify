@@ -19,7 +19,7 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 const partitionKeyName = "qrId";
 
 
-const addQrCodeMapping = (mapping) => {
+export const addQrCodeMapping = (mapping) => {
     let putItemParams = {
         TableName: tableName,
         Item: mapping
@@ -37,7 +37,7 @@ const addQrCodeMapping = (mapping) => {
     })
 }
 
-const deleteQrMapping = (mapping, ownerId) => {
+export const deleteQrMapping = (mapping, ownerId) => {
     let deleteItem = {
         TableName: tableName,
         Key: {
@@ -62,7 +62,3 @@ const deleteQrMapping = (mapping, ownerId) => {
 }
 
 
-module.exports = {
-    addQrCodeMapping,
-    deleteQrMapping
-}
