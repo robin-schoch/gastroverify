@@ -1,12 +1,17 @@
+import {DbConnection, DynamodbError} from '../util/dynamoDbDriver';
+
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-import moment from 'moment';
+
 const util = require('util');
 
 
-import bunyan from 'bunyan';
-const log = bunyan.createLogger({name: "qrCodeMappingStorage", src: true});
+import {createLogger} from 'bunyan';
+import {Partner} from '../domain/partner';
+import {Observable} from 'rxjs';
+import {QrCodeMapping} from '../domain/qrCodeMapping';
+const log = createLogger({name: "qrCodeMappingStorage", src: true});
 
 
 let tableName = "QRMapping";
@@ -59,6 +64,31 @@ export const deleteQrMapping = (mapping, ownerId) => {
 
   //  return util.promisify(dynamodb.delete)(deleteItem)
 
+}
+
+export class QrCodeMappingStorage {
+    private readonly dbConnection: DbConnection<QrCodeMapping>;
+
+    constructor() {
+
+        this.dbConnection = new DbConnection<QrCodeMapping>(
+            'QRMapping',
+            'qrId'
+        );
+    }
+
+    public findMapping(qrId: string): Observable<QrCodeMapping | DynamodbError<QrCodeMapping>> {
+        return this.dbConnection.findById(qrId).pipe(
+        );
+    }
+
+    public deleteMapping(qrId: string): Observable<Partial<QrCodeMapping> | DynamodbError<QrCodeMappingStorage>> {
+        return this.dbConnection.deleteItem(qrId)
+    }
+
+    public createMapping(qrCodeMapping: QrCodeMapping): Observable<Partial<QrCodeMapping> | DynamodbError<QrCodeMapping>> {
+        return this.dbConnection.putItem(qrCodeMapping);
+    }
 }
 
 

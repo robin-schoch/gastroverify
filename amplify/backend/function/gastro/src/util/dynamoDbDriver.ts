@@ -49,7 +49,7 @@ export interface DynamodbError<T> {
 }
 
 export function isNotDynamodbError<T>(value: DynamodbError<T> | T): value is T {
-    return !(<DynamodbError<T>>value).Error !== undefined;
+    return !(<DynamodbError<T>>value)?.Error !== undefined;
 }
 
 export class Page<T> {
@@ -151,6 +151,17 @@ export class DbConnection<T> {
         ));
     }
 
+    public deleteItem(partitionKey: any, sortKey?: any): Observable<Partial<T> | DynamodbError<T>> {
+        return this.deleteEntity(
+            {
+                TableName: this.tableName,
+                Key: {
+                    [this.partitionKey]: partitionKey,
+                    [this.sortKey]: sortKey
+                }
+            });
+    }
+
     private updateEntity(updateItemParams: UpdateItemParams): Observable<Partial<T> | DynamodbError<T>> {
         return new Observable<Partial<T> | DynamodbError<T>>(subscriber => {
             this.dynamodb.update(
@@ -170,6 +181,25 @@ export class DbConnection<T> {
         });
     }
 
+    private deleteEntity(deleteItemParams: any): Observable<Partial<T> | DynamodbError<T>> {
+        return new Observable<Partial<T> | DynamodbError<T>>(subscriber => {
+            this.dynamodb.delete(
+                deleteItemParams,
+                (((err, data) => {
+                    if (err) {
+                        subscriber.next(<DynamodbError<T>>{
+                            Error: err,
+                            itemParams: deleteItemParams
+                        });
+                    } else {
+                        subscriber.next(deleteItemParams);
+                        subscriber.complete();
+                    }
+                }))
+            );
+        });
+    }
+
     private putEntity(putItemParams: PutItemParams<T>): Observable<Partial<T> | DynamodbError<T>> {
         return new Observable<Partial<T> | DynamodbError<T>>(subscriber => {
             this.dynamodb.put(
@@ -181,7 +211,7 @@ export class DbConnection<T> {
                             itemParams: putItemParams
                         });
                     } else {
-                        subscriber.next(data.Attributes);
+                        subscriber.next(putItemParams.Item);
                         subscriber.complete();
                     }
                 }

@@ -3,10 +3,10 @@ AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const {DailyReport} = require('../domain/DailyReport')
 import {Page} from '../domain/page'
-import moment from 'moment';
 
-import bunyan from 'bunyan';
-const log = bunyan.createLogger({name: "reportStorage", src: true});
+
+import {createLogger} from 'bunyan';
+const log = createLogger({name: "reportStorage", src: true});
 
 // add dev if local
 let tableName = "DailyReport";

@@ -1,3 +1,5 @@
+import {v4} from 'uuid';
+
 export class Partner {
 
     public email;
@@ -6,8 +8,20 @@ export class Partner {
     public address;
     public city;
     public zipcode;
-    public locations;
+    public locations: Location[];
     public bills;
+
+    public static fromRequest(req: any): Partner {
+        return new Partner(
+            // @ts-ignore
+            req.xUser.email,
+            req.body.firstName,
+            req.body.lastName,
+            req.body.address,
+            req.body.city,
+            req.body.zipcode
+        )
+    }
 
     constructor(
         email,
@@ -44,6 +58,22 @@ export class Location {
     public senderID;
     public smsText;
 
+    public static fromRequest(req): Location {
+        return new Location(
+            v4(),
+            req.body.name,
+            req.body.street,
+            req.body.city,
+            req.body.zipcode,
+            v4(),
+            v4(),
+            true,
+            !req.body.senderID ? 'default' : 'premium',
+            req.body.senderID,
+            req.body.smsText
+        )
+    }
+
     public constructor(
         locationId,
         name,
@@ -56,6 +86,8 @@ export class Location {
         payment,
         senderID,
         smsText
+
+
     ) {
         this.locationId = locationId
         this.name = name

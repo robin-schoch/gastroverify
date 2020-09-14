@@ -30,10 +30,11 @@ Amplify Params - DO NOT EDIT */
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
-const gastroRoute = require('./routes/gastroRoute')
-const adminRoute = require('./routes/adminRoute')
-const entryRoute = require('./routes/entryRoute')
-const reportRoute = require('./routes/reportRoute')
+import {router as partnerRoute}  from './routes/partnerRoute'
+import {router as adminRoute}  from './routes/adminRoute'
+import {router as entryRoute}  from './routes/entryRoute'
+import {router as reportRoute}  from './routes/reportRoute'
+
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
@@ -74,7 +75,7 @@ app.use((req, res, next) => {
  * /gastro*
  **********************/
 
-app.use('/v1/gastro', gastroRoute)
+app.use('/v1/gastro', partnerRoute)
 app.use('/v1/admin', adminRoute)
 app.use('/v1/entry', entryRoute)
 app.use('/v1/report', reportRoute)

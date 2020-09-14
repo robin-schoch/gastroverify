@@ -7,8 +7,8 @@ const axios = require('axios').default;
 const jwkToPem = require('jwk-to-pem')
 const jwt = require('jsonwebtoken');
 
-const bunyan = require('bunyan');
-const log = bunyan.createLogger({name: "partner-express", src: true});
+const {createLogger} = require('bunyan');
+const log = createLogger({name: "partner-express", src: true});
 
 
 const pems = {}

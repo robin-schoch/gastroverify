@@ -3,10 +3,10 @@ AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const {Page} = require('../domain/page')
 
-import moment  from 'moment';
+import * as moment from 'moment';
 
-import bunyan from 'bunyan';
-const log = bunyan.createLogger({name: "entryStorage", src: true});
+import {createLogger} from 'bunyan';
+const log = createLogger({name: "entryStorage", src: true});
 
 // add dev if local
 let tableName = "Entrance";

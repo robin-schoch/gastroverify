@@ -1,5 +1,5 @@
-import bunyan from 'bunyan';
 
+var bunyan = require('bunyan');
 const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'});
 const dynamodb = new AWS.DynamoDB.DocumentClient();

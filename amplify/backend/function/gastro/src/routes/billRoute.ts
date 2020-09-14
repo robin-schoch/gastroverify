@@ -1,13 +1,13 @@
-import express from 'express';
+import {Router} from 'express';
 
 
 import {getBills} from '../db/monthlyReport';
 
 
-import bunyan from 'bunyan';
+import {createLogger} from 'bunyan';
 
-const log = bunyan.createLogger({name: 'billRoute', src: true});
-export const router = express.Router();
+const log = createLogger({name: 'billRoute', src: true});
+export const router = Router();
 router.get(
     '/:partnerId',
     ((req, res) => {

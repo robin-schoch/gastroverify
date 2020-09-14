@@ -1,17 +1,17 @@
-import {from} from 'rxjs';
-
+import * as moment from 'moment';
 const {getEntries} = require("../db/entryStorage");
-import express from 'express';
+import {Router} from 'express';
 
 const {getReports} = require("../db/reportStorage");
 const {getBills, completeBill, incompleteBill} = require("../db/monthlyReport");
 const {getGastro, getAllPartner} = require('../db/gastroStorage')
-import moment from 'moment';
 
 
-import bunyan  from 'bunyan';
-const log = bunyan.createLogger({name: "adminRoute", src: true});
-export const router = express.Router();
+
+
+import {createLogger}  from 'bunyan';
+const log = createLogger({name: "adminRoute", src: true});
+export const router = Router();
 
 /***************************************************************************
  *                                                                         *

@@ -1,15 +1,15 @@
-import express from "express";
+import {Router} from 'express';
 
 import jwt  from 'jsonwebtoken';
 import {getGastro} from '../db/gastroStorage'
 import {getReports} from '../db/reportStorage'
 import {v4} from 'uuid';
-import moment from 'moment';
-import bunyan from 'bunyan'
+import * as moment from 'moment';
+import {createLogger} from 'bunyan'
 
 
-const log = bunyan.createLogger({name: "reportRoute", src: true});
-export const router = express.Router();
+const log = createLogger({name: "reportRoute", src: true});
+export const router = Router();
 
 
 router.get('/daily/:locationId', ((req, res) => {

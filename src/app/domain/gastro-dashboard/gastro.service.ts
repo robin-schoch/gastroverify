@@ -59,6 +59,8 @@ export class GastroService {
 
 
     public set gastro(gastro: Partner) {
+        if (!!gastro) gastro.locations = gastro.locations.filter(location => location.active);
+        console.log(gastro.locations)
 
         this._gastro$.next(gastro);
     }

@@ -1,12 +1,12 @@
-import express from 'express';
+import {Router} from 'express';
 const jwt = require('jsonwebtoken');
 const {getGastro} = require('../db/gastroStorage')
 const {getEntries} = require('../db/entryStorage')
 const {parse} = require('json2csv');
 
-import bunyan from 'bunyan';
-const log = bunyan.createLogger({name: "entryRoute", src: true});
-export const router = express.Router();
+import {createLogger} from 'bunyan';
+const log = createLogger({name: "entryRoute", src: true});
+export const router = Router();
 
 const fields = [
     {
@@ -58,6 +58,8 @@ const fields = [
 
 router.get('/:barId', (req, res) => {
     // @ts-ignore
+    log.info(req.xUser)
+    // @ts-ignore
     getGastro(req.xUser.email).then(user => {
         const location = user.locations.filter(l => l.locationId === req.params.barId)[0]
         if (location !== null) {
@@ -76,6 +78,7 @@ router.get('/:barId', (req, res) => {
         }
 
     }).catch(error => {
+        log.error(error);
         res.status(404)
         res.json(error)
     })
