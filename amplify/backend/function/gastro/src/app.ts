@@ -38,7 +38,7 @@ const reportRoute = require('./routes/reportRoute')
 var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
-import {verifyXIDToken} from './jwtUtil';
+import {verifyXIDToken} from './util/jwtUtil';
 
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({name: "partner-express", src: true});

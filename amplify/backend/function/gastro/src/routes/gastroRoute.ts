@@ -8,8 +8,12 @@ import {createNewPartner, createPartner, getGastro} from '../db/gastroStorage';
 import {v4} from 'uuid';
 import {addQrCodeMapping, deleteQrMapping} from '../db/qrCodeMappingStorage';
 
+import {partnerStorage} from '../db/partnerStorage';
+import {isNotDynamodbError} from '../util/dynamoDbDriver';
+
 
 const log = bunyan.createLogger({name: 'partnerRoute', src: true});
+const storage = new partnerStorage();
 
 export const router = express.Router();
 
@@ -17,13 +21,21 @@ router.get(
     '/',
     (req, res) => {
         // @ts-ignore
+        storage.findPartner(req.xUser.email).subscribe(parter => {
+            if (!isNotDynamodbError(parter)) {
+                res.status(500);
+                log.error(parter);
+            }
+            res.json(parter);
+        });
+/*
         getGastro(req.xUser.email).then(gastro => {
             res.json(gastro);
         }).catch(error => {
             log.error(error);
             res.json(error);
         });
-
+*/
     }
 );
 
@@ -183,16 +195,15 @@ router.delete(
                     location.checkOutCode,
                     partner.email
                 )
-            ])
-                   .then(elem => {
-                       partner.locations = partner.locations.filter(l => l.locationId !== req.params.barId);
-                       createPartner(partner).then(success => {
-                           res.json(success);
-                       }).catch(error => {
-                           res.status(500);
-                           res.json(error);
-                       });
-                   }).catch(error => {
+            ]).then(elem => {
+                // partner.locations = partner.locations.filter(l => l.locationId !== req.params.barId);
+                createPartner(partner).then(success => {
+                    res.json(success);
+                }).catch(error => {
+                    res.status(500);
+                    res.json(error);
+                });
+            }).catch(error => {
                 res.status(512);
                 res.json(error);
             });
