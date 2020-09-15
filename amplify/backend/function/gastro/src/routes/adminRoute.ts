@@ -50,8 +50,14 @@ router.get(
 router.put(
     '/partner/:id/hide',
     (req, res) => {
-        storage.hidePartner(req.params.id, req.query.hide).subscribe(elem => {
-            if (isNotDynamodbError(elem)) res.status(500);
+
+        console.log(req.query.hide);
+        console.log(req.query.hide === 'true');
+        storage.hidePartner(
+            req.params.id,
+            req.query.hide === 'true'
+        ).subscribe(elem => {
+            if (!isNotDynamodbError(elem)) res.status(500);
             res.json(Object.assign(
                 {},
                 {email: req.params.id},

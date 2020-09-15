@@ -116,13 +116,13 @@ export class AdminService {
         );
     }
 
-    public hideUser(email: string) {
+    public hideUser(email: string, hide: boolean) {
         return this.amplifyHttpClient.put(
             this.apiName,
-            '/v1/admin/partner' + email + '/hide',
+            '/v1/admin/partner/' + email + '/hide',
             {
                 queryStringParameters: {
-                    hide: true
+                    hide: hide
                 }
             }
         )

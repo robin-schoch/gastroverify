@@ -5,7 +5,7 @@ import {Page} from '../../entry-browser/entry.service';
 import {Partner} from '../../gastro-dashboard/gastro.service';
 import {IPartnerOverview, PartnerOverviewComponent} from '../partner-overview/partner-overview.component';
 import {MatDialog} from '@angular/material/dialog';
-import {filter, map} from 'rxjs/operators';
+import {filter, map, tap} from 'rxjs/operators';
 
 @Component({
     selector: 'app-admin-dashbaord',
@@ -16,6 +16,11 @@ import {filter, map} from 'rxjs/operators';
 export class AdminDashbaordComponent implements OnInit {
 
     public partners$: Observable<Page<Partner>>;
+
+    private _hiddenPartner$: Observable<Page<Partner>>;
+    private _partner$: Observable<Page<Partner>>;
+
+    private isHidden: boolean = true;
 
 
     displayedColumns = [
@@ -38,23 +43,44 @@ export class AdminDashbaordComponent implements OnInit {
     constructor(
         private adminService: AdminService,
         private dialog: MatDialog
-    ) { }
+    ) {
+
+    }
 
     ngOnInit(): void {
-        this.adminService.partners = null;
         this.loadPartners();
-        this.partners$ = this.adminService.partners$.pipe(
+        this._hiddenPartner$ = this.adminService.partners$.pipe(
             filter(elem => !!elem),
+            tap(elem => console.log(elem)),
             map(partners => Object.assign(
+                {},
                 partners,
-                {Data: partners.Data.filter(elem => elem.hidden || elem.hidden === undefined)}
+                {Data: partners.Data.filter(elem => !Boolean(elem.isHidden) || elem.isHidden === undefined)}
             ))
         );
+        this._partner$ = this.adminService.partners$.pipe(
+            filter(elem => !!elem),
+            tap(elem => console.log(elem)),
+            map(partners => Object.assign(
+                {},
+                partners,
+                {Data: partners.Data.filter(elem => Boolean(elem.isHidden) || !elem.isHidden === undefined)}
+            ))
+        );
+
+        this.partners$ = this._hiddenPartner$;
 
     }
 
     private loadPartners() {
+        this.adminService.partners = null;
         this.adminService.loadPartners().subscribe(elem => this.adminService.mergePartners(elem));
+    }
+
+    public toggleHidden() {
+        this.partners$ = this.isHidden ? this._partner$ : this._hiddenPartner$;
+        this.isHidden = !this.isHidden;
+
     }
 
     onPageEvent(page: Page<Partner>) {
@@ -73,9 +99,14 @@ export class AdminDashbaordComponent implements OnInit {
         );
     }
 
-    public hidePartner(partner: Partner) {
-        this.adminService.hideUser(partner.email).subscribe(elem => {
+    public hidePartner(partner: Partner, hide = true) {
+        this.adminService.hideUser(partner.email, !hide).subscribe(elem => {
             this.loadPartners();
         });
+    }
+
+    toBool(isHidden: string | boolean) {
+        return Boolean(isHidden)
+
     }
 }

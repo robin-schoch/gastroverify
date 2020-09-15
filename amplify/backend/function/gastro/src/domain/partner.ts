@@ -10,6 +10,7 @@ export class Partner {
     public zipcode;
     public locations: Location[];
     public bills;
+    public isHidden?: boolean
 
     public static fromRequest(req: any): Partner {
         return new Partner(
@@ -20,6 +21,7 @@ export class Partner {
             req.body.address,
             req.body.city,
             req.body.zipcode
+
         )
     }
 
@@ -32,6 +34,7 @@ export class Partner {
         zipcode,
         locations = [],
         bills = [],
+        isHidden =false
     ) {
         this.email = email
         this.firstName = firstName
@@ -41,6 +44,7 @@ export class Partner {
         this.zipcode = zipcode
         this.locations = locations
         this.bills = bills
+        this.isHidden = isHidden
     }
 }
 

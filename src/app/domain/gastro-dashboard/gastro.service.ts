@@ -12,7 +12,7 @@ export interface Partner {
     zipcode: string,
     locations: Location[],
     bills: any[],
-    hidden: boolean
+    isHidden: boolean
 }
 
 export interface Location {
