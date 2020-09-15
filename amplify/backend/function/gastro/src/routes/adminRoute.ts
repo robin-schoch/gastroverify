@@ -8,6 +8,7 @@ const {getEntries} = require('../db/entryStorage');
 const {getReports} = require('../db/reportStorage');
 const {monthlyReport} = require('../db/monthlyReport');
 const {getGastro, getAllPartner} = require('../db/gastroStorage');
+const {partnerStorage} = require('../db/partnerStorage');
 
 const monthlyReportStorage = new monthlyReport();
 
@@ -15,7 +16,7 @@ const monthlyReportStorage = new monthlyReport();
 const log = createLogger({name: 'adminRoute', src: true});
 export const router = Router();
 
-
+const storage = new partnerStorage();
 /***************************************************************************
  *                                                                         *
  * partner                                                                 *
@@ -40,6 +41,22 @@ router.get(
         getGastro(req.params.id).then(elem => res.json(elem)).catch(err => {
             log.error(err);
             res.json(err);
+        });
+
+    }
+);
+
+
+router.put(
+    '/partner/:id/hide',
+    (req, res) => {
+        storage.hidePartner(req.params.id, req.query.hide).subscribe(elem => {
+            if (isNotDynamodbError(elem)) res.status(500);
+            res.json(Object.assign(
+                {},
+                {email: req.params.id},
+                elem
+            ));
         });
 
     }
@@ -132,24 +149,3 @@ router.put(
  **************************************************************************/
 
 
-router.get(
-    '/bill',
-    (req, res) => {
-
-    }
-);
-
-router.post(
-    '/',
-    (req, res) => {
-
-
-    }
-);
-
-router.put(
-    '/:id',
-    ((req, res) => {
-
-    })
-);

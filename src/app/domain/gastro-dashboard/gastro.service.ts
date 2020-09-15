@@ -10,8 +10,9 @@ export interface Partner {
     address: string,
     city: string
     zipcode: string,
-    locations: Location[]
-    bills: any[]
+    locations: Location[],
+    bills: any[],
+    hidden: boolean
 }
 
 export interface Location {

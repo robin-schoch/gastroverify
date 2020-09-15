@@ -45,8 +45,8 @@ export class monthlyReport {
     ): Observable<Partial<MonthlyReport> | DynamodbError<MonthlyReport>> {
         const updateParams = {
             Key: {
-                partnerId: partnerId,
-                billingDate: billingDate
+                [this.dbConnection.partitionKey]: partnerId,
+                [this.dbConnection.sortKey]: billingDate
             },
             UpdateExpression: 'set complete = :complete, paidAt=:paidAt',
             ExpressionAttributeValues: {

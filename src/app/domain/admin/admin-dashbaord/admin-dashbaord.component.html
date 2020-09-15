@@ -57,6 +57,16 @@
                 <mat-cell  *matCellDef="let element"> {{element.zipcode}} </mat-cell >
             </ng-container>
 
+            <ng-container matColumnDef="hide">
+                <mat-header-cell  *matHeaderCellDef>hide</mat-header-cell>
+                <mat-cell  *matCellDef="let element">
+                    <button mat-mini-fab color="primary"
+                            (click)="hidePartner(element)">
+                        <mat-icon>visibility_off</mat-icon>
+                    </button>
+                </mat-cell >
+            </ng-container>
+
 
 
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>

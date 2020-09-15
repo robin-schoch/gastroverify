@@ -5,6 +5,7 @@ import {Page} from '../../entry-browser/entry.service';
 import {Partner} from '../../gastro-dashboard/gastro.service';
 import {IPartnerOverview, PartnerOverviewComponent} from '../partner-overview/partner-overview.component';
 import {MatDialog} from '@angular/material/dialog';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-admin-dashbaord',
@@ -25,8 +26,14 @@ export class AdminDashbaordComponent implements OnInit {
         'address',
         'city',
         'zip',
+        'hide'
     ];
 
+    /*
+     let part = partners;
+     part.Data = partners.Data.filter(elem => elem.hidden || elem.hidden === undefined);
+     return part;
+     */
 
     constructor(
         private adminService: AdminService,
@@ -35,9 +42,19 @@ export class AdminDashbaordComponent implements OnInit {
 
     ngOnInit(): void {
         this.adminService.partners = null;
-        this.adminService.loadPartners().subscribe(elem => this.adminService.mergePartners(elem));
-        this.partners$ = this.adminService.partners$;
+        this.loadPartners();
+        this.partners$ = this.adminService.partners$.pipe(
+            filter(elem => !!elem),
+            map(partners => Object.assign(
+                partners,
+                {Data: partners.Data.filter(elem => elem.hidden || elem.hidden === undefined)}
+            ))
+        );
 
+    }
+
+    private loadPartners() {
+        this.adminService.loadPartners().subscribe(elem => this.adminService.mergePartners(elem));
     }
 
     onPageEvent(page: Page<Partner>) {
@@ -54,5 +71,11 @@ export class AdminDashbaordComponent implements OnInit {
                 data: <IPartnerOverview>{partner: parnter}
             }
         );
+    }
+
+    public hidePartner(partner: Partner) {
+        this.adminService.hideUser(partner.email).subscribe(elem => {
+            this.loadPartners();
+        });
     }
 }
