@@ -1,17 +1,20 @@
 import * as moment from 'moment';
-const {getEntries} = require("../db/entryStorage");
 import {Router} from 'express';
+import {createLogger} from 'bunyan';
+import {isNotDynamodbError} from '../util/dynamoDbDriver';
 
-const {getReports} = require("../db/reportStorage");
-const {getBills, completeBill, incompleteBill} = require("../db/monthlyReport");
-const {getGastro, getAllPartner} = require('../db/gastroStorage')
+const {getEntries} = require('../db/entryStorage');
+
+const {getReports} = require('../db/reportStorage');
+const {monthlyReport} = require('../db/monthlyReport');
+const {getGastro, getAllPartner} = require('../db/gastroStorage');
+
+const monthlyReportStorage = new monthlyReport();
 
 
-
-
-import {createLogger}  from 'bunyan';
-const log = createLogger({name: "adminRoute", src: true});
+const log = createLogger({name: 'adminRoute', src: true});
 export const router = Router();
+
 
 /***************************************************************************
  *                                                                         *
@@ -19,79 +22,108 @@ export const router = Router();
  *                                                                         *
  **************************************************************************/
 
-router.get('/partner', (req, res) => {
-    getAllPartner(req.query.LastEvaluatedKey).then(data => {
-        res.json(data)
-    }).catch(err => {
-        log.error(err)
-        res.json(err)
-    })
-})
+router.get(
+    '/partner',
+    (req, res) => {
+        getAllPartner(req.query.LastEvaluatedKey).then(data => {
+            res.json(data);
+        }).catch(err => {
+            log.error(err);
+            res.json(err);
+        });
+    }
+);
 
-router.get('/partner/:id', (req, res) => {
-    getGastro(req.params.id).then(elem => res.json(elem)).catch(err => {
-        log.error(err)
-        res.json(err)
-    })
+router.get(
+    '/partner/:id',
+    (req, res) => {
+        getGastro(req.params.id).then(elem => res.json(elem)).catch(err => {
+            log.error(err);
+            res.json(err);
+        });
 
-})
+    }
+);
 
-router.get('/partner/:id/entries/:locationId', (req, res) => {
-    // @ts-ignore
-    getEntries(req.params.locationId, req.query.Limit ? req.query.Limit : 100, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null)
-        .then(elems => {
-            res.json(elems)
-        }).catch(error => {
-        log.error(error)
-        res.status(503)
-        res.json({error: "oh boy"})
-    })
+router.get(
+    '/partner/:id/entries/:locationId',
+    (req, res) => {
+        // @ts-ignore
+        getEntries(
+            req.params.locationId,
+            req.query.Limit ? req.query.Limit : 100,
+            // @ts-ignore
+            req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null
+        )
+            .then(elems => {
+                res.json(elems);
+            }).catch(error => {
+            log.error(error);
+            res.status(503);
+            res.json({error: 'oh boy'});
+        });
 
-})
+    }
+);
 
 
-router.get('/partner/:id/report/:locationId', (req, res) => {
+router.get(
+    '/partner/:id/report/:locationId',
+    (req, res) => {
 
-    // @ts-ignore
-    getReports(req.params.locationId, req.query.Limit ? req.query.Limit : 31, req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null, moment(req.query.date))
-        .then(elems => {
-            res.json(elems)
-        }).catch(error => {
-        log.error(error)
-        res.status(503)
-        res.json({error: "oh boy"})
-    })
+        // @ts-ignore
+        getReports(
+            req.params.locationId,
+            req.query.Limit ? req.query.Limit : 31,
+            // @ts-ignore
+            req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null,
+            // @ts-ignore
+            moment(req.query.date)
+        )
+            .then(elems => {
+                res.json(elems);
+            }).catch(error => {
+            log.error(error);
+            res.status(503);
+            res.json({error: 'oh boy'});
+        });
 
-})
+    }
+);
 
-router.get('/partner/:partnerId/bill', (req, res) => {
+router.get(
+    '/partner/:partnerId/bill',
+    (req, res) => {
 
-    getBills(req.params.partnerId).then(elem => {
-        res.json(elem)
-    }).catch(err => {
-        log.error(err)
-        res.status(500)
-        res.json({error: "ob boy"})
-    })
+        monthlyReportStorage.findPaged(req.params.partnerId).subscribe(elem => {
+            if (!isNotDynamodbError(elem)) {
+                res.status(500);
+                log.error(elem);
+            }
+            res.json(elem);
+        });
 
-})
+    }
+);
 
-router.put('/partner/:partnerId/bill/:billingDate', (req, res) => {
-    log.info(req)
-    const operation = req.body.complete ?
-        completeBill(req.params.partnerId, req.params.billingDate) :
-        incompleteBill(req.params.partnerId, req.params.billingDate)
+router.put(
+    '/partner/:partnerId/bill/:billingDate',
+    (req, res) => {
+        log.info(req);
+        monthlyReportStorage.completeReport(
+            req.params.partnerId,
+            req.params.billingDate,
+            req.body.complete
+        ).subscribe(elem => {
+            if (!isNotDynamodbError(elem)) {
+                res.status(500);
+                log.error(elem);
+            }
+            res.json(elem);
+        });
 
-    operation.then(elem => {
-        log.info(elem, "updated bill")
-        res.json(elem)
-    }).catch(err => {
-        res.status(500)
-        log.error(err)
-        res.json({error: err})
-    })
-
-})
+    }
+);
 
 /***************************************************************************
  *                                                                         *
@@ -100,15 +132,24 @@ router.put('/partner/:partnerId/bill/:billingDate', (req, res) => {
  **************************************************************************/
 
 
-router.get('/bill', (req, res) => {
+router.get(
+    '/bill',
+    (req, res) => {
 
-})
+    }
+);
 
-router.post('/', (req, res) => {
+router.post(
+    '/',
+    (req, res) => {
 
 
-})
+    }
+);
 
-router.put('/:id', ((req, res) => {
+router.put(
+    '/:id',
+    ((req, res) => {
 
-}))
+    })
+);

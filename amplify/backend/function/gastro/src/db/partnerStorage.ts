@@ -17,8 +17,7 @@ export class partnerStorage {
     }
 
     public findPartner(email: string): Observable<Partner | DynamodbError<Partner>> {
-        return this.dbConnection.findById(email).pipe(
-        );
+        return this.dbConnection.findById(email)
     }
 
     public createPartner(partner: Partner): Observable<Partial<Partner> | DynamodbError<Partner>> {
