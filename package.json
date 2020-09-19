@@ -9,7 +9,9 @@
     "staging": "ng build --configuration=staging",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "amplify:typescripttest": "cd amplify/backend/function/typescripttest/src && tsc",
+    "amplify:gastro": "cd amplify/backend/function/gastro/src && tsc"
   },
   "private": true,
   "dependencies": {

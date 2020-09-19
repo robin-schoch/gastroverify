@@ -10,8 +10,9 @@ export interface Partner {
     address: string,
     city: string
     zipcode: string,
-    locations: Location[]
-    bills: any[]
+    locations: Location[],
+    bills: any[],
+    isHidden: boolean
 }
 
 export interface Location {
@@ -59,6 +60,8 @@ export class GastroService {
 
 
     public set gastro(gastro: Partner) {
+        if (!!gastro) gastro.locations = gastro.locations.filter(location => location.active);
+        console.log(gastro.locations)
 
         this._gastro$.next(gastro);
     }

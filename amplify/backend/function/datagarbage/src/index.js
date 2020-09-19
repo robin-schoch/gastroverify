@@ -21,10 +21,12 @@ const log = bunyan.createLogger({name: "monthlyReport", src: true});
 
 
 const createBillForPartner = async (from, to, partner) => {
+
     return new Promise((async (resolve, reject) => {
         const reports = await Promise.all(partner.locations.map(location => createBillForLocation(from, to, location)))
 
-        const billInfo = reports.reduce((acc, report) => billReducer(acc, report), {
+
+        const billInfo = reports.reduce((acc, report) => billReducer(acc, report.res), {
             distinctTotal: 0,
             total: 0,
             price: 0,
@@ -32,8 +34,8 @@ const createBillForPartner = async (from, to, partner) => {
         })
 
         const bill = billBuilder(partner.email, from.toISOString(), to.toISOString(), billInfo.total, billInfo.distinctTotal, billInfo.price)
-        log.info(bill)
-       createBill(bill).then(elem => {
+        console.log(bill)
+        createBill(bill).then(elem => {
             resolve(true)
         })
     }))
@@ -45,8 +47,16 @@ const createBillForLocation = async (from, to, location) => {
     return new Promise(async (resolve, reject) => {
 
         let data = await getReports(location.locationId, from, to).catch(err => log.error(err))
-
-        resolve(data.Items.reduce((acc, item) => reportReducer(acc, item), {distinctTotal: 0, total: 0, price: 0, location: ""}))
+        resolve({
+                res: data.Items.reduce((acc, item) => reportReducer(acc, item), {
+                    distinctTotal: 0,
+                    total: 0,
+                    price: 0,
+                    location: ""
+                }),
+                original: data.Items
+            }
+        )
 
     })
 

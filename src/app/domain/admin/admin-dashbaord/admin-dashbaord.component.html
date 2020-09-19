@@ -1,8 +1,9 @@
-<div class="mat-elevation-z8 example-container "xFill fxLayout="column">
+<div class="mat-elevation-z8 example-container " fxFill fxLayout="column">
 
     <mat-toolbar>
         <span>{{'entry.title' | translate}}</span>
         <span class="example-spacer"></span>
+        <mat-slide-toggle (toggleChange)="toggleHidden()">Hidden</mat-slide-toggle>
 
     </mat-toolbar>
 
@@ -10,6 +11,8 @@
 
 
         <mat-table  [dataSource]="partnerPage.Data" fxFlex >
+
+
 
 
             <ng-container matColumnDef="detail">
@@ -57,6 +60,20 @@
                 <mat-cell  *matCellDef="let element"> {{element.zipcode}} </mat-cell >
             </ng-container>
 
+            <ng-container matColumnDef="hide">
+                <mat-header-cell  *matHeaderCellDef>hide</mat-header-cell>
+                <mat-cell  *matCellDef="let element">
+                    <button mat-mini-fab color="primary" *ngIf="toBool(element.isHidden)"
+                            (click)="hidePartner(element)">
+                        <mat-icon>visibility_off</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="primary" *ngIf="!toBool(element.isHidden)"
+                            (click)="hidePartner(element, false)">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                </mat-cell >
+            </ng-container>
+
 
 
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
@@ -69,7 +86,7 @@
                 <mat-icon>expand_more</mat-icon>
             </button>
         </div>
-        <div fxFlex fxLayoutAlign="center center" *ngIf="!partnerPage.LastEvaluatedKey">
+        <div  fxLayoutAlign="center center" *ngIf="!partnerPage.LastEvaluatedKey">
             <span>{{'entry.nomoredata' | translate}}</span>
         </div>
     </div>

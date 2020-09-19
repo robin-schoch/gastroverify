@@ -60,6 +60,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { AdminBillComponent } from './domain/admin/admin-bill/admin-bill.component';
 import { BillComponent } from './domain/bill/bill.component';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 Amplify.configure(awsconfig);
 
@@ -130,7 +131,8 @@ Amplify.configure(awsconfig);
     MatSelectModule,
     MatProgressSpinnerModule,
     MatGridListModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatSlideToggleModule
   ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],

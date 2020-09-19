@@ -1,5 +1,11 @@
-class DailyReport {
-    constructor(
+export class DailyReport {
+
+    public locationId;
+    public reportDate;
+    public distinctTotal;
+    public total;
+
+    public constructor(
         locationId,
         reportDate,
         distinctTotal,
@@ -12,6 +18,3 @@ class DailyReport {
     }
 }
 
-module.exports = {
-    DailyReport
-}

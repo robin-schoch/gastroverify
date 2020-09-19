@@ -1,0 +1,19 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "storage": {
+      "Partner": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "QRMapping": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

@@ -44,7 +44,6 @@ export class AdminService {
 
 
     public loadBills(partnerId: string) {
-
         return this.amplifyHttpClient.get<Page<Bill>>(
             this.apiName,
             '/v1/admin/partner/' + partnerId + '/bill'
@@ -89,11 +88,9 @@ export class AdminService {
             ];
             this.partners = page;
         }
-
     }
 
     public mergeReports(page: Page<Report>) {
-        console.log(page);
         const old = this.reports;
         if (!false) {
             this.reports = page;
@@ -117,6 +114,18 @@ export class AdminService {
                 }
             }
         );
+    }
+
+    public hideUser(email: string, hide: boolean) {
+        return this.amplifyHttpClient.put(
+            this.apiName,
+            '/v1/admin/partner/' + email + '/hide',
+            {
+                queryStringParameters: {
+                    hide: hide
+                }
+            }
+        )
     }
 
 
@@ -171,4 +180,6 @@ export class AdminService {
         this.bills = JSON.parse(JSON.stringify(this.bills));
 
     }
+
+
 }

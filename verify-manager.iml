@@ -3,6 +3,16 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/amplify/#current-cloud-backend/function/typescripttest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/#current-cloud-backend/function/gastro" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/#current-cloud-backend/function/visitors" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/#current-cloud-backend/function/datagarbage" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/#current-cloud-backend/function/dailyReport" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/backend/function/visitors/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/backend/function/typescripttest/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/backend/function/gastro/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/backend/function/datagarbage/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/amplify/backend/function/dailyReport/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
     </content>

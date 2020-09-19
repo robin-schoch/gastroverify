@@ -10,6 +10,14 @@
 		"env": {
 			"Type": "String"
 		},
+		"storageQRMappingName": {
+			"Type": "String",
+			"Default": "storageQRMappingName"
+		},
+		"storageQRMappingArn": {
+			"Type": "String",
+			"Default": "storageQRMappingArn"
+		},
 		"storagePartnerName": {
 			"Type": "String",
 			"Default": "storagePartnerName"
@@ -17,30 +25,6 @@
 		"storagePartnerArn": {
 			"Type": "String",
 			"Default": "storagePartnerArn"
-		},
-		"storageEntranceName": {
-			"Type": "String",
-			"Default": "storageEntranceName"
-		},
-		"storageEntranceArn": {
-			"Type": "String",
-			"Default": "storageEntranceArn"
-		},
-		"storageDailyReportName": {
-			"Type": "String",
-			"Default": "storageDailyReportName"
-		},
-		"storageDailyReportArn": {
-			"Type": "String",
-			"Default": "storageDailyReportArn"
-		},
-		"storageMonthlyReportName": {
-			"Type": "String",
-			"Default": "storageMonthlyReportName"
-		},
-		"storageMonthlyReportArn": {
-			"Type": "String",
-			"Default": "storageMonthlyReportArn"
 		}
 	},
 	"Conditions": {
@@ -65,12 +49,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"datagarbage",
+						"typescripttest",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"datagarbage",
+									"typescripttest",
 									"-",
 									{
 										"Ref": "env"
@@ -88,29 +72,17 @@
 						"REGION": {
 							"Ref": "AWS::Region"
 						},
+						"STORAGE_QRMAPPING_NAME": {
+							"Ref": "storageQRMappingName"
+						},
+						"STORAGE_QRMAPPING_ARN": {
+							"Ref": "storageQRMappingArn"
+						},
 						"STORAGE_PARTNER_NAME": {
 							"Ref": "storagePartnerName"
 						},
 						"STORAGE_PARTNER_ARN": {
 							"Ref": "storagePartnerArn"
-						},
-						"STORAGE_ENTRANCE_NAME": {
-							"Ref": "storageEntranceName"
-						},
-						"STORAGE_ENTRANCE_ARN": {
-							"Ref": "storageEntranceArn"
-						},
-						"STORAGE_DAILYREPORT_NAME": {
-							"Ref": "storageDailyReportName"
-						},
-						"STORAGE_DAILYREPORT_ARN": {
-							"Ref": "storageDailyReportArn"
-						},
-						"STORAGE_MONTHLYREPORT_NAME": {
-							"Ref": "storageMonthlyReportName"
-						},
-						"STORAGE_MONTHLYREPORT_ARN": {
-							"Ref": "storageMonthlyReportArn"
 						}
 					}
 				},
@@ -125,7 +97,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/datagarbage-4175666c6d71797a5836-build.zip"
+					"S3Key": "amplify-builds/typescripttest-38712b4f514933537363-build.zip"
 				}
 			}
 		},
@@ -135,12 +107,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"gastroverifyLambdaRole3ff62564",
+						"gastroverifyLambdaRole1341b935",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"gastroverifyLambdaRole3ff62564",
+									"gastroverifyLambdaRole1341b935",
 									"-",
 									{
 										"Ref": "env"
@@ -277,80 +249,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storageEntranceArn"
+									"Ref": "storageQRMappingArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storageEntranceArn"
-											},
-											"index/*"
-										]
-									]
-								}
-							]
-						},
-						{
-							"Effect": "Allow",
-							"Action": [
-								"dynamodb:Put*",
-								"dynamodb:Create*",
-								"dynamodb:BatchWriteItem",
-								"dynamodb:Get*",
-								"dynamodb:BatchGetItem",
-								"dynamodb:List*",
-								"dynamodb:Describe*",
-								"dynamodb:Scan",
-								"dynamodb:Query",
-								"dynamodb:Update*",
-								"dynamodb:RestoreTable*",
-								"dynamodb:Delete*"
-							],
-							"Resource": [
-								{
-									"Ref": "storageDailyReportArn"
-								},
-								{
-									"Fn::Join": [
-										"/",
-										[
-											{
-												"Ref": "storageDailyReportArn"
-											},
-											"index/*"
-										]
-									]
-								}
-							]
-						},
-						{
-							"Effect": "Allow",
-							"Action": [
-								"dynamodb:Put*",
-								"dynamodb:Create*",
-								"dynamodb:BatchWriteItem",
-								"dynamodb:Get*",
-								"dynamodb:BatchGetItem",
-								"dynamodb:List*",
-								"dynamodb:Describe*",
-								"dynamodb:Scan",
-								"dynamodb:Query",
-								"dynamodb:Update*",
-								"dynamodb:RestoreTable*",
-								"dynamodb:Delete*"
-							],
-							"Resource": [
-								{
-									"Ref": "storageMonthlyReportArn"
-								},
-								{
-									"Fn::Join": [
-										"/",
-										[
-											{
-												"Ref": "storageMonthlyReportArn"
+												"Ref": "storageQRMappingArn"
 											},
 											"index/*"
 										]
@@ -358,45 +264,6 @@
 								}
 							]
 						}
-					]
-				}
-			}
-		},
-		"CloudWatchEvent": {
-			"Type": "AWS::Events::Rule",
-			"Properties": {
-				"Description": "Schedule rule for Lambda",
-				"ScheduleExpression": {
-					"Ref": "CloudWatchRule"
-				},
-				"State": "ENABLED",
-				"Targets": [
-					{
-						"Arn": {
-							"Fn::GetAtt": [
-								"LambdaFunction",
-								"Arn"
-							]
-						},
-						"Id": {
-							"Ref": "LambdaFunction"
-						}
-					}
-				]
-			}
-		},
-		"PermissionForEventsToInvokeLambda": {
-			"Type": "AWS::Lambda::Permission",
-			"Properties": {
-				"FunctionName": {
-					"Ref": "LambdaFunction"
-				},
-				"Action": "lambda:InvokeFunction",
-				"Principal": "events.amazonaws.com",
-				"SourceArn": {
-					"Fn::GetAtt": [
-						"CloudWatchEvent",
-						"Arn"
 					]
 				}
 			}
@@ -424,11 +291,6 @@
 		"LambdaExecutionRole": {
 			"Value": {
 				"Ref": "LambdaExecutionRole"
-			}
-		},
-		"CloudWatchEventRule": {
-			"Value": {
-				"Ref": "CloudWatchEvent"
 			}
 		}
 	}
