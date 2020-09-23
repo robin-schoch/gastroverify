@@ -7,19 +7,23 @@ export class QrCodeMapping {
     locationId: string;
     locationName: string;
     checkIn: boolean;
+    type?: string;
     senderID?: string;
     smsText?: string;
 
     public static fromLocation(location: Location, email: string, checkIn: boolean): QrCodeMapping {
-        return new QrCodeMapping(
+        const b = new QrCodeMapping(
             checkIn ? location.checkInCode : location.checkOutCode,
             email,
             location.locationId,
             location.name,
             checkIn,
+            location.type,
             location.senderID,
             location.smsText
         );
+        console.log(b);
+        return b;
 
     }
 
@@ -30,6 +34,7 @@ export class QrCodeMapping {
         locationId: string,
         locationName: string,
         checkIn: boolean,
+        type?: string,
         senderID?: string,
         smsText?: string
     ) {
@@ -38,6 +43,7 @@ export class QrCodeMapping {
         this.locationId = locationId;
         this.locationName = locationName;
         this.checkIn = checkIn;
+        this.type = type;
         this.senderID = senderID;
         this.smsText = smsText;
     }

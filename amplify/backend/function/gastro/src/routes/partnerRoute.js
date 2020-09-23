@@ -61,27 +61,6 @@ exports.router.post('/:id/bar', (req, res) => {
             res.json(partner);
         }
     });
-    /*
-     getGastro(req.xUser.email).then(partner => {
-     if (partner.locations.map(l => l.locationId).includes(location.locationId)) {
-     log.error('location id already exits');
-     res.json({error: 'location id already exits'});
-     } else {
-     partner.locations.push(location);
-     Promise.all([
-     createPartner(partner),
-     addQrCodeMapping(QrCodeMapping.fromLocation(location, partner.email, true)),
-     addQrCodeMapping(QrCodeMapping.fromLocation(location, partner.email, false))
-     ]).then(([a, b, c]) => {
-     log.info('create qr codes');
-     res.json(a);
-     }).catch(error => {
-     res.status(500);
-     log.error(error);
-     res.json(error);
-     });
-     }
-     });*/
 });
 exports.router.delete('/:id/bar/:barId', (req, res) => {
     // @ts-ignore

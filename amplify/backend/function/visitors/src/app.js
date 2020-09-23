@@ -73,6 +73,7 @@ app.use(function (req, res, next) {
 
 app.post('/v1/register', (req, res) => {
     const phoneNumber = req.body.phoneNr;
+    log.info(req.body, "remove me i am illegal")
     if (phoneNumber) {
         const p = []
         if (req.body.qrCodeId) {
@@ -83,6 +84,7 @@ app.post('/v1/register', (req, res) => {
         }, "new registration");
         p.push(validationStorage.validateValidationRequest(phoneNumber))
         Promise.all(p).then(b => {
+            log.info(b)
             let senderID = "EntryCheck"
             let text = 'Dein Verifikationcode ist:'
 
@@ -149,7 +151,7 @@ app.post('/v1/checkin/:qrId', function (req, res) {
                 const timeIso = moment().toISOString()
                 let cI = new CheckIn(code.locationId, req.body.firstName, req.body.surName,
                     !!req.body.email ? req.body.email : "no email", req.body.address, req.body.city, req.body.zipcode,
-                    code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table)
+                    code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table, code.type)
                 log.info({
                     locationId: code.locationId,
                     locationName: code.locationName,

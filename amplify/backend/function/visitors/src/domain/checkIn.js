@@ -14,7 +14,8 @@ class CheckIn {
         phonenumber,
         birthdate,
         firstUse,
-        tableNumber = -1
+        tableNumber = -1,
+        type = 'Tisch'
     ) {
         this.locationId = locationId
         this.entryTime = timestamp
@@ -29,6 +30,7 @@ class CheckIn {
         this.birthdate = birthdate
         this.firstUse = firstUse
         this.tableNumber = tableNumber
+        this.type = type
         this.ttl = moment().add(14, "days").unix()
     }
 
