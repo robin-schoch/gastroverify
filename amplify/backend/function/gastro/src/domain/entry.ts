@@ -10,6 +10,7 @@ export class Entry {
     checkIn: boolean;
     birthdate: string;
     tableNumber: number;
+    type: string;
 
     public static exportToHumanReadable(entry: Entry) {
         return {
@@ -23,7 +24,7 @@ export class Entry {
             entryTime: entry.entryTime,
             checkIn: entry.checkIn ? 'Standort betreten' : 'Standort verlassen',
             birthdate: entry.birthdate,
-            tableNumber: entry.tableNumber === -1 ? 'Kein Tisch' : entry.tableNumber
+            tableNumber: entry.tableNumber === -1 ? 'Keine Angabe' : entry.tableNumber
         };
     }
 
@@ -38,7 +39,8 @@ export class Entry {
         entryTime: string,
         checkIn: boolean,
         birthdate: string,
-        tableNumber: number
+        tableNumber: number,
+        type:string = 'table'
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -51,5 +53,6 @@ export class Entry {
         this.checkIn = checkIn;
         this.birthdate = birthdate;
         this.tableNumber = tableNumber;
+        this.type = type
     }
 }

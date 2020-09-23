@@ -28,6 +28,7 @@ export class AddBarDialogComponent implements OnInit {
     enablePremium: boolean = false;
 
     ngOnInit() {
+        this.newLocation.type = 'Tisch';
     }
 
     addBar() {

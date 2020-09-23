@@ -9,8 +9,8 @@
     <div style="text-align: center;">
         <mat-checkbox *ngIf="data.text === 'checkin'" [(ngModel)]="tableEnabled" style="margin-right: 10px;" (change)="tableCheckboxChanged()"></mat-checkbox>
         <mat-form-field class="example-form-field" *ngIf="data.text === 'checkin'">
-            <mat-label>Tischnummer</mat-label>
-            <input matInput type="number" #tableinput [disabled]="!(isLoaded$ | async) || !tableEnabled" [(ngModel)]="tableNr" (keyup)="setTableNumber(tableinput.value)">
+            <mat-label>{{data.type}}nummer</mat-label>
+            <input matInput type="text" #tableInput [disabled]="!(isLoaded$ | async) || !tableEnabled" [(ngModel)]="tableNr" (input)="setTableNumber(tableInput.value)">
         </mat-form-field>
         <br>
         <canvas #canvas width="400" height="566"></canvas>

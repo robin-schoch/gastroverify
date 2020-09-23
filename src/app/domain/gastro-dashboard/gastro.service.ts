@@ -24,6 +24,7 @@ export interface Location {
     checkOutCode: string,
     checkInCode: string,
     active: boolean,
+    type: string,
     senderID: string,
     smsText: string
 }

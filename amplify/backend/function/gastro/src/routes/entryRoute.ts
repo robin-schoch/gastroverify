@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {createLogger} from 'bunyan';
 import {filter, map, mergeMap} from 'rxjs/operators';
 import {isNotDynamodbError} from '../util/dynamoDbDriver';
+import {Location, Partner} from '../domain/partner';
 
 const jwt = require('jsonwebtoken');
 const {getGastro} = require('../db/gastroStorage');
@@ -56,10 +57,7 @@ const fields = [
         label: 'Status',
         value: 'checkIn'
     },
-    {
-        label: 'Tisch',
-        value: 'tableNumber'
-    }
+
 ];
 // 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime'
 
@@ -71,11 +69,10 @@ router.get(
         // @ts-ignore
         storage.findPartner(req.xUser.email).pipe(
             filter(isNotDynamodbError),
-            // @ts-ignore
-            map(partner => partner.locations.filter(l => l.locationId === req.params.barId)[0]),
 
-            mergeMap(location => entrystorage.findPaged(
-                // @ts-ignore
+            map((partner: Partner) => partner.locations.filter(l => l.locationId === req.params.barId)[0]),
+
+            mergeMap((location: Location) => entrystorage.findPaged(
                 location.locationId,
                 req.query.Limit ? req.query.Limit : 10,
                 // @ts-ignore
@@ -169,6 +166,10 @@ router.get(
                 }
                 while (!!lastKey);
                 log.info('csv is ' + data.length + ' elements long');
+                fields.push({
+                    label: !!data[0] ? 'Tisch' : data[0].type,
+                    value: 'tableNumber'
+                });
                 downloadResource(
                     res,
                     'besucherliste.csv',
@@ -193,8 +194,8 @@ const mapEntries = (data) => {
             entryTime: values.entryTime,
             checkIn: values.checkIn ? 'Standort betreten' : 'Standort verlassen',
             birthdate: values.birthdate,
-            tableNumber: values.tableNumber === -1 ? 'Kein Tisch' : values.tableNumber
-
+            tableNumber: values.tableNumber === -1 ? 'Keine Angabe' : values.tableNumber,
+            type: !!values.type ? values.type : 'Tisch'
         };
     });
 };

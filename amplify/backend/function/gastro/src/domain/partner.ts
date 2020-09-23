@@ -14,14 +14,12 @@ export class Partner {
 
     public static fromRequest(req: any): Partner {
         return new Partner(
-            // @ts-ignore
             req.xUser.email,
             req.body.firstName,
             req.body.lastName,
             req.body.address,
             req.body.city,
             req.body.zipcode
-
         )
     }
 
@@ -59,6 +57,7 @@ export class Location {
     public checkInCode;
     public active;
     public payment;
+    public type;
     public senderID;
     public smsText;
 
@@ -73,6 +72,7 @@ export class Location {
             v4(),
             true,
             !req.body.senderID ? 'default' : 'premium',
+            !!req.body.type ? req.body.type : 'Tisch',
             req.body.senderID,
             req.body.smsText
         )
@@ -88,6 +88,7 @@ export class Location {
         checkInCode,
         active,
         payment,
+        type,
         senderID,
         smsText
 
@@ -100,9 +101,9 @@ export class Location {
         this.zipcode = zipcode
         this.checkOutCode = checkOutCode
         this.checkInCode = checkInCode
-
         this.active = active
         this.payment = payment
+        this.type = type
         this.senderID = senderID
         this.smsText = smsText
 
