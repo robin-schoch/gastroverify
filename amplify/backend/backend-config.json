@@ -1,297 +1,305 @@
 {
-	"function": {
-		"visitors": {
-			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "Validation",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "Partner",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "QRMapping",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "Entrance",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				}
-			]
-		},
-		"gastro": {
-			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "Validation",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "Partner",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "QRMapping",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "Entrance",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "DailyReport",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "MonthlyReport",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "auth",
-					"resourceName": "gastroverifyd8b8759f",
-					"attributes": [
-						"UserPoolId"
-					]
-				}
-			]
-		},
-		"datagarbage": {
-			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "Partner",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "Entrance",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "DailyReport",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "MonthlyReport",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				}
-			]
-		},
-		"dailyReport": {
-			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "Partner",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "Entrance",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "DailyReport",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				}
-			]
-		},
-		"typescripttest": {
-			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "Partner",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "storage",
-					"resourceName": "QRMapping",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				}
-			]
-		}
-	},
-	"api": {
-		"verifyGateway": {
-			"service": "API Gateway",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": [
-				{
-					"category": "function",
-					"resourceName": "visitors",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "function",
-					"resourceName": "gastro",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "auth",
-					"resourceName": "gastroverifyd8b8759f",
-					"attributes": [
-						"UserPoolId"
-					]
-				},
-				{
-					"category": "auth",
-					"resourceName": "userPoolGroups",
-					"attributes": [
-						"adminGroupRole"
-					]
-				},
-				{
-					"category": "auth",
-					"resourceName": "userPoolGroups",
-					"attributes": [
-						"gastroGroupRole"
-					]
-				}
-			]
-		}
-	},
-	"storage": {
-		"Validation": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"Partner": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"QRMapping": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"Entrance": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"DailyReport": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"MonthlyReport": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"Location": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		}
-	},
-	"auth": {
-		"gastroverifyd8b8759f": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": [],
-			"customAuth": false
-		},
-		"userPoolGroups": {
-			"service": "Cognito-UserPool-Groups",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": [
-				{
-					"category": "auth",
-					"resourceName": "gastroverifyd8b8759f",
-					"attributes": [
-						"UserPoolId",
-						"AppClientIDWeb",
-						"AppClientID",
-						"IdentityPoolId"
-					]
-				}
-			]
-		}
-	}
+    "function": {
+        "visitors": {
+            "build": true,
+            "providerPlugin": "awscloudformation",
+            "service": "Lambda",
+            "dependsOn": [
+                {
+                    "category": "storage",
+                    "resourceName": "Validation",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Partner",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "QRMapping",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Entrance",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                }
+            ]
+        },
+        "gastro": {
+            "build": true,
+            "providerPlugin": "awscloudformation",
+            "service": "Lambda",
+            "dependsOn": [
+                {
+                    "category": "storage",
+                    "resourceName": "Validation",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Partner",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "QRMapping",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Entrance",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "DailyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "MonthlyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "auth",
+                    "resourceName": "gastroverifyd8b8759f",
+                    "attributes": [
+                        "UserPoolId"
+                    ]
+                }
+            ]
+        },
+        "datagarbage": {
+            "build": true,
+            "providerPlugin": "awscloudformation",
+            "service": "Lambda",
+            "dependsOn": [
+                {
+                    "category": "storage",
+                    "resourceName": "Partner",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Entrance",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "DailyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "MonthlyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                }
+            ]
+        },
+        "dailyReport": {
+            "build": true,
+            "providerPlugin": "awscloudformation",
+            "service": "Lambda",
+            "dependsOn": [
+                {
+                    "category": "storage",
+                    "resourceName": "Partner",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Entrance",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "DailyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                }
+            ]
+        },
+        "typescripttest": {
+            "build": true,
+            "providerPlugin": "awscloudformation",
+            "service": "Lambda",
+            "dependsOn": [
+                {
+                    "category": "storage",
+                    "resourceName": "Partner",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "QRMapping",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Location",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                }
+            ]
+        }
+    },
+    "api": {
+        "verifyGateway": {
+            "service": "API Gateway",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [
+                {
+                    "category": "function",
+                    "resourceName": "visitors",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "gastro",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "auth",
+                    "resourceName": "gastroverifyd8b8759f",
+                    "attributes": [
+                        "UserPoolId"
+                    ]
+                },
+                {
+                    "category": "auth",
+                    "resourceName": "userPoolGroups",
+                    "attributes": [
+                        "adminGroupRole"
+                    ]
+                },
+                {
+                    "category": "auth",
+                    "resourceName": "userPoolGroups",
+                    "attributes": [
+                        "gastroGroupRole"
+                    ]
+                }
+            ]
+        }
+    },
+    "storage": {
+        "Validation": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "Partner": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "QRMapping": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "Entrance": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "DailyReport": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "MonthlyReport": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "Location": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        }
+    },
+    "auth": {
+        "gastroverifyd8b8759f": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [],
+            "customAuth": false
+        },
+        "userPoolGroups": {
+            "service": "Cognito-UserPool-Groups",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [
+                {
+                    "category": "auth",
+                    "resourceName": "gastroverifyd8b8759f",
+                    "attributes": [
+                        "UserPoolId",
+                        "AppClientIDWeb",
+                        "AppClientID",
+                        "IdentityPoolId"
+                    ]
+                }
+            ]
+        }
+    }
 }

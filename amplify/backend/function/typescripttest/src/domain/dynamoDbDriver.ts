@@ -36,14 +36,20 @@ export interface UpdateItemParams {
     TableName: string,
     Key: Record<string, any>,
     UpdateExpression: string,
-    ExpressionAttributeValues: Record<string, string>,
+    ExpressionAttributeValues: Record<string, any>,
     ReturnValues?: string
 
 }
 
+export type ItemParams<T> = UpdateItemParams | ScanItemParams | QueryItemParams | PutItemParams<T> | GetItemParams
+
 export interface DynamodbError<T> {
     Error: any,
-    itemParams: UpdateItemParams | ScanItemParams | QueryItemParams | PutItemParams<T> | GetItemParams
+    itemParams: ItemParams<T>
+}
+
+export function isNotDynamodbError<T>(value: DynamodbError<T> | T): value is T {
+    return !(<DynamodbError<T>>value)?.Error !== undefined;
 }
 
 export class Page<T> {
@@ -73,7 +79,6 @@ export class Page<T> {
 
     }
 }
-
 
 export class DbConnection<T> {
 
@@ -146,6 +151,17 @@ export class DbConnection<T> {
         ));
     }
 
+    public deleteItem(partitionKey: any, sortKey?: any): Observable<Partial<T> | DynamodbError<T>> {
+        return this.deleteEntity(
+            {
+                TableName: this.tableName,
+                Key: {
+                    [this.partitionKey]: partitionKey,
+                    [this.sortKey]: sortKey
+                }
+            });
+    }
+
     private updateEntity(updateItemParams: UpdateItemParams): Observable<Partial<T> | DynamodbError<T>> {
         return new Observable<Partial<T> | DynamodbError<T>>(subscriber => {
             this.dynamodb.update(
@@ -165,6 +181,25 @@ export class DbConnection<T> {
         });
     }
 
+    private deleteEntity(deleteItemParams: any): Observable<Partial<T> | DynamodbError<T>> {
+        return new Observable<Partial<T> | DynamodbError<T>>(subscriber => {
+            this.dynamodb.delete(
+                deleteItemParams,
+                (((err, data) => {
+                    if (err) {
+                        subscriber.next(<DynamodbError<T>>{
+                            Error: err,
+                            itemParams: deleteItemParams
+                        });
+                    } else {
+                        subscriber.next(deleteItemParams);
+                        subscriber.complete();
+                    }
+                }))
+            );
+        });
+    }
+
     private putEntity(putItemParams: PutItemParams<T>): Observable<Partial<T> | DynamodbError<T>> {
         return new Observable<Partial<T> | DynamodbError<T>>(subscriber => {
             this.dynamodb.put(
@@ -176,7 +211,7 @@ export class DbConnection<T> {
                             itemParams: putItemParams
                         });
                     } else {
-                        subscriber.next(data.Attributes);
+                        subscriber.next(putItemParams.Item);
                         subscriber.complete();
                     }
                 }
