@@ -93,6 +93,14 @@
                     ]
                 },
                 {
+                    "category": "storage",
+                    "resourceName": "Location",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
                     "category": "auth",
                     "resourceName": "gastroverifyd8b8759f",
                     "attributes": [

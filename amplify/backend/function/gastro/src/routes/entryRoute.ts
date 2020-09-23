@@ -1,8 +1,10 @@
 import {Router} from 'express';
 import {createLogger} from 'bunyan';
-import {filter, map, mergeMap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
 import {isNotDynamodbError} from '../util/dynamoDbDriver';
-import {Location, Partner} from '../domain/partner';
+import {Location} from '../domain/partner';
+import {locationStorage} from '../db/locationStorage';
+import {of, throwError} from 'rxjs';
 
 const jwt = require('jsonwebtoken');
 const {getGastro} = require('../db/gastroStorage');
@@ -15,6 +17,7 @@ export const router = Router();
 
 const storage = new partnerStorage();
 const entrystorage = new entryStorage();
+const locationstorage = new locationStorage();
 
 const fields = [
     {
@@ -63,55 +66,27 @@ const fields = [
 
 router.get(
     '/:barId',
-    (req, res) => {
-        // @ts-ignore
-        log.info(req.xUser);
-        // @ts-ignore
-        storage.findPartner(req.xUser.email).pipe(
-            filter(isNotDynamodbError),
+    (req: any, res) => {
 
-            map((partner: Partner) => partner.locations.filter(l => l.locationId === req.params.barId)[0]),
-
-            mergeMap((location: Location) => entrystorage.findPaged(
-                location.locationId,
+        locationstorage.findLocation(
+            req.xUser.email,
+            req.params.barId
+        ).pipe(
+            switchMap(a => isNotDynamodbError<Location>(a) ? entrystorage.findPaged(
+                a.locationId,
                 req.query.Limit ? req.query.Limit : 10,
-                // @ts-ignore
                 req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null
-            ))
-        ).subscribe(elem => {
-            if (!isNotDynamodbError(elem)) {
-                log.error(elem);
+            ) : throwError(a)),
+            switchMap(b => isNotDynamodbError<any>(b) ? of(b) : throwError(b))
+        ).subscribe(
+            (entries) => {
+                res.json(entries);
+            },
+            error => {
                 res.status(500);
+                res.json(error);
             }
-            res.json(elem);
-        });
-        /*
-         getGastro(req.xUser.email).then(user => {
-         const location = user.locations.filter(l => l.locationId === req.params.barId)[0];
-         if (location !== null) {
-         // @ts-ignore
-         getEntries(
-         location.locationId,
-         req.query.Limit ? req.query.Limit : 10,
-         req.query.LastEvaluatedKey ? JSON.parse(req.query.LastEvaluatedKey) : null
-         )
-         .then(elems => {
-         res.json(elems);
-         }).catch(error => {
-         log.error(error);
-         res.status(503);
-         res.json({error: 'oh boy'});
-         });
-         } else {
-         res.status(401);
-         res.json({barid: req.params.barId, bars: user.bars, cond: !!location, location: location});
-         }
-
-         }).catch(error => {
-         log.error(error);
-         res.status(404);
-         res.json(error);
-         });*/
+        );
     }
 );
 
@@ -144,8 +119,14 @@ router.get(
          )
          */
         // @ts-ignore
-        getGastro(req.xUser.email).then(async (user) => {
-            const location = user.locations.filter(l => l.locationId === req.params.barId)[0];
+
+        locationstorage.findLocation(
+            // @ts-ignore
+            req.xUser.email,
+            req.params.barId
+        ).pipe(
+            switchMap(a => isNotDynamodbError<Location>(a) ? of(a) : throwError(a)),
+        ).subscribe(async (location) => {
             if (location !== null) {
                 let lastKey = null;
                 let data = [];
@@ -163,11 +144,10 @@ router.get(
                         ...mappedValues
                     ];
                     lastKey = entries.LastEvaluatedKey;
-                }
-                while (!!lastKey);
+                } while (!!lastKey);
                 log.info('csv is ' + data.length + ' elements long');
                 fields.push({
-                    label: !!data[0] ? 'Tisch' : data[0].type,
+                    label: location.type,
                     value: 'tableNumber'
                 });
                 downloadResource(

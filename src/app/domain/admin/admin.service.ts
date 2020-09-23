@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Page} from '../entry-browser/entry.service';
-import {Partner} from '../gastro-dashboard/gastro.service';
+import {Location, Partner} from '../gastro-dashboard/gastro.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Report} from '../report/report.service';
 import {Bill} from '../bill/bill.service';
@@ -48,6 +48,14 @@ export class AdminService {
             this.apiName,
             '/v1/admin/partner/' + partnerId + '/bill'
         );
+    }
+
+    public loadLocations(partenrId: string) {
+        return this.amplifyHttpClient.get<Page<Location>>(
+            this.apiName,
+            '/v1/admin/partner/' + partenrId + '/location'
+        );
+
     }
 
     public loadReports(
@@ -125,7 +133,7 @@ export class AdminService {
                     hide: hide
                 }
             }
-        )
+        );
     }
 
 

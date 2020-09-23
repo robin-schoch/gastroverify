@@ -105,7 +105,14 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
 
     deleteLocation(location: Location) {
         this.gastroService.removeBar(location).subscribe(
-            elem => this.gastroService.gastro = elem,
+            elem => {
+                const p = this.gastroService.gastro;
+                p.locations = [...p.locations.filter(l => l.locationId !== location.locationId)];
+                this.gastroService.gastro = Object.assign(
+                    {},
+                    p
+                );
+            },
             error => console.log(error)
         );
     }

@@ -59,10 +59,15 @@ export class AdminReportComponent implements OnInit {
     @Input()
     public partner: Partner;
 
+    public locations: BehaviorSubject<Location[]> = new BehaviorSubject<Location[]>(null);
+
     public location: Location;
 
     ngOnInit(): void {
         this.adminService.reports = null;
+        this.adminService.loadLocations(this.partner.email).subscribe(locations => {
+            this.locations.next(locations.Data)
+        });
     }
 
     loadReports(location: string, page: Page<Report> = null) {

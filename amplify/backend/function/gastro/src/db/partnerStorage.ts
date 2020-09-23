@@ -19,6 +19,13 @@ export class partnerStorage {
         return this.dbConnection.findById(email);
     }
 
+    public findPartnerPaged(limit = 100, lastKey = null){
+        return this.dbConnection.scanItems({
+            Limit: limit,
+            ExclusiveStartKey: lastKey
+        })
+    }
+
     public hidePartner(email: string, hide = true): Observable<Partial<Partner> | DynamodbError<Partial<Partner>>> {
         return this.dbConnection.updateItem({
                 Key: {

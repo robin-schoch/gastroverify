@@ -1,32 +1,35 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.scanPartner = void 0;
-const AWS = require('aws-sdk');
-AWS.config.update({ region: process.env.TABLE_REGION || 'eu-central-1' });
+const AWS = require('aws-sdk')
+AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 //const moment = require('moment');
+
+
 let tableName = "Partner";
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
+} else if (process.env.ENV === undefined) {
+    tableName = tableName + '-dev'
 }
-else if (process.env.ENV === undefined) {
-    tableName = tableName + '-dev';
-}
+
 const partitionKeyName = "email";
-exports.scanPartner = (lastEvaluatedKey) => {
+
+export const scanPartner = (lastEvaluatedKey) => {
+
     let scanItem = {
         TableName: tableName,
         ExclusiveStartKey: lastEvaluatedKey,
         Limit: 1000000
-    };
+    }
+
     return new Promise(((resolve, reject) => {
         dynamodb.scan(scanItem, ((err, data) => {
             if (err) {
-                reject(err);
+                reject(err)
+            } else {
+                resolve(data)
             }
-            else {
-                resolve(data);
-            }
-        }));
-    }));
-};
+        }))
+    }))
+}
+
+

@@ -34,7 +34,13 @@ export class AddBarDialogComponent implements OnInit {
     addBar() {
         this.gastroService.addBar(this.newLocation).subscribe(
             elem => {
-                this.gastroService.gastro = elem;
+                const p = this.gastroService.gastro
+                console.log(p);
+                p.locations.push(elem);
+                this.gastroService.gastro = Object.assign(
+                    {},
+                    p
+                );
                 this.dialogRef.close();
             },
             error => {
