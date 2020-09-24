@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core'
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {GastroService, Location} from '../gastro.service';
 import {SnackbarService} from '../../snackbar/snackbar.service';
+import {BehaviorSubject} from 'rxjs';
 
 export interface IAddBarData {
 
@@ -24,17 +25,25 @@ export class AddBarDialogComponent implements OnInit {
 
     public newLocation = <Location>{};
 
+
+    public options = [
+        'Tisch',
+        'Raum',
+        'Turnhalle',
+        'Kinosaal'
+    ];
+    public filteredOptions: BehaviorSubject<string[]> = new BehaviorSubject<string[]>(this.options);
+
     public reg = new RegExp('^[A-z0-9]*');
     enablePremium: boolean = false;
 
     ngOnInit() {
-        this.newLocation.type = 'Tisch';
     }
 
     addBar() {
         this.gastroService.addBar(this.newLocation).subscribe(
             elem => {
-                const p = this.gastroService.gastro
+                const p = this.gastroService.gastro;
                 console.log(p);
                 p.locations.push(elem);
                 this.gastroService.gastro = Object.assign(
@@ -48,5 +57,10 @@ export class AddBarDialogComponent implements OnInit {
                 console.log(error);
             }
         );
+    }
+
+    filterOptions($event: string) {
+        console.log($event);
+        this.filteredOptions.next([...this.options.filter(opt => opt.startsWith($event))]);
     }
 }

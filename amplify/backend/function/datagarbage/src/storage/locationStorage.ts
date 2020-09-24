@@ -1,7 +1,6 @@
 import {DbConnection, DynamodbError} from '../util/dynamoDbDriver';
 import {Partner, Location} from '../domain/partner';
 import {Observable} from 'rxjs';
-
 import {Page} from '../util/dynamoDbDriver';
 
 
@@ -22,7 +21,7 @@ export class locationStorage {
         return this.dbConnection.findById(email, locationId);
     }
 
-    public findLocations(email:string, pageSize = 1000, LastEvaluatedKey = null): Observable<Page<Location> | DynamodbError<Location>> {
+    public findLocations(email:string, pageSize = 100, LastEvaluatedKey = null): Observable<Page<Location> | DynamodbError<Location>> {
         const queryParams = {
             ExpressionAttributeValues: {
                 ':email': email,

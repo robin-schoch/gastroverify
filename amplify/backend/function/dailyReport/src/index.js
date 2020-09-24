@@ -6,14 +6,17 @@
  STORAGE_DAILYREPORT_NAME
  STORAGE_ENTRANCE_ARN
  STORAGE_ENTRANCE_NAME
+ STORAGE_LOCATION_ARN
+ STORAGE_LOCATION_NAME
  STORAGE_PARTNER_ARN
  STORAGE_PARTNER_NAME
  Amplify Params - DO NOT EDIT */
 Object.defineProperty(exports, "__esModule", { value: true });
 const operators_1 = require("rxjs/operators");
 const locationStorage_1 = require("./storage/locationStorage");
-const dynamoDbDriver_1 = require("../../gastro/src/util/dynamoDbDriver");
+const dynamoDbDriver_1 = require("./util/dynamoDbDriver");
 const rxjs_1 = require("rxjs");
+const partnerStorage_1 = require("./storage/partnerStorage");
 const { scanPartner } = require('./storage/partnerStorage');
 const { getEntries } = require('./storage/entryStorage');
 const { createNewReport } = require('./storage/reportStorage');
@@ -21,14 +24,13 @@ const moment = require('moment');
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({ name: 'reportStorage', src: true });
 const locationstorage = new locationStorage_1.locationStorage();
+const partnerstorage = new partnerStorage_1.partnerStorage();
 const prices = {
     premium: 0.3,
     default: 0.15
 };
 const createReportForPartner = async (date, partner) => {
-    const locations = await locationstorage.findLocations(partner.email).pipe(operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ?
-        rxjs_1.of(a) :
-        rxjs_1.throwError(a)), operators_1.map(page => page.Data)).toPromise();
+    const locations = await locationstorage.findLocations(partner.email).pipe(operators_1.tap(a => log.info(a)), operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ? rxjs_1.of(a.Data) : rxjs_1.throwError(a))).toPromise().catch(err => log.error(err));
     return Promise.all(locations.map(location => createReportForLocation(date.clone(), location)));
 };
 const createReportForLocation = async (date, location) => {
@@ -53,20 +55,21 @@ const createReportForLocation = async (date, location) => {
     });
 };
 exports.handler = async (event) => {
-    const creationTime = moment()
-        .minutes(0)
-        .seconds(0)
-        .milliseconds(0);
+    const creationTime = moment().hours(6).minutes(0).seconds(0).milliseconds(0);
     log.info('create reports: ' + creationTime.toISOString());
     const dat = creationTime.clone();
     let lastEvaluatedPartnerKey = null;
     let partnerList = [];
     do {
-        let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
+        let partners = await partnerstorage.findPartnerPaged()
+            .pipe(operators_1.switchMap((a) => dynamoDbDriver_1.isNotDynamodbError(a) ?
+            rxjs_1.of(a) :
+            rxjs_1.throwError(a))).toPromise().catch(err => log.error(err));
+        // let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null;
         partnerList = [
             ...partnerList,
-            ...partners.Items.map(p => createReportForPartner(creationTime, p))
+            ...partners.Data.map(p => createReportForPartner(creationTime, p))
         ];
     } while (!!lastEvaluatedPartnerKey);
     await Promise.all(partnerList);

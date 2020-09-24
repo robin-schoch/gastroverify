@@ -5,11 +5,13 @@
  STORAGE_DAILYREPORT_NAME
  STORAGE_ENTRANCE_ARN
  STORAGE_ENTRANCE_NAME
+ STORAGE_LOCATION_ARN
+ STORAGE_LOCATION_NAME
  STORAGE_PARTNER_ARN
  STORAGE_PARTNER_NAME
  Amplify Params - DO NOT EDIT */
 
-import {map, switchMap} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 import {locationStorage} from './storage/locationStorage';
 import {isNotDynamodbError} from './util/dynamoDbDriver';
 import {of, throwError} from 'rxjs';
@@ -33,12 +35,10 @@ const prices = {
 };
 
 const createReportForPartner = async (date, partner) => {
-
-
     const locations = await locationstorage.findLocations(partner.email).pipe(
-        switchMap(a => isNotDynamodbError<Page<any>>(a) ? of(a) : throwError(a)),
-        map(page => page.Data)
-    ).toPromise();
+        tap(a => log.info(a)),
+        switchMap(a => isNotDynamodbError<Page<any>>(a) ? of(a.Data) : throwError(a)),
+    ).toPromise().catch(err => log.error(err));
     return Promise.all(locations.map(location => createReportForLocation(
         date.clone(),
         location
@@ -84,10 +84,9 @@ const createReportForLocation = async (date, location) => {
 
 exports.handler = async (event) => {
 
-    const creationTime = moment()
-        .minutes(0)
-        .seconds(0)
-        .milliseconds(0);
+
+    const creationTime = moment().hours(6).minutes(0).seconds(0).milliseconds(0);
+
 
     log.info('create reports: ' + creationTime.toISOString());
 
@@ -98,10 +97,12 @@ exports.handler = async (event) => {
     let partnerList = [];
     do {
         let partners = await partnerstorage.findPartnerPaged()
-                      .pipe(
-                          switchMap((a) => isNotDynamodbError<Page<any>>(a) ? of(a) : throwError(a)),
-                      ).toPromise().catch(err => log.error(err));
-       // let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
+                                           .pipe(
+                                               switchMap((a) => isNotDynamodbError<Page<any>>(a) ?
+                                                                of(a) :
+                                                                throwError(a)),
+                                           ).toPromise().catch(err => log.error(err));
+        // let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null;
         partnerList = [
             ...partnerList,

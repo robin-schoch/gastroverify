@@ -33,7 +33,13 @@
 
         <mat-form-field>
             <input [(ngModel)]="newLocation.type" class="cell" delayedfocus matInput name="type"
-                   placeholder="{{'form.type' | translate}}" required type="text">
+                   (ngModelChange)="filterOptions($event)"
+                   placeholder="{{'form.type' | translate}}" required type="text" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
         </mat-form-field>
         <!--
                 <section class="example-section">

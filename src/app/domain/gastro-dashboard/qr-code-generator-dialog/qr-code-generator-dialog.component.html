@@ -1,20 +1,40 @@
-<button mat-icon-button class="close-button" [mat-dialog-close]="true">
-    <mat-icon class="close-icon">close</mat-icon>
-</button>
+<div fxLayout="column" fxFill fxLayoutGap="10px">
 
-<h1 mat-dialog-title>QR-Code Generierung</h1>
+    <mat-toolbar color="primary">
+        <span>QR-Code Generierung</span>
+        <span class="example-spacer"></span>
+        <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+            <mat-icon class="close-icon">close</mat-icon>
+        </button>
+    </mat-toolbar>
 
-<div mat-dialog-content *ngIf="qrUrl$ | async as qrUrl">
+    <div *ngIf="qrUrl$ | async as qrUrl" fxflex="column" fxFlex fxLayoutGap="10px">
 
-    <div style="text-align: center;">
-        <mat-checkbox *ngIf="data.text === 'checkin'" [(ngModel)]="tableEnabled" style="margin-right: 10px;" (change)="tableCheckboxChanged()"></mat-checkbox>
-        <mat-form-field class="example-form-field" *ngIf="data.text === 'checkin'">
-            <mat-label>{{data.type}}nummer</mat-label>
-            <input matInput type="text" #tableInput [disabled]="!(isLoaded$ | async) || !tableEnabled" [(ngModel)]="tableNr" (input)="setTableNumber(tableInput.value)">
-        </mat-form-field>
-        <br>
-        <canvas #canvas width="400" height="566"></canvas>
-        <br>
-        <button mat-flat-button color="accent" (click)="download()" style="width: 400px;">Download</button>
+
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+            <div *ngIf="data.text === 'checkin'">
+                <mat-checkbox [(ngModel)]="tableEnabled" style="margin-right: 10px;"
+                              (change)="tableCheckboxChanged()"></mat-checkbox>
+                <mat-form-field>
+                    <mat-label>{{data.type}}nummer</mat-label>
+                    <input matInput type="text" #tableInput [disabled]="!(isLoaded$ | async) || !tableEnabled"
+                           [(ngModel)]="tableNr" (input)="setTableNumber(tableInput.value)">
+                </mat-form-field>
+            </div>
+            <div style="padding-bottom: 8px">
+                <button mat-flat-button color="accent" (click)="download()">Download</button>
+            </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
+
+            <canvas #canvas width="400" height="566"></canvas>
+        </div>
+
     </div>
+
 </div>
+
+
+

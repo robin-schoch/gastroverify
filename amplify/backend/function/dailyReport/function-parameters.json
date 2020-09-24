@@ -18,6 +18,12 @@
         "read",
         "update",
         "delete"
+      ],
+      "Location": [
+        "create",
+        "read",
+        "update",
+        "delete"
       ]
     }
   },

@@ -41,6 +41,14 @@
 		"storageMonthlyReportArn": {
 			"Type": "String",
 			"Default": "storageMonthlyReportArn"
+		},
+		"storageLocationName": {
+			"Type": "String",
+			"Default": "storageLocationName"
+		},
+		"storageLocationArn": {
+			"Type": "String",
+			"Default": "storageLocationArn"
 		}
 	},
 	"Conditions": {
@@ -111,6 +119,12 @@
 						},
 						"STORAGE_MONTHLYREPORT_ARN": {
 							"Ref": "storageMonthlyReportArn"
+						},
+						"STORAGE_LOCATION_NAME": {
+							"Ref": "storageLocationName"
+						},
+						"STORAGE_LOCATION_ARN": {
+							"Ref": "storageLocationArn"
 						}
 					}
 				},
@@ -125,7 +139,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-					"S3Key": "amplify-builds/datagarbage-4175666c6d71797a5836-build.zip"
+					"S3Key": "amplify-builds/datagarbage-415a5075713061785444-build.zip"
 				}
 			}
 		},
@@ -351,6 +365,39 @@
 										[
 											{
 												"Ref": "storageMonthlyReportArn"
+											},
+											"index/*"
+										]
+									]
+								}
+							]
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:Put*",
+								"dynamodb:Create*",
+								"dynamodb:BatchWriteItem",
+								"dynamodb:Get*",
+								"dynamodb:BatchGetItem",
+								"dynamodb:List*",
+								"dynamodb:Describe*",
+								"dynamodb:Scan",
+								"dynamodb:Query",
+								"dynamodb:Update*",
+								"dynamodb:RestoreTable*",
+								"dynamodb:Delete*"
+							],
+							"Resource": [
+								{
+									"Ref": "storageLocationArn"
+								},
+								{
+									"Fn::Join": [
+										"/",
+										[
+											{
+												"Ref": "storageLocationArn"
 											},
 											"index/*"
 										]

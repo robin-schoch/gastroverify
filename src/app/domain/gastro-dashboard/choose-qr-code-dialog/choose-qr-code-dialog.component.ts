@@ -26,6 +26,7 @@ export class ChooseQrCodeDialogComponent implements OnInit {
         let dialogRef = this.dialog.open(
             QrCodeGeneratorDialogComponent,
             {
+                panelClass: 'no-padding-dialog',
                 autoFocus: false,
                 height: '90vh',
                 width: '90vw',
@@ -43,12 +44,13 @@ export class ChooseQrCodeDialogComponent implements OnInit {
         let dialogRef = this.dialog.open(
             QrCodeGeneratorDialogComponent,
             {
+                panelClass: 'no-padding-dialog',
                 autoFocus: false,
                 height: '90vh',
                 width: '90vw',
                 data: <IQRCodeGeneratorData>{
                     url: `${this.data.checkOutCode}?businessName=${this.data.name}`,
-                    text: 'cehckout',
+                    text: 'checkout',
                     name: this.data.name,
                     type: !!this.data.type ? this.data.type : 'Tisch'
                 }

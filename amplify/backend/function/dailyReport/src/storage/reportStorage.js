@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reportStorage = exports.createNewReport = void 0;
-const dynamoDbDriver_1 = require("../../../gastro/src/util/dynamoDbDriver");
+const dynamoDbDriver_1 = require("../util/dynamoDbDriver");
 const DailyReport_1 = require("../domain/DailyReport");
 const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.TABLE_REGION || 'eu-central-1' });

@@ -11,11 +11,10 @@ import {DailyReport} from '../domain/DailyReport';
 import {locationStorage} from '../db/locationStorage';
 import {Location} from '../domain/partner';
 
-const {getEntries} = require('../db/entryStorage');
+
 
 
 const {monthlyReport} = require('../db/monthlyReport');
-const {getGastro, getAllPartner} = require('../db/gastroStorage');
 const {partnerStorage} = require('../db/partnerStorage');
 
 const monthlyReportStorage = new monthlyReport();

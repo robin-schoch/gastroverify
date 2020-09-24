@@ -145,6 +145,14 @@
                         "Name",
                         "Arn"
                     ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Location",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
                 }
             ]
         },
@@ -172,6 +180,14 @@
                 {
                     "category": "storage",
                     "resourceName": "DailyReport",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Location",
                     "attributes": [
                         "Name",
                         "Arn"

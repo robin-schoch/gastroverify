@@ -7,7 +7,6 @@ import {locationStorage} from '../db/locationStorage';
 import {of, throwError} from 'rxjs';
 
 const jwt = require('jsonwebtoken');
-const {getGastro} = require('../db/gastroStorage');
 const {partnerStorage} = require('../db/partnerStorage');
 const {getEntries, entryStorage} = require('../db/entryStorage');
 const {parse} = require('json2csv');
@@ -109,17 +108,6 @@ const downloadResource = (res, fileName, fields, data) => {
 router.get(
     '/:barId/export',
     (req, res) => {
-
-        /*
-         // @ts-ignore
-         storage.findPartner(req.xUser.email).pipe(
-         filter(isNotDynamodbError),
-         // @ts-ignore
-         map(partner => partner.locations.filter(l => l.locationId === req.params.barId)[0]),
-         )
-         */
-        // @ts-ignore
-
         locationstorage.findLocation(
             // @ts-ignore
             req.xUser.email,
@@ -131,11 +119,16 @@ router.get(
                 let lastKey = null;
                 let data = [];
                 do {
-                    const entries = await getEntries(
+                    const entries = await entrystorage.findPaged(
+                        location.locationId,
+                        50000,
+                        lastKey
+                    ).pipe(switchMap((b) => isNotDynamodbError<any>(b) ? of(b) : throwError(b))).toPromise()
+                   /* const entries = await getEntries(
                         location.locationId,
                         5000,
                         lastKey
-                    );
+                    );*/
                     // 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate,
                     // tableNumber',
                     const mappedValues = mapEntries(entries.Data);

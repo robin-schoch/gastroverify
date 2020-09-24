@@ -1,4 +1,4 @@
-import {DbConnection} from '../../../gastro/src/util/dynamoDbDriver';
+import {DbConnection} from '../util/dynamoDbDriver';
 import {DailyReport} from '../domain/DailyReport';
 
 const AWS = require('aws-sdk');

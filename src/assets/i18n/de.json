@@ -27,7 +27,8 @@
     "street": "Strasse + Nummer",
     "city": "Ort",
     "zip": "PLZ",
-    "add": "Hinzufügen"
+    "add": "Hinzufügen",
+    "type": "Unterteilung vom Standort"
   },
   "entry": {
     "title": "Eintritte",
