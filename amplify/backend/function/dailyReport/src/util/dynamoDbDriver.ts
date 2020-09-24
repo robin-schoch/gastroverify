@@ -1,4 +1,5 @@
 import {Observable} from 'rxjs';
+import {strict} from 'assert';
 
 const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'});

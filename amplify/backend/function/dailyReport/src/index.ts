@@ -11,11 +11,13 @@
 
 import {map, switchMap} from 'rxjs/operators';
 import {locationStorage} from './storage/locationStorage';
-import {isNotDynamodbError} from '../../gastro/src/util/dynamoDbDriver';
+import {isNotDynamodbError} from './util/dynamoDbDriver';
 import {of, throwError} from 'rxjs';
 import {Page} from './domain/page';
+import {partnerStorage} from './storage/partnerStorage';
 
 const {scanPartner} = require('./storage/partnerStorage');
+
 const {getEntries} = require('./storage/entryStorage');
 const {createNewReport} = require('./storage/reportStorage');
 const moment = require('moment');
@@ -23,6 +25,7 @@ const bunyan = require('bunyan');
 const log = bunyan.createLogger({name: 'reportStorage', src: true});
 
 const locationstorage = new locationStorage();
+const partnerstorage = new partnerStorage();
 
 const prices = {
     premium: 0.3,
@@ -30,10 +33,10 @@ const prices = {
 };
 
 const createReportForPartner = async (date, partner) => {
+
+
     const locations = await locationstorage.findLocations(partner.email).pipe(
-        switchMap(a => isNotDynamodbError<Page<any>>(a) ?
-                       of(a) :
-                       throwError(a)),
+        switchMap(a => isNotDynamodbError<Page<any>>(a) ? of(a) : throwError(a)),
         map(page => page.Data)
     ).toPromise();
     return Promise.all(locations.map(location => createReportForLocation(
@@ -94,11 +97,15 @@ exports.handler = async (event) => {
     let lastEvaluatedPartnerKey = null;
     let partnerList = [];
     do {
-        let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
+        let partners = await partnerstorage.findPartnerPaged()
+                      .pipe(
+                          switchMap((a) => isNotDynamodbError<Page<any>>(a) ? of(a) : throwError(a)),
+                      ).toPromise().catch(err => log.error(err));
+       // let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
         lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null;
         partnerList = [
             ...partnerList,
-            ...partners.Items.map(p => createReportForPartner(
+            ...partners.Data.map(p => createReportForPartner(
                 creationTime,
                 p
             ))

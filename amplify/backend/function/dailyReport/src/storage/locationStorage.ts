@@ -1,7 +1,6 @@
 import {DbConnection, DynamodbError} from '../util/dynamoDbDriver';
 import {Partner, Location} from '../domain/partner';
 import {Observable} from 'rxjs';
-import * as moment from 'moment';
 import {Page} from '../domain/page';
 
 
