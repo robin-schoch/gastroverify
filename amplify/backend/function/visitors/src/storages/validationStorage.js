@@ -1,159 +1,67 @@
-const AWS = require('aws-sdk')
-const jwtUtil = require('../util/jwtUtil')
-const smsUtil = require('../util/smsUtil')
-AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-const moment = require('moment');
-const momentDurationFormatSetup = require("moment-duration-format");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validationStorage = void 0;
+const dynamoDbDriver_1 = require("../util/dynamoDbDriver");
+const moment = require("moment");
+const rxjs_1 = require("rxjs");
+const operators_1 = require("rxjs/operators");
+const validation_1 = require("../domain/validation");
+const validationState_1 = require("../domain/validationState");
+const codeValidationError_1 = require("../domain/codeValidationError");
+const crypto = require("crypto");
+const jwtUtil_1 = require("../util/jwtUtil");
+const momentDurationFormatSetup = require('moment-duration-format');
 momentDurationFormatSetup(moment);
-
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({name: "validationStorage", src: true});
-
-
-const crypto = require('crypto');
-// add dev if local
-let tableName = "Validation";
-if (process.env.ENV && process.env.ENV !== "NONE") {
-    tableName = tableName + '-' + process.env.ENV;
-} else if (process.env.ENV === undefined) {
-    tableName = tableName + '-dev'
-}
-const partitionKeyName = "phoneNumberHash";
-
-
-
-
-const insertValidationData = (item) => {
-    let putItemParams = {
-        TableName: tableName,
-        Item: item
+const log = bunyan.createLogger({ name: 'validationStorage', src: true });
+class validationStorage {
+    constructor() {
+        this.sendSMSCoolDown = 1; // min
+        this.registerCoolDown = 10; // min
+        this.dbConnection = new dynamoDbDriver_1.DbConnection('Validation', 'phoneNumberHash');
     }
-    return new Promise((resolve, reject) => {
-        dynamodb.put(putItemParams, (err, data) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(putItemParams.Item)
+    validateValidationRequest(phoneNumber) {
+        return this.dbConnection.findById(crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'))
+            .pipe(operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ? rxjs_1.of(a) : rxjs_1.throwError(a)), operators_1.map((validation) => {
+            if (!validation)
+                return [true, null];
+            const now = moment();
+            let durationRequested = moment.duration(now.diff(moment(validation.validation_requested)));
+            let durationSucceeded = moment.duration(now.diff(moment(validation.validation_success)));
+            if ((validation.validation_success === '' && durationRequested.asMinutes() > this.sendSMSCoolDown)
+                || (durationSucceeded.asMinutes() > this.registerCoolDown)) {
+                return [true, null];
             }
-        });
-    })
-}
-
-
-module.exports.createValidation = (phoneNumber, senderID, text = 'Dein Verifikationcode ist:') => {
-    const item = {
-        phoneNumberHash: crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'),
-        code: Math.floor(10000 + Math.random() * 90000),
-        validation_requested: moment().toISOString(),
-        validation_success: "",
-        try: 5,
-        strikes: 0,
-    }
-
-    return Promise.all([
-        insertValidationData(item),
-        smsUtil.sendVerifactionSMS(phoneNumber, item.code, senderID, text)
-    ])
-
-}
-
-
-module.exports.validationSuccess = (phoneNumber, momentum) => {
-    var params = {};
-    params[partitionKeyName] = crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex');
-    let getItemParams = {
-        TableName: tableName,
-        Key: params
-    }
-    return new Promise((resolve, reject) => {
-        dynamodb.get(getItemParams, (err, data) => {
-            if (err || Object.keys(data).length === 0) {
-                resolve(false)
-            } else {
-                let w = data.Item ? data.Item : data
-                if (moment(w.validation_success).diff(momentum) === 0) {
-                    resolve(true)
-                } else {
-                    resolve(false)
-                }
+            else {
+                return [
+                    false, !validation.validation_success
+                        ?
+                            // @ts-ignore
+                            new validationState_1.ValidationState(moment.duration(this.sendSMSCoolDown, 'minutes').subtract(durationRequested).format('hh:mm:ss'), 'cool down', 403)
+                        :
+                            // @ts-ignore
+                            new validationState_1.ValidationState(moment.duration(this.registerCoolDown, 'minutes').subtract(durationSucceeded).format('hh:mm:ss'), 'already registered', 403)
+                ];
             }
-        })
-    })
-}
-
-
-module.exports.validateValidationRequest = (phoneNumber) => {
-    const now = moment()
-    var params = {};
-    params[partitionKeyName] = crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex');
-    let getItemParams = {
-        TableName: tableName,
-        Key: params
+        }));
     }
-    return new Promise((resolve, reject) => {
-        dynamodb.get(getItemParams, (err, data) => {
-            if (err || Object.keys(data).length === 0) {
-                resolve({})
-            } else {
-                let w = data.Item ? data.Item : data
-                let coolDown = 1 // min
-                let registeredCoolDown = 10 // min
-                let duration = moment.duration(now.diff(moment(w.validation_requested)))
-                let duration2 = moment.duration(now.diff(moment(w.validation_success)))
-                if (w.validation_success === "" && duration.asMinutes() > coolDown) {
-
-                    resolve(w)
-                } else if (duration2.asMinutes() > registeredCoolDown) {
-
-                    resolve(w)
-                } else {
-                    if (w.validation_success === "") {
-                        reject({
-                            interval: moment.duration(coolDown, 'minutes').subtract(duration).format("hh:mm:ss"),
-                            status: "cool down"
-                        })
-                    } else {
-                        reject({
-                            interval: moment.duration(registeredCoolDown, 'minutes').subtract(duration2).format("hh:mm:ss"),
-                            status: "already registered"
-                        })
-                    }
-                }
-            }
-        })
-    })
-}
-
-module.exports.validateNumber = (phoneNumber, code) => {
-    var params = {};
-    params[partitionKeyName] = crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex');
-    let getItemParams = {
-        TableName: tableName,
-        Key: params
+    createValidation(phoneNumber, randomNumber) {
+        return this.dbConnection.putItem(validation_1.Validation.generateValidation(phoneNumber, randomNumber));
     }
-    return new Promise((resolve, reject) => {
-        dynamodb.get(getItemParams, (err, data) => {
-            if (err || Object.keys(data).length === 0) {
-                reject({error: "no validation request"})
-            } else {
-                let w = data.Item ? data.Item : data
-                if (w.code === Number(code) && w.validation_success === "" && w.try > 0) {
-                    w.validation_success = moment().toISOString()
-                    insertValidationData(w).then(elem => resolve(jwtUtil.generateJWT(phoneNumber, w.validation_success))).catch(err => reject(err))
-                } else {
-                    if (w.try > 0) {
-                        w.try = w.try - 1
-                        insertValidationData(w).then(elem => {
-                            reject({error: "invalid code", remaining: w.try})
-                        })
-                    } else {
-                        reject({error: "validation blocked"})
-                    }
-
-                }
-            }
-        })
-    })
+    validateCode(phoneNumber, code) {
+        return this.dbConnection.findById(crypto.createHash('sha256').update(String(phoneNumber), 'utf8').digest('hex'))
+            .pipe(operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ? rxjs_1.of(a) : rxjs_1.throwError(a)), operators_1.switchMap(a => !!a ? rxjs_1.of(a) : rxjs_1.throwError(codeValidationError_1.CodeValidationError.create('no validation request', 404))), operators_1.switchMap(a => a.try > 0 ? rxjs_1.of(a) : rxjs_1.throwError(codeValidationError_1.CodeValidationError.create('you are blocked', 403))), operators_1.switchMap(a => (Number(code) === a.code) ?
+            this.dbConnection.putItem(validation_1.Validation.rightCode(a)) :
+            this.dbConnection.putItem(validation_1.Validation.wrongCode(a))), operators_1.switchMap((a) => dynamoDbDriver_1.isNotDynamodbError(a) ? (a.validation_success !== '' ?
+            jwtUtil_1.generateJWT$(phoneNumber, a.validation_success) :
+            rxjs_1.throwError((codeValidationError_1.CodeValidationError.create('invalid code', 401, a.try)))) :
+            rxjs_1.throwError(a)));
+    }
+    validateSuccess(decode) {
+        return this.dbConnection.findById(crypto.createHash('sha256').update(String(decode.phone), 'utf8')
+            .digest('hex')).pipe(operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ?
+            rxjs_1.of(!!a && moment(a.validation_success).diff(decode.validation) === 0) :
+            rxjs_1.throwError(a)));
+    }
 }
-
+exports.validationStorage = validationStorage;

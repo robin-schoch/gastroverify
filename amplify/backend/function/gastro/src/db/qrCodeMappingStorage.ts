@@ -23,7 +23,7 @@ export class QrCodeMappingStorage {
         return this.dbConnection.findById(qrId).pipe();
     }
 
-    public deleteMapping(qrId: string): Observable<Partial<QrCodeMapping> | DynamodbError<QrCodeMappingStorage>> {
+    public deleteMapping(qrId: string): Observable<Partial<QrCodeMapping> | DynamodbError<QrCodeMapping>> {
         return this.dbConnection.deleteItem(qrId);
     }
 

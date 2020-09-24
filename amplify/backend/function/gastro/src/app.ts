@@ -38,7 +38,7 @@ import {router as entryRoute}  from './routes/entryRoute'
 import {router as reportRoute}  from './routes/reportRoute'
 
 // declare a new express app
-var app = express()
+const app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 import {verifyXIDToken} from './util/jwtUtil';
