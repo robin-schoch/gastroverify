@@ -30,7 +30,8 @@ export class AddBarDialogComponent implements OnInit {
         'Tisch',
         'Raum',
         'Turnhalle',
-        'Kinosaal'
+        'Kinosaal',
+        'Sektor'
     ];
     public filteredOptions: BehaviorSubject<string[]> = new BehaviorSubject<string[]>(this.options);
 
