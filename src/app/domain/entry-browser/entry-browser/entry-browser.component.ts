@@ -43,7 +43,6 @@ export class EntryBrowserComponent implements OnInit {
         'Name',
         'Strasse',
         'Nr.',
-        'Email'
     ];
     displayedColumns2: string[] = ['position', 'name', 'weight', 'symbol'];
     dataSource = ELEMENT_DATA;

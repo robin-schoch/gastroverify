@@ -1,8 +1,12 @@
 <div class="mat-elevation-z8 " *ngIf="selectedBar$ | async as selectedbar" fxFill fxLayout="column">
 
     <mat-toolbar>
-        <span>{{selectedbar.name}}</span>
+        <span>{{'context.location' | translate}}: {{selectedbar.name}}</span>
         <span class="example-spacer"></span>
+        <button *ngIf="data$ | async as data" mat-raised-button (click)="exportCSV()"
+                matTooltip="{{'entry.download' | translate}}" color="warn">
+            {{'entry.download' | translate}}
+        </button>
         <button mat-icon-button (click)="reload(selectedbar)" matTooltip="{{'entry.reload' | translate}}">
             <mat-icon>replay</mat-icon>
         </button>
@@ -13,7 +17,7 @@
     </mat-toolbar>
     <app-spinner [data$]="data$"></app-spinner>
 
-    <div class="example-container" fxLayout="column"  *ngIf="data$ | async as data">
+    <div class="example-container" fxLayout="column" *ngIf="data$ | async as data">
         <!--     -->
         <mat-table [dataSource]="data.Data" fxFlex>
 
@@ -29,7 +33,7 @@
 
             <ng-container matColumnDef="Zeit">
                 <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.entryTime | date:'short'}} </mat-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.entryTime | date:'HH:mm : dd.MM'}} </mat-cell>
             </ng-container>
 
 
@@ -50,8 +54,14 @@
 
 
             <ng-container matColumnDef="Nr.">
-                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.phonenr' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.phoneNumber}} </mat-cell>
+                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.phonenr' | translate}}
+                    & {{'entry.email' | translate}} </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element">
+                    <div fxLayout="column">
+                        <span> {{element.phoneNumber}} </span>
+                        <span> {{element.email}} </span>
+                    </div>
+                </mat-cell>
             </ng-container>
 
 
@@ -76,9 +86,6 @@
             <span>{{'entry.nomoredata' | translate}}</span>
         </div>
     </div>
-    <button *ngIf="data$ | async as data" mat-raised-button (click)="exportCSV()"
-            matTooltip="{{'entry.download' | translate}}" color="warn">
-        {{'entry.download' | translate}}
-    </button>
+
 </div>
 
