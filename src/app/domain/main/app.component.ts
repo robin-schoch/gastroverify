@@ -46,15 +46,14 @@ export class AppComponent implements OnInit, AfterViewChecked {
         // Set Browser Language as Init Language
         translate.use(translate.getBrowserLang());
         this.isAdmin$ = this.authService.role$.pipe(
-            tap(elem => console.log('this is working ' + elem)),
+
             map(roles => roles.filter(elem => elem === 'admin')),
             map(roles => roles.length > 0),
-            tap(elem => console.log('this is working too' + elem)),
+
         );
 
 
-        console.log('hulla');
-        this.isAdmin$.subscribe(elem => console.log('admin = ' + elem));
+       // this.isAdmin$.subscribe(elem => console.log('admin = ' + elem));
 
     }
 

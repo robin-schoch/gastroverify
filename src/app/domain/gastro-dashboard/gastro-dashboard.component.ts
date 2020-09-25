@@ -55,6 +55,7 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
     this.partner$ = this.gastroService.gastro$;
     this.toolbarService.toolbarTitle = 'Übersicht';
     this.newPartner$ = this.gastroService.gastro$.pipe(
+        tap(f => console.log(f)),
         skip(1),
         filter(g => !g?.email),
         tap(f => console.log(f)),
@@ -65,6 +66,10 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         elem => this.gastroService.gastro = elem,
         error => this.gastroService.error = error
     );
+    this.gastroService.error$.subscribe(elem => this.router.navigate([
+      'location',
+      'personal'
+    ]));
     let sub = this.newPartner$.subscribe(elem => {
       this.router.navigate([
         'location',

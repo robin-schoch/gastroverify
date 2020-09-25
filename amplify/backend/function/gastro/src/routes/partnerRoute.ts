@@ -59,7 +59,6 @@ router.get(
           ([partner, locations]) => {
             partner.locations = locations.Data;
             log.info(locations);
-
             res.json(partner);
           },
           error => {

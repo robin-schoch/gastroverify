@@ -45,13 +45,8 @@ export class AuthenticationService {
     public setUser() {
         Auth.currentAuthenticatedUser().then(user => {
             this.activeUser = <CognitoUser>user;
-            console.log(user);
             this.isAuthenticated = true;
-
-            console.log(user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
             const r = user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups'];
-
-            this.role = !!r ? r : ["no_role"];
             console.log('Active user: ' + user.username);
         }).catch(elem => {
             this.isAuthenticated = false;
