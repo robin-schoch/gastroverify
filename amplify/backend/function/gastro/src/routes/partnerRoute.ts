@@ -11,6 +11,7 @@ import {isNotDynamodbError} from '../util/dynamoDbDriver';
 import {QrCodeMapping} from '../domain/qrCodeMapping';
 import {mergeMap, switchMap, tap} from 'rxjs/operators';
 import {Page} from '../domain/page';
+import {RequestError} from '../domain/RequestError';
 
 const log = createLogger({name: 'partnerRoute', src: true});
 const storage = new partnerStorage();
@@ -36,12 +37,7 @@ router.get(
             log.info(locations);
             res.json(partner);
           },
-          error => {
-            log.error(error);
-            res.status(500);
-            res.json(error);
-          }
-      );
+          error => handleError(res, error));
     }
 );
 
@@ -49,25 +45,22 @@ router.get(
     '/:id',
     (req: any, res) => {
       forkJoin([
-        storage.findPartner(req.xUser.email).pipe(
-            switchMap(inner => isNotDynamodbError(inner) ? of(inner) : throwError(inner)),
-        ),
-        locationstorage.findLocations(req.xUser.email).pipe(
-            switchMap(inner => isNotDynamodbError<Page<Location>>(inner) ? of(inner) : throwError(inner)),
-        ),
-      ]).subscribe(
-          ([partner, locations]) => {
+        storage.findPartner(req.xUser.email),
+        locationstorage.findLocations(req.xUser.email)
+      ]).pipe(
+          switchMap(([partner, loc]) => {
+            if (!isNotDynamodbError(partner)) return throwError(RequestError.create(500, 'internal service', partner));
+            if (!isNotDynamodbError<Page<Location>>(loc)) return throwError(RequestError.create(500, 'internal service', loc));
+            if (!partner) return throwError(RequestError.create(404, 'partner not found'));
+            return of([partner, loc]);
+          }),
+      ).subscribe(
+          ([partner, locations]: [Partner, Page<Location>]) => {
             partner.locations = locations.Data;
             log.info(locations);
             res.json(partner);
           },
-          error => {
-            log.error(error);
-            res.status(500);
-            res.json(error);
-          }
-      );
-
+          error => handleError(res, error));
     }
 );
 
@@ -95,53 +88,44 @@ router.post(
         ))
       ]).pipe(
           switchMap(([partner, qr1, qr2]) => {
-            if (!isNotDynamodbError(partner)) return throwError(partner);
-            if (!isNotDynamodbError(qr1)) return throwError(qr1);
-            if (!isNotDynamodbError(qr2)) return throwError(qr2);
+            if (!isNotDynamodbError(partner)) return throwError(RequestError.create(500, 'internal service', partner));
+            if (!isNotDynamodbError(qr1)) return throwError(RequestError.create(500, 'internal service', qr1));
+            if (!isNotDynamodbError(qr2)) return throwError(RequestError.create(500, 'internal service', qr2));
             return of(location);
           })
       ).subscribe(
           (location) => {
             res.json(location);
           },
-          (error) => {
-            res.status(500);
-            res.json(error);
-          }
-      );
+          error => handleError(res, error));
     }
 );
 
-router.delete('/:id/bar/:barId', (req:any, res) => {
+router.delete('/:id/bar/:barId', (req: any, res) => {
       locationstorage.changeActivateLocation(
           // @ts-ignore
           req.xUser.email,
           req.params.barId,
           false
       ).pipe(
-         // tap(elem => log.info(elem)),
+          // tap(elem => log.info(elem)),
           switchMap((inner) => isNotDynamodbError<Partial<Location>>(inner) ? of(inner) : throwError(inner)),
           mergeMap((location) => forkJoin([
             mappingStorage.deleteMapping(location.checkInCode).pipe(
                 switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
                                      of(inner) :
-                                     throwError(inner)),
+                                     throwError(RequestError.create(500, 'internal error', inner))),
             ),
             mappingStorage.deleteMapping(location.checkOutCode).pipe(
                 switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
                                      of(inner) :
-                                     throwError(inner)),
+                                     throwError(RequestError.create(500, 'internal error', inner))),
             ),
             of(location)
           ]))
-      ).subscribe(([qr1, qr2, location]) => {
-
-            res.json(location);
-          },
-          error => {
-            log.error(error);
-            res.json(error);
-          });
+      ).subscribe(
+          ([qr1, qr2, location]) => res.json(location),
+          error => handleError(res, error));
     }
 );
 
@@ -164,13 +148,13 @@ router.put('/:id/bar/:barId', (req: any, res) => {
             tap(inner => log.info(inner)),
             switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
                                  of(inner) :
-                                 throwError(inner)),
+                                 throwError(RequestError.create(500, 'internal error', inner))),
         ),
         mappingStorage.createMapping(QrCodeMapping.fromLocation(location, location.partnerId, false)).pipe(
             tap(inner => log.info(inner)),
             switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
                                  of(inner) :
-                                 throwError(inner)),
+                                 throwError(RequestError.create(500, 'internal error', inner))),
         ),
         of(location)
       ]))
@@ -180,10 +164,7 @@ router.put('/:id/bar/:barId', (req: any, res) => {
         log.info(qr1);
         res.json(location);
       },
-      error => {
-        log.error(error);
-        res.json(error);
-      });
+      error => handleError(res, error));
 });
 
 
@@ -199,4 +180,16 @@ router.post(
     }
 );
 
+
+const handleError = (res, error) => {
+  log.error(error);
+  if (error instanceof RequestError) {
+    res.status(error.status);
+    res.json(error);
+  } else {
+    res.status(500);
+    res.json(error);
+  }
+
+};
 
