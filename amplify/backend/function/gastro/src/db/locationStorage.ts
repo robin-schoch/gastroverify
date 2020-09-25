@@ -36,16 +36,16 @@ export class locationStorage {
 
   public changeActivateLocation(email: string, locationId: string, active): Observable<Partial<Location> | DynamodbError<Location>> {
     const remove = {
-      UpdateExpression: 'set active = :active, remove ttl',
+      UpdateExpression: 'set active = :active REMOVE timeToLive',
       ExpressionAttributeValues: {
         ':active': active,
       },
     };
     const add = {
-      UpdateExpression: 'set active = :active, set ttl = :ttl',
+      UpdateExpression: 'set active = :active, timeToLive=:timeToLive',
       ExpressionAttributeValues: {
         ':active': active,
-        ':ttl': moment().add(40, 'days').unix()
+        ':timeToLive': moment().add(40, 'days').unix()
       },
     };
     const updateParams = {
@@ -56,6 +56,7 @@ export class locationStorage {
       ReturnValues: 'ALL_NEW'
     };
     const param = Object.assign({}, updateParams, active ? remove : add);
+    console.log(param)
     return this.dbConnection.updateItem(param);
   }
 

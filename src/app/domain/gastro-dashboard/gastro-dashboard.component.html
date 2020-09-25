@@ -57,7 +57,7 @@
                                 <button mat-raised-button color="warn" (click)="openConfirmDialog(element)" *ngIf="element.active">
                                     <mat-icon>delete</mat-icon>
                                 </button>
-                                <button mat-raised-button color="warn" (click)="openConfirmDialog(element)" *ngIf="!element.active">
+                                <button mat-raised-button color="warn" (click)="openConfirmDialogActive(element)" *ngIf="!element.active">
                                     <mat-icon>rotate_right</mat-icon>
                                 </button>
                             </mat-cell>

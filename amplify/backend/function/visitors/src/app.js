@@ -133,8 +133,13 @@ app.post('/v1/validate', (req, res) => {
 });
 app.post('/v1/checkin/:qrId', (req, res) => {
     log.info('new checkin...');
+    if (!hasRequriredFields(req.body)) {
+        res.status(403);
+        res.json('missing parameter');
+    }
     if (!req.header('Authorization')) {
         const error = checkInError_1.CheckInError.create(402, 'token is invalid');
+        log.error(error);
         res.status(error.status);
         res.json(error);
     }
@@ -171,6 +176,9 @@ app.post('/v1/checkin/:qrId', (req, res) => {
         }
     });
 });
+const hasRequriredFields = (body) => {
+    return !!body.firstName && !!body.surName && !!body.address && !!body.city && !!body.zipcode;
+};
 app.get('/v1/checkin', (req, res) => {
     log.info(req);
     res.redirect(`https://app.entry-check.ch/?qrCodeUrl=https%3A%2F%2Fapi.entry-check.ch%2Fv1%2Fcheckin%2${encodeURI(req.url)}`);

@@ -74,7 +74,9 @@ exports.router.post('/:id/bar', (req, res) => {
 exports.router.delete('/:id/bar/:barId', (req, res) => {
     locationstorage.changeActivateLocation(
     // @ts-ignore
-    req.xUser.email, req.params.barId, false).pipe(operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ? rxjs_1.of(inner) : rxjs_1.throwError(inner)), operators_1.mergeMap((location) => rxjs_1.forkJoin([
+    req.xUser.email, req.params.barId, false).pipe(
+    // tap(elem => log.info(elem)),
+    operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ? rxjs_1.of(inner) : rxjs_1.throwError(inner)), operators_1.mergeMap((location) => rxjs_1.forkJoin([
         mappingStorage.deleteMapping(location.checkInCode).pipe(operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ?
             rxjs_1.of(inner) :
             rxjs_1.throwError(inner))),
@@ -84,6 +86,35 @@ exports.router.delete('/:id/bar/:barId', (req, res) => {
         rxjs_1.of(location)
     ]))).subscribe(([qr1, qr2, location]) => {
         res.json(location);
+    }, error => {
+        log.error(error);
+        res.json(error);
+    });
+});
+exports.router.put('/:id/bar/:barId', (req, res) => {
+    log.info({
+        a: req.xUser.email,
+        B: req.params.barId,
+        x: true
+    });
+    locationstorage.changeActivateLocation(
+    // @ts-ignore
+    req.xUser.email, req.params.barId, true).pipe(operators_1.tap(elem => log.info(elem)), operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ? rxjs_1.of(inner) : rxjs_1.throwError(inner)), operators_1.mergeMap((location) => rxjs_1.forkJoin([
+        mappingStorage.createMapping(qrCodeMapping_1.QrCodeMapping.fromLocation(location, location.partnerId, true)).pipe(operators_1.tap(inner => log.info(inner)), operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ?
+            rxjs_1.of(inner) :
+            rxjs_1.throwError(inner))),
+        mappingStorage.createMapping(qrCodeMapping_1.QrCodeMapping.fromLocation(location, location.partnerId, false)).pipe(operators_1.tap(inner => log.info(inner)), operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ?
+            rxjs_1.of(inner) :
+            rxjs_1.throwError(inner))),
+        rxjs_1.of(location)
+    ]))).subscribe(([qr1, qr2, location]) => {
+        log.info(location);
+        log.info(qr2);
+        log.info(qr1);
+        res.json(location);
+    }, error => {
+        log.error(error);
+        res.json(error);
     });
 });
 exports.router.post('/', (req, res) => {
