@@ -22,52 +22,52 @@ export const router = Router();
 router.get(
     '/',
     (req: any, res) => {
-        // @ts-ignore
-        forkJoin([
-            storage.findPartner(req.xUser.email).pipe(
-                switchMap(a => isNotDynamodbError<Partner>(a) ? of(a) : throwError(a)),
-            ),
-            locationstorage.findLocations(req.xUser.email).pipe(
-                switchMap(inner => isNotDynamodbError<Page<Location>>(inner) ? of(inner) : throwError(inner)),
-            ),
-        ]).subscribe(
-            ([partner, locations]) => {
-                partner.locations = locations.Data;
-                log.info(locations);
-                res.json(partner);
-            },
-            error => {
-                log.error(error);
-                res.status(500);
-                res.json(error);
-            }
-        );
+      // @ts-ignore
+      forkJoin([
+        storage.findPartner(req.xUser.email).pipe(
+            switchMap(a => isNotDynamodbError<Partner>(a) ? of(a) : throwError(a)),
+        ),
+        locationstorage.findLocations(req.xUser.email).pipe(
+            switchMap(inner => isNotDynamodbError<Page<Location>>(inner) ? of(inner) : throwError(inner)),
+        ),
+      ]).subscribe(
+          ([partner, locations]) => {
+            partner.locations = locations.Data;
+            log.info(locations);
+            res.json(partner);
+          },
+          error => {
+            log.error(error);
+            res.status(500);
+            res.json(error);
+          }
+      );
     }
 );
 
 router.get(
     '/:id',
     (req: any, res) => {
-        forkJoin([
-            storage.findPartner(req.xUser.email).pipe(
-                switchMap(inner => isNotDynamodbError(inner) ? of(inner) : throwError(inner)),
-            ),
-            locationstorage.findLocations(req.xUser.email).pipe(
-                switchMap(inner => isNotDynamodbError<Page<Location>>(inner) ? of(inner) : throwError(inner)),
-            ),
-        ]).subscribe(
-            ([partner, locations]) => {
-                partner.locations = locations.Data;
-                log.info(locations);
+      forkJoin([
+        storage.findPartner(req.xUser.email).pipe(
+            switchMap(inner => isNotDynamodbError(inner) ? of(inner) : throwError(inner)),
+        ),
+        locationstorage.findLocations(req.xUser.email).pipe(
+            switchMap(inner => isNotDynamodbError<Page<Location>>(inner) ? of(inner) : throwError(inner)),
+        ),
+      ]).subscribe(
+          ([partner, locations]) => {
+            partner.locations = locations.Data;
+            log.info(locations);
 
-                res.json(partner);
-            },
-            error => {
-                log.error(error);
-                res.status(500);
-                res.json(error);
-            }
-        );
+            res.json(partner);
+          },
+          error => {
+            log.error(error);
+            res.status(500);
+            res.json(error);
+          }
+      );
 
     }
 );
@@ -76,83 +76,105 @@ router.get(
 router.post(
     '/:id/bar',
     (req, res) => {
-        const location = Location.fromRequest(req);
-        log.info(location);
-        if (!location.locationId) {
-            res.status(409);
-            res.json(location);
-        }
-        forkJoin([
-            locationstorage.createLocation(location),
-            mappingStorage.createMapping(QrCodeMapping.fromLocation(
-                location,
-                location.partnerId,
-                true
-            )),
-            mappingStorage.createMapping(QrCodeMapping.fromLocation(
-                location,
-                location.partnerId,
-                false
-            ))
-        ]).pipe(
-            switchMap(([partner, qr1, qr2]) => {
-                if (!isNotDynamodbError(partner)) return throwError(partner);
-                if (!isNotDynamodbError(qr1)) return throwError(qr1);
-                if (!isNotDynamodbError(qr2)) return throwError(qr2);
-                return of(location);
-            })
-        ).subscribe(
-            (location) => {
-                res.json(location);
-            },
-            (error) => {
-                res.status(500);
-                res.json(error);
-            }
-        );
-    }
-);
-
-router.delete(
-    '/:id/bar/:barId',
-    (req, res) => {
-
-
-        locationstorage.changeActivateLocation(
-            // @ts-ignore
-            req.xUser.email,
-            req.params.barId,
+      const location = Location.fromRequest(req);
+      log.info(location);
+      if (!location.locationId) {
+        res.status(409);
+        res.json(location);
+      }
+      forkJoin([
+        locationstorage.createLocation(location),
+        mappingStorage.createMapping(QrCodeMapping.fromLocation(
+            location,
+            location.partnerId,
+            true
+        )),
+        mappingStorage.createMapping(QrCodeMapping.fromLocation(
+            location,
+            location.partnerId,
             false
-        ).pipe(
-            switchMap((inner) => isNotDynamodbError<Partial<Location>>(inner) ? of(inner) : throwError(inner)),
-            mergeMap((location) => forkJoin([
-                mappingStorage.deleteMapping(location.checkInCode).pipe(
-                    switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
-                                         of(inner) :
-                                         throwError(inner)),
-                ),
-                mappingStorage.deleteMapping(location.checkOutCode).pipe(
-                    switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
-                                         of(inner) :
-                                         throwError(inner)),
-                ),
-                of(location)
-            ]))
-        ).subscribe(([qr1, qr2, location]) => {
+        ))
+      ]).pipe(
+          switchMap(([partner, qr1, qr2]) => {
+            if (!isNotDynamodbError(partner)) return throwError(partner);
+            if (!isNotDynamodbError(qr1)) return throwError(qr1);
+            if (!isNotDynamodbError(qr2)) return throwError(qr2);
+            return of(location);
+          })
+      ).subscribe(
+          (location) => {
             res.json(location);
-        });
-
+          },
+          (error) => {
+            res.status(500);
+            res.json(error);
+          }
+      );
     }
 );
+
+router.delete('/:id/bar/:barId', (req, res) => {
+      locationstorage.changeActivateLocation(
+          // @ts-ignore
+          req.xUser.email,
+          req.params.barId,
+          false
+      ).pipe(
+          switchMap((inner) => isNotDynamodbError<Partial<Location>>(inner) ? of(inner) : throwError(inner)),
+          mergeMap((location) => forkJoin([
+            mappingStorage.deleteMapping(location.checkInCode).pipe(
+                switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
+                                     of(inner) :
+                                     throwError(inner)),
+            ),
+            mappingStorage.deleteMapping(location.checkOutCode).pipe(
+                switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
+                                     of(inner) :
+                                     throwError(inner)),
+            ),
+            of(location)
+          ]))
+      ).subscribe(([qr1, qr2, location]) => {
+        res.json(location);
+      });
+    }
+);
+
+router.put('/:id/bar/:barId', (req, res) => {
+  locationstorage.changeActivateLocation(
+      // @ts-ignore
+      req.xUser.email,
+      req.params.barId,
+      true
+  ).pipe(
+      switchMap((inner) => isNotDynamodbError<Partial<Location>>(inner) ? of(inner) : throwError(inner)),
+      mergeMap((location: Location) => forkJoin([
+        mappingStorage.createMapping(QrCodeMapping.fromLocation(location, location.partnerId, true)).pipe(
+            switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
+                                 of(inner) :
+                                 throwError(inner)),
+        ),
+        mappingStorage.createMapping(QrCodeMapping.fromLocation(location, location.partnerId, false)).pipe(
+            switchMap((inner) => isNotDynamodbError<Partial<QrCodeMapping>>(inner) ?
+                                 of(inner) :
+                                 throwError(inner)),
+        ),
+        of(location)
+      ]))
+  ).subscribe(([qr1, qr2, location]) => {
+    res.json(location);
+  });
+})
+
 
 router.post(
     '/',
     (req, res) => {
-        storage.createPartner(
-            Partner.fromRequest(req)
-        ).subscribe(success => {
-            res.json(success);
-        });
+      storage.createPartner(
+          Partner.fromRequest(req)
+      ).subscribe(success => {
+        res.json(success);
+      });
 
     }
 );

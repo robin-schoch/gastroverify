@@ -117,6 +117,20 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
+    activateLocation(location: Location) {
+      this.gastroService.activateLocation(location).subscribe(
+          elem => {
+            const p = this.gastroService.gastro;
+            p.locations = [...p.locations.filter(l => l.locationId !== location.locationId)];
+            this.gastroService.gastro = Object.assign(
+                {},
+                p
+            );
+          },
+          error => console.log(error)
+      )
+    }
+
     selectBar(row: Location) {
         this.dialog.open(
             EntryBrowserComponent,
@@ -137,6 +151,22 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
                 autoFocus: false,
                 width: '250px',
                 data: {message: 'Standort ' + location.name + ' löschen? Alle gespeicherten Eintritte gehen verloren!'}
+            }
+        );
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.deleteLocation(location);
+            }
+
+        });
+    }
+    openConfirmDialogActive(location: Location): void {
+        const dialogRef = this.dialog.open(
+            ConfirmdialogComponent,
+            {
+                autoFocus: false,
+                width: '250px',
+                data: {message: 'Standort ' + location.name + ' wieder aktivieren?'}
             }
         );
         dialogRef.afterClosed().subscribe(result => {

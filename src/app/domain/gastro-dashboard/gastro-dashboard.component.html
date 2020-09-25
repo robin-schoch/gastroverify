@@ -26,14 +26,14 @@
                     <mat-table  [dataSource]="partner.locations" fxFlex>
                         <!-- Name Column -->
                         <ng-container matColumnDef="Name">
-                            <mat-header-cell  *matHeaderCellDef> {{'location.name' | translate}}</mat-header-cell>
-                            <mat-cell  *matCellDef="let element"> {{element.name}} </mat-cell>
+                            <mat-header-cell *matHeaderCellDef> {{'location.name' | translate}}</mat-header-cell>
+                            <mat-cell  *matCellDef="let element" [class.disabled-cell]="!element.active" > {{element.name}} </mat-cell>
                         </ng-container>
 
                         <!-- Delete Column -->
                         <ng-container matColumnDef="Entries">
                             <mat-header-cell *matHeaderCellDef>{{'location.entries' | translate}}</mat-header-cell>
-                            <mat-cell  *matCellDef="let element">
+                            <mat-cell [class.disabled-cell]="!element.active" *matCellDef="let element">
                                 <button mat-raised-button color="primary" (click)="selectBar(element)">
                                     {{'location.entries' | translate}}
                                 </button>
@@ -43,9 +43,9 @@
 
                         <ng-container matColumnDef="QRCodes">
                             <mat-header-cell *matHeaderCellDef>{{'location.qrcode' | translate}}</mat-header-cell>
-                            <mat-cell  *matCellDef="let element">
+                            <mat-cell [class.disabled-cell]="!element.active" *matCellDef="let element">
                                 <button mat-raised-button color="primary"
-                                        (click)="openQRCodeDialog(element)">
+                                        (click)="openQRCodeDialog(element)" [disabled]="!element.active">
                                     <mat-icon>qr_code_2</mat-icon>
                                 </button>
                             </mat-cell>
@@ -53,9 +53,12 @@
 
                         <ng-container matColumnDef="Delete">
                             <mat-header-cell  *matHeaderCellDef></mat-header-cell>
-                            <mat-cell  *matCellDef="let element">
-                                <button mat-icon-button color="warn" (click)="openConfirmDialog(element)">
+                            <mat-cell [class.disabled-cell]="!element.active" *matCellDef="let element">
+                                <button mat-raised-button color="warn" (click)="openConfirmDialog(element)" *ngIf="element.active">
                                     <mat-icon>delete</mat-icon>
+                                </button>
+                                <button mat-raised-button color="warn" (click)="openConfirmDialog(element)" *ngIf="!element.active">
+                                    <mat-icon>rotate_right</mat-icon>
                                 </button>
                             </mat-cell>
                         </ng-container>
