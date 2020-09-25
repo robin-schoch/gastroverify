@@ -7,179 +7,180 @@ import {filter} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthenticationService {
 
-    /***************************************************************************
-     *                                                                         *
-     * Fields                                                                  *
-     *                                                                         *
-     **************************************************************************/
+  /***************************************************************************
+   *                                                                         *
+   * Fields                                                                  *
+   *                                                                         *
+   **************************************************************************/
 
-    private _isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
-    private _activeUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
-    private _role$: BehaviorSubject<string[]> = new BehaviorSubject<any>([]);
+  private _isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+  private _activeUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
+  private _role$: BehaviorSubject<string[]> = new BehaviorSubject<any>([]);
 
-    private _signUpUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
+  private _signUpUser$: BehaviorSubject<CognitoUser | any> = new BehaviorSubject<CognitoUser | any>(null);
 
-    /***************************************************************************
-     *                                                                         *
-     * Constructor                                                             *
-     *                                                                         *
-     **************************************************************************/
+  /***************************************************************************
+   *                                                                         *
+   * Constructor                                                             *
+   *                                                                         *
+   **************************************************************************/
 
-    constructor(
-        private router: Router
-    ) {
+  constructor(
+      private router: Router
+  ) {
 
-        this.setUser();
-    }
+    this.setUser();
+  }
 
-    /***************************************************************************
-     *                                                                         *
-     * Public API                                                              *
-     *                                                                         *
-     **************************************************************************/
+  /***************************************************************************
+   *                                                                         *
+   * Public API                                                              *
+   *                                                                         *
+   **************************************************************************/
 
-    public setUser() {
-        Auth.currentAuthenticatedUser().then(user => {
-            this.activeUser = <CognitoUser>user;
-            this.isAuthenticated = true;
-            const r = user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups'];
-            console.log('Active user: ' + user.username);
-        }).catch(elem => {
-            this.isAuthenticated = false;
-            console.log('no active user');
-        });
-    }
+  public setUser() {
+    Auth.currentAuthenticatedUser().then(user => {
+      this.activeUser = <CognitoUser>user;
+      this.isAuthenticated = true;
+      const r = user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups'];
+      this.setRoles(r)
+      console.log('Active user: ' + user.username);
+    }).catch(elem => {
+      this.isAuthenticated = false;
+      console.log('no active user');
+    });
+  }
 
-    public signOut(): void {
-        Auth.signOut({global: true}).then(logout => {
-            this.isAuthenticated = false;
-            this.activeUser = null;
-            this.router.navigate(['/']);
+  public signOut(): void {
+    Auth.signOut({global: true}).then(logout => {
+      this.isAuthenticated = false;
+      this.activeUser = null;
+      this.router.navigate(['/']);
 
-        });
-    }
+    });
+  }
 
-    public signIn(username, password): void {
-        Auth.signIn(
-            username,
-            password
-        ).then(user => {
-            this.isAuthenticated = user;
-            this.isAuthenticated = true;
-        }).catch(error => {
-                console.log(error);
-            }
-        );
-    }
-
-    public signUp(signUp: SignUp): boolean {
-        if (signUp.email && signUp.password) {
-            Auth.signUp(this.toAWSSignUp(signUp)).then(user => {
-                this.signUpUser = user.user;
-            }).catch(error => this.signUpUser = error);
-            return true;
+  public signIn(username, password): void {
+    Auth.signIn(
+        username,
+        password
+    ).then(user => {
+      this.isAuthenticated = user;
+      this.isAuthenticated = true;
+    }).catch(error => {
+          console.log(error);
         }
-        return false;
+    );
+  }
 
+  public signUp(signUp: SignUp): boolean {
+    if (signUp.email && signUp.password) {
+      Auth.signUp(this.toAWSSignUp(signUp)).then(user => {
+        this.signUpUser = user.user;
+      }).catch(error => this.signUpUser = error);
+      return true;
     }
+    return false;
 
-    public confirmSignUp(code, user: SignUp): Observable<any> {
-        const confirmationSucceded = new Subject();
-        Auth.confirmSignUp(
-            this._signUpUser$.getValue().username,
-            code
-        )
-            .then(elem => {
-                confirmationSucceded.next('success');
-                const signUpUserSnapshto = this._signUpUser$.getValue();
+  }
 
-                this.signIn(
-                    user.email,
-                    user.password
-                );
-                confirmationSucceded.complete();
-            })
-            .catch(error => {
-                confirmationSucceded.next('error');
-                confirmationSucceded.complete();
-                console.log(error);
-            });
-        return confirmationSucceded.asObservable();
-    }
+  public confirmSignUp(code, user: SignUp): Observable<any> {
+    const confirmationSucceded = new Subject();
+    Auth.confirmSignUp(
+        this._signUpUser$.getValue().username,
+        code
+    )
+        .then(elem => {
+          confirmationSucceded.next('success');
+          const signUpUserSnapshto = this._signUpUser$.getValue();
 
-    public changePassword(oldPw, newPw) {
-        Auth.changePassword(
-            this._activeUser$.getValue(),
-            oldPw,
-            newPw
-        )
-            .then(elem => console.log(elem))
-            .catch(elem => console.log(elem));
-    }
+          this.signIn(
+              user.email,
+              user.password
+          );
+          confirmationSucceded.complete();
+        })
+        .catch(error => {
+          confirmationSucceded.next('error');
+          confirmationSucceded.complete();
+          console.log(error);
+        });
+    return confirmationSucceded.asObservable();
+  }
 
-    /***************************************************************************
-     *                                                                         *
-     * Getters / Setters                                                       *
-     *                                                                         *
-     **************************************************************************/
+  public changePassword(oldPw, newPw) {
+    Auth.changePassword(
+        this._activeUser$.getValue(),
+        oldPw,
+        newPw
+    )
+        .then(elem => console.log(elem))
+        .catch(elem => console.log(elem));
+  }
 
-    public get isAuthenticated$(): Observable<boolean> {
-        return this._isAuthenticated$.pipe(filter(state => state !== null));
-    }
+  /***************************************************************************
+   *                                                                         *
+   * Getters / Setters                                                       *
+   *                                                                         *
+   **************************************************************************/
 
-    public get activeUser$(): Observable<CognitoUser> {
-        return this._activeUser$.pipe(filter(user => !!user));
-    }
+  public get isAuthenticated$(): Observable<boolean> {
+    return this._isAuthenticated$.pipe(filter(state => state !== null));
+  }
 
-    public get isAuthenticated(): boolean {
-        return this._isAuthenticated$.getValue();
-    }
+  public get activeUser$(): Observable<CognitoUser> {
+    return this._activeUser$.pipe(filter(user => !!user));
+  }
 
-    public set isAuthenticated(isAuthenticated: boolean) {
-        this._isAuthenticated$.next(isAuthenticated);
-    }
+  public get isAuthenticated(): boolean {
+    return this._isAuthenticated$.getValue();
+  }
 
-    public set activeUser(user: CognitoUser) {
-        this._activeUser$.next(user);
-    }
+  public set isAuthenticated(isAuthenticated: boolean) {
+    this._isAuthenticated$.next(isAuthenticated);
+  }
 
-    public set signUpUser(user: CognitoUser | any) {
-        this._signUpUser$.next(user);
-    }
+  public set activeUser(user: CognitoUser) {
+    console.log(user);
+    this._activeUser$.next(user);
+  }
 
-    public get role$(): Observable<string[]> {
-        return this._role$.asObservable();
-    }
+  public set signUpUser(user: CognitoUser | any) {
+    this._signUpUser$.next(user);
+  }
 
-    public set role(roles: string[]) {
-        console.log('devoded : ' + roles);
-        this._role$.next(roles);
-    }
+  public get role$(): Observable<string[]> {
+    return this._role$.asObservable();
+  }
 
-    /***************************************************************************
-     *                                                                         *
-     * Private methods                                                         *
-     *                                                                         *
-     **************************************************************************/
+  public set role(roles: string[]) {
+    console.log('devoded : ' + roles);
+    this._role$.next(roles);
+  }
+
+  /***************************************************************************
+   *                                                                         *
+   * Private methods                                                         *
+   *                                                                         *
+   **************************************************************************/
 
 
 
-    private toAWSSignUp(signUp: SignUp): any {
-        return {
-            username: signUp.email,
-            password: signUp.password,
-            attributes: {
-                email: signUp.email
-            }
-        };
-    }
+  private toAWSSignUp(signUp: SignUp): any {
+    return {
+      username: signUp.email,
+      password: signUp.password,
+      attributes: {
+        email: signUp.email
+      }
+    };
+  }
 
-    setRoles(decodePayloadElement: any) {
-
-        this.role = decodePayloadElement;
-    }
+  setRoles(decodePayloadElement: any[] | undefined) {
+    this.role = !decodePayloadElement ? [] : decodePayloadElement
+  }
 }
