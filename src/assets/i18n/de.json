@@ -8,7 +8,8 @@
     "save": "Speichern",
     "signin": "Anmelden",
     "report": "Report",
-    "admin": "Administration"
+    "admin": "Administration",
+    "deletedAt": "Gelöscht am:"
   },
   "location": {
     "id": "Standort ID",

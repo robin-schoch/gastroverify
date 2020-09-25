@@ -11,7 +11,6 @@ if (environment.production) {
     enableProdMode();
 }
 
-console.log('main');
 let config = Object.assign(
     {},
     awsconfig,
@@ -29,10 +28,8 @@ config.aws_cloud_logic_custom[0] = Object.assign(
         }
     }
 );
-console.log(config);
-console.log('succ');
+
 const a = API.configure(config);
-console.log(a);
 
 
 platformBrowserDynamic().bootstrapModule(AppModule)

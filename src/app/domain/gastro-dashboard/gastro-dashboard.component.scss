@@ -2,13 +2,19 @@
 
   overflow: auto;
 }
+
 .example-spacer {
   flex: 1 1 auto;
 }
 
 
 .mat-column-Entries, .mat-column-QRCodes,
-.mat-column-Delete, .mat-column-Name{
+.mat-column-Delete, .mat-column-Name {
   min-width: 200px;
 
+}
+
+.disabled-cell {
+  background-color: #f3f3f3;
+  color: grey;
 }
