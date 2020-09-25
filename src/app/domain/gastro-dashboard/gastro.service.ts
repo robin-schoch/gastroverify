@@ -26,7 +26,8 @@ export interface Location {
   active: boolean,
   type: string,
   senderID: string,
-  smsText: string
+  smsText: string,
+  timeToLive?: number
 }
 
 

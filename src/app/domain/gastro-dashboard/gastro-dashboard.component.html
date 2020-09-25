@@ -1,9 +1,8 @@
-<div fxFill fxLayoutGap="10px"  fxLayout="column">
+<div fxFill fxLayoutGap="10px" fxLayout="column">
 
     <app-spinner [data$]="partner$"></app-spinner>
 
     <div fxLayout="row" fxFlex fxLayoutGap="10px" *ngIf="partner$ | async as partner">
-
 
 
         <div class="mat-elevation-z8" fxFlex fxLayout="column">
@@ -23,11 +22,17 @@
             </div>
             <div fxFlex *ngIf="partner.locations?.length > 0">
                 <div *ngIf="!!partner.locations || partner.locations?.length > 0" class="example-container" fxFlex>
-                    <mat-table  [dataSource]="partner.locations" fxFlex>
+                    <mat-table [dataSource]="partner.locations" fxFlex>
                         <!-- Name Column -->
                         <ng-container matColumnDef="Name">
                             <mat-header-cell *matHeaderCellDef> {{'location.name' | translate}}</mat-header-cell>
-                            <mat-cell  *matCellDef="let element" [class.disabled-cell]="!element.active" > {{element.name}} </mat-cell>
+                            <mat-cell *matCellDef="let element" [class.disabled-cell]="!element.active">
+                                <div fxLayout="column">
+                                    <span>{{element.name}} </span>
+                                    <span *ngIf="!element.active">{{'context.deletedAt' | translate}} {{element.timeToLive * 1000 | date: 'medium'}}</span>
+                                </div>
+
+                            </mat-cell>
                         </ng-container>
 
                         <!-- Delete Column -->
@@ -52,19 +57,21 @@
                         </ng-container>
 
                         <ng-container matColumnDef="Delete">
-                            <mat-header-cell  *matHeaderCellDef></mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
                             <mat-cell [class.disabled-cell]="!element.active" *matCellDef="let element">
-                                <button mat-raised-button color="warn" (click)="openConfirmDialog(element)" *ngIf="element.active">
+                                <button mat-raised-button color="warn" (click)="openConfirmDialog(element)"
+                                        *ngIf="element.active">
                                     <mat-icon>delete</mat-icon>
                                 </button>
-                                <button mat-raised-button color="warn" (click)="openConfirmDialogActive(element)" *ngIf="!element.active">
+                                <button mat-raised-button color="warn" (click)="openConfirmDialogActive(element)"
+                                        *ngIf="!element.active">
                                     <mat-icon>rotate_right</mat-icon>
                                 </button>
                             </mat-cell>
                         </ng-container>
 
-                        <mat-header-row  *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-                        <mat-row  *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                     </mat-table>
 
                 </div>
