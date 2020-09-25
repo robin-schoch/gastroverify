@@ -19,7 +19,7 @@
                 <span>{{'context.report' | translate}}</span>
             </mat-list-option>
 
-            <mat-list-option routerLink="/admin"  (click)="sidenav.toggle()" *ngIf="(isAdmin$ | async)">
+            <mat-list-option routerLink="/admin"  (click)="sidenav.toggle()" *ngIf="isAdmin$ | async as admin">
                 <mat-icon mat-list-icon color="accent">admin_panel_settings</mat-icon>
                 <span>{{'context.admin' | translate}}</span>
             </mat-list-option>

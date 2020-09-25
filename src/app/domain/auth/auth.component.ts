@@ -37,9 +37,7 @@ export class AuthComponent implements OnInit , OnDestroy{
     ngOnInit() {
 
         onAuthUIStateChange((authState, authData) => {
-            console.log("hurra")
-            console.log(authData);
-            console.log(authState);
+
             if (authState === 'signedin') {
                 this.authService.isAuthenticated = true;
                 this.authService.activeUser = authData as CognitoUser;
