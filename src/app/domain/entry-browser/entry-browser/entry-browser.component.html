@@ -19,7 +19,7 @@
 
     <div class="example-container" fxLayout="column" *ngIf="data$ | async as data">
         <!--     -->
-        <mat-table [dataSource]="data.Data" fxFlex>
+        <mat-table [dataSource]="data.Data" *ngIf="displayedColumns$ | async as displayedColumns" fxFlex>
 
 
             <ng-container matColumnDef="Checkin">
@@ -66,8 +66,8 @@
 
 
             <ng-container matColumnDef="Email">
-                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.email' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                <mat-header-cell mat-header-cell *matHeaderCellDef>{{selectedbar.type}}</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{mapNumber(element.tableNumber)}} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
