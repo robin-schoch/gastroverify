@@ -93,6 +93,14 @@
                     ]
                 },
                 {
+                    "category": "storage",
+                    "resourceName": "Location",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
                     "category": "auth",
                     "resourceName": "gastroverifyd8b8759f",
                     "attributes": [
@@ -137,6 +145,14 @@
                         "Name",
                         "Arn"
                     ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Location",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
                 }
             ]
         },
@@ -168,6 +184,14 @@
                         "Name",
                         "Arn"
                     ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Location",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
                 }
             ]
         },
@@ -187,6 +211,14 @@
                 {
                     "category": "storage",
                     "resourceName": "QRMapping",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "storage",
+                    "resourceName": "Location",
                     "attributes": [
                         "Name",
                         "Arn"
@@ -262,6 +294,10 @@
             "providerPlugin": "awscloudformation"
         },
         "MonthlyReport": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "Location": {
             "service": "DynamoDB",
             "providerPlugin": "awscloudformation"
         }

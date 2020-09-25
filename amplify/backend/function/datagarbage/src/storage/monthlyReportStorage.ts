@@ -1,28 +1,27 @@
+import {Bill} from '../domain/bill';
+
 const AWS = require('aws-sdk')
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-//const moment = require('moment');
 
 
-let tableName = "Partner";
+// add dev if local
+let tableName = "MonthlyReport";
+
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
 } else if (process.env.ENV === undefined) {
     tableName = tableName + '-dev'
 }
+const partitionKeyName = "partnerId";
+const sortkeyName = "billingDate";
 
-const partitionKeyName = "email";
 
-const scanPartner = (lastEvaluatedKey) => {
 
-    let scanItem = {
-        TableName: tableName,
-        ExclusiveStartKey: lastEvaluatedKey,
-        Limit: 1000000
-    }
 
+const putBill = (bill) => {
     return new Promise(((resolve, reject) => {
-        dynamodb.scan(scanItem, ((err, data) => {
+        dynamodb.put(bill, ((err, data) => {
             if (err) {
                 reject(err)
             } else {
@@ -30,9 +29,15 @@ const scanPartner = (lastEvaluatedKey) => {
             }
         }))
     }))
+
+}
+
+export const createBill = (bill) => {
+    let putItemParams = {
+        TableName: tableName,
+        Item: bill
+    }
+    return putBill(putItemParams)
 }
 
 
-module.exports = {
-    scanPartner
-}

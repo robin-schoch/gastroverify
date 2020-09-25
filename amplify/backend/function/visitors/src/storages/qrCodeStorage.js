@@ -1,50 +1,15 @@
-const AWS = require('aws-sdk')
-AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-
-const moment = require('moment');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.qrCodeStorage = void 0;
+const dynamoDbDriver_1 = require("../util/dynamoDbDriver");
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({name: "qrCodeStorage", src: true});
-
-
-// add dev if local
-let tableName = "QRMapping";
-
-if (process.env.ENV && process.env.ENV !== "NONE") {
-    tableName = tableName + '-' + process.env.ENV;
-} else if (process.env.ENV === undefined) {
-    tableName = tableName + '-dev'
-}
-const partitionKeyName = "qrId";
-
-const get = (getParams) => {
-    return new Promise((resolve, reject) => {
-        dynamodb.query(getParams, (err, data) => {
-            if (err || !data.Items || data.Items.length < 1) {
-                reject(err)
-            } else {
-                resolve(data.Items[0])
-            }
-        })
-    })
-}
-
-
-const getQrCode = (qrCode) => {
-
-    let getItemParams = {
-        TableName: tableName,
-        ExpressionAttributeValues: {
-            ':qrCode': qrCode,
-        },
-        KeyConditionExpression: `${partitionKeyName} = :qrCode`,
-        ProjectionExpression: 'checkIn, locationName, locationId, senderID, smsText',
-        Limit: 1,
+const log = bunyan.createLogger({ name: 'qrCodeStorage', src: true });
+class qrCodeStorage {
+    constructor() {
+        this.dbConnection = new dynamoDbDriver_1.DbConnection('QRMapping', 'qrId');
     }
-    return get(getItemParams)
+    findMapping(qrId) {
+        return this.dbConnection.findById(qrId);
+    }
 }
-
-
-module.exports = {
-    getQrCode
-}
+exports.qrCodeStorage = qrCodeStorage;

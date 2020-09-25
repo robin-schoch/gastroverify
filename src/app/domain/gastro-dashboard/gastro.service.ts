@@ -24,6 +24,7 @@ export interface Location {
     checkOutCode: string,
     checkInCode: string,
     active: boolean,
+    type: string,
     senderID: string,
     smsText: string
 }
@@ -61,9 +62,14 @@ export class GastroService {
 
     public set gastro(gastro: Partner) {
         if (!!gastro) gastro.locations = gastro.locations.filter(location => location.active);
-        console.log(gastro.locations)
+        console.log(gastro.locations);
 
         this._gastro$.next(gastro);
+    }
+
+    public get gastro(): Partner {
+
+        return this._gastro$.value;
     }
 
     public get error$(): any {
@@ -102,14 +108,14 @@ export class GastroService {
         }
     }
 
-    addBar(location: Location): Observable<Partner> {
+    addBar(location: Location): Observable<Location> {
 
         let body = Object.assign(
             {},
             this.myInit
         );
         body['body'] = location;
-        return this.amplifyHttpClient.post<Partner>(
+        return this.amplifyHttpClient.post<Location>(
             this.apiName,
             '/v1/gastro/me/bar',
             body

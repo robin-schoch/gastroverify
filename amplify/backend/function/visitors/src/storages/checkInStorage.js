@@ -1,43 +1,18 @@
-const AWS = require('aws-sdk')
-AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-const moment = require('moment');
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkInStorage = void 0;
+const dynamoDbDriver_1 = require("../util/dynamoDbDriver");
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({name: "checkInStorage", src: true});
-
-// add dev if local
-let tableName = "Entrance";
-
-if (process.env.ENV && process.env.ENV !== "NONE") {
-  tableName = tableName + '-' + process.env.ENV;
-} else if (process.env.ENV === undefined) {
-  tableName = tableName + '-dev'
+const log = bunyan.createLogger({ name: 'checkInStorage', src: true });
+class checkInStorage {
+    constructor() {
+        this.dbConnection = new dynamoDbDriver_1.DbConnection('Entrance', 'locationId', 'entryTime');
+    }
+    findEntry(locationId, entryTime) {
+        return this.dbConnection.findById(locationId, entryTime);
+    }
+    createEntry(checkin) {
+        return this.dbConnection.putItem(checkin);
+    }
 }
-const partitionKeyName = "locationId";
-const sortKeyName = "entryTime";
-
-
-const insertCheckInData = (item) => {
-  let putItemParams = {
-    TableName: tableName,
-    Item: item
-  }
-
-  // return new Promise(((resolve, reject) => resolve(putItemParams)))
-  return new Promise((resolve, reject) => {
-    dynamodb.put(putItemParams, (err, data) => {
-      if (err) {
-
-        reject(err)
-      } else {
-
-        resolve(putItemParams.Item)
-      }
-    });
-  })
-}
-
-module.exports.addCheckIn = (checkIn) => {
-  return insertCheckInData(Object.assign({}, checkIn, {}))
-}
+exports.checkInStorage = checkInStorage;

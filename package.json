@@ -11,6 +11,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "amplify:typescripttest": "cd amplify/backend/function/typescripttest/src && tsc",
+    "amplify:dailyReport": "cd amplify/backend/function/dailyReport/src && tsc",
+    "amplify:datagarbage": "cd amplify/backend/function/datagarbage/src && tsc",
+    "amplify:visitors": "cd amplify/backend/function/visitors/src && tsc",
     "amplify:gastro": "cd amplify/backend/function/gastro/src && tsc"
   },
   "private": true,

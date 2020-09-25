@@ -1,0 +1,7 @@
+{
+    "tableName": "Location",
+    "partitionKeyName": "partnerId",
+    "partitionKeyType": "S",
+    "sortKeyName": "locationId",
+    "sortKeyType": "S"
+}

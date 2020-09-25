@@ -27,7 +27,8 @@
     "street": "Street + number",
     "city": "City",
     "zip": "Zipcode",
-    "add": "Add"
+    "add": "Add",
+    "type": "Separation of location"
   },
   "entry": {
     "title": "Entries",

@@ -1,38 +1,33 @@
-const AWS = require('aws-sdk')
-AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'})
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getEntries = void 0;
+const AWS = require('aws-sdk');
+AWS.config.update({ region: process.env.TABLE_REGION || 'eu-central-1' });
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-
 const moment = require('moment');
-
-
 // add dev if local
 let tableName = "Entrance";
-
 if (process.env.ENV && process.env.ENV !== "NONE") {
     tableName = tableName + '-' + process.env.ENV;
-} else if (process.env.ENV === undefined) {
-    tableName = tableName + '-dev'
+}
+else if (process.env.ENV === undefined) {
+    tableName = tableName + '-dev';
 }
 const partitionKeyName = "locationId";
 const sortkeyName = "entryTime";
-
 const query = (queryParams) => {
-
     return new Promise((resolve, reject) => {
-
         dynamodb.query(queryParams, (err, data) => {
-
             if (err) {
-                reject(err)
-            } else {
-                resolve({value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey})
+                reject(err);
             }
-        })
-    })
-}
-
-const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
-
+            else {
+                resolve({ value: data.Items, lastEvaluatedKey: data.LastEvaluatedKey });
+            }
+        });
+    });
+};
+exports.getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
     const queryParams = {
         ExpressionAttributeValues: {
             ':location': id,
@@ -45,11 +40,6 @@ const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
         ExclusiveStartKey: LastEvaluatedKey,
         TableName: tableName
     };
-    let a = query(queryParams)
-
-    return a
-}
-
-module.exports = {
-    getEntries
-}
+    let a = query(queryParams);
+    return a;
+};

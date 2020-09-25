@@ -10,6 +10,7 @@ export interface IQRCodeGeneratorData {
     url: string,
     text: string,
     name: string,
+    type: string,
 }
 
 
@@ -38,7 +39,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
     ];
     private loadingTracker: Subject<void> = new Subject<void>();
     public isLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private tableNumber$: BehaviorSubject<number> = new BehaviorSubject<number>(null);
+    private tableNumber$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
     public tableEnabled: boolean = false;
     public tableNr: string = "";
 
@@ -90,7 +91,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
         }
     }
 
-    generateCode(table?: number) {
+    generateCode(table?: string) {
 
         let sub = new Subject();
         let qrCodeImage = new Image(
@@ -134,7 +135,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
         this.loadingTracker.next();
     }
 
-    generateImage(table?: number) {
+    generateImage(table?: string) {
 
         this.generateCode(table).subscribe(elem => {
             this.ctx.drawImage(
@@ -152,7 +153,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
                 this.ctx.font = 'bold 40px Arial';
                 this.ctx.textAlign = 'center';
                 this.ctx.fillText(
-                    'Tisch ' + table,
+                    `${this.data.type} ${table}`,
                     200,
                     545
                 );
@@ -170,7 +171,7 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
 
     }
 
-    generateUrlWithTable(code: string, table: number) {
+    generateUrlWithTable(code: string, table: string) {
         let query = environment.qrBaseURL + code + '&table=' + table;
         // console.log(query);
         return encodeURI(query);
@@ -194,6 +195,6 @@ export class QrCodeGeneratorDialogComponent implements OnInit, AfterViewInit {
 
     setTableNumber(value: string) {
 
-        this.tableNumber$.next(Number(value));
+        this.tableNumber$.next(value);
     }
 }
