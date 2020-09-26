@@ -63,9 +63,8 @@ export class GastroService {
 
   public set gastro(gastro: Partner) {
     if (!!gastro) gastro.locations = gastro.locations.sort((l1, l2) => Number(l2.active) - Number(l1.active));
-    console.log(gastro.locations);
 
-    this._gastro$.next(gastro);
+    this._gastro$.next(Object.assign({}, gastro));
   }
 
   public get gastro(): Partner {
