@@ -95,6 +95,7 @@ router.post(
           })
       ).subscribe(
           (location) => {
+            log.info(location);
             res.json(location);
           },
           error => handleError(res, error));
