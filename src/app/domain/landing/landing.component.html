@@ -1,5 +1,6 @@
 <div class="main-landing" fxLayout="column">
 
+    <!--
     <div class="top-banner" fxLayout="row" fxLayoutAlign="space-between center">
         <div fxLayoutAlign="center center" fxLayoutGap="20px">
             <img src="assets/circle-cropped.png" style="max-height: 40px">
@@ -8,20 +9,38 @@
         <button mat-flat-button color="primary" class="login-button"
                 (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
     </div>
-
+-->
     <div fxFill fxLayoutAlign="center center" fxlayout="column">
-        <h1 class="main-title">
-            Entry Check
-        </h1>
 
+        <mat-grid-list cols="{{topGridTiles | async}}" fxFlex>
+            <mat-grid-tile>
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <span>Entry Check - check your entries</span>
+                    <span>Entry Check - check your entries</span>
+                    <button mat-flat-button>login</button>
+                </div>
 
-        <h1>
-            Check your entries
-        </h1>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <div class="success-checkmark" style="min-height: 115px;">
+                    <div class="check-icon">
+                        <span class="icon-line line-tip"></span>
+                        <span class="icon-line line-long"></span>
+                        <div class="icon-circle"></div>
+                        <div class="icon-fix"></div>
+                    </div>
+                </div>
+            </mat-grid-tile>
+
+        </mat-grid-list>
+
 
     </div>
 
 </div>
+
+
 <div class="second-landing">
 
     <mat-grid-list rowHeight="300px" cols="{{gridTiles | async}}" fxFlex gutterSize="30px" class="info-grid">

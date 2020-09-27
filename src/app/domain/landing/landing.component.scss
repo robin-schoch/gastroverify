@@ -1,8 +1,9 @@
 .main-landing {
   height: 100vh;
 
-  background: url("../../../assets/background.svg");
-  background-color: #FFA357;
+  // background: url("../../../assets/background.svg");
+  // background-color: #3cd1f7;
+  background-image: linear-gradient(to right, #3cd1f7, #89eb99);
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0.9;
@@ -20,7 +21,6 @@
 }
 
 
-
 .landing-banner-title {
   font-weight: bold;
   color: white;
@@ -31,13 +31,13 @@
 
 }
 
-.second-landing{
+.second-landing {
   background-color: #FFC1C1;
   margin: -10px;
   max-width: 100vw;
 }
 
-.footer-landing{
+.footer-landing {
   background-color: black;
   height: 30vh;
   margin: -10px;
@@ -51,6 +51,7 @@
   font-size: 100px;
   color: white;
 }
+
 .mat-grid-tile {
   padding: 10px;
 }
@@ -69,3 +70,217 @@
 .example-header-image {
 
 }
+
+@keyframes open {
+  from {
+    top: 100%
+  }
+  to {
+    top: 0%;
+  }
+}
+
+
+/**
+ * Extracted from: SweetAlert
+ * Modified by: Istiak Tridip
+ */
+.success-checkmark {
+  $size: 300px;
+  $modi: ($size / 80);
+
+  width: $size;
+  height: $size + 50;
+  margin: 0 auto;
+
+  .check-icon {
+    width: $size;
+    height: $size;
+    position: relative;
+    border-radius: 50%;
+    box-sizing: content-box;
+    border: 4px solid black;
+
+    &::before {
+      top: 3 * $modi;
+      left: -2 * $modi;
+      width: 30 * $modi;
+      transform-origin: 100% 50%;
+      border-radius: 100 * $modi 0 0 100 * $modi;
+    }
+
+    &::after {
+      top: 0;
+      left: 30 * $modi;
+      width: 60 * $modi;
+      transform-origin: 0 50%;
+      border-radius: 0 100 * $modi 100 * $modi 0;
+      animation: rotate-circle 4.25s ease-in;
+    }
+
+
+    &::before, &::after {
+      content: '';
+      height: 100  * $modi;
+      position: absolute;
+      background: transparent;
+      transform: rotate(-45deg);
+    }
+
+    .icon-line {
+      height: 5 * $modi;
+      background-color: black;
+      display: block;
+      border-radius: 2 * $modi;
+      position: absolute;
+      z-index: 10 * $modi;
+
+      &.line-tip {
+        transform: rotate(45deg);
+        animation: icon-line-tip 3s infinite;
+      }
+
+      &.line-long {
+        transform: rotate(-45deg);
+        animation: icon-line-long 3s infinite;
+      }
+    }
+
+    .icon-circle {
+      top: -4 * $modi;
+      left: -4 * $modi;
+      z-index: 10;
+      width: 80 * $modi;
+      height: 80 * $modi;
+      border-radius: 50%;
+      position: absolute;
+      box-sizing: content-box;
+      border: 4 * $modi solid rgba(0, 0, 0, 1);
+      box-shadow:  0 5px 40px -3px #585858;
+    }
+
+    .icon-fix {
+      top: 8 * $modi;
+      width: 5 * $modi;
+      left: 26 * $modi;
+      z-index: 1;
+      height: 85 * $modi;
+      position: absolute;
+      transform: rotate(-45deg);
+      background-color: transparent;
+    }
+  }
+
+  @keyframes rotate-circle {
+    0% {
+      transform: rotate(-45deg);
+    }
+    5% {
+      transform: rotate(-45deg);
+    }
+    12% {
+      transform: rotate(-405deg);
+    }
+    100% {
+      transform: rotate(-405deg);
+    }
+  }
+
+  @keyframes icon-line-tip {
+    0% {
+      width: 0;
+      left: 1 *$modi;
+      top: 19 * $modi;
+    }
+    14% {
+      width: 0;
+      left: 1 * $modi;
+      top: 19* $modi;
+    }
+    18% {
+      width: 50*$modi;
+      left: -8*$modi;
+      top: 37*$modi;
+    }
+    21% {
+      width: 17*$modi;
+      left: 21*$modi;
+      top: 48*$modi;
+    }
+    25% {
+      width: 25*$modi;
+      left: 14*$modi;
+      top: 45*$modi;
+    }
+    75% {
+      width: 25*$modi;
+      left: 14*$modi;
+      top: 45*$modi;
+    }
+    79% {
+      width: 17*$modi;
+      left: 21*$modi;
+      top: 48*$modi;
+    }
+    82% {
+      width: 50*$modi;
+      left: -8*$modi;
+      top: 37*$modi;
+    }
+    86% {
+      width: 0;
+      left: 1*$modi;
+      top: 19*$modi;
+    }
+    100% {
+      width: 0;
+      left: 1*$modi;
+      top: 19*$modi;
+    }
+  }
+
+  @keyframes icon-line-long {
+    0% {
+      width: 0;
+      right: 46*$modi;
+      top: 54*$modi;
+    }
+    16% {
+      width: 0;
+      right: 46*$modi;
+      top: 54*$modi;
+    }
+    21% {
+      width: 55*$modi;
+      right: 0*$modi;
+      top: 35*$modi;
+    }
+    25% {
+      width: 47*$modi;
+      right: 8*$modi;
+      top: 37*$modi;
+    }
+    75% {
+      width: 47*$modi;
+      right: 8*$modi;
+      top: 37*$modi;
+    }
+    79% {
+      width: 55*$modi;
+      right: 0*$modi;
+      top: 35*$modi;
+    }
+    84% {
+      width: 0;
+      right: 46*$modi;
+      top: 54*$modi;
+    }
+    100% {
+      width: 0;
+      right: 46*$modi;
+      top: 54*$modi;
+    }
+  }
+
+}
+

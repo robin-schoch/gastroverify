@@ -85,7 +85,7 @@ const createReportForLocation = async (date, location) => {
 exports.handler = async (event) => {
 
 
-    const creationTime = moment().hours(6).minutes(0).seconds(0).milliseconds(0);
+    const creationTime = moment().hours(8).minutes(0).seconds(0).milliseconds(0);
 
 
     log.info('create reports: ' + creationTime.toISOString());
