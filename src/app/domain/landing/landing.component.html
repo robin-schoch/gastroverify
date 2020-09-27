@@ -16,7 +16,8 @@
             <mat-grid-tile colspan="1">
                 <div class="mat-elevation-z21 titlecard" fxLayout="column" fxLayoutGap="10px">
                     <h1 class="mat-display-1">Entry Check</h1>
-                    <span class="mat-subheading-2">Einfaches und schnelles CheckIn und CheckOut Tool für ihre Bar, Club oder Kino</span>
+                    <span class="mat-subheading-2">Einfaches und schnelles Check-in und Check-out Tool für ihre Bar, Club oder andere Räumlichkeite</span>
+                    <span (click)="scrollToInfo()">mehr erfahren</span>
                     <div fxLayout="row" fxLayoutGap="20px">
                         <button mat-raised-button color="primary"
                                 (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
@@ -47,6 +48,7 @@
                 <div class="mat-elevation-z17 titlecard2" fxLayout="column" fxLayoutGap="10px">
                     <h1 class="mat-display-1">Entry Check</h1>
                     <span class="mat-subheading-2">Einfaches und schnelles CheckIn und CheckOut Tool für ihre Bar, Club oder Kino</span>
+                    <span (click)="scrollToInfo()">mehr erfahren</span>
                     <div fxLayout="row" fxLayoutGap="20px">
                         <button mat-raised-button color="primary"
                                 (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
@@ -81,8 +83,10 @@
 
 
     <mat-grid-list rowHeight="300px" cols="{{gridTiles | async}}" fxFlex gutterSize="30px" class="info-grid">
-        <mat-grid-tile fxLayout="column">
-            <mat-card class="example-card" fxFlex>
+        <mat-grid-tile class="mat-elevation-z10" fxLayout="column">
+
+
+            <mat-card class="example-card  " fxFlex>
                 <mat-card-header>
                     <mat-card-title>Schneller Check-in für bereits Registrierte Besucher</mat-card-title>
                 </mat-card-header>
@@ -99,7 +103,7 @@
             </mat-card>
 
         </mat-grid-tile>
-        <mat-grid-tile fxLayout="column">
+        <mat-grid-tile class="mat-elevation-z10" fxLayout="column">
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
@@ -115,7 +119,7 @@
 
             </mat-card>
         </mat-grid-tile>
-        <mat-grid-tile fxLayout="row">
+        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
@@ -131,7 +135,7 @@
 
             </mat-card>
         </mat-grid-tile>
-        <mat-grid-tile fxLayout="row">
+        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
@@ -149,7 +153,7 @@
 
             </mat-card>
         </mat-grid-tile>
-        <mat-grid-tile fxLayout="row">
+        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
@@ -166,7 +170,7 @@
 
             </mat-card>
         </mat-grid-tile>
-        <mat-grid-tile fxLayout="row">
+        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
@@ -187,11 +191,12 @@
             </mat-card>
 
         </mat-grid-tile>
-        <mat-grid-tile fxLayout="row">
+        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
                     <mat-card-title>Ready wenn sie es sind</mat-card-title>
+
 
                 </mat-card-header>
 

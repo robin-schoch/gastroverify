@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 
 export interface PeriodicElement {
@@ -31,7 +32,14 @@ const ELEMENT_DATA: PeriodicElement[] = [
   selector: 'app-entry-browser',
   templateUrl: './entry-browser.component.html',
   styleUrls: ['./entry-browser.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class EntryBrowserComponent implements OnInit {
 
@@ -50,6 +58,7 @@ export class EntryBrowserComponent implements OnInit {
   displayedColumns$: Observable<string[]>;
   displayedColumns2: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
+  expandedElement: any | null;
 
 
   constructor(
@@ -174,6 +183,13 @@ export class EntryBrowserComponent implements OnInit {
 
   mapNumber(tableNumber: number) {
     return tableNumber === -1 ? 'Keine Angabe' : tableNumber;
+
+  }
+
+  expanedElemet(row: any) {
+    console.log("hurra")
+    this.expandedElement = this.expandedElement === row ? null : row
+    console.log(this.expandedElement)
 
   }
 }

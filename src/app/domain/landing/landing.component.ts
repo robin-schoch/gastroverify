@@ -116,6 +116,12 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  public scrollToInfo(): void {
+    let valueInVh = 90;
+    console.log('scroll');
+    document.querySelector('mat-sidenav-content').scrollTop = valueInVh * window.innerHeight / 100;
+  }
+
 
   openConfirmDialog(): void {
     const dialogRef = this.dialog.open(

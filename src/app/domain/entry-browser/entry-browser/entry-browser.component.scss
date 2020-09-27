@@ -10,8 +10,13 @@
   margin-right: 10px;
 }
 
-.mat-table{
+.mat-table {
   width: 100%;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
 }
 
 .mat-column-Zeit,
@@ -28,3 +33,21 @@
   min-width: 50px;
 }
 
+.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row mat-cell {
+  border-bottom-width: 0 !important;
+}
+
+
+.example-detail-row {
+  height: 0px !important;
+  max-height: 0px !important;
+  min-height: 0px !important;
+}
