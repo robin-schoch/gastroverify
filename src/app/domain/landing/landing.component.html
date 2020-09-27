@@ -12,14 +12,49 @@
 -->
     <div fxFill fxLayoutAlign="center center" fxlayout="column">
 
-        <mat-grid-list cols="{{topGridTiles | async}}" fxFlex>
-            <mat-grid-tile>
-                <div fxLayout="column" fxLayoutGap="10px">
-                    <span>Entry Check - check your entries</span>
-                    <span>Entry Check - check your entries</span>
-                    <button mat-flat-button>login</button>
+        <mat-grid-list *ngIf="(topGridTiles | async)" cols="2" fxFlex [rowHeight]="600">
+            <mat-grid-tile colspan="1">
+                <div class="mat-elevation-z21 titlecard" fxLayout="column" fxLayoutGap="10px">
+                    <h1 class="mat-display-1">Entry Check</h1>
+                    <span class="mat-subheading-2">Einfaches und schnelles CheckIn und CheckOut Tool für ihre Bar, Club oder Kino</span>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <button mat-raised-button color="primary"
+                                (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
+                        <a mat-raised-button color="accent"
+                           href="mailto:gastro.verify@gmail.com?subject=Entry Check - Sign up">{{'context.signup' | translate}}</a>
+                    </div>
+
                 </div>
 
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="1">
+                <div class="success-checkmark2" style="min-height: 115px;">
+                    <div class="check-icon2">
+                        <span class="icon-line2 line-tip2"></span>
+                        <span class="icon-line2 line-long2"></span>
+                        <div class="icon-circle2"></div>
+                        <div class="icon-fix2"></div>
+                    </div>
+                </div>
+            </mat-grid-tile>
+
+        </mat-grid-list>
+
+
+        <mat-grid-list *ngIf="!(topGridTiles | async)" cols="1" fxFlex [rowHeight]="250">
+            <mat-grid-tile>
+                <div class="mat-elevation-z17 titlecard2" fxLayout="column" fxLayoutGap="10px">
+                    <h1 class="mat-display-1">Entry Check</h1>
+                    <span class="mat-subheading-2">Einfaches und schnelles CheckIn und CheckOut Tool für ihre Bar, Club oder Kino</span>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <button mat-raised-button color="primary"
+                                (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
+                        <a mat-raised-button color="accent"
+                           href="mailto:gastro.verify@gmail.com?subject=Entry Check - Sign up">{{'context.signup' | translate}}</a>
+                    </div>
+
+                </div>
             </mat-grid-tile>
 
             <mat-grid-tile>
@@ -43,16 +78,21 @@
 
 <div class="second-landing">
 
+
+
     <mat-grid-list rowHeight="300px" cols="{{gridTiles | async}}" fxFlex gutterSize="30px" class="info-grid">
         <mat-grid-tile fxLayout="column">
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
-                    <mat-card-title>Einmalig Anmelden</mat-card-title>
+                    <mat-card-title>Schneller Check-in für bereits Registrierte Besucher</mat-card-title>
                 </mat-card-header>
 
                 <mat-card-content>
                     <p>
-                        Ein Kunde muss sich nur einmal registrien. Danach bleiben seine
+                        Ein Besucher welcher sich mit Entry Check einmal angemeldet hat, muss bei der zweiten
+                        Anmeldung seine Daten nicht nochmals angegeben.
+                        Dabei spielt es keine Rolle ob sich ein Besucher ursprünglich in ihrere oder einer anderen
+                        Bar, Restaurant oder Kino registiert hat.
                     </p>
                 </mat-card-content>
 
@@ -63,15 +103,13 @@
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
-                    <mat-card-title>Shiba Inu</mat-card-title>
-                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                    <mat-card-title>Datensicherheit</mat-card-title>
+
                 </mat-card-header>
 
                 <mat-card-content>
                     <p>
-                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                        bred for hunting.
+                        Alle Besucherdaten werden sicher und verschlüsselt abgespeichert.
                     </p>
                 </mat-card-content>
 
@@ -81,15 +119,13 @@
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
-                    <mat-card-title>Shiba Inu</mat-card-title>
-                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                    <mat-card-title>Garantierte Löschung</mat-card-title>
                 </mat-card-header>
 
                 <mat-card-content>
                     <p>
-                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                        bred for hunting.
+                        Entry Check garantiert das die Besucherdaten nach ablauf der Aufbewahrungspflicht von 14
+                        Tagen vernichtet werden.
                     </p>
                 </mat-card-content>
 
@@ -99,19 +135,75 @@
             <mat-card class="example-card" fxFlex>
                 <mat-card-header>
 
-                    <mat-card-title>Shiba Inu</mat-card-title>
-                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                    <mat-card-title>Apps</mat-card-title>
+
                 </mat-card-header>
 
                 <mat-card-content>
                     <p>
-                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                        bred for hunting.
+                        Android und iOS Apps sind verfügbar, aber mit einem herkömmlichen QR-Code Scanner von einem
+                        Smartphone geht es genau so schnell wie mit der App. Es ist keine zusätzliche Installation
+                        von Software nötig!
                     </p>
                 </mat-card-content>
 
             </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile fxLayout="row">
+            <mat-card class="example-card" fxFlex>
+                <mat-card-header>
+
+                    <mat-card-title>Räumliche Unterteilung</mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+                    <p>
+                        Mit Entry Check können sie optional ihre Bar, Restaurant oder Kino Räumlich unterteilen und
+                        QR-Codes für Tisch, Sektoren usw. generieren.
+                    </p>
+                </mat-card-content>
+
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile fxLayout="row">
+            <mat-card class="example-card" fxFlex>
+                <mat-card-header>
+
+                    <mat-card-title>Pay-as-you go</mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+                    <p>
+                        Bezahlt nur was du brauchst! Entry Check verlangt keine Kündigungs- und
+                        Einrichtungsgebühren. Verrechnet werden CHF 0.15 pro einmaligem Besucher am Tag. Scanned ein
+                        besucher ihren Code mehrfach ein bezahlen sie nicht doppelt.
+                        Scanend sich niemand ein oder sie deaktivieren ihren Standort weil sie das System nicht mehr
+                        benötigen, so bezahlen sie auch nichts.
+                    </p>
+                </mat-card-content>
+
+            </mat-card>
+
+        </mat-grid-tile>
+        <mat-grid-tile fxLayout="row">
+            <mat-card class="example-card" fxFlex>
+                <mat-card-header>
+
+                    <mat-card-title>Ready wenn sie es sind</mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+                    <p>
+                        Entry Check ist innert kürzester Zeit eingerichtet. Account erstellen, einen Standort
+                        hinzufügen, QR-Codes ausdrucken - Fertig!
+                    </p>
+                </mat-card-content>
+
+            </mat-card>
+
         </mat-grid-tile>
     </mat-grid-list>
 
@@ -120,5 +212,5 @@
 <div class="footer-landing" id="support" style="color: white;">
     <h1>Support Contact</h1>
     <p>If you have issues, general feedback and feature enhancement requests, please contact us via E-Mail:</p>
-    <a href="mailto:gastro.verify@gmail.com">gastro.verify@gmail.com</a>
+    <a href="mailto:gastro.verify@gmail.com?subject=Entry Check - Issue">gastro.verify@gmail.com</a>
 </div>

@@ -22,7 +22,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public gridTiles: Observable<number>;
 
-  public topGridTiles: Observable<number>;
+  public topGridTiles: Observable<boolean>;
 
   constructor(
       private toolbarService: ToolbarService,
@@ -76,7 +76,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         breaks[3]
     ).pipe(startWith(4));
 
-    this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 1 ? 2 : 1));
+    this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2 ));
   }
 
 
