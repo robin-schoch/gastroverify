@@ -19,8 +19,7 @@
 
     <div class="example-container" fxLayout="column" *ngIf="data$ | async as data">
         <!--     -->
-        <mat-table [dataSource]="data.Data" *ngIf="displayedColumns$ | async as displayedColumns" fxFlex>
-
+        <mat-table multiTemplateDataRows [dataSource]="data.Data" *ngIf="displayedColumns$ | async as displayedColumns" fxFlex >
 
             <ng-container matColumnDef="Checkin">
                 <mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -70,8 +69,27 @@
                 <mat-cell mat-cell *matCellDef="let element"> {{mapNumber(element.tableNumber)}} </mat-cell>
             </ng-container>
 
+
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail" >
+                <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="example-element-detail"
+                         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                     sadfjkashjkdfhkasdjkfhjkasd
+                    </div>
+                </mat-cell>
+            </ng-container>
+
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"
+                     class="example-element-row"
+                     [class.example-expanded-row]="expandedElement === row"
+                     (click)="expanedElemet(row)"
+            ></mat-row>
+
+     <!-- <mat-row class="example-detail-row" *matRowDef="let row; columns: ['expandedDetail']" ></mat-row>-->
+
 
         </mat-table>
 
