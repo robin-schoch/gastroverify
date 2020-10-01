@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {ToolbarService} from '../main/toolbar.service';
 import {AuthenticationService} from '../auth/authentication.service';
 import {merge, Observable, Subscription} from 'rxjs';
@@ -23,6 +32,9 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   public gridTiles: Observable<number>;
 
   public topGridTiles: Observable<boolean>;
+
+  @ViewChild('anchor1')
+  public anchor1: ElementRef;
 
   constructor(
       private toolbarService: ToolbarService,
@@ -76,7 +88,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         breaks[3]
     ).pipe(startWith(4));
 
-    this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2 ));
+    this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2));
   }
 
 
@@ -119,7 +131,9 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   public scrollToInfo(): void {
     let valueInVh = 90;
     console.log('scroll');
-    document.querySelector('mat-sidenav-content').scrollTop = valueInVh * window.innerHeight / 100;
+    this.anchor1.nativeElement.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
+    //   $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    //document.querySelector('mat-sidenav-content').scrollTop = valueInVh * window.innerHeight / 100;
   }
 
 

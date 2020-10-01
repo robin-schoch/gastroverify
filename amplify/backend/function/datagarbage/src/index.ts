@@ -43,7 +43,6 @@ const createBillForPartner = async (from, to, partner) => {
             location
         )));
 
-
         const billInfo: any = reports.reduce(
             (acc, report: any) => billReducer(
                 acc,
@@ -66,8 +65,9 @@ const createBillForPartner = async (from, to, partner) => {
             billInfo.price
         );
         console.log(bill);
+        // create pdf
         createBill(bill).then(elem => {
-            resolve(true);
+            resolve(bill);
         });
     }));
 

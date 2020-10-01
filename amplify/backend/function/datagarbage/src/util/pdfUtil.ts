@@ -2,6 +2,62 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 import * as moment from 'moment';
 
+const overview = {
+  billingDate: moment(),
+  name: "marc",
+  sumAllEntries: 135,
+  sumAllPrice: 81,
+  locations: [
+    {
+      name: "Time bar",
+      distinctEntries: 123,
+      price: 80
+    },
+    {
+      name: "Billabong",
+      distinctEntries: 12,
+      price: 1
+    }
+  ]
+}
+
+const pages = [
+  {
+    locationName: "Time bar",
+    sumAllEntries: 123,
+    sumAllPrice: 80,
+    detail: [
+      {
+        date: moment(),
+        distinctEntries: 12,
+        price: 12
+      },
+      {
+        date: moment(),
+        distinctEntries: 12,
+        price: 12
+      }
+    ]
+  },
+  {
+    locationName: "Billabong",
+    sumAllEntries: 12,
+    sumAllPrice: 1,
+    detail: [
+      {
+        date: moment(),
+        distinctEntries: 2,
+        price: 2
+      },
+      {
+        date: moment(),
+        distinctEntries: 2,
+        price: 2
+      }
+    ]
+  }
+]
+
 const p = {
     city: 'Windisch',
     locations: [
@@ -107,8 +163,10 @@ const createBillPDF = (partner, reports, bill) => {
 
     doc.pipe(fs.createWriteStream('output.pdf'));
 
+    overviewPage(doc);
+
 // Embed a font, set the font size, and render some text
-    drawPartnerAddress(partner, doc)
+  /*  drawPartnerAddress(partner, doc)
     drawBillingDate(moment(bill.billingDate), doc)
     drawBillHeader(doc)
     drawTableHeader(doc)
@@ -116,22 +174,22 @@ const createBillPDF = (partner, reports, bill) => {
     for (let i = 0; i < reports.length; i++) {
         nextPosition = drawLocationTable(reports[i], doc, nextPosition, bill)
     }
-
+*/
     doc.end();
 }
 
 
 const drawPartnerAddress = (partner, doc) => {
-    doc.fontSize(13)
-       .text(partner.address, 450, 100)
+    doc.fontSize(11)
+       .text(partner.address, 50, 100)
        .text(partner.city)
        .text(partner.zipcode)
 
 }
 
 const drawBillingDate = (date, doc) => {
-    doc.fontSize(13)
-       .text("Rechnungsdatum " + date.format("DD MM YYYY"), 50, 100)
+    doc.fontSize(11)
+       .text("Rechnungsdatum " + date.format("DD MM YYYY"), 300, 100)
 }
 
 const drawBillHeader = (doc) => {
@@ -166,6 +224,14 @@ const drawTableColumn = (report, doc, index, nextPosition) => {
        .text(moment().format("DD.MM.YYYY"), 50, nextPosition)
        .text(report.distinctTotal, 200, nextPosition)
        .text((report.pricePerEntry ? report.pricePerEntry : 0.15) * report.distinctTotal + '.-', 400, nextPosition)
+}
+
+
+const overviewPage = (doc) => {
+  drawBillingDate(moment(), doc)
+  drawPartnerAddress(p, doc)
+
+
 }
 
 
