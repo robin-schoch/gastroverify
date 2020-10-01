@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="48px" height="48px">
+
+
+    <path id="top_chev" d="m16.59,12.47925l-4.59,4.58l-4.59,-4.58l-1.41,1.41l6,6l6,-6l-1.41,-1.41z"/>
+    <path id="middle_chev" d="m16.59,7.53529l-4.59,4.58l-4.59,-4.58l-1.41,1.41l6,6l6,-6l-1.41,-1.41z"/>
+    <path id="bottom_chev" d="m16.59,2.32764l-4.59,4.58l-4.59,-4.58l-1.41,1.41l6,6l6,-6l-1.41,-1.41z"/>
+
+
+
+</svg>

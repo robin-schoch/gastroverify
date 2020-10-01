@@ -17,12 +17,29 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from '../auth/login-dialog/login-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {filter, map, startWith} from 'rxjs/operators';
+import {animate, state, style, transition, trigger,} from '@angular/animations';
+import {fadeInGrow, fadeInGrowNoStagger} from '../../util/animation/fadeInGrow';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('fadeInTitle',
+        [
+          state('out', style({
+            opacity: 0
+          })),
+          state('in', style({
+            opacity: 1
+          })),
+          transition('void => in', [animate('1s')])
+        ]),
+    fadeInGrow,
+
+    fadeInGrowNoStagger
+  ]
 })
 export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -33,8 +50,11 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public topGridTiles: Observable<boolean>;
 
+  public showIcon: Observable<boolean>;
+
   @ViewChild('anchor1')
   public anchor1: ElementRef;
+  public isHandset: Observable<boolean>;
 
   constructor(
       private toolbarService: ToolbarService,
@@ -88,7 +108,17 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         breaks[3]
     ).pipe(startWith(4));
 
+    this.showIcon = breakpointObserver.observe([
+      Breakpoints.HandsetLandscape,
+    ]).pipe(map(a => !a.matches))
+
+    this.isHandset = breakpointObserver.observe([
+        Breakpoints.HandsetPortrait
+    ]).pipe(map(a => a.matches))
+
     this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2));
+
+
   }
 
 
@@ -144,4 +174,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
+  openMail() {
+    window.open('mailto:gastro.verify@gmail.com?subject=Entry Check - Sign up');
+  }
 }

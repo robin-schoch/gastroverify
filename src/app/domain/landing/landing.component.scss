@@ -3,7 +3,8 @@
 
   // background: url("../../../assets/background.svg");
   // background-color: #3cd1f7;
-  background-image: linear-gradient(to right, #3cd1f7, #89eb99);
+
+  background-image: linear-gradient(to right, rgba(60, 209, 247, 0.5), rgba(137, 235, 153, 0.5));
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0.9;
@@ -31,12 +32,46 @@
 
 }
 
+@keyframes comein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mainname {
+  font-size: 100px;
+  text-shadow:5px 5px 10px #6d6d6d;
+}
+
+
+.mainname-small {
+  font-size: 50px;
+  text-shadow:5px 5px 10px #6d6d6d;
+}
+
+::ng-deep .mat-stroked-button{
+  height:50px !important;
+  font-size:20px !important;
+
+}
+
+.subtext {
+  font-size: 20px;
+}
+
+.subtext-small {
+  font-size: 15px;
+}
 .titlecard {
   background-color: white;
   padding: 50px;
   margin: 5px;
   border-radius: 6px;
 }
+
 .titlecard2 {
   background-color: white;
   padding: 20px;
@@ -64,8 +99,8 @@
   color: white;
 }
 
-.mat-grid-tile {
-  padding: 10px;
+.title-grid {
+
 }
 
 .example-card {
@@ -89,6 +124,67 @@
   }
   to {
     top: 0%;
+  }
+}
+
+.chev {
+  fill: #7e7e7e;
+
+}
+
+.scrolldowndiv:hover {
+  background-color: transparent;
+}
+
+
+.bottom_chev {
+  animation: hideshow 2s 600ms ease-in-out infinite;
+}
+
+
+.scrolldowndiv:hover .chev {
+  fill: white;
+
+}
+
+
+.middle_chev {
+
+  animation: hideshow 2s 300ms ease-in-out infinite;
+}
+
+.top_chev {
+  animation: hideshow 2s ease-in-out infinite;
+}
+
+@keyframes changeChevColor {
+  0%, 100% {
+    fill: #d40202;
+  }
+  50% {
+    fill: #ffffff;
+  }
+}
+
+
+@keyframes hideshow {
+  0%, 100% {
+    opacity: 1;
+  }
+  75%, 25% {
+    opacity: 0.8%;
+  }
+  50% {
+    opacity: 0
+  }
+}
+
+@keyframes colorChangeCircle {
+  0%, 100% {
+    box-shadow: 0 5px 40px -3px #585858;
+  }
+  50% {
+    box-shadow: 0 5px 40px -3px #f8f8f8;
   }
 }
 
@@ -168,7 +264,11 @@
       position: absolute;
       box-sizing: content-box;
       border: 4 * $modi1 solid rgba(0, 0, 0, 1);
-      box-shadow:  0 5px 40px -3px #585858;
+      box-shadow: 0 5px 40px -3px #585858;
+    }
+
+    .icon-circle:hover {
+      animation: colorChangeCircle ease-in-out 1s;
     }
 
     .icon-fix {
@@ -367,8 +467,14 @@
       position: absolute;
       box-sizing: content-box;
       border: 4 * $modi solid rgba(0, 0, 0, 1);
-      box-shadow:  0 5px 40px -3px #585858;
+      box-shadow: 0 5px 40px -3px #585858;
+
     }
+
+    .icon-circle2:hover {
+      animation: colorChangeCircle ease-in-out 1s;
+    }
+
 
     .icon-fix2 {
       top: 8 * $modi;
