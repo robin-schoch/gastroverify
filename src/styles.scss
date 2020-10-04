@@ -58,3 +58,73 @@ Mat Dialog
 }
 
 
+// chevron
+
+
+.scrolldowndiv:hover {
+  background-color: transparent;
+}
+
+
+
+
+.scrolldowndiv:hover .chev {
+  fill: white;
+
+}
+
+.bottom_chev {
+  animation: hideshow 2s ease-in-out infinite;
+}
+
+.top_chev{
+  animation: hideshow 2s 600ms ease-in-out infinite;
+
+}
+
+
+.middle_chev {
+
+  animation: hideshow 2s 300ms ease-in-out infinite;
+}
+
+
+.bottom_chev-reverse {
+  animation: hideshow 2s 150ms ease-in-out infinite ;
+
+}
+
+
+.middle_chev-reverse {
+
+  animation: hideshow 2s 450ms ease-in-out infinite ;
+}
+
+.top_chev-reverse {
+  animation: hideshow 2s 750ms ease-in-out infinite ;
+}
+
+@keyframes changeChevColor {
+  0%, 100% {
+    fill: #d40202;
+  }
+  50% {
+    fill: #ffffff;
+  }
+}
+
+
+@keyframes hideshow {
+  0%, 100% {
+    opacity: 1;
+  }
+  75%, 25% {
+    opacity: 0.8%;
+  }
+  50% {
+    opacity: 0
+  }
+}
+.chev {
+  fill: #7e7e7e;
+}

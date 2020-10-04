@@ -1,0 +1,51 @@
+.titleDiv {
+  height: 100vh;
+  width: 100vw;
+  padding: 0 !important;
+  margin: -0px -0px -0px -10px;
+  //  background-image: url("https://images.unsplash.com/photo-1596919877893-de04159e0983?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80");
+
+  // filter: blur(4px);
+  // -webkit-filter: blur(4px);
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+
+}
+
+.rotate {
+  transform: rotate(180deg);
+  transform-origin: 50% 50%;
+}
+
+.contentTile {
+
+  margin: 0px -10px 0px -10px;
+
+  z-index: 2;
+}
+
+.tileTitle {
+  color: #868686;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.bodyTitle {
+  color: #868686;
+  font-size: 20px;
+  max-width: 600px;
+  font-weight: bolder;
+}
+
+.content-div {
+  margin: 20px;
+  margin-bottom: 40px;
+}
+
+.innerContent {
+  width: 100vw;
+}
+

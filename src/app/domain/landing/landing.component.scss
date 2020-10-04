@@ -8,11 +8,11 @@
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0.9;
-  margin: -10px;
+  margin: -10px -10px 0px -10px;
 }
 
 .top-banner {
-  max-width: 100vw;
+  max-width: 100vh;
   background-color: black;
   opacity: 0.9;
   height: 60px;
@@ -43,28 +43,33 @@
 
 .mainname {
   font-size: 100px;
-  text-shadow:5px 5px 10px #6d6d6d;
+  text-shadow: 2px 2px 5px #6d6d6d;
+  color: #3b3b3b;
 }
 
 
 .mainname-small {
   font-size: 50px;
-  text-shadow:5px 5px 10px #6d6d6d;
+  text-shadow: 2px 2px 5px #6d6d6d;
+  color: #3b3b3b;
 }
 
-::ng-deep .mat-stroked-button{
-  height:50px !important;
-  font-size:20px !important;
+::ng-deep .mat-stroked-button {
+  height: 50px !important;
+  font-size: 20px !important;
 
 }
 
 .subtext {
   font-size: 20px;
+  color: #545454;
 }
 
 .subtext-small {
   font-size: 15px;
+  color: #545454;
 }
+
 .titlecard {
   background-color: white;
   padding: 50px;
@@ -81,17 +86,18 @@
 .second-landing {
   background-color: #e5e5e5;
   margin: -10px;
-  max-width: 100vw;
+  max-width: 100vh;
 }
 
 .footer-landing {
   background-color: black;
-  height: 10vh;
-  margin: -10px;
-  max-width: 100vw;
-  color: white;
-  padding-top: 10px;
-  padding-left: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: -10px;
+
+  padding: 15px;
+
+
 }
 
 .main-title {
@@ -100,13 +106,6 @@
 }
 
 .title-grid {
-
-}
-
-.example-card {
-  max-width: 600px;
-  height: 100%;
-  width: 100%;
 
 }
 
@@ -127,57 +126,6 @@
   }
 }
 
-.chev {
-  fill: #7e7e7e;
-
-}
-
-.scrolldowndiv:hover {
-  background-color: transparent;
-}
-
-
-.bottom_chev {
-  animation: hideshow 2s 600ms ease-in-out infinite;
-}
-
-
-.scrolldowndiv:hover .chev {
-  fill: white;
-
-}
-
-
-.middle_chev {
-
-  animation: hideshow 2s 300ms ease-in-out infinite;
-}
-
-.top_chev {
-  animation: hideshow 2s ease-in-out infinite;
-}
-
-@keyframes changeChevColor {
-  0%, 100% {
-    fill: #d40202;
-  }
-  50% {
-    fill: #ffffff;
-  }
-}
-
-
-@keyframes hideshow {
-  0%, 100% {
-    opacity: 1;
-  }
-  75%, 25% {
-    opacity: 0.8%;
-  }
-  50% {
-    opacity: 0
-  }
-}
 
 @keyframes colorChangeCircle {
   0%, 100% {

@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     translate.setDefaultLang('de');
 
     // Set Browser Language as Init Language
-    translate.use(translate.getBrowserLang());
+    //translate.use(translate.getBrowserLang());
     this.isAdmin$ = this.authService.role$.pipe(
         tap(roles => console.log(roles)),
         map(roles => roles.filter(elem => elem === 'admin')),
