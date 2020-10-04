@@ -1,7 +1,7 @@
 <div class="titleDiv" fxLayout="column" fxLayoutAlign="center center"
      style=" background-image: url({{backgroundUrl}});">
 
-    <div *ngIf="nextElem !== 0" fxFlex="10" fxLayout="column" fxLayoutAlign="end center" class="scrolldowndiv"
+    <div *ngIf="nextElem !== 0" fxFlex="7" fxLayout="column" fxLayoutAlign="end center" class="scrolldowndiv"
          (click)="scrollTo.emit(nextElem - 2)">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="250" height="250px">
             <path class="top_chev-reverse chev rotate"
@@ -13,26 +13,26 @@
         </svg>
 
     </div>
+    <div *ngIf="nextElem === 0" fxFlex="7"></div>
 
-
-    <div *ngIf="position === contentPosition.TOP_LEFT" fxFlex="80" fxLayout="column" fxLayoutAlign="start start"
+    <div *ngIf="position === contentPosition.TOP_LEFT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="start start"
          class="innerContent">
         <ng-container *ngTemplateOutlet="content"></ng-container>
     </div>
 
-    <div *ngIf="position === contentPosition.TOP_RIGHT" fxFlex="80" fxLayout="column" fxLayoutAlign="start end"
-         class="innerContent">
-        <ng-container *ngTemplateOutlet="content"></ng-container>
-    </div>
-
-
-    <div *ngIf="position === contentPosition.BOTTOM_RIGHT" fxFlex="80" fxLayout="column" fxLayoutAlign="end end"
+    <div *ngIf="position === contentPosition.TOP_RIGHT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="start end"
          class="innerContent">
         <ng-container *ngTemplateOutlet="content"></ng-container>
     </div>
 
 
-    <div *ngIf="position === contentPosition.BOTTOM_LEFT" fxFlex="80" fxLayout="column" fxLayoutAlign="end start"
+    <div *ngIf="position === contentPosition.BOTTOM_RIGHT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="end end"
+         class="innerContent">
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+    </div>
+
+
+    <div *ngIf="position === contentPosition.BOTTOM_LEFT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="end start"
          class="innerContent">
         <ng-container *ngTemplateOutlet="content"></ng-container>
 
@@ -47,7 +47,7 @@
     </ng-template>
 
 
-    <div *ngIf="nextElem !== lastElem" fxFlex="10" fxLayout="column" fxLayoutAlign="end center" class="scrolldowndiv"
+    <div *ngIf="nextElem !== lastElem" fxFlex="7" fxLayout="column" fxLayoutAlign="end center" class="scrolldowndiv"
          (click)="scrollTo.emit(nextElem)">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="250" height="250px">
             <path class="top_chev chev" d="m16.59,12.47925l-4.59,4.58l-4.59,-4.58l-1.41,1.41l6,6l6,-6l-1.41,-1.41z"/>
@@ -58,7 +58,7 @@
     </div>
 
 
-    <div *ngIf="!(nextElem !== lastElem)" fxFlex="10" fxLayout="column" fxLayoutAlign="end center"
+    <div *ngIf="!(nextElem !== lastElem)" fxFlex="7" fxLayout="column" fxLayoutAlign="end center"
          class="scrolldowndiv">
 
 

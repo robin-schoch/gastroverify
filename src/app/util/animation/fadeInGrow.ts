@@ -2,7 +2,7 @@ import {animate, query, stagger, style, transition, trigger} from '@angular/anim
 
 export const fadeInGrow = trigger('fadeInGrow', [
   transition(':enter',
-      query('button, h1, pre', [
+      query('button, h1, pre, span', [
             style({opacity: 0, transform: 'scale(1) translateY(50px)'}),
             stagger('100ms', [
               animate('500ms', style({opacity: 1, transform: 'scale(1) translateY(0)'}))

@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {fadeInGrow} from '../../../util/animation/fadeInGrow';
 
 export enum ContentPosition {
   TOP_LEFT,
@@ -14,11 +15,14 @@ export enum ContentPosition {
   selector: 'app-landing-tile',
   templateUrl: './landing-tile.component.html',
   styleUrls: ['./landing-tile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    fadeInGrow,
+  ]
 })
 export class LandingTileComponent implements OnInit {
 
-  public contentPosition =  ContentPosition;
+  public contentPosition = ContentPosition;
 
   @Input()
   public backgroundUrl: string;
@@ -39,11 +43,10 @@ export class LandingTileComponent implements OnInit {
   public position: ContentPosition;
 
   @Input()
-  public fontColor: string = 'white'
+  public fontColor: string = 'white';
 
   @Output()
   public scrollTo = new EventEmitter<Number>();
-
 
 
   constructor() { }
