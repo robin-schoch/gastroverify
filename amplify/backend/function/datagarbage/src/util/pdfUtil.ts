@@ -6,251 +6,220 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
 const overview = {
-  billId: 'asdfijaiosdf',
-  billingDate: moment(),
+  reference: 'asdfijaiosdf',
+  billingDate: moment().toISOString(),
+  partnerId: 'sadf@dsf',
+  complete: false,
+  from: moment().toISOString(),
+  to: moment().toISOString(),
+  paidAt: null,
+  total: 34,
+  distinctTotal: 135,
+  price: 81,
+
   customer: {
     firstName: 'Marc',
     lastName: 'Lusser',
     address: 'hohenweg 3',
     city: 'Baden',
     zipcode: 5400
-
   },
-  sumAllEntries: 135,
-  sumAllPrice: 81,
   locations: [
     {
-      name: 'Time bar',
-      distinctEntries: 123,
+      name: 'Billabong', // location
+      distinctTotal: 123, //distinctTotal
       price: 80
     },
     {
-      name: 'Time bar',
-      distinctEntries: 123,
-      price: 80
-    },
-    {
-      name: 'Time bar',
-      distinctEntries: 123,
-      price: 80
-    },
-    {
-      name: 'Time bar',
-      distinctEntries: 123,
-      price: 80
-    },
-    {
-      name: 'Time bar',
-      distinctEntries: 123,
-      price: 80
-    },
-
-    {
-      name: 'Time bar',
-      distinctEntries: 123,
-      price: 80
-    },
-
-    {
-      name: 'Time bar',
-      distinctEntries: 123,
-      price: 80
-    },
-
-    {
-      name: 'Time bar',
-      distinctEntries: 123,
-      price: 80
-    },
-    {
-      name: 'Time bar',
-      distinctEntries: 123,
+      location: 'Time bar',
+      distinctTotal: 123,
       price: 80
     }
   ]
 };
 
-const pages = [
+const detail = [
   {
     locationName: 'Time bar',
-    sumAllEntries: 123,
-    sumAllPrice: 80,
+    distinctTotal: 123,
+    price: 80,
     detail: [
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(), // reportreportDate
+        distinctTotal: 12, // distinctTotal
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
-        price: 12
-      },
-
-      {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
 
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
+        price: 12
+      },
+
+      {
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       },
       {
-        date: moment(),
-        distinctEntries: 12,
+        reportDate: moment().toISOString(),
+        distinctTotal: 12,
         price: 12
       }
     ]
   },
   {
     locationName: 'Billabong',
-    sumAllEntries: 12,
-    sumAllPrice: 1,
+    distinctTotal: 12,
+    price: 1,
     detail: [
       {
-        date: moment(),
-        distinctEntries: 2,
+        reportDate: moment().toISOString(),
+        distinctTotal: 2,
         price: 2
       },
       {
-        date: moment(),
-        distinctEntries: 2,
+        reportDate: moment().toISOString(),
+        distinctTotal: 2,
         price: 2
       }
     ]
   }
 ];
 
-const createBillPDF = (overview, pages) => {
+export const createBillPDF = (overview, pages) => {
   // Create a document
   const doc = new PDFDocument({margin: 50});
 
 
-  doc.pipe(fs.createWriteStream('output.pdf'));
+  doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
 
   let buffers = [];
-  doc.on('data', buffers.push.bind(buffers));
-  doc.on('end', () => {
+  /*
+   doc.on('data', buffers.push.bind(buffers));
+   doc.on('end', () => {
 
-    let pdfData = Buffer.concat(buffers);
-    console.log(pdfData.toString('utf-8'));
+   let pdfData = Buffer.concat(buffers);
+   console.log(pdfData.toString('utf-8'));
 
-    // ... now send pdfData as attachment ...
+   // ... now send pdfData as attachment ...
 
-  });
+   });*/
 
 
   overviewPage(doc, overview);
@@ -269,7 +238,7 @@ const overviewPage = (doc, overview) => {
     doc.addPage();
     generateHeader(doc);
   }
-  generateFooter(doc);
+  generateFooter(doc, overview);
 };
 
 const detailPages = (doc, detail) => {
@@ -279,4 +248,4 @@ const detailPages = (doc, detail) => {
 };
 
 
-createBillPDF(overview, pages);
+// createBillPDF(overview, detail);

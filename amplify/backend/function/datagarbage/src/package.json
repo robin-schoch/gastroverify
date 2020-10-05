@@ -13,6 +13,7 @@
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "^2.31.0",
     "aws-sdk": "^2.738.0",
+    "base62": "^2.0.1",
     "bunyan": "^1.8.14",
     "eslint": "^7.8.1",
     "moment": "^2.27.0",

@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export const generateHeader = (doc) => {
   doc.image('logo.png', 50, 45, {width: 50})
      .fillColor('#444444')
@@ -27,12 +29,12 @@ export const generateCustomerInformation = (doc, customer) => {
   doc.fontSize(10)
      .text('Rechnungsnummer:', 50, customerInformationTop)
      .font('Helvetica-Bold')
-     .text(customer.billId, 150, customerInformationTop)
+     .text(customer.reference, 150, customerInformationTop)
      .font('Helvetica')
      .text('Rechnungsdatum:', 50, customerInformationTop + 15)
-     .text(customer.billingDate.locale('de').format('L'), 150, customerInformationTop + 15)
+     .text(moment(customer.billingDate).locale('de').format('L'), 150, customerInformationTop + 15)
      .text('Offener Betrag:', 50, customerInformationTop + 30)
-     .text(toCHF(customer.sumAllPrice), 150, customerInformationTop + 30)
+     .text(toCHF(customer.price), 150, customerInformationTop + 30)
      .font('Helvetica-Bold')
      .text(customer.customer.firstName + ' ' + customer.customer.lastName, 300, customerInformationTop)
      .font('Helvetica')
@@ -59,7 +61,7 @@ export const generateTableRow = (doc, y, location, distinctEntries, price) => {
 
 export const generateInvoiceTable = (doc, invoice) => {
   let i;
-  let pageCounter = 0
+  let pageCounter = 0;
   let invoiceTableTop = 330;
   doc.font('Helvetica-Bold');
   generateTableRow(doc, invoiceTableTop, 'Standort', 'Einamlige Eintritte', 'Kosten');
@@ -75,7 +77,7 @@ export const generateInvoiceTable = (doc, invoice) => {
       pageCounter = 0;
     }
     const position = invoiceTableTop + (pageCounter + 1) * 30;
-    generateTableRow(doc, position, item.name, item.distinctEntries, toCHF(item.price));
+    generateTableRow(doc, position, item.name, item.distinctTotal, toCHF(item.price));
     generateHr(doc, position + 20);
     pageCounter++;
   }
@@ -87,23 +89,23 @@ export const generateInvoiceTable = (doc, invoice) => {
   }
   doc.font('Helvetica-Bold');
   generateTableRow(doc, invoiceTableTop + (pageCounter + 1) * 30, 'Summe',
-      invoice.map(elem => elem.distinctEntries).reduce((acc, v) => acc + v),
-      toCHF(invoice.map(elem => elem.price).reduce((acc, v) => acc + v)));
+      invoice.map(elem => elem.distinctTotal).reduce((acc, v) => acc + v, 0),
+      toCHF(invoice.map(elem => elem.price).reduce((acc, v) => acc + v, 0)));
   doc.font('Helvetica');
-  generateTableRow(doc, invoiceTableTop + (pageCounter+ 2) * 30, 'Mehrwertsteuer 0.0%',
+  generateTableRow(doc, invoiceTableTop + (pageCounter + 2) * 30, 'Mehrwertsteuer 0.0%',
       '',
       toCHF(0));
   generateHr(doc, invoiceTableTop + (pageCounter + 2) * 30 + 20);
   doc.font('Helvetica-Bold');
   generateTableRow(doc, invoiceTableTop + (pageCounter + 3) * 30, 'Gesammtbetrag', '',
-      toCHF(invoice.map(elem => elem.price).reduce((acc, v) => acc + v)));
+      toCHF(invoice.map(elem => elem.price).reduce((acc, v) => acc + v, 0)));
   doc.font('Helvetica');
-  return invoiceTableTop + (pageCounter + 3) * 30
+  return invoiceTableTop + (pageCounter + 3) * 30;
 };
 
 //Zu begleichen innert 30 Tagen auf folgendes Konto:;;
 
-export const generateFooter = (doc) => {
+export const generateFooter = (doc, customer) => {
   doc.font('Helvetica-Bold');
   doc.fontSize(10)
      .text('Zu begleichen innert 30 Tagen auf folgendes Konto:', 50, 650, {width: 500})
@@ -111,7 +113,9 @@ export const generateFooter = (doc) => {
      .text('Robin Michael Schoch')
      .text('UBS AG')
      .text('5400 Baden')
-     .text('CH39 0023 2232 1189 9540 Z');
+     .text('CH39 0023 2232 1189 9540 Z')
+     .text('Buchungstext: ' + customer.reference);
+  doc.font('Helvetica');
   /*
 
 
