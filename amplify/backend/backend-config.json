@@ -201,6 +201,13 @@
       "service": "Lambda",
       "dependsOn": [
         {
+          "category": "function",
+          "resourceName": "sendBill",
+          "attributes": [
+            "Name"
+          ]
+        },
+        {
           "category": "storage",
           "resourceName": "Partner",
           "attributes": [
