@@ -240,6 +240,11 @@
           ]
         }
       ]
+    },
+    "utility": {
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer",
+      "build": true
     }
   },
   "api": {

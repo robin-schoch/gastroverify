@@ -1,23 +1,38 @@
 {
-    "dev": {
-        "awscloudformation": {
-            "AuthRoleName": "amplify-gastroverify-dev-75918-authRole",
-            "UnauthRoleArn": "arn:aws:iam::375439687272:role/amplify-gastroverify-dev-75918-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::375439687272:role/amplify-gastroverify-dev-75918-authRole",
-            "Region": "eu-central-1",
-            "DeploymentBucketName": "amplify-gastroverify-dev-75918-deployment",
-            "UnauthRoleName": "amplify-gastroverify-dev-75918-unauthRole",
-            "StackName": "amplify-gastroverify-dev-75918",
-            "StackId": "arn:aws:cloudformation:eu-central-1:375439687272:stack/amplify-gastroverify-dev-75918/a2f1f820-d617-11ea-8e01-0a0ddac78b4a",
-            "AmplifyAppId": "d3kezlnq1hnpnp"
-        },
-        "categories": {
-            "auth": {
-                "gastroverifyd8b8759f": {}
-            },
-            "function": {
-                "gastro": {}
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-gastroverify-dev-75918-authRole",
+      "UnauthRoleArn": "arn:aws:iam::375439687272:role/amplify-gastroverify-dev-75918-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::375439687272:role/amplify-gastroverify-dev-75918-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-gastroverify-dev-75918-deployment",
+      "UnauthRoleName": "amplify-gastroverify-dev-75918-unauthRole",
+      "StackName": "amplify-gastroverify-dev-75918",
+      "StackId": "arn:aws:cloudformation:eu-central-1:375439687272:stack/amplify-gastroverify-dev-75918/a2f1f820-d617-11ea-8e01-0a0ddac78b4a",
+      "AmplifyAppId": "d3kezlnq1hnpnp"
+    },
+    "categories": {
+      "auth": {
+        "gastroverifyd8b8759f": {}
+      },
+      "function": {
+        "gastro": {}
+      }
+    },
+    "nonCFNdata": {
+      "function": {
+        "utility": {
+          "layerVersionMap": {
+            "1": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ]
             }
+          }
         }
+      }
     }
+  }
 }
