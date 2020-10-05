@@ -25,8 +25,10 @@ export const handler = async (event, context) => {
 
       lambda.invoke(params, function (err, data) {
         if (err) {
+          console.log(err)
           context.fail(err);
         } else {
+          console.log(data)
           context.succeed('Lambda_B said ' + data.Payload);
         }
       });
