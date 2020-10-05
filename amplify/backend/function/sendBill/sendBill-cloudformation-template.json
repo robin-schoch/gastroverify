@@ -84,7 +84,11 @@
                 },
                 "Runtime": "nodejs12.x",
                 "Layers": [],
-                "Timeout": "25"
+                "Timeout": "25",
+                "Code": {
+                    "S3Bucket": "amplify-gastroverify-dev-75918-deployment",
+                    "S3Key": "amplify-builds/sendBill-4e364f5a70485261794d-build.zip"
+                }
             }
         },
         "LambdaExecutionRole": {
