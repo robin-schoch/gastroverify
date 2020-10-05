@@ -16,7 +16,7 @@
     "amplify:datagarbage": "cd amplify/backend/function/datagarbage/src && tsc",
     "amplify:visitors": "cd amplify/backend/function/visitors/src && tsc",
     "amplify:gastro": "cd amplify/backend/function/gastro/src && tsc",
-    "amplify:sendBill": "cd amplify/backend/function/sendBill/src && tsc",
+    "amplify:sendBill": "cd amplify/backend/function/sendBill/src && tsc"
   },
   "private": true,
   "dependencies": {
