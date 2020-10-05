@@ -23,19 +23,28 @@ export const handler = async (event, context) => {
         Payload: '{ "name" : "Alex" }'
       };
 
-      lambda.invoke(params, function (err, data) {
-        if (err) {
-          console.log(err)
-          context.fail(err);
-        } else {
-          console.log(data)
-          context.succeed('Lambda_B said ' + data.Payload);
-        }
+
+      const p = new Promise((resolve, reject) => {
+        lambda.invoke(params, function (err, data) {
+          if (err) {
+            console.log(err);
+            context.fail(err);
+            reject(err);
+          } else {
+            console.log(data);
+            context.succeed('Lambda_B said ' + data.Payload);
+            resolve(data);
+          }
+        });
+
       });
+      const res = await p;
 
       return {
         statusCode: 200,
-        body: {}
+        body: {
+          res: res
+        }
       };
 
 // const res = await dbConnection.findById('0ae17e6b-64dc-4e97-8fc5-0823767fae36').toPromise();
