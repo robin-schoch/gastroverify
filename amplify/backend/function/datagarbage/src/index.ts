@@ -24,6 +24,7 @@ import {of, throwError} from 'rxjs';
 import {Partner} from './domain/partner';
 import {DynamodbError, isNotDynamodbError, Page} from './util/dynamoDbDriver';
 import {locationStorage} from './storage/locationStorage';
+import {createBillPDF} from './util/pdfUtil';
 
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({name: 'monthlyReport', src: true});
@@ -80,7 +81,7 @@ const createBillForPartner = async (from, to, partner) => {
       resolve(bill);
     });
 
-    //createBillPDF(bill, bill.detail);
+    // createBillPDF(bill, bill.detail);
   }));
 
 

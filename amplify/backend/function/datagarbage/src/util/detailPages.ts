@@ -1,5 +1,6 @@
 import {generateHr, toCHF} from './overviewPage';
 import * as moment from 'moment';
+
 export const generateDetailPage = (doc, location) => {
   generateDetailDetail(doc, location);
   generateDetailTable(doc, location.detail);
@@ -21,6 +22,7 @@ const generateDetailTable = (doc, invoice) => {
   generateTableRow(doc, invoiceTableTop, 'Datum', 'Einamlige Eintritte', 'Kosten');
   generateHr(doc, invoiceTableTop + 9);
   doc.font('Helvetica');
+  invoice = invoice.reverse();
   for (i = 0; i < invoice.length; i++) {
     const item = invoice[i];
     const position = invoiceTableTop + (i + 1) * 15;
