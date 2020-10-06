@@ -1,13 +1,4 @@
 {
-  "permissions": {
-    "storage": {
-      "MonthlyReport": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ]
-    }
-  },
+  "permissions": {},
   "lambdaLayers": []
 }

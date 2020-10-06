@@ -14,7 +14,12 @@ exports.generateHeader = (doc) => {
         .moveDown();
 };
 exports.toCHF = (value) => {
-    return 'CHF ' + value.toFixed(2);
+    try {
+        return 'CHF ' + value.toFixed(2);
+    }
+    catch (e) {
+        return 'CHF';
+    }
 };
 exports.generateCustomerInformation = (doc, customer) => {
     doc.fillColor('#444444')

@@ -201,21 +201,18 @@ const detail = [
 exports.createBillPDF = (overview, pages) => {
     // Create a document
     const doc = new PDFDocument({ margin: 50 });
-    doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
+    // doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
     let buffers = [];
-    /*
-     doc.on('data', buffers.push.bind(buffers));
-     doc.on('end', () => {
-  
-     let pdfData = Buffer.concat(buffers);
-     console.log(pdfData.toString('utf-8'));
-  
-     // ... now send pdfData as attachment ...
-  
-     });*/
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => {
+        let pdfData = Buffer.concat(buffers);
+        console.log(pdfData.toString('utf-8'));
+        // ... now send pdfData as attachment ...
+    });
     overviewPage(doc, overview);
     pages.forEach(p => detailPages(doc, p));
     doc.end();
+    return { doc: doc, buffers: buffers };
 };
 const overviewPage = (doc, overview) => {
     overviewPage_1.generateHeader(doc);

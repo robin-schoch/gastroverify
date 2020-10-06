@@ -14,6 +14,8 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'});
 const lambda = new AWS.Lambda();
 
+
+
 export const handler = async (event, context) => {
       console.log(process.env.FUNCTION_SENDBILL_NAME);
       const params = {
@@ -28,11 +30,9 @@ export const handler = async (event, context) => {
         lambda.invoke(params, function (err, data) {
           if (err) {
             console.log(err);
-            context.fail(err);
             reject(err);
           } else {
             console.log(data);
-            context.succeed('Lambda_B said ' + data.Payload);
             resolve(data);
           }
         });

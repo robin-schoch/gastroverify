@@ -243,15 +243,11 @@
           "resourceName": "MonthlyReport",
           "attributes": [
             "Name",
-            "Arn"
+            "Arn",
+            "StreamArn"
           ]
         }
       ]
-    },
-    "utility": {
-      "providerPlugin": "awscloudformation",
-      "service": "LambdaLayer",
-      "build": true
     }
   },
   "api": {

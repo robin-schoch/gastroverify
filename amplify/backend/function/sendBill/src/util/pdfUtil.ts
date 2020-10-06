@@ -207,10 +207,10 @@ export const createBillPDF = (overview, pages) => {
   const doc = new PDFDocument({margin: 50});
 
 
-  doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
+  // doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
 
   let buffers = [];
-  /*
+
    doc.on('data', buffers.push.bind(buffers));
    doc.on('end', () => {
 
@@ -219,7 +219,7 @@ export const createBillPDF = (overview, pages) => {
 
    // ... now send pdfData as attachment ...
 
-   });*/
+   });
 
 
   overviewPage(doc, overview);
@@ -227,6 +227,7 @@ export const createBillPDF = (overview, pages) => {
 
 
   doc.end();
+  return {doc: doc, buffers: buffers}
 
 };
 

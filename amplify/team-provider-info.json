@@ -18,21 +18,6 @@
       "function": {
         "gastro": {}
       }
-    },
-    "nonCFNdata": {
-      "function": {
-        "utility": {
-          "layerVersionMap": {
-            "1": {
-              "permissions": [
-                {
-                  "type": "private"
-                }
-              ]
-            }
-          }
-        }
-      }
     }
   }
 }

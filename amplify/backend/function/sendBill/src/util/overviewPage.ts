@@ -14,7 +14,12 @@ export const generateHeader = (doc) => {
 
 
 export const toCHF = (value) => {
-  return 'CHF ' + value.toFixed(2);
+  try {
+    return 'CHF ' + value.toFixed(2);
+  } catch (e) {
+    return 'CHF';
+  }
+
 };
 
 export const generateCustomerInformation = (doc, customer) => {
