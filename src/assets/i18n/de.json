@@ -75,5 +75,11 @@
     "total": "Total",
     "price": "Kosten",
     "paidAt": "Gezahtl am"
+  },
+  "landing": {
+    "first": {
+      "title": "",
+      "content": "Durch die Nutzung der Entry Check App ist ein schnelles Check-in garantiert. Für die Besucher ist eine einmalige Registration erforderlich, danach muss nur noch der QR Code gescannt werden. Somit ist eine einfache und schnelle Datenübermittlung der Kunden garantiert. Dabei spielt es keine Rolle, ob sich ein Besucher ursprünglich in Ihrer oder einer anderen Bar, Restaurant oder Kino registriert hat."
+    }
   }
 }

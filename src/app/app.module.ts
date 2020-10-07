@@ -63,6 +63,7 @@ import { BillComponent } from './domain/bill/bill.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { LandingTileComponent } from './domain/landing/landing-tile/landing-tile.component';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 Amplify.configure(awsconfig);
 
@@ -136,7 +137,8 @@ Amplify.configure(awsconfig);
     MatGridListModule,
     MatButtonToggleModule,
     MatSlideToggleModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    ClipboardModule
   ],
     entryComponents: [AddBarDialogComponent],
     providers: [DatePipe],

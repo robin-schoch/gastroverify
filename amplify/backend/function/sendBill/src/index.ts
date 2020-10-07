@@ -21,7 +21,7 @@ const sendBillAsEmail = (bill: Buffer, subscriber: Subscriber<any>) => {
   transporter.sendMail({
     from: 'noreply@entry-check.ch',
     to: 'gastro.verify@gmail.com',
-    subject: 'PDF Test',
+    subject: process.env.ENV === 'dev' ? 'DEVD EDV DEV' : 'Prod: Rechnung',
     text: 'here is your pdf',
     attachments: [
       {

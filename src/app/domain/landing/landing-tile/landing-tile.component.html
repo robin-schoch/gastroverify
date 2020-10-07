@@ -15,24 +15,29 @@
     </div>
     <div *ngIf="nextElem === 0" fxFlex="7"></div>
 
-    <div *ngIf="position === contentPosition.TOP_LEFT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="start start"
+    <div *ngIf="position === contentPosition.TOP_LEFT" fxFlex="86" fxLayout="column"
+         fxLayoutAlign="start start"
          class="innerContent">
         <ng-container *ngTemplateOutlet="content"></ng-container>
     </div>
 
-    <div *ngIf="position === contentPosition.TOP_RIGHT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="start end"
+    <div *ngIf="position === contentPosition.TOP_RIGHT" fxFlex="86" fxLayout="column"
+         fxLayoutAlign="start end"
+
          class="innerContent">
         <ng-container *ngTemplateOutlet="content"></ng-container>
     </div>
 
 
-    <div *ngIf="position === contentPosition.BOTTOM_RIGHT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="end end"
+    <div *ngIf="position === contentPosition.BOTTOM_RIGHT"  fxFlex="86" fxLayout="column"
+         fxLayoutAlign="end end"
          class="innerContent">
         <ng-container *ngTemplateOutlet="content"></ng-container>
     </div>
 
 
-    <div *ngIf="position === contentPosition.BOTTOM_LEFT" [@fadeInGrow] fxFlex="86" fxLayout="column" fxLayoutAlign="end start"
+    <div *ngIf="position === contentPosition.BOTTOM_LEFT" fxFlex="86" fxLayout="column"
+         fxLayoutAlign="end start"
          class="innerContent">
         <ng-container *ngTemplateOutlet="content"></ng-container>
 
@@ -40,9 +45,11 @@
 
     <ng-template #content>
         <div class="content-div" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px">
-            <span style="color: {{fontColor}}" class="tileTitle">{{titleText}}</span>
+            <span (click)="openCopyUrlSnackbar()" [cdkCopyToClipboard]="getAnchorURl()" [ngClass]="(smallText | async)?'tileTitle-small':'tileTitle'"
+                  style="color: {{fontColor}}">{{titleText}}</span>
 
-            <span style="color: {{fontColor}}" class="bodyTitle">{{bodyText}}</span>
+            <span [ngClass]="(smallText | async)?'bodyTitle-small':'bodyTitle'"
+                  style="color: {{fontColor}}">{{bodyText}}</span>
         </div>
     </ng-template>
 
