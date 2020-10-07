@@ -76,7 +76,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
       title: 'Garantierte Löschung',
       body: 'Bei der Verwendung von Entry Check garantieren wir die Vernichtung der Daten nach Ablauf der Aufbewahrungspflicht; Die Daten werden 14 Tage in der Datenbank gespeichert und danach unwiderruflich gelöst.',
       imageUrl: 'https://images.unsplash.com/photo-1528190336454-13cd56b45b5a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80',
-      position: ContentPosition.TOP_LEFT,
+      position: ContentPosition.TOP_RIGHT,
       color: '#1d1d1d'
     },
     {
