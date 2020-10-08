@@ -1,221 +1,150 @@
-<div class="main-landing" fxLayout="column">
+<div fxLayout="column">
 
-    <!--
-    <div class="top-banner" fxLayout="row" fxLayoutAlign="space-between center">
-        <div fxLayoutAlign="center center" fxLayoutGap="20px">
-            <img src="assets/circle-cropped.png" style="max-height: 40px">
-            <span class="landing-banner-title">Entry Check</span>
+    <div class="main-landing" fxLayout="column" #top>
+
+
+        <div fxFlex="93" fxLayoutAlign="center center" fxlayout="column">
+
+            <mat-grid-list *ngIf="(topGridTiles | async)" cols="2" fxFlex [rowHeight]="600" class="title-grid"
+                           gutterSize="20px">
+
+                <mat-grid-tile colspan="1">
+
+                    <div fxLayout="column" [@fadeInGrow]>
+                        <h1 class="mainname">Entry Check</h1>
+
+                        <pre class="mat-subheading-2 subtext">
+Einfaches und schnelles Check-in und Check-out Tool
+für Ihre Bar, Club oder andere Räumlichkeite
+                    </pre>
+
+                        <div fxFlex="5" fxLayoutAlign="end start" fxLayoutGap="20px"
+                             style="margin-right: 15px; margin-top: 15px">
+                            <button mat-raised-button color="primary"
+                                    (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
+                            <button mat-raised-button color="accent"
+                                    (click)="openMail()"
+                            >{{'context.signup' | translate}}</button>
+
+                        </div>
+
+                    </div>
+
+
+                </mat-grid-tile>
+
+
+                <mat-grid-tile colspan="1">
+
+                    <div class="success-checkmark2">
+                        <div class="check-icon2">
+                            <span class="icon-line2 line-tip2"></span>
+                            <span class="icon-line2 line-long2"></span>
+                            <div class="icon-circle2"></div>
+                            <div class="icon-fix2"></div>
+                        </div>
+                    </div>
+
+                </mat-grid-tile>
+
+
+            </mat-grid-list>
+
+            <div *ngIf="!(topGridTiles | async)" fxLayout="column">
+
+
+                <div fxFlex="30" *ngIf="showIcon | async">
+                    <div class="success-checkmark" style="min-height: 115px;">
+                        <div class="check-icon">
+                            <span class="icon-line line-tip"></span>
+                            <span class="icon-line line-long"></span>
+                            <div class="icon-circle"></div>
+                            <div class="icon-fix"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div fxFlex="100">
+                    <div fxLayout="column" [@fadeInGrow] *ngIf="!(isHandset | async)">
+                        <h1 class="mainname-small">Entry Check</h1>
+
+                        <pre class="mat-subheading-2 subtext-small">
+Einfaches und schnelles Check-in und Check-out Tool
+für ihre Bar, Club oder andere Räumlichkeite</pre>
+
+                        <div fxFlex="5" fxLayoutAlign="end start" fxLayoutGap="20px"
+                             style="margin-right: 15px; margin-top: 15px">
+                            <button mat-raised-button color="primary"
+                                    (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
+                            <button mat-raised-button color="accent"
+                                    (click)="openMail()"
+                            >{{'context.signup' | translate}}</button>
+
+                        </div>
+
+                    </div>
+                    <div fxLayout="column" [@fadeInGrow] *ngIf="isHandset | async">
+                        <h1 class="mainname-small">Entry Check</h1>
+
+                        <pre class="mat-subheading-2 subtext-small">
+Einfaches und schnelles Check-in
+und Check-out Toolfür ihre Bar,
+Club oder andere Räumlichkeite</pre>
+
+                        <div fxFlex="5" fxLayoutAlign="end start" fxLayoutGap="20px"
+                             style="margin-top: 15px">
+                            <button mat-raised-button color="primary"
+                                    (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
+                            <button mat-raised-button color="accent"
+                                    (click)="openMail()"
+                            >{{'context.signup' | translate}}</button>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
-        <button mat-flat-button color="primary" class="login-button"
-                (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
-    </div>
--->
-    <div fxFill fxLayoutAlign="center center" fxlayout="column">
 
-        <mat-grid-list *ngIf="(topGridTiles | async)" cols="2" fxFlex [rowHeight]="600">
-            <mat-grid-tile colspan="1">
-                <div class="mat-elevation-z21 titlecard" fxLayout="column" fxLayoutGap="10px">
-                    <h1 class="mat-display-1">Entry Check</h1>
-                    <span class="mat-subheading-2">Einfaches und schnelles Check-in und Check-out Tool für ihre Bar, Club oder andere Räumlichkeite</span>
-                    <span (click)="scrollToInfo()">mehr erfahren</span>
-                    <div fxLayout="row" fxLayoutGap="20px">
-                        <button mat-raised-button color="primary"
-                                (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
-                        <a mat-raised-button color="accent"
-                           href="mailto:gastro.verify@gmail.com?subject=Entry Check - Sign up">{{'context.signup' | translate}}</a>
-                    </div>
+        <div fxFlex="7" fxLayout="column" fxLayoutAlign="end center" class="scrolldowndiv" (click)="scrollToAnchor(0)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="250" height="250px">
+                <path class="top_chev-reverse"
+                      d="m16.59,12.47925l-4.59,4.58l-4.59,-4.58l-1.41,1.41l6,6l6,-6l-1.41,-1.41z"/>
+                <path class="middle_chev-reverse chev"
+                      d="m16.59,7.53529l-4.59,4.58l-4.59,-4.58l-1.41,1.41l6,6l6,-6l-1.41,-1.41z"/>
+                <path class="bottom_chev-reverse chev"
+                      d="m16.59,2.32764l-4.59,4.58l-4.59,-4.58l-1.41,1.41l6,6l6,-6l-1.41,-1.41z"/>
+            </svg>
 
-                </div>
-
-            </mat-grid-tile>
-
-            <mat-grid-tile colspan="1">
-                <div class="success-checkmark2" style="min-height: 115px;">
-                    <div class="check-icon2">
-                        <span class="icon-line2 line-tip2"></span>
-                        <span class="icon-line2 line-long2"></span>
-                        <div class="icon-circle2"></div>
-                        <div class="icon-fix2"></div>
-                    </div>
-                </div>
-            </mat-grid-tile>
-
-        </mat-grid-list>
-
-
-        <mat-grid-list *ngIf="!(topGridTiles | async)" cols="1" fxFlex [rowHeight]="250">
-            <mat-grid-tile>
-                <div class="mat-elevation-z17 titlecard2" fxLayout="column" fxLayoutGap="10px">
-                    <h1 class="mat-display-1">Entry Check</h1>
-                    <span class="mat-subheading-2">Einfaches und schnelles CheckIn und CheckOut Tool für ihre Bar, Club oder Kino</span>
-                    <span (click)="scrollToInfo()">mehr erfahren</span>
-                    <div fxLayout="row" fxLayoutGap="20px">
-                        <button mat-raised-button color="primary"
-                                (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
-                        <a mat-raised-button color="accent"
-                           href="mailto:gastro.verify@gmail.com?subject=Entry Check - Sign up">{{'context.signup' | translate}}</a>
-                    </div>
-
-                </div>
-            </mat-grid-tile>
-
-            <mat-grid-tile>
-                <div class="success-checkmark" style="min-height: 115px;">
-                    <div class="check-icon">
-                        <span class="icon-line line-tip"></span>
-                        <span class="icon-line line-long"></span>
-                        <div class="icon-circle"></div>
-                        <div class="icon-fix"></div>
-                    </div>
-                </div>
-            </mat-grid-tile>
-
-        </mat-grid-list>
-
+        </div>
 
     </div>
 
-</div>
+    <app-landing-tile *ngFor="let tile of landingTiles; let i = index"
+                      [bodyText]="tile.body"
+                      [titleText]="tile.title"
+                      [backgroundUrl]="tile.imageUrl"
+                      [nextElem]="i + 1"
+                      [lastElem]="landingTiles.length"
+                      [position]="tile.position"
+                      [fontColor]="!!tile.color ? tile.color : '#444444'"
+                      (scrollTo)="scrollToAnchor($event)"
+                      #anchor>
+
+    </app-landing-tile>
 
 
-<div class="second-landing">
+    <div class="footer-landing" id="support" style="color: #444444;" fxFlex fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
 
 
-
-    <mat-grid-list rowHeight="300px" cols="{{gridTiles | async}}" fxFlex gutterSize="30px" class="info-grid">
-        <mat-grid-tile class="mat-elevation-z10" fxLayout="column">
-
-
-            <mat-card class="example-card  " fxFlex>
-                <mat-card-header>
-                    <mat-card-title>Schneller Check-in für bereits Registrierte Besucher</mat-card-title>
-                </mat-card-header>
-
-                <mat-card-content>
-                    <p>
-                        Ein Besucher welcher sich mit Entry Check einmal angemeldet hat, muss bei der zweiten
-                        Anmeldung seine Daten nicht nochmals angegeben.
-                        Dabei spielt es keine Rolle ob sich ein Besucher ursprünglich in ihrere oder einer anderen
-                        Bar, Restaurant oder Kino registiert hat.
-                    </p>
-                </mat-card-content>
-
-            </mat-card>
-
-        </mat-grid-tile>
-        <mat-grid-tile class="mat-elevation-z10" fxLayout="column">
-            <mat-card class="example-card" fxFlex>
-                <mat-card-header>
-
-                    <mat-card-title>Datensicherheit</mat-card-title>
-
-                </mat-card-header>
-
-                <mat-card-content>
-                    <p>
-                        Alle Besucherdaten werden sicher und verschlüsselt abgespeichert.
-                    </p>
-                </mat-card-content>
-
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
-            <mat-card class="example-card" fxFlex>
-                <mat-card-header>
-
-                    <mat-card-title>Garantierte Löschung</mat-card-title>
-                </mat-card-header>
-
-                <mat-card-content>
-                    <p>
-                        Entry Check garantiert das die Besucherdaten nach ablauf der Aufbewahrungspflicht von 14
-                        Tagen vernichtet werden.
-                    </p>
-                </mat-card-content>
-
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
-            <mat-card class="example-card" fxFlex>
-                <mat-card-header>
-
-                    <mat-card-title>Apps</mat-card-title>
-
-                </mat-card-header>
-
-                <mat-card-content>
-                    <p>
-                        Android und iOS Apps sind verfügbar, aber mit einem herkömmlichen QR-Code Scanner von einem
-                        Smartphone geht es genau so schnell wie mit der App. Es ist keine zusätzliche Installation
-                        von Software nötig!
-                    </p>
-                </mat-card-content>
-
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
-            <mat-card class="example-card" fxFlex>
-                <mat-card-header>
-
-                    <mat-card-title>Räumliche Unterteilung</mat-card-title>
-
-                </mat-card-header>
-
-                <mat-card-content>
-                    <p>
-                        Mit Entry Check können sie optional ihre Bar, Restaurant oder Kino Räumlich unterteilen und
-                        QR-Codes für Tisch, Sektoren usw. generieren.
-                    </p>
-                </mat-card-content>
-
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
-            <mat-card class="example-card" fxFlex>
-                <mat-card-header>
-
-                    <mat-card-title>Pay-as-you go</mat-card-title>
-
-                </mat-card-header>
-
-                <mat-card-content>
-                    <p>
-                        Bezahlt nur was du brauchst! Entry Check verlangt keine Kündigungs- und
-                        Einrichtungsgebühren. Verrechnet werden CHF 0.15 pro einmaligem Besucher am Tag. Scanned ein
-                        besucher ihren Code mehrfach ein bezahlen sie nicht doppelt.
-                        Scanend sich niemand ein oder sie deaktivieren ihren Standort weil sie das System nicht mehr
-                        benötigen, so bezahlen sie auch nichts.
-                    </p>
-                </mat-card-content>
-
-            </mat-card>
-
-        </mat-grid-tile>
-        <mat-grid-tile  class="mat-elevation-z10" fxLayout="row">
-            <mat-card class="example-card" fxFlex>
-                <mat-card-header>
-
-                    <mat-card-title>Ready wenn sie es sind</mat-card-title>
+        <h1>Support Contact</h1>
+        <p>If you have issues, general feedback and feature enhancement requests, please contact us via E-Mail:</p>
+        <a href="mailto:gastro.verify@gmail.com?subject=Entry Check - Issue" style="color:#444444;">gastro.verify@gmail.com</a>
 
 
-                </mat-card-header>
-
-                <mat-card-content>
-                    <p>
-                        Entry Check ist innert kürzester Zeit eingerichtet. Account erstellen, einen Standort
-                        hinzufügen, QR-Codes ausdrucken - Fertig!
-                    </p>
-                </mat-card-content>
-
-            </mat-card>
-
-        </mat-grid-tile>
-    </mat-grid-list>
-
-
-</div>
-<div class="footer-landing" id="support" style="color: white;">
-    <h1>Support Contact</h1>
-    <p>If you have issues, general feedback and feature enhancement requests, please contact us via E-Mail:</p>
-    <a href="mailto:gastro.verify@gmail.com?subject=Entry Check - Issue">gastro.verify@gmail.com</a>
+    </div>
 </div>

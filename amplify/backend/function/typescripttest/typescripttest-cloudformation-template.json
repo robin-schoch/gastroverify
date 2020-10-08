@@ -33,6 +33,10 @@
     "storageLocationArn": {
       "Type": "String",
       "Default": "storageLocationArn"
+    },
+    "functionsendBillName": {
+      "Type": "String",
+      "Default": "functionsendBillName"
     }
   },
   "Conditions": {
@@ -97,6 +101,9 @@
             },
             "STORAGE_LOCATION_ARN": {
               "Ref": "storageLocationArn"
+            },
+            "FUNCTION_SENDBILL_NAME": {
+              "Ref": "functionsendBillName"
             }
           }
         },
@@ -111,7 +118,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-          "S3Key": "amplify-builds/typescripttest-3473594c4f2f69747871-build.zip"
+          "S3Key": "amplify-builds/typescripttest-6e574371306b2f2b7444-build.zip"
         }
       }
     },
@@ -212,6 +219,41 @@
         "PolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "lambda:Create*",
+                "lambda:Put*",
+                "lambda:Add*",
+                "lambda:Get*",
+                "lambda:List*",
+                "lambda:Invoke*",
+                "lambda:Update*",
+                "lambda:Delete*",
+                "lambda:Remove*"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:lambda:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":function:",
+                      {
+                        "Ref": "functionsendBillName"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
             {
               "Effect": "Allow",
               "Action": [

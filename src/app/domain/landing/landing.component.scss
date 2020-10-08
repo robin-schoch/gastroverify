@@ -3,15 +3,16 @@
 
   // background: url("../../../assets/background.svg");
   // background-color: #3cd1f7;
-  background-image: linear-gradient(to right, #3cd1f7, #89eb99);
+
+  background: linear-gradient(to right, rgb(60, 209, 247), rgb(137, 235, 153));
   background-repeat: no-repeat;
   background-size: cover;
-  opacity: 0.9;
-  margin: -10px;
+  opacity: 1;
+  margin: -10px -10px 0px -10px;
 }
 
 .top-banner {
-  max-width: 100vw;
+  max-width: 100vh;
   background-color: black;
   opacity: 0.9;
   height: 60px;
@@ -31,12 +32,55 @@
 
 }
 
+@keyframes comein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mainname {
+  font-size: 100px;
+  text-shadow: 2px 2px 5px #6d6d6d;
+  color: #3b3b3b;
+}
+
+
+.mainname-small {
+  font-size: 50px;
+  text-shadow: 2px 2px 5px #6d6d6d;
+  color: #3b3b3b;
+}
+
+::ng-deep .mat-raised-button  {
+  height: 50px !important;
+  font-size: 20px !important;
+
+}
+
+.subtext {
+  font-size: 20px;
+  color: #545454;
+}
+
+.subtext-small {
+  font-size: 17px;
+  color: #545454;
+}
+
+pre {
+  white-space: pre-line
+}
+
 .titlecard {
   background-color: white;
   padding: 50px;
   margin: 5px;
   border-radius: 6px;
 }
+
 .titlecard2 {
   background-color: white;
   padding: 20px;
@@ -46,17 +90,18 @@
 .second-landing {
   background-color: #e5e5e5;
   margin: -10px;
-  max-width: 100vw;
+  max-width: 100vh;
 }
 
 .footer-landing {
   background-color: black;
-  height: 10vh;
-  margin: -10px;
-  max-width: 100vw;
-  color: white;
-  padding-top: 10px;
-  padding-left: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: -10px;
+
+  padding: 15px;
+
+
 }
 
 .main-title {
@@ -64,14 +109,7 @@
   color: white;
 }
 
-.mat-grid-tile {
-  padding: 10px;
-}
-
-.example-card {
-  max-width: 600px;
-  height: 100%;
-  width: 100%;
+.title-grid {
 
 }
 
@@ -89,6 +127,16 @@
   }
   to {
     top: 0%;
+  }
+}
+
+
+@keyframes colorChangeCircle {
+  0%, 100% {
+    box-shadow: 0 5px 40px -3px #585858;
+  }
+  50% {
+    box-shadow: 0 5px 40px -3px #f8f8f8;
   }
 }
 
@@ -168,7 +216,11 @@
       position: absolute;
       box-sizing: content-box;
       border: 4 * $modi1 solid rgba(0, 0, 0, 1);
-      box-shadow:  0 5px 40px -3px #585858;
+      box-shadow: 0 5px 40px -3px #585858;
+    }
+
+    .icon-circle:hover {
+      animation: colorChangeCircle ease-in-out 1s;
     }
 
     .icon-fix {
@@ -367,8 +419,14 @@
       position: absolute;
       box-sizing: content-box;
       border: 4 * $modi solid rgba(0, 0, 0, 1);
-      box-shadow:  0 5px 40px -3px #585858;
+      box-shadow: 0 5px 40px -3px #585858;
+
     }
+
+    .icon-circle2:hover {
+      animation: colorChangeCircle ease-in-out 1s;
+    }
+
 
     .icon-fix2 {
       top: 8 * $modi;

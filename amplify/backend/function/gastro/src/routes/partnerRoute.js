@@ -66,6 +66,7 @@ exports.router.post('/:id/bar', (req, res) => {
             return rxjs_1.throwError(RequestError_1.RequestError.create(500, 'internal service', qr2));
         return rxjs_1.of(location);
     })).subscribe((location) => {
+        log.info(location);
         res.json(location);
     }, error => handleError(res, error));
 });
