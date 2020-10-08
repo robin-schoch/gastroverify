@@ -5,6 +5,7 @@
 
         <div fxFlex="93" fxLayoutAlign="center center" fxlayout="column">
 
+
             <mat-grid-list *ngIf="(topGridTiles | async)" cols="2" fxFlex [rowHeight]="600" class="title-grid"
                            gutterSize="20px">
 
@@ -125,6 +126,7 @@ Club oder andere Räumlichkeite</pre>
     </div>
 
     <app-landing-tile *ngFor="let tile of landingTiles; let i = index"
+                      class="removePadding"
                       [bodyText]="tile.body"
                       [titleText]="tile.title"
                       [backgroundUrl]="tile.imageUrl"
@@ -138,7 +140,8 @@ Club oder andere Räumlichkeite</pre>
     </app-landing-tile>
 
 
-    <div class="footer-landing" id="support" style="color: #444444;" fxFlex fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <div class="footer-landing" id="support" style="color: #444444;" fxFlex fxLayout="column"
+         fxLayoutAlign="start center" fxLayoutGap="10px">
 
 
         <h1>Support Contact</h1>
