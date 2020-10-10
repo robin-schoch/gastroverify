@@ -1,0 +1,53 @@
+<div fxFill class="defaultpadding">
+    <div fxLayoutGap="10px" fxLayout="row" fxFlex>
+
+        <div fxLayoutGap="10px" fxLayout="column" fxFlex>
+            <mat-form-field class="example-form-field">
+                <mat-label>Email</mat-label>
+                <input matInput type="text" [ngModel]="partner.email">
+            </mat-form-field>
+
+            <mat-form-field class="example-form-field">
+                <mat-label>Firstname</mat-label>
+                <input matInput type="text" [ngModel]="partner.firstName">
+            </mat-form-field>
+
+            <mat-form-field class="example-form-field">
+                <mat-label>Lastname</mat-label>
+                <input matInput type="text" [ngModel]="partner.lastName">
+            </mat-form-field>
+
+            <mat-form-field class="example-form-field">
+                <mat-label>referral</mat-label>
+                <input matInput type="text" [ngModel]="partner.referral ? partner.referral : 0">
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addReferral()">
+                    <mat-icon>arrow_circle_up</mat-icon>
+                </button>
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="removeReferral()">
+                    <mat-icon>arrow_circle_down</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+
+        <div fxLayoutGap="10px" fxLayout="column" fxFlex>
+            <mat-form-field class="example-form-field">
+                <mat-label>Address</mat-label>
+                <input matInput type="text" [ngModel]="partner.address">
+            </mat-form-field>
+
+            <mat-form-field class="example-form-field">
+                <mat-label>City</mat-label>
+                <input matInput type="text" [ngModel]="partner.city">
+            </mat-form-field>
+
+            <mat-form-field class="example-form-field">
+                <mat-label>Zipcode</mat-label>
+                <input matInput type="text" [ngModel]="partner.zipcode">
+
+            </mat-form-field>
+
+        </div>
+
+
+    </div>
+</div>

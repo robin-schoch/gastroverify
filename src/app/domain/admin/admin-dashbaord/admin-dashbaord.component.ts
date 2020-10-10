@@ -2,10 +2,11 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AdminService} from '../admin.service';
 import {Observable} from 'rxjs';
 import {Page} from '../../entry-browser/entry.service';
-import {Partner} from '../../gastro-dashboard/gastro.service';
+
 import {IPartnerOverview, PartnerOverviewComponent} from '../partner-overview/partner-overview.component';
 import {MatDialog} from '@angular/material/dialog';
 import {filter, map, tap} from 'rxjs/operators';
+import {Partner} from '../../../model/Partner';
 
 @Component({
     selector: 'app-admin-dashbaord',

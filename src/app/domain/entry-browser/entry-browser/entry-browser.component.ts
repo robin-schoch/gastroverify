@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {Location} from '../../gastro-dashboard/gastro.service';
+import {Location} from '../../../model/Location';
 import {Entry, EntryService, Page} from '../entry.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';

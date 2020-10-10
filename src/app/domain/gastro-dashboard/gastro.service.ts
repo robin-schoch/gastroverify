@@ -2,33 +2,8 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {AuthenticationService} from '../auth/authentication.service';
 import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
-
-export interface Partner {
-  email: string,
-  firstName: string,
-  lastName: string,
-  address: string,
-  city: string
-  zipcode: string,
-  locations: Location[],
-  bills: any[],
-  isHidden: boolean
-}
-
-export interface Location {
-  locationId: string,
-  name: string,
-  street: string,
-  city: string,
-  zipcode: string,
-  checkOutCode: string,
-  checkInCode: string,
-  active: boolean,
-  type: string,
-  senderID: string,
-  smsText: string,
-  timeToLive?: number
-}
+import {Partner} from '../../model/Partner';
+import {Location} from '../../model/Location';
 
 
 @Injectable({

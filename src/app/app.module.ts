@@ -64,6 +64,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { LandingTileComponent } from './domain/landing/landing-tile/landing-tile.component';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import { AdminPartnerDetailComponent } from './domain/admin/admin-partner-detail/admin-partner-detail.component';
 
 Amplify.configure(awsconfig);
 
@@ -95,6 +96,7 @@ Amplify.configure(awsconfig);
         AdminBillComponent,
         BillComponent,
         LandingTileComponent,
+        AdminPartnerDetailComponent,
 
     ],
   imports: [

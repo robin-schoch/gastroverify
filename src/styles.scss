@@ -66,8 +66,6 @@ Mat Dialog
 }
 
 
-
-
 .scrolldowndiv:hover .chev {
   fill: white;
 
@@ -77,7 +75,7 @@ Mat Dialog
   animation: hideshow 2s ease-in-out infinite;
 }
 
-.top_chev{
+.top_chev {
   animation: hideshow 2s 600ms ease-in-out infinite;
 
 }
@@ -90,18 +88,18 @@ Mat Dialog
 
 
 .bottom_chev-reverse {
-  animation: hideshow 2s 150ms ease-in-out infinite ;
+  animation: hideshow 2s 150ms ease-in-out infinite;
 
 }
 
 
 .middle_chev-reverse {
 
-  animation: hideshow 2s 450ms ease-in-out infinite ;
+  animation: hideshow 2s 450ms ease-in-out infinite;
 }
 
 .top_chev-reverse {
-  animation: hideshow 2s 750ms ease-in-out infinite ;
+  animation: hideshow 2s 750ms ease-in-out infinite;
 }
 
 @keyframes changeChevColor {
@@ -125,6 +123,12 @@ Mat Dialog
     opacity: 0
   }
 }
+
 .chev {
   fill: #7e7e7e;
+}
+
+
+.defaultpadding {
+  padding: 10px;
 }

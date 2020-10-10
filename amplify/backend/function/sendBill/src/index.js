@@ -16,50 +16,12 @@ const ses = new AWS.SES();
 let transporter = nodemailer.createTransport({
     SES: ses
 });
-/*
- const schemaBill: Schema = {
- id: {type: 'String', keyType: 'HASH'},
- date_time: {type: 'Date', keyType: 'RANGE'},
- some_property: {type: 'String'},
- another_property: {type: 'String'},
- reference: {type: 'String'},
- billingDate: {type: 'String'},
- total: {type: 'Number'},
- price: {type: 'Number'},
- distinctTotal: {type: 'Number'},
- paidAt: {type: 'String'},
- from: {type: 'String'},
- locations: {
- type: 'List',
- memberType: {
- type: 'Map', memberType: {type: 'Any'}
- }
- },
- detail: {L: []},
- partnerId: {type: 'String'},
- to: {type: 'String'},
- complete: {type: 'Boolean'},
- customer: {
- M: {
- zipcode: [Object],
- lastName: [Object],
- firstName: [Object],
- address: [Object],
- city: [Object],
- bills: [Object],
- locations: [Object],
- email: [Object],
- isHidden: [Object]
- }
- };
- };
- */
-const sendBillAsEmail = (bill, subscriber) => {
+const sendBillAsEmail = (bill, converted, subscriber) => {
     transporter.sendMail({
-        from: 'noReply@entry-check.ch',
+        from: 'noreply@entry-check.ch',
         to: 'gastro.verify@gmail.com',
-        subject: 'PDF Test',
-        text: 'here is your pdf',
+        subject: process.env.ENV === 'dev' ? 'DEVD EDV DEV' : 'Prod: Rechnung',
+        text: 'here is your pdf' + converted.email + ' ',
         attachments: [
             {
                 filename: 'rechnung.pdf',
@@ -75,53 +37,16 @@ const sendBillAsEmail = (bill, subscriber) => {
             subscriber.complete();
         }
     });
-    /*const params = {
-     Destination: {
-     ToAddresses: ['gastro.verify@gmail.com']
-     },
-     Message: {
-     Body: {
-     Text: {
-     Data: 'Test'
-  
-     }
-  
-     },
-  
-     Subject: {
-     Data: 'Test Email'
-  
-     },
-     attachments: [{
-     filename: 'attachment.pdf',
-     content: bill
-     }]
-     },
-     Source: 'noReply@entry-check.ch'
-     };
-     ses.sendEmail(params, (err, data) => {
-     if (err) {
-     subscriber.error(err);
-     } else {
-     subscriber.next(data);
-     subscriber.complete();
-     }
-  
-  
-     });*/
 };
 const handleDynamoRecord = (record) => {
     return new rxjs_1.Observable(subscriber => {
         switch (record.eventName) {
             case 'INSERT': {
-                console.log(record.dynamodb.NewImage);
                 const converted = AWS.DynamoDB.Converter.unmarshall((record.dynamodb.NewImage));
-                console.log(converted);
                 const { doc, buffers } = pdfUtil_1.createBillPDF(converted, converted.detail);
                 doc.on('end', () => {
                     let pdfData = Buffer.concat(buffers);
-                    // console.log(pdfData.toString('utf-8'));
-                    sendBillAsEmail(pdfData, subscriber);
+                    sendBillAsEmail(pdfData, converted, subscriber);
                 });
                 break;
             }

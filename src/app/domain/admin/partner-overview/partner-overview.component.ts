@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Partner} from '../../gastro-dashboard/gastro.service';
+import {Partner} from '../../../model/Partner';
 import {AdminService} from '../admin.service';
 
 

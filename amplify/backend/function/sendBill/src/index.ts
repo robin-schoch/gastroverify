@@ -17,12 +17,12 @@ let transporter = nodemailer.createTransport({
   SES: ses
 });
 
-const sendBillAsEmail = (bill: Buffer, subscriber: Subscriber<any>) => {
+const sendBillAsEmail = (bill: Buffer, converted: any, subscriber: Subscriber<any>) => {
   transporter.sendMail({
     from: 'noreply@entry-check.ch',
     to: 'gastro.verify@gmail.com',
     subject: process.env.ENV === 'dev' ? 'DEVD EDV DEV' : 'Prod: Rechnung',
-    text: 'here is your pdf',
+    text: 'here is your pdf' + converted.email + ' ',
     attachments: [
       {
         filename: 'rechnung.pdf',
@@ -48,7 +48,7 @@ const handleDynamoRecord = (record: any): Observable<any> => {
         const {doc, buffers} = createBillPDF(converted, converted.detail);
         doc.on('end', () => {
           let pdfData = Buffer.concat(buffers);
-          sendBillAsEmail(pdfData, subscriber);
+          sendBillAsEmail(pdfData, converted, subscriber);
         });
         break;
       }

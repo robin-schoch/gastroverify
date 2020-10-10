@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {Location} from '../gastro.service';
+import {Location} from '../../../model/Location';
 import {
     IQRCodeGeneratorData,
     QrCodeGeneratorDialogComponent

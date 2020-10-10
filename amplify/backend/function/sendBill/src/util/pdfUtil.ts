@@ -212,15 +212,15 @@ export const createBillPDF = (overview, pages) => {
   let buffers = [];
 
    doc.on('data', buffers.push.bind(buffers));
-   doc.on('end', () => {
+   /*doc.on('end', () => {
 
    let pdfData = Buffer.concat(buffers);
-   console.log(pdfData.toString('utf-8'));
+
 
    // ... now send pdfData as attachment ...
 
    });
-
+*/
 
   overviewPage(doc, overview);
   pages.forEach(p => detailPages(doc, p));
@@ -234,7 +234,7 @@ export const createBillPDF = (overview, pages) => {
 const overviewPage = (doc, overview) => {
   generateHeader(doc);
   generateCustomerInformation(doc, overview);
-  let pos = generateInvoiceTable(doc, overview.locations);
+  let pos = generateInvoiceTable(doc, overview);
   if (pos > 640) {
     doc.addPage();
     generateHeader(doc);

@@ -2,7 +2,9 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {AuthenticationService} from '../auth/authentication.service';
 import {ToolbarService} from '../main/toolbar.service';
 import {EntryService} from '../entry-browser/entry.service';
-import {GastroService, Location, Partner} from './gastro.service';
+import {GastroService} from './gastro.service';
+import {Location} from '../../model/Location';
+import {Partner} from '../../model/Partner';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, skip, tap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';

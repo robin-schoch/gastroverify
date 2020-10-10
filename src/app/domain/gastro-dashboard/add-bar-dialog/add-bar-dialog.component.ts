@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {GastroService, Location} from '../gastro.service';
+import {GastroService} from '../gastro.service';
+import {Location} from '../../../model/Location';
 import {SnackbarService} from '../../snackbar/snackbar.service';
 import {BehaviorSubject} from 'rxjs';
 

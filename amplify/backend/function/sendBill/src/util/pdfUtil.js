@@ -204,11 +204,15 @@ exports.createBillPDF = (overview, pages) => {
     // doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
     let buffers = [];
     doc.on('data', buffers.push.bind(buffers));
-    doc.on('end', () => {
-        let pdfData = Buffer.concat(buffers);
-        console.log(pdfData.toString('utf-8'));
-        // ... now send pdfData as attachment ...
+    /*doc.on('end', () => {
+ 
+    let pdfData = Buffer.concat(buffers);
+ 
+ 
+    // ... now send pdfData as attachment ...
+ 
     });
+ */
     overviewPage(doc, overview);
     pages.forEach(p => detailPages(doc, p));
     doc.end();
@@ -217,7 +221,7 @@ exports.createBillPDF = (overview, pages) => {
 const overviewPage = (doc, overview) => {
     overviewPage_1.generateHeader(doc);
     overviewPage_1.generateCustomerInformation(doc, overview);
-    let pos = overviewPage_1.generateInvoiceTable(doc, overview.locations);
+    let pos = overviewPage_1.generateInvoiceTable(doc, overview);
     if (pos > 640) {
         doc.addPage();
         overviewPage_1.generateHeader(doc);

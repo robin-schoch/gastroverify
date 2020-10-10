@@ -11,7 +11,7 @@ export class Partner {
   public locations?: Location[];
   public bills?;
   public isHidden?: boolean;
-  public timeToLive?: number;
+  public referral?: number;
 
   public static fromRequest(req: any): Partner {
     return new Partner(
@@ -33,7 +33,8 @@ export class Partner {
       zipcode,
       locations = [],
       bills = [],
-      isHidden = false
+      isHidden = false,
+      referral = 0
   ) {
     this.email = email;
     this.firstName = firstName;
@@ -44,6 +45,7 @@ export class Partner {
     this.locations = locations;
     this.bills = bills;
     this.isHidden = isHidden;
+    this.referral = referral;
   }
 }
 
@@ -62,6 +64,7 @@ export class Location {
   public type;
   public senderID;
   public smsText;
+  public timeToLive?: number;
 
   public static fromRequest(req): Location {
     return new Location(

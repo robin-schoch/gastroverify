@@ -64,10 +64,12 @@ export const generateTableRow = (doc, y, location, distinctEntries, price) => {
      .text(price, 450, y, {width: 90, align: 'right'});
 };
 
-export const generateInvoiceTable = (doc, invoice) => {
+export const generateInvoiceTable = (doc, meta) => {
+  const invoice = meta.locations;
   let i;
   let pageCounter = 0;
   let invoiceTableTop = 330;
+  let endPageCounter = 1;
   doc.font('Helvetica-Bold');
   generateTableRow(doc, invoiceTableTop, 'Standort', 'Einamlige Eintritte', 'Kosten');
   generateHr(doc, invoiceTableTop + 20);
@@ -86,26 +88,30 @@ export const generateInvoiceTable = (doc, invoice) => {
     generateHr(doc, position + 20);
     pageCounter++;
   }
-  if (invoiceTableTop + (pageCounter + 1) * 30 > 600) {
+  if (invoiceTableTop + (pageCounter + endPageCounter) * 30 > 600) {
     doc.addPage();
     generateHeader(doc);
     invoiceTableTop = 100;
     pageCounter = 0;
   }
   doc.font('Helvetica-Bold');
-  generateTableRow(doc, invoiceTableTop + (pageCounter + 1) * 30, 'Summe',
-      invoice.map(elem => elem.distinctTotal).reduce((acc, v) => acc + v, 0),
-      toCHF(invoice.map(elem => elem.price).reduce((acc, v) => acc + v, 0)));
+  generateTableRow(doc, invoiceTableTop + (pageCounter + endPageCounter) * 30, 'Summe',
+      meta.distinctTotal,
+      toCHF(meta.price));
   doc.font('Helvetica');
-  generateTableRow(doc, invoiceTableTop + (pageCounter + 2) * 30, 'Mehrwertsteuer 0.0%',
-      '',
-      toCHF(0));
-  generateHr(doc, invoiceTableTop + (pageCounter + 2) * 30 + 20);
+  endPageCounter = endPageCounter + 1;
+  generateTableRow(doc, invoiceTableTop + (pageCounter + endPageCounter) * 30, 'Mehrwertsteuer 0.0%', '', toCHF(0));
+  if (meta.discount > 0) {
+    endPageCounter = endPageCounter + 1;
+    generateTableRow(doc, invoiceTableTop + (pageCounter + endPageCounter) * 30, 'Rabatt', meta.discount + '%', toCHF(meta.finalizedPrice - meta.price));
+  }
+  generateHr(doc, invoiceTableTop + (pageCounter + endPageCounter) * 30 + 20);
   doc.font('Helvetica-Bold');
-  generateTableRow(doc, invoiceTableTop + (pageCounter + 3) * 30, 'Gesammtbetrag', '',
-      toCHF(invoice.map(elem => elem.price).reduce((acc, v) => acc + v, 0)));
+  endPageCounter = endPageCounter + 1;
+  generateTableRow(doc, invoiceTableTop + (pageCounter + endPageCounter) * 30, 'Gesammtbetrag', '',
+      toCHF(meta.finalizedPrice));
   doc.font('Helvetica');
-  return invoiceTableTop + (pageCounter + 3) * 30;
+  return invoiceTableTop + (pageCounter + endPageCounter) * 30;
 };
 
 //Zu begleichen innert 30 Tagen auf folgendes Konto:;;
@@ -121,13 +127,4 @@ export const generateFooter = (doc, customer) => {
      .text('CH39 0023 2232 1189 9540 Z')
      .text('Buchungstext: ' + customer.reference);
   doc.font('Helvetica');
-  /*
-
-
-   Zu begleichen innert 30 Tagen auf folgendes Konto:
-   Robin Michael Schoch
-   UBS AG
-   5400 Baden
-   CH39 0023 2232 1189 9540 Z
-   */
 };
