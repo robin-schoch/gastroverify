@@ -70,6 +70,7 @@ import {EntryCheckTableComponent} from './components/entry-check-table/entry-che
 import {EntryCheckTableToolbarDirective} from './components/entry-check-table/entry-check-table-toolbar.directive';
 import {AdminCoronaAlarmComponent} from './domain/admin/admin-corona-alarm/admin-corona-alarm.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
 
 Amplify.configure(awsconfig);
 
@@ -108,6 +109,7 @@ Amplify.configure(awsconfig);
 
   ],
   imports: [
+    MatMomentDateModule,
     MatNativeDateModule,
     BrowserModule,
     FlexLayoutModule,

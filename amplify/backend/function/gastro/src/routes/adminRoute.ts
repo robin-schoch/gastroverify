@@ -177,12 +177,14 @@ router.put('/partner/:partnerId/referral', ((req, res) => {
 
 router.get('/partner/:partnerId/location/:locationId/coronaalarm', (req, res) => {
   entrystorage.getQuarantine(req.params.locationId, req.query.time, req.query.firstName, req.query.lastname, req.query.phoneNumber)
-              .subscribe(
-                  elem => {
-                    console.log(elem.length);
+              .subscribe(elem => {
+                    log.info(elem.length);
                     res.json(elem);
                   },
-                  error => res.json(error)
+                  error => {
+                    log.error(error);
+                    res.json(error);
+                  }
               );
 });
 

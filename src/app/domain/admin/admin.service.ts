@@ -201,7 +201,7 @@ export class AdminService {
 
   getQuarantineList(email: string, location: string, time: string, firstName: string, lastName: string, phoneNumber: string): Observable<number> {
     return this.amplifyHttpClient.get(this.apiName,
-        '/v1/admin/partner' + email + '/location/' + location + '/coronaalarm',
+        '/v1/admin/partner/' + email + '/location/' + location + '/coronaalarm',
         {
           queryStringParameters: {
             time: time,
