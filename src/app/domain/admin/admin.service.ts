@@ -191,12 +191,26 @@ export class AdminService {
 
   changeReferral(up: boolean, partner: Partner): Observable<any> {
     return this.amplifyHttpClient.put(this.apiName,
-        '/v1/admin/partner'+ partner.email + '/hide',
+        '/v1/admin/partner' + partner.email + '/referral',
         {
           body: {
             up: up
           }
         });
+  }
+
+  getQuarantineList(email: string, location: string, time: string, firstName: string, lastName: string, phoneNumber: string): Observable<number> {
+    return this.amplifyHttpClient.get(this.apiName,
+        '/v1/admin/partner' + email + '/location/' + location + '/coronaalarm',
+        {
+          queryStringParameters: {
+            time: time,
+            firstName: firstName,
+            lastName: lastName,
+            phoneNumber: phoneNumber
+          }
+        }
+    );
   }
 
 

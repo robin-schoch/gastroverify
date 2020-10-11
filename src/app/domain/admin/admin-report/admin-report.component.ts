@@ -92,9 +92,7 @@ export class AdminReportComponent implements OnInit {
       this.location = location;
       this.adminService.reports = null;
       this.loadReports(location.locationId);
-
     }
-
   }
 
   subtractDay(isoTime: string): string {

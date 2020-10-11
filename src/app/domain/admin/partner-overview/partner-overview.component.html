@@ -16,6 +16,9 @@
         <mat-tab label="Bills">
             <app-admin-bill [partnerId]="data.partner.email"></app-admin-bill>
         </mat-tab>
+        <mat-tab label="Corona Alarm">
+            <app-admin-corona-alarm [partner]="data.partner"></app-admin-corona-alarm>
+        </mat-tab>
     </mat-tab-group>
 
 </div>

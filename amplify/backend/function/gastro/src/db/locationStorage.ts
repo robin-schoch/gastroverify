@@ -1,8 +1,9 @@
-import {DbConnection, DynamodbError} from '../util/dynamoDbDriver';
+import {DbConnection, DynamodbError, isNotDynamodbError} from '../util/dynamoDbDriver';
 import {Location} from '../domain/partner';
-import {Observable} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {Page} from '../domain/page';
 import * as moment from 'moment';
+import {switchMap} from 'rxjs/operators';
 
 
 export class locationStorage {
@@ -18,8 +19,11 @@ export class locationStorage {
     );
   }
 
-  public findLocation(email: string, locationId: string): Observable<Location | DynamodbError<Location>> {
-    return this.dbConnection.findById(email, locationId);
+  public findLocation(email: string, locationId: string): Observable<Location> {
+    return this.dbConnection.findById(email, locationId)
+               .pipe(switchMap(a => isNotDynamodbError<Location>(a) ?
+                                    of(a) :
+                                    throwError(a)));
   }
 
   public findLocations(email: string, pageSize = 40, LastEvaluatedKey = null): Observable<Page<Location> | DynamodbError<Location>> {
@@ -56,7 +60,7 @@ export class locationStorage {
       ReturnValues: 'ALL_NEW'
     };
     const param = Object.assign({}, updateParams, active ? remove : add);
-    console.log(param)
+    console.log(param);
     return this.dbConnection.updateItem(param);
   }
 

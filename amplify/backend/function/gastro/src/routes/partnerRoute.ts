@@ -20,14 +20,12 @@ const mappingStorage = new QrCodeMappingStorage();
 
 export const router = Router();
 
-router.get(
-    '/',
-    (req: any, res) => {
+router.get('/', (req: any, res) => {
       // @ts-ignore
       forkJoin([
-        storage.findPartner(req.xUser.email).pipe(
-            switchMap(a => isNotDynamodbError<Partner>(a) ? of(a) : throwError(a)),
-        ),
+        storage.findPartner(req.xUser.email)
+               .pipe(switchMap(a => isNotDynamodbError<Partner>(a) ? of(a) : throwError(a)),
+               ),
         locationstorage.findLocations(req.xUser.email).pipe(
             switchMap(inner => isNotDynamodbError<Page<Location>>(inner) ? of(inner) : throwError(inner)),
         ),
@@ -41,9 +39,7 @@ router.get(
     }
 );
 
-router.get(
-    '/:id',
-    (req: any, res) => {
+router.get('/:id', (req: any, res) => {
       forkJoin([
         storage.findPartner(req.xUser.email),
         locationstorage.findLocations(req.xUser.email)
@@ -65,9 +61,7 @@ router.get(
 );
 
 
-router.post(
-    '/:id/bar',
-    (req, res) => {
+router.post('/:id/bar', (req, res) => {
       const location = Location.fromRequest(req);
       log.info(location);
       if (!location.locationId) {
@@ -169,17 +163,14 @@ router.put('/:id/bar/:barId', (req: any, res) => {
 });
 
 
-router.post(
-    '/',
-    (req, res) => {
-      storage.createPartner(
-          Partner.fromRequest(req)
-      ).subscribe(success => {
+router.post('/', (req, res) => {
+      storage.createPartner(Partner.fromRequest(req)).subscribe(success => {
         res.json(success);
       });
 
     }
 );
+
 
 
 const handleError = (res, error) => {

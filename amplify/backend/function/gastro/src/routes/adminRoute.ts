@@ -3,13 +3,14 @@ import {Router} from 'express';
 import {createLogger} from 'bunyan';
 import {isNotDynamodbError} from '../util/dynamoDbDriver';
 import {switchMap} from 'rxjs/operators';
-import {of, throwError} from 'rxjs';
+import {forkJoin, of, throwError} from 'rxjs';
 import {entryStorage} from '../db/entryStorage';
 import {reportStorage} from '../db/reportStorage';
 import {Page} from '../domain/page';
 import {DailyReport} from '../domain/DailyReport';
 import {locationStorage} from '../db/locationStorage';
 import {Location} from '../domain/partner';
+import {sendCoronaSMS} from '../util/smsUtil';
 
 
 const {monthlyReport} = require('../db/monthlyReport');
@@ -167,3 +168,31 @@ router.put('/partner/:partnerId/referral', ((req, res) => {
   });
 
 }));
+
+/***************************************************************************
+ *                                                                         *
+ * corona alarm                                                            *
+ *                                                                         *
+ **************************************************************************/
+
+router.get('/partner/:partnerId/location/:locationId/coronaalarm', (req, res) => {
+  entrystorage.getQuarantine(req.params.locationId, req.query.time, req.query.firstName, req.query.lastname, req.query.phoneNumber)
+              .subscribe(
+                  elem => {
+                    console.log(elem.length);
+                    res.json(elem);
+                  },
+                  error => res.json(error)
+              );
+});
+
+router.post('/partner/:partnerId/location/:locationId/coronaalarm', (req, res) => {
+  entrystorage.getQuarantine(req.params.locationId, req.query.time, req.query.fistname, req.query.lastname, req.query.phoneNumber)
+              .pipe(switchMap(elem => forkJoin(elem.map(entry => sendCoronaSMS(entry.phoneNumber, req.body.message)))))
+              .subscribe(
+                  elem => {
+                    res.json(elem);
+                  },
+                  error => res.json(error)
+              );
+});

@@ -20,7 +20,8 @@ exports.router = express_1.Router();
 exports.router.get('/', (req, res) => {
     // @ts-ignore
     rxjs_1.forkJoin([
-        storage.findPartner(req.xUser.email).pipe(operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ? rxjs_1.of(a) : rxjs_1.throwError(a))),
+        storage.findPartner(req.xUser.email)
+            .pipe(operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ? rxjs_1.of(a) : rxjs_1.throwError(a))),
         locationstorage.findLocations(req.xUser.email).pipe(operators_1.switchMap(inner => dynamoDbDriver_1.isNotDynamodbError(inner) ? rxjs_1.of(inner) : rxjs_1.throwError(inner))),
     ]).subscribe(([partner, locations]) => {
         partner.locations = locations.Data;
