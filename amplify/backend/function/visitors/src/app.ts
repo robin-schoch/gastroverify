@@ -165,13 +165,13 @@ app.post('/v1/validate', (req, res) => {
 
 app.post('/v1/checkin/:qrId', (req, res) => {
       log.info('new checkin...');
-      if (!hasRequriredFields(req.body)){
+      if (!hasRequriredFields(req.body)) {
         res.status(403);
         res.json('missing parameter');
       }
       if (!req.header('Authorization')) {
         const error = CheckInError.create(402, 'token is invalid');
-        log.error(error)
+        log.error(error);
         res.status(error.status);
         res.json(error);
       }
@@ -203,7 +203,8 @@ app.post('/v1/checkin/:qrId', (req, res) => {
               time: checkin.entryTime,
               locationName: qrcode.locationName,
               barId: checkin.locationId,
-              locationId: checkin.locationId
+              locationId: checkin.locationId,
+              relatedCheckout: qrcode.relatedCheckOutCode
             });
           },
           error => {

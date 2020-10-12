@@ -70,16 +70,8 @@ router.post('/:id/bar', (req, res) => {
       }
       forkJoin([
         locationstorage.createLocation(location),
-        mappingStorage.createMapping(QrCodeMapping.fromLocation(
-            location,
-            location.partnerId,
-            true
-        )),
-        mappingStorage.createMapping(QrCodeMapping.fromLocation(
-            location,
-            location.partnerId,
-            false
-        ))
+        mappingStorage.createMapping(QrCodeMapping.fromLocation(location, location.partnerId, true)),
+        mappingStorage.createMapping(QrCodeMapping.fromLocation(location, location.partnerId, false))
       ]).pipe(
           switchMap(([partner, qr1, qr2]) => {
             if (!isNotDynamodbError(partner)) return throwError(RequestError.create(500, 'internal service', partner));
@@ -125,17 +117,9 @@ router.delete('/:id/bar/:barId', (req: any, res) => {
 );
 
 router.put('/:id/bar/:barId', (req: any, res) => {
-  log.info({
-    a: req.xUser.email,
-    B: req.params.barId,
-    x: true
-  });
-  locationstorage.changeActivateLocation(
-      // @ts-ignore
-      req.xUser.email,
-      req.params.barId,
-      true
-  ).pipe(
+  log.info({a: req.xUser.email, B: req.params.barId, x: true});
+  // @ts-ignore
+  locationstorage.changeActivateLocation(req.xUser.email, req.params.barId, true).pipe(
       tap(elem => log.info(elem)),
       switchMap((inner) => isNotDynamodbError<Partial<Location>>(inner) ? of(inner) : throwError(inner)),
       mergeMap((location: Location) => forkJoin([
@@ -170,7 +154,6 @@ router.post('/', (req, res) => {
 
     }
 );
-
 
 
 const handleError = (res, error) => {

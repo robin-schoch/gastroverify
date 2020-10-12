@@ -10,44 +10,38 @@
  STORAGE_QRMAPPING_NAME
  Amplify Params - DO NOT EDIT */
 
+import {map, switchMap} from 'rxjs/operators';
+import {QrCodeMappingStorage} from './db/qrCodeMappingStorage';
+import {locationStorage} from './db/locationStorage';
+import {forkJoin} from 'rxjs';
+import {QrCodeMapping} from './domain/qrCodeMapping';
+
 const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'});
 const lambda = new AWS.Lambda();
-
-
-
 export const handler = async (event, context) => {
-      console.log(process.env.FUNCTION_SENDBILL_NAME);
-      const params = {
-        FunctionName: process.env.FUNCTION_SENDBILL_NAME, // the lambda function we are going to invoke
-        InvocationType: 'Event',
-        LogType: 'Tail',
-        Payload: '{ "name" : "Alex" }'
-      };
 
 
-      const p = new Promise((resolve, reject) => {
-        lambda.invoke(params, function (err, data) {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            console.log(data);
-            resolve(data);
-          }
-        });
+  // migration for locations
+  const storage = new QrCodeMappingStorage();
+  const lstorage = new locationStorage();
 
-      });
-      const res = await p;
+  lstorage.findAllLocation().pipe(
+      map(page => page.Data),
+      switchMap(locations => forkJoin(
+          locations.map(elem => {
+            return forkJoin([
+              storage.createMapping(QrCodeMapping.fromLocation(elem, elem.partnerId, true)),
+              storage.createMapping(QrCodeMapping.fromLocation(elem, elem.partnerId, false))
+            ]);
+          })
+          )
+      )
+  ).subscribe(elems => {
+    console.log(elems);
+  });
 
-      return {
-        statusCode: 200,
-        body: {
-          res: res
-        }
-      };
 
 // const res = await dbConnection.findById('0ae17e6b-64dc-4e97-8fc5-0823767fae36').toPromise();
 
-    }
-;
+};
