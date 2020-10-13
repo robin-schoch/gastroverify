@@ -31,7 +31,7 @@ export class PersonalAddDialogComponent implements OnInit, OnDestroy {
   public _subs: Subscription[] = [];
 
   public orgs = [
-    'NachtGallen'
+    'NachtGallen',
   ];
 
   constructor(
@@ -65,6 +65,10 @@ export class PersonalAddDialogComponent implements OnInit, OnDestroy {
   }
 
   openBottomSheet(): void {
+    if (this.acceptedBuisnessinquries.value) {
+      this.acceptedBuisnessinquries.next(false);
+      return;
+    }
     this._bottomSheet.open(AllgemeineGeschaetsbedienungenComponent, {
       hasBackdrop: false,
       panelClass: 'my-component-bottom-sheet'

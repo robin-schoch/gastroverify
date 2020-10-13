@@ -100,21 +100,21 @@ export class entryStorage {
     return this.findPossibleCoronaSubject(id, timeOfEntry, firstName, lastName, phoneNumber).pipe(
         tap(elem => console.log(elem)),
         switchMap(subjects => forkJoin(subjects.map(subject =>
-            this.findPossibleQuarantine(
-                id, subject[0].entryTime, !!subject[1] ?
-                                          subject[1].entryTime :
-                                          moment(timeOfEntry).endOf('day').add(5, 'hour').toISOString(),
-                subject[0].tableNumber)
-        )).pipe(
-            map(elem => {
-              elem.map(elem => elem);
+                this.findPossibleQuarantine(id, subject[0].entryTime,
+                    !!subject[1] ?
+                    subject[1].entryTime :
+                    moment(timeOfEntry).endOf('day').add(5, 'hour').toISOString(),
+                    subject[0].tableNumber)
+            )).pipe(map(elem => {
+              // elem.map(elem => elem);
               const numberSet = new Set();
               return [].concat(...elem).filter(elem => {
                 const unique = !numberSet.has(elem.phoneNumber);
                 numberSet.add(elem.phoneNumber);
                 return unique;
               });
-            })))
+            }))
+        )
     );
   }
 
@@ -132,26 +132,28 @@ export class entryStorage {
                                     of(b.Data) :
                                     throwError(b)),
                    map(entries => entries.filter(entry => {
-                     if (!!phoneNumber) return entry.phoneNumber === phoneNumber;
-                     if (!!lastName && !!firstName) return entry.lastName === lastName && entry.firstName === firstName;
-                     return false;
-                   }).reduce((acc, entry) => {
-                     switch (entry.checkIn) {
-                       case true: {
-                         if (acc.length === 0) return [[entry, null]];
-                         if (!acc[acc.length - 1][1]) return acc;
-                         if (!!acc[acc.length - 1][1]) return [...acc, [entry, null]];
-                         break;
-                       }
-                       case false: {
-                         if (acc.length === 0) return [[entry, null]];
-                         acc[acc.length - 1][1] = entry;
-                         return acc;
-                       }
-                       default:
-                         return acc;
-                     }
-                   }, [])));
+                         if (!!phoneNumber) return entry.phoneNumber === phoneNumber;
+                         if (!!lastName && !!firstName) return entry.lastName === lastName && entry.firstName === firstName;
+                         return false;
+                       }).reduce((acc, entry) => {
+                         switch (entry.checkIn) {
+                           case true: {
+                             if (acc.length === 0) return [[entry, null]];
+                             if (!acc[acc.length - 1][1]) return acc;
+                             if (!!acc[acc.length - 1][1]) return [...acc, [entry, null]];
+                             break;
+                           }
+                           case false: {
+                             if (acc.length === 0) return [[entry, null]];
+                             acc[acc.length - 1][1] = entry;
+                             return acc;
+                           }
+                           default:
+                             return acc;
+                         }
+                       }, [])
+                   )
+               );
   }
 
   public findPossibleQuarantine(id: string, timeOfEntry: string, timeOfExit: string, table: number = -1): Observable<Entry[]> {
