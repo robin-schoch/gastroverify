@@ -29,6 +29,19 @@ export class Partner {
     );
   }
 
+  public static fromRequestUpdate(req: any): Partner {
+    return new Partner(
+        req.xUser.email,
+        req.body.contactEmail,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.address,
+        req.body.city,
+        req.body.zipcode,
+        !!req.body.organisation ? req.body.organisation : 'default'
+    );
+  }
+
   constructor(
       email,
       contactEmail,

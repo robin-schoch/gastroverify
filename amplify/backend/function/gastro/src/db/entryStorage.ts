@@ -139,11 +139,20 @@ export class entryStorage {
                                     of(b.Data) :
                                     throwError(b)),
                    tap(found => log.info(found)),
-                   map(entries => entries.filter(entry => {
-                         if (!!phoneNumber) return entry.phoneNumber === phoneNumber;
-                         if (!!lastName && !!firstName) return entry.lastName === lastName && entry.firstName === firstName;
+                   map(entries => entries
+                       .filter(entry => {
+                         if (!!phoneNumber) {
+                           log.info('phonenumber matched');
+                           return entry.phoneNumber === phoneNumber;
+                         }
+                         if (!!lastName && !!firstName) {
+                           log.info('name matched');
+                           return entry.lastName === lastName && entry.firstName === firstName;
+                         }
+                         log.warn('No match');
                          return false;
-                       }).reduce((acc, entry) => {
+                       })
+                       .reduce((acc, entry) => {
                          switch (entry.checkIn) {
                            case true: {
                              if (acc.length === 0) return [[entry, null]];

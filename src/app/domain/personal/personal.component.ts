@@ -10,7 +10,6 @@ import {filter, map, tap} from 'rxjs/operators';
 import {IPersonalAddDialogData, PersonalAddDialogComponent} from './personal-add-dialog/personal-add-dialog.component';
 import {TranslateService} from '@ngx-translate/core';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {AllgemeineGeschaetsbedienungenComponent} from './allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
 
 @Component({
   selector: 'app-personal',
@@ -68,6 +67,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   updateBillingAddress() {
     // this.gastroService.
+
+    this.gastroService.updatePartner(this.gastroService.gastro)
+        .subscribe(elem => this.gastroService.gastro = elem);
 
   }
 

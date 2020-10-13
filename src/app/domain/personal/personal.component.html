@@ -9,6 +9,14 @@
 
 
                 <mat-form-field>
+                    <input [(ngModel)]="partner.contactEmail" class="cell"
+                           delayedFocus matInput name="contactEmail"
+                           placeholder="{{'personal.name' | translate}}"
+                           required type="name">
+                </mat-form-field>
+
+
+                <mat-form-field>
                     <input [(ngModel)]="partner.firstName" class="cell"
                            delayedFocus matInput name="firstname"
                            placeholder="{{'personal.name' | translate}}"

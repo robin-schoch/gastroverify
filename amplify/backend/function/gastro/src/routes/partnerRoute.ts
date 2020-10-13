@@ -155,6 +155,13 @@ router.post('/', (req, res) => {
     }
 );
 
+router.put('/', (req, res) => {
+  storage.createPartner(Partner.fromRequestUpdate(req)).subscribe(success => {
+        res.json(success);
+      },
+      error => handleError(res, error));
+});
+
 
 const handleError = (res, error) => {
   log.error(error);

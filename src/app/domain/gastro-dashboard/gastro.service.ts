@@ -73,6 +73,19 @@ export class GastroService {
     );
   }
 
+  public updatePartner(partner: Partner): Observable<Partner> {
+    let body = Object.assign(
+        {},
+        this.myInit
+    );
+    body['body'] = partner;
+    return this.amplifyHttpClient.put<Partner>(
+        this.apiName,
+        'v1/gastro',
+        body
+    );
+  }
+
   getPartner(): Observable<Partner> {
     if (!this._loaded) {
       return this.amplifyHttpClient.get<Partner>(
