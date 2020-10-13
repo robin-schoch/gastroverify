@@ -67,7 +67,7 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
     this.gastroService.getPartner().subscribe(
         elem => this.gastroService.gastro = elem,
         error => {
-          console.log(error.statusCode)
+          console.log(error.statusCode);
           if (error.statusCode !== 404) this.gastroService.error = error;
         }
     );
@@ -95,7 +95,9 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
         {
           autoFocus: false,
           width: '90vw',
-          data: <IAddBarData>{}
+          data: <IAddBarData>{
+            senderID: this.gastroService.gastro.organisation
+          }
         }
     );
   }

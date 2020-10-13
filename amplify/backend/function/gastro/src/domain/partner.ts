@@ -76,6 +76,7 @@ export class Location {
   public timeToLive?: number;
 
   public static fromRequest(req): Location {
+
     return new Location(
         req.xUser.email,
         v4(),

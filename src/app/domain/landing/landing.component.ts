@@ -157,6 +157,10 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         breaks
     ).pipe(startWith(4));
 
+    breakpointObserver.observe([
+      Breakpoints.Large
+    ]).pipe(filter(result => result.matches), map(_ => 4)).subscribe(elem => console.log(elem))
+
     this.gridTiles.subscribe(elem => console.log(elem))
     this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2));
 
@@ -167,7 +171,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isHandset = breakpointObserver.observe([
       Breakpoints.HandsetPortrait
     ]).pipe(map(a => a.matches));
-
 
 
   }
