@@ -40,15 +40,23 @@
             <label class="margin-bottom">Organisation:</label>
             <mat-radio-group [(ngModel)]="partner.organisation" name="org" fxLayout="column" fxLayoutGap="10px">
                 <mat-radio-button class="example-margin" [value]="'default'">Default</mat-radio-button>
-                <mat-radio-button *ngFor="let org of orgs"  [value]="org" class="example-margin"
+                <mat-radio-button *ngFor="let org of orgs" [value]="org" class="example-margin"
                                   value="before">{{org}}</mat-radio-button>
             </mat-radio-group>
         </section>
 
+        <section class="example-section">
+            <mat-checkbox name="allgemein" [checked]="acceptedBuisnessinquries | async" (click)="openBottomSheet()"
+                          required class="example-margin">Allgemeine
+                Geschäftsbedienungen Annehmen
+            </mat-checkbox>
+        </section>
+
 
         <button mat-flat-button
+
                 type="button"
-                [disabled]="signInFrom.invalid"
+                [disabled]="signInFrom.invalid || !(acceptedBuisnessinquries | async )"
                 (click)="registerNewPartner()"
                 color="accent">
             speichern

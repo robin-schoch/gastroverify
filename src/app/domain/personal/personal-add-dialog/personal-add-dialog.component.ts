@@ -3,9 +3,12 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {IAddBarData} from '../../gastro-dashboard/add-bar-dialog/add-bar-dialog.component';
 import {GastroService} from '../../gastro-dashboard/gastro.service';
 import {Partner} from '../../../model/Partner';
-import {Subscription} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {SnackbarService} from '../../snackbar/snackbar.service';
+import {AllgemeineGeschaetsbedienungenComponent} from '../allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {MAT_CHECKBOX_CLICK_ACTION} from '@angular/material/checkbox';
 
 export interface IPersonalAddDialogData {
 
@@ -15,12 +18,16 @@ export interface IPersonalAddDialogData {
   selector: 'app-personal-add-dialog',
   templateUrl: './personal-add-dialog.component.html',
   styleUrls: ['./personal-add-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {provide: MAT_CHECKBOX_CLICK_ACTION, useValue: 'noop'}
+  ]
 })
 export class PersonalAddDialogComponent implements OnInit, OnDestroy {
 
   public partner: Partner = <Partner>{organisation: 'default'};
 
+  public acceptedBuisnessinquries = new BehaviorSubject(false);
   public _subs: Subscription[] = [];
 
   public orgs = [
@@ -31,7 +38,8 @@ export class PersonalAddDialogComponent implements OnInit, OnDestroy {
       @Inject(MAT_DIALOG_DATA) public data: IAddBarData,
       public dialogRef: MatDialogRef<IPersonalAddDialogData>,
       private gastroService: GastroService,
-      private snackbar: SnackbarService
+      private snackbar: SnackbarService,
+      private _bottomSheet: MatBottomSheet
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +62,15 @@ export class PersonalAddDialogComponent implements OnInit, OnDestroy {
         elem => this.gastroService.gastro = elem,
         error => this.gastroService.error = error
     );
+  }
+
+  openBottomSheet(): void {
+    this._bottomSheet.open(AllgemeineGeschaetsbedienungenComponent, {
+      hasBackdrop: false,
+      panelClass: 'my-component-bottom-sheet'
+    }).afterDismissed().subscribe(accept => {
+      this.acceptedBuisnessinquries.next(accept.accept);
+    });
   }
 
 }

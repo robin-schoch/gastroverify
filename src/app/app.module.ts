@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {MatNativeDateModule} from '@angular/material/core';
-
+import {MatBottomSheetModule, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './domain/main/app.component';
 import {GastroDashboardComponent} from './domain/gastro-dashboard/gastro-dashboard.component';
@@ -72,6 +72,7 @@ import {AdminCoronaAlarmComponent} from './domain/admin/admin-corona-alarm/admin
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatRadioModule} from '@angular/material/radio';
+import {AllgemeineGeschaetsbedienungenComponent} from './domain/personal/allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
 
 Amplify.configure(awsconfig);
 
@@ -107,9 +108,11 @@ Amplify.configure(awsconfig);
     EntryCheckTableComponent,
     EntryCheckTableToolbarDirective,
     AdminCoronaAlarmComponent,
+    AllgemeineGeschaetsbedienungenComponent,
 
   ],
   imports: [
+    MatBottomSheetModule,
     MatMomentDateModule,
     MatNativeDateModule,
     BrowserModule,
@@ -157,7 +160,7 @@ Amplify.configure(awsconfig);
     MatRadioModule
   ],
   entryComponents: [AddBarDialogComponent],
-  providers: [DatePipe],
+  providers: [DatePipe, {provide: MatBottomSheetRef, useValue: {}}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
