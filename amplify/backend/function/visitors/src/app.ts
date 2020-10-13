@@ -164,6 +164,7 @@ app.post('/v1/validate', (req, res) => {
 );
 
 app.post('/v1/checkin/:qrId', (req, res) => {
+  const isCheckout = req.params.checkOut === 'true'
       log.info('new checkin...');
       if (!hasRequriredFields(req.body)) {
         res.status(403);
@@ -188,7 +189,7 @@ app.post('/v1/checkin/:qrId', (req, res) => {
             }
             if (success) {
               const timeIso = moment().toISOString();
-              let cI = CheckIn.fromReq(req, qrcode, decode, timeIso);
+              let cI = CheckIn.fromReq(req, qrcode, decode, timeIso, !isCheckout);
               log.info(qrcode, 'new checkin entry');
               return forkJoin([checkinstorage.createEntry(cI), of(qrcode)]);
             } else {

@@ -30,54 +30,57 @@ const locationstorage = new locationStorage();
 const partnerstorage = new partnerStorage();
 
 const prices = {
-    premium: 0.3,
-    default: 0.15
+  premium: 0.3,
+  default: 0.15,
+  nachtGallen: 0.12
 };
 
 const createReportForPartner = async (date, partner) => {
-    const locations = await locationstorage.findLocations(partner.email).pipe(
-        tap(a => log.info(a)),
-        switchMap(a => isNotDynamodbError<Page<any>>(a) ? of(a.Data) : throwError(a)),
-    ).toPromise().catch(err => log.error(err));
-    return Promise.all(locations.map(location => createReportForLocation(
-        date.clone(),
-        location
-    )));
+  const locations = await locationstorage.findLocations(partner.email).pipe(
+      tap(a => log.info(a)),
+      switchMap(a => isNotDynamodbError<Page<any>>(a) ? of(a.Data) : throwError(a)),
+  ).toPromise().catch(err => log.error(err));
+  return Promise.all(locations.map(location => createReportForLocation(
+      date.clone(),
+      location
+  )));
 };
 
 const createReportForLocation = async (date, location) => {
-    return new Promise(async (resolve, reject) => {
-        log.info(location);
-        let vals = [];
-        let lastkey = null;
-        do {
+  return new Promise(async (resolve, reject) => {
+    log.info(location);
+    let vals = [];
+    let lastkey = null;
+    do {
 
-            let data = await getEntries(
-                location.locationId,
-                date.clone(),
-                10000,
-                lastkey
-            ).catch(err => log.error(err));
+      let data = await getEntries(
+          location.locationId,
+          date.clone(),
+          10000,
+          lastkey
+      ).catch(err => log.error(err));
 
-            if (!!data.value) {
-                vals = [
-                    ...data.value.map(elem => elem.phoneNumber),
-                    ...vals
-                ];
-                lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null;
-            }
-        } while (lastkey !== null);
-        let count = new Set(vals).size;
-        let totalCount = vals.length;
-        await createNewReport(
-            location.locationId,
-            date.toISOString(),
-            count,
-            totalCount,
-            !!location.senderID ? prices.premium : prices.default
-        ).catch(err => log.error(err));
-        resolve(true);
-    });
+      if (!!data.value) {
+        vals = [
+          ...data.value.map(elem => elem.phoneNumber),
+          ...vals
+        ];
+        lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null;
+      }
+    } while (lastkey !== null);
+    let count = new Set(vals).size;
+    let totalCount = vals.length;
+    let pricing = !!location.senderID ? prices.premium : prices.default;
+    if (location.senderID === 'NachtGallen') pricing = prices.nachtGallen;
+    await createNewReport(
+        location.locationId,
+        date.toISOString(),
+        count,
+        totalCount,
+        pricing
+    ).catch(err => log.error(err));
+    resolve(true);
+  });
 
 };
 
@@ -85,39 +88,39 @@ const createReportForLocation = async (date, location) => {
 exports.handler = async (event) => {
 
 
-    const creationTime = moment().hours(8).minutes(0).seconds(0).milliseconds(0);
+  const creationTime = moment().hours(8).minutes(0).seconds(0).milliseconds(0);
 
 
-    log.info('create reports: ' + creationTime.toISOString());
+  log.info('create reports: ' + creationTime.toISOString());
 
-    const dat = creationTime.clone();
+  const dat = creationTime.clone();
 
 
-    let lastEvaluatedPartnerKey = null;
-    let partnerList = [];
-    do {
-        let partners = await partnerstorage.findPartnerPaged()
-                                           .pipe(
-                                               switchMap((a) => isNotDynamodbError<Page<any>>(a) ?
-                                                                of(a) :
-                                                                throwError(a)),
-                                           ).toPromise().catch(err => log.error(err));
-        // let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
-        lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null;
-        partnerList = [
-            ...partnerList,
-            ...partners.Data.map(p => createReportForPartner(
-                creationTime,
-                p
-            ))
-        ];
-    } while (!!lastEvaluatedPartnerKey);
-    await Promise.all(partnerList);
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify('Hello from Lambda!'),
-    };
-    return response;
+  let lastEvaluatedPartnerKey = null;
+  let partnerList = [];
+  do {
+    let partners = await partnerstorage.findPartnerPaged()
+                                       .pipe(
+                                           switchMap((a) => isNotDynamodbError<Page<any>>(a) ?
+                                                            of(a) :
+                                                            throwError(a)),
+                                       ).toPromise().catch(err => log.error(err));
+    // let partners = await scanPartner(lastEvaluatedPartnerKey).catch(err => log.error(err));
+    lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null;
+    partnerList = [
+      ...partnerList,
+      ...partners.Data.map(p => createReportForPartner(
+          creationTime,
+          p
+      ))
+    ];
+  } while (!!lastEvaluatedPartnerKey);
+  await Promise.all(partnerList);
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify('Hello from Lambda!'),
+  };
+  return response;
 };
 
 
