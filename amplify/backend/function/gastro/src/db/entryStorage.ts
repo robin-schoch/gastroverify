@@ -108,15 +108,17 @@ export class entryStorage {
                         moment(timeOfEntry).endOf('day').add(5, 'hour').toISOString(),
                         subject[0].tableNumber);
                   }
-              )).pipe(map(elem => {
-                // elem.map(elem => elem);
-                const numberSet = new Set();
-                return [].concat(...elem).filter(elem => {
-                  const unique = !numberSet.has(elem.phoneNumber);
-                  numberSet.add(elem.phoneNumber);
-                  return unique;
-                });
-              }));
+              )).pipe(
+                  tap(elem => console.log('we are at 112' + elem)),
+                  map(elem => {
+                    // elem.map(elem => elem);
+                    const numberSet = new Set();
+                    return [].concat(...elem).filter(elem => {
+                      const unique = !numberSet.has(elem.phoneNumber);
+                      numberSet.add(elem.phoneNumber);
+                      return unique;
+                    });
+                  }));
             }
         )
     );
