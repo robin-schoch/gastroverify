@@ -71,6 +71,7 @@ import {EntryCheckTableToolbarDirective} from './components/entry-check-table/en
 import {AdminCoronaAlarmComponent} from './domain/admin/admin-corona-alarm/admin-corona-alarm.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MatRadioModule} from '@angular/material/radio';
 
 Amplify.configure(awsconfig);
 
@@ -152,7 +153,8 @@ Amplify.configure(awsconfig);
     MatSlideToggleModule,
     MatAutocompleteModule,
     ClipboardModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatRadioModule
   ],
   entryComponents: [AddBarDialogComponent],
   providers: [DatePipe],

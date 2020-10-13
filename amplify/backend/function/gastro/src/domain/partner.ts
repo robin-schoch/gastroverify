@@ -2,16 +2,18 @@ import {v4} from 'uuid';
 
 export class Partner {
 
-  public email;
-  public firstName;
-  public lastName;
+  public email: string;
+  public firstName: string;
+  public lastName: string;
   public address;
   public city;
   public zipcode;
-  public locations?: Location[];
-  public bills?;
+  public organisation?;
   public isHidden?: boolean;
   public referral?: number;
+  public locations?: Location[];
+  public bills?;
+
 
   public static fromRequest(req: any): Partner {
     return new Partner(
@@ -20,7 +22,8 @@ export class Partner {
         req.body.lastName,
         req.body.address,
         req.body.city,
-        req.body.zipcode
+        req.body.zipcode,
+        !!req.body.organisation ? req.body.organisation : 'default'
     );
   }
 

@@ -6,7 +6,11 @@
         <div fxFlex="93" fxLayoutAlign="center center" fxlayout="column">
 
 
-            <mat-grid-list *ngIf="(topGridTiles | async)" cols="2" fxFlex [rowHeight]="600" class="title-grid"
+            <mat-grid-list *ngIf="(topGridTiles | async)"
+                           cols="2"
+                           fxFlex
+                           [rowHeight]="600"
+                           class="title-grid"
                            gutterSize="20px">
 
                 <mat-grid-tile colspan="1">
@@ -95,7 +99,7 @@ Club oder andere Räumlichkeite</pre>
 
                         <div fxFlex="5" fxLayoutAlign="end start" fxLayoutGap="20px"
                              style="margin-top: 15px">
-                            <button mat-raised-button  color="primary"
+                            <button mat-raised-button color="primary"
                                     (click)="scrollToLogin()">{{'context.signin' | translate}}</button>
                             <button mat-raised-button color="accent"
                                     (click)="openMail()"

@@ -7,8 +7,9 @@ export interface Partner {
   address: string,
   city: string
   zipcode: string,
-  locations: Location[],
-  bills: any[],
+  organisation: string,
   isHidden: boolean
   referral?: number
+  locations: Location[],
+  bills: any[],
 }

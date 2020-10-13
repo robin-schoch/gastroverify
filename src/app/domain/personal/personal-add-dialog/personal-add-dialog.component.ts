@@ -19,9 +19,13 @@ export interface IPersonalAddDialogData {
 })
 export class PersonalAddDialogComponent implements OnInit, OnDestroy {
 
-  public partner: Partner = <Partner>{};
+  public partner: Partner = <Partner>{organisation: 'default'};
 
   public _subs: Subscription[] = [];
+
+  public orgs = [
+    'NachtGallen'
+  ];
 
   constructor(
       @Inject(MAT_DIALOG_DATA) public data: IAddBarData,

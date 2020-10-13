@@ -46,7 +46,9 @@ export class AmplifyHttpClientService {
                     observer.next(res);
                     observer.complete();
                 }
-            ).catch(error => observer.error(error));
+            ).catch(error => {
+              observer.error(error)
+            });
         });
     }
 

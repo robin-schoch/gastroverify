@@ -66,7 +66,10 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
     this.toolbarService.toolbarHidden = false;
     this.gastroService.getPartner().subscribe(
         elem => this.gastroService.gastro = elem,
-        error => this.gastroService.error = error
+        error => {
+          console.log(error.statusCode)
+          if (error.statusCode !== 404) this.gastroService.error = error;
+        }
     );
     this.gastroService.error$.subscribe(elem => this.router.navigate([
       'location',

@@ -1,6 +1,6 @@
 <h1>Registrieren</h1>
 <div mat-dialog-content>
-    <form #signInFrom="ngForm" fxLayout="column" fxFlex>
+    <form #signInFrom="ngForm" fxLayout="column" fxLayoutGap="10px" fxFlex>
 
 
         <mat-form-field>
@@ -35,6 +35,16 @@
                    placeholder="PLZ"
                    required type="zip">
         </mat-form-field>
+
+        <section class="example-section" fxLayout="column" fxLayoutGap="10px">
+            <label class="margin-bottom">Organisation:</label>
+            <mat-radio-group [(ngModel)]="partner.organisation" name="org" fxLayout="column" fxLayoutGap="10px">
+                <mat-radio-button class="example-margin" [value]="'default'">Default</mat-radio-button>
+                <mat-radio-button *ngFor="let org of orgs"  [value]="org" class="example-margin"
+                                  value="before">{{org}}</mat-radio-button>
+            </mat-radio-group>
+        </section>
+
 
         <button mat-flat-button
                 type="button"
