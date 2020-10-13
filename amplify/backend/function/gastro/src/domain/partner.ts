@@ -3,6 +3,7 @@ import {v4} from 'uuid';
 export class Partner {
 
   public email: string;
+  public contactEmail: string;
   public firstName: string;
   public lastName: string;
   public address;
@@ -18,6 +19,7 @@ export class Partner {
   public static fromRequest(req: any): Partner {
     return new Partner(
         req.xUser.email,
+        req.xUser.email,
         req.body.firstName,
         req.body.lastName,
         req.body.address,
@@ -29,6 +31,7 @@ export class Partner {
 
   constructor(
       email,
+      contactEmail,
       firstName,
       lastName,
       address,
@@ -40,6 +43,7 @@ export class Partner {
       referral = 0
   ) {
     this.email = email;
+    this.contactEmail = contactEmail;
     this.firstName = firstName;
     this.lastName = lastName;
     this.address = address;

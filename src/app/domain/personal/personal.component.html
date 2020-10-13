@@ -14,6 +14,7 @@
                            placeholder="{{'personal.name' | translate}}"
                            required type="name">
                 </mat-form-field>
+
                 <mat-form-field>
 
                     <input [(ngModel)]="partner.lastName" class="cell" delayedFocus matInput name="lastname"
@@ -39,7 +40,7 @@
                            placeholder="PLZ"
                            required type="{{'personal.zip' | translate}}">
                 </mat-form-field>
-                <button mat-flat-button color="accent" (click)="updateBillingAddress()">
+                <button mat-flat-button color="accent" (click)="updateBillingAddress()" disabled>
                     {{'context.save' | translate}}
                 </button>
 

@@ -2,6 +2,7 @@ import {Location} from './Location';
 
 export interface Partner {
   email: string,
+
   firstName: string,
   lastName: string,
   address: string,
