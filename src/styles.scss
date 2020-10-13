@@ -48,6 +48,14 @@ Mat Bottom Shee
 
 }
 
+
+.my-component-bottom-sheet-no-padding {
+  @extend .my-component-bottom-sheet;
+  margin: 0 !important;
+  padding: 0 !important;
+
+}
+
 /******************************
 Mat Dialog
 *******************************/
