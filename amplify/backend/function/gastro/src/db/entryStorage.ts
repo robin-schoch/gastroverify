@@ -99,21 +99,25 @@ export class entryStorage {
   public getQuarantine(id: string, timeOfEntry, firstName = null, lastName = null, phoneNumber = null): Observable<Entry[]> {
     return this.findPossibleCoronaSubject(id, timeOfEntry, firstName, lastName, phoneNumber).pipe(
         tap(elem => console.log(elem)),
-        switchMap(subjects => forkJoin(subjects.map(subject =>
-                this.findPossibleQuarantine(id, subject[0].entryTime,
-                    !!subject[1] ?
-                    subject[1].entryTime :
-                    moment(timeOfEntry).endOf('day').add(5, 'hour').toISOString(),
-                    subject[0].tableNumber)
-            )).pipe(map(elem => {
-              // elem.map(elem => elem);
-              const numberSet = new Set();
-              return [].concat(...elem).filter(elem => {
-                const unique = !numberSet.has(elem.phoneNumber);
-                numberSet.add(elem.phoneNumber);
-                return unique;
-              });
-            }))
+        switchMap(subjects => {
+              if (subjects.length < 1) return of([]);
+              return forkJoin(subjects.map(subject => {
+                    return this.findPossibleQuarantine(id, subject[0].entryTime,
+                        !!subject[1] ?
+                        subject[1].entryTime :
+                        moment(timeOfEntry).endOf('day').add(5, 'hour').toISOString(),
+                        subject[0].tableNumber);
+                  }
+              )).pipe(map(elem => {
+                // elem.map(elem => elem);
+                const numberSet = new Set();
+                return [].concat(...elem).filter(elem => {
+                  const unique = !numberSet.has(elem.phoneNumber);
+                  numberSet.add(elem.phoneNumber);
+                  return unique;
+                });
+              }));
+            }
         )
     );
   }
@@ -127,10 +131,12 @@ export class entryStorage {
       KeyConditionExpression: `${this.dbConnection.partitionKey} = :location and ${this.dbConnection.sortKey} >= :entry`,
       ScanIndexForward: true,
     };
+
     return this.dbConnection.queryItems(queryParams)
                .pipe(switchMap(b => isNotDynamodbError<Page<Entry>>(b) ?
                                     of(b.Data) :
                                     throwError(b)),
+                   tap(found => log.info(found)),
                    map(entries => entries.filter(entry => {
                          if (!!phoneNumber) return entry.phoneNumber === phoneNumber;
                          if (!!lastName && !!firstName) return entry.lastName === lastName && entry.firstName === firstName;
