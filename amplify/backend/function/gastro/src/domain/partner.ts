@@ -37,6 +37,7 @@ export class Partner {
       address,
       city,
       zipcode,
+      organisation,
       locations = [],
       bills = [],
       isHidden = false,
@@ -49,6 +50,7 @@ export class Partner {
     this.address = address;
     this.city = city;
     this.zipcode = zipcode;
+    this.organisation = organisation;
     this.locations = locations;
     this.bills = bills;
     this.isHidden = isHidden;
