@@ -177,7 +177,7 @@ router.put('/partner/:partnerId/referral', ((req, res) => {
 router.get('/partner/:partnerId/location/:locationId/coronaalarm', (req, res) => {
   log.info({function: 'get corona alram'});
   log.info(req.query);
-  entrystorage.getQuarantine(req.params.locationId, req.query.time, req.query.firstName, req.query.lastname, req.query.phoneNumber)
+  entrystorage.getQuarantine(req.params.locationId, req.query.time, req.query.firstName, req.query.lastName, req.query.phoneNumber)
               .subscribe(elem => {
                     log.info(elem.length);
                     res.json({quarantane: elem});

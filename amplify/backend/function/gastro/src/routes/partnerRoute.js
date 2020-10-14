@@ -87,14 +87,9 @@ exports.router.delete('/:id/bar/:barId', (req, res) => {
     ]))).subscribe(([qr1, qr2, location]) => res.json(location), error => handleError(res, error));
 });
 exports.router.put('/:id/bar/:barId', (req, res) => {
-    log.info({
-        a: req.xUser.email,
-        B: req.params.barId,
-        x: true
-    });
-    locationstorage.changeActivateLocation(
+    log.info({ a: req.xUser.email, B: req.params.barId, x: true });
     // @ts-ignore
-    req.xUser.email, req.params.barId, true).pipe(operators_1.tap(elem => log.info(elem)), operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ? rxjs_1.of(inner) : rxjs_1.throwError(inner)), operators_1.mergeMap((location) => rxjs_1.forkJoin([
+    locationstorage.changeActivateLocation(req.xUser.email, req.params.barId, true).pipe(operators_1.tap(elem => log.info(elem)), operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ? rxjs_1.of(inner) : rxjs_1.throwError(inner)), operators_1.mergeMap((location) => rxjs_1.forkJoin([
         mappingStorage.createMapping(qrCodeMapping_1.QrCodeMapping.fromLocation(location, location.partnerId, true)).pipe(operators_1.tap(inner => log.info(inner)), operators_1.switchMap((inner) => dynamoDbDriver_1.isNotDynamodbError(inner) ?
             rxjs_1.of(inner) :
             rxjs_1.throwError(RequestError_1.RequestError.create(500, 'internal error', inner)))),
@@ -113,6 +108,11 @@ exports.router.post('/', (req, res) => {
     storage.createPartner(partner_1.Partner.fromRequest(req)).subscribe(success => {
         res.json(success);
     });
+});
+exports.router.put('/', (req, res) => {
+    storage.createPartner(partner_1.Partner.fromRequestUpdate(req)).subscribe(success => {
+        res.json(success);
+    }, error => handleError(res, error));
 });
 const handleError = (res, error) => {
     log.error(error);

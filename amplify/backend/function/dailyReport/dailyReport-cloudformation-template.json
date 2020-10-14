@@ -125,7 +125,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-gastroverify-dev-75918-deployment",
-          "S3Key": "amplify-builds/dailyReport-6d474a5532616736326f-build.zip"
+          "S3Key": "amplify-builds/dailyReport-306a4870456948316e6d-build.zip"
         }
       }
     },

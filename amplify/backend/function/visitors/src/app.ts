@@ -189,7 +189,7 @@ app.post('/v1/checkin/:qrId', (req, res) => {
             }
             if (success) {
               const timeIso = moment().toISOString();
-              let cI = CheckIn.fromReq(req, qrcode, decode, timeIso, !isCheckout);
+              let cI = CheckIn.fromReq(req, qrcode, decode, timeIso, isCheckout);
               log.info(qrcode, 'new checkin entry');
               return forkJoin([checkinstorage.createEntry(cI), of(qrcode)]);
             } else {

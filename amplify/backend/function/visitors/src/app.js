@@ -132,6 +132,7 @@ app.post('/v1/validate', (req, res) => {
     }
 });
 app.post('/v1/checkin/:qrId', (req, res) => {
+    const isCheckout = req.params.checkOut === 'true';
     log.info('new checkin...');
     if (!hasRequriredFields(req.body)) {
         res.status(403);
@@ -152,7 +153,7 @@ app.post('/v1/checkin/:qrId', (req, res) => {
         }
         if (success) {
             const timeIso = moment().toISOString();
-            let cI = checkIn_1.CheckIn.fromReq(req, qrcode, decode, timeIso);
+            let cI = checkIn_1.CheckIn.fromReq(req, qrcode, decode, timeIso, !isCheckout);
             log.info(qrcode, 'new checkin entry');
             return rxjs_1.forkJoin([checkinstorage.createEntry(cI), rxjs_1.of(qrcode)]);
         }
@@ -166,7 +167,8 @@ app.post('/v1/checkin/:qrId', (req, res) => {
             time: checkin.entryTime,
             locationName: qrcode.locationName,
             barId: checkin.locationId,
-            locationId: checkin.locationId
+            locationId: checkin.locationId,
+            relatedCheckout: qrcode.relatedCheckOutCode
         });
     }, error => {
         log.error(error);
