@@ -82,7 +82,7 @@ export const createBillPDF = (overview, pages) => {
       // fs.createWriteStream('./' + overview.reference + '.pdf')
 
       // fs.createWriteStream('./pdf/' + overview.reference + '.pdf')
-      //const doc = new PDFDocument({margin: 50});
+      // const doc = new PDFDocument({margin: 50});
       //doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
 
       let buffers = [];
