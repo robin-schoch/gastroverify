@@ -10,7 +10,8 @@
     "signin": "Anmelden",
     "report": "Report",
     "admin": "Administration",
-    "deletedAt": "Gelöscht am:"
+    "deletedAt": "Gelöscht am:",
+    "checkin": "Check In"
   },
   "location": {
     "id": "Standort ID",

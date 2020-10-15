@@ -5,6 +5,7 @@ import {isNotDynamodbError} from '../util/dynamoDbDriver';
 import {locationStorage} from '../db/locationStorage';
 import {of, throwError} from 'rxjs';
 import {Entry} from '../domain/entry';
+import {CheckIn} from '../domain/checkIn';
 
 const jwt = require('jsonwebtoken');
 const {partnerStorage} = require('../db/partnerStorage');
@@ -61,6 +62,24 @@ const fields = [
   },
 
 ];
+
+
+/***************************************************************************
+ *                                                                         *
+ * Custom add person                                                       *
+ *                                                                         *
+ **************************************************************************/
+
+router.post('/:id/location/:locationId/visitor', ((req, res) => {
+  entrystorage.createEntry(CheckIn.fromReq(req)).subscribe(elem => {
+        res.json(elem);
+      },
+      error => {
+        res.status(500);
+        res.json({error: 'error'});
+      }
+  );
+}));
 // 'FirstName, LastName, Street, City, Zipcode, Email, PhoneNumber, EntryTime'
 
 // corona alarm

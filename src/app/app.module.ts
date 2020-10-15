@@ -73,6 +73,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatRadioModule} from '@angular/material/radio';
 import {AllgemeineGeschaetsbedienungenComponent} from './domain/personal/allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
+import { CustomVisitorCheckinComponent } from './domain/custom-visitor-checkin/custom-visitor-checkin.component';
 
 Amplify.configure(awsconfig);
 
@@ -109,6 +110,7 @@ Amplify.configure(awsconfig);
     EntryCheckTableToolbarDirective,
     AdminCoronaAlarmComponent,
     AllgemeineGeschaetsbedienungenComponent,
+    CustomVisitorCheckinComponent,
 
   ],
   imports: [

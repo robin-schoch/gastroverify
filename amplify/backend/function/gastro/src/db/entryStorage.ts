@@ -5,6 +5,7 @@ import {createLogger} from 'bunyan';
 import {forkJoin, Observable, of, throwError} from 'rxjs';
 import {map, switchMap, tap} from 'rxjs/operators';
 import {Entry} from '../domain/entry';
+import {CheckIn} from '../domain/checkIn';
 
 const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'});
@@ -206,6 +207,11 @@ export class entryStorage {
 
   private convertToUniqueString(entry: Entry): string {
     return entry.phoneNumber + entry.entryTime;
+  }
+
+
+  public createEntry(checkin: CheckIn): Observable<Partial<CheckIn> | DynamodbError<CheckIn>> {
+    return this.dbConnection.putItem(checkin).pipe(switchMap(elem => isNotDynamodbError(elem) ? of(elem) : throwError(elem)));
   }
 
 }

@@ -93,11 +93,11 @@ const handleDynamoRecord = (record: any): Observable<any> => {
         console.log(converted);
         console.log(converted.reference);
         console.log(calcESNR(converted.reference));
-        const {doc, buffers} = createBillPDF(converted, converted.detail);
-        doc.on('finish', () => {;
-          let pdfData = Buffer.concat(buffers);
-          sendBillAsEmail(pdfData, converted, subscriber);
-        });
+        /*const {doc, buffers} = createBillPDF(converted, converted.detail);
+         doc.on('finish', () => {
+         let pdfData = Buffer.concat(buffers);
+         sendBillAsEmail(pdfData, converted, subscriber);
+         });*/
         subscriber.next('done');
         subscriber.complete();
         break;

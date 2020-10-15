@@ -9,7 +9,8 @@
     "save": "Save",
     "report": "Report",
     "admin": "Administration",
-    "deletedAt": "Deleted at:"
+    "deletedAt": "Deleted at:",
+    "checkin": "Check In"
   },
   "location": {
     "id": "Location ID",

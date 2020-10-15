@@ -1,0 +1,76 @@
+<div fxLayout="column" fxLayoutGap="10px" fxFill>
+    <div class="mat-elevation-z8 " fxFlex fxLayout="column">
+        <form #signInFrom="ngForm" fxLayout="column" fxFlex>
+            <mat-toolbar>
+                <span>{{'checkin.CheckInTitle' | translate}}</span>
+                <span class="example-spacer"></span>
+            </mat-toolbar>
+            <mat-card fxLayout="column" fxFlex>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.firstName" class="cell"
+                           delayedFocus matInput name="firstName"
+                           placeholder="{{'personal.name' | translate}}"
+                           required type="name">
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.surName" class="cell"
+                           delayedFocus matInput name="latName"
+                           placeholder="{{'personal.lastName' | translate}}"
+                           required type="name">
+                </mat-form-field>
+
+                <mat-form-field>
+
+                    <input [(ngModel)]="checkIn.phone" class="cell" delayedFocus matInput name="phone"
+                           placeholder="{{'personal.phone' | translate}}"
+                           required type="name">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.address" class="cell" delayedFocus matInput name="address"
+                           placeholder="{{'personal.street' | translate}}"
+                           required type="Address">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.city" class="cell" delayedFocus matInput name="city"
+                           placeholder="{{'personal.city' | translate}}"
+                           required type="city">
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.zipcode" class="cell" delayedFocus matInput name="zip"
+                           placeholder="PLZ"
+                           required type="{{'personal.zip' | translate}}">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.birthdate" class="cell" delayedFocus matInput name="birth"
+                           placeholder="Geburtstag"
+                           required type="{{'personal.zip' | translate}}">
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.email" class="cell" delayedFocus matInput name="email"
+                           placeholder="Email"
+                           type="{{'personal.zip' | translate}}">
+                </mat-form-field>
+
+
+                <button mat-flat-button color="accent" (click)="checkInUser()" [disabled]="signInFrom.invalid">
+                    {{'context.save' | translate}}
+                </button>
+
+
+            </mat-card>
+        </form>
+    </div>
+
+
+</div>
