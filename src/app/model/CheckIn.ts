@@ -7,4 +7,5 @@ export interface CheckIn {
   zipcode: string,
   phone: string,
   birthdate: string
+  checkIn: boolean
 }

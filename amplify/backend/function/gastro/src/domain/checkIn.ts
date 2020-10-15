@@ -27,7 +27,7 @@ export class CheckIn {
         req.body.address,
         req.body.city,
         req.body.zipcode,
-        true,
+        req.body.checkIn,
         moment().toISOString(),
         req.body.phone,
         req.body.birthdate,

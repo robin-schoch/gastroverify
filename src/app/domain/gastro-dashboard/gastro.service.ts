@@ -4,6 +4,7 @@ import {AuthenticationService} from '../auth/authentication.service';
 import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
 import {Partner} from '../../model/Partner';
 import {Location} from '../../model/Location';
+import {CheckIn} from '../../model/CheckIn';
 
 
 @Injectable({
@@ -115,6 +116,18 @@ export class GastroService {
   }
 
   activateLocation(location: Location): Observable<Location> {
+
     return this.amplifyHttpClient.put(this.apiName, '/v1/gastro/me/bar/' + location.locationId);
   }
+
+
+  addCustomEntry(location: Location, checkIn: CheckIn) {
+    let body = Object.assign(
+        {},
+        this.myInit
+    );
+    body['body'] = checkIn;
+    return this.amplifyHttpClient.post(this.apiName, '/v1/entry/me/location/' + location.locationId + '/visitor', body);
+  }
+
 }
