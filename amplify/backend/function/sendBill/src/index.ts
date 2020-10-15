@@ -18,6 +18,34 @@ let transporter = nodemailer.createTransport({
   SES: ses
 });
 
+const billinfo = {
+  'billingDate': '2020-09-30T23:59:59.999Z',
+  'complete': false,
+  'customer': {
+    'address': 'Trottackerstrasse 35',
+    'bills': [],
+    'city': 'Mellingen',
+    'email': 'gg@gg.com',
+    'firstName': 'Kathi',
+    'isHidden': true,
+    'lastName': 'Rofka',
+    'locations': [],
+    'zipcode': '5507'
+  },
+  'detail': [],
+  'discount': 0,
+  'distinctTotal': 0,
+  'finalizedPrice': 0,
+  'from': '2020-09-01T00:00:00.000Z',
+  'locations': [],
+  'paidAt': '',
+  'partnerId': 'gg@gg.com',
+  'price': 0,
+  'reference': '0000009204',
+  'to': '2020-09-30T23:59:59.999Z',
+  'total': 0
+};
+
 const sendBillAsEmail = (bill: Buffer, converted: any, subscriber: Subscriber<any>) => {
   console.log('send mail ');
   transporter.sendMail({
@@ -36,16 +64,27 @@ const sendBillAsEmail = (bill: Buffer, converted: any, subscriber: Subscriber<an
       console.log(err);
       subscriber.error(err);
     } else {
-      console.log(bill.toString('utf-8'));
       subscriber.next(info);
       subscriber.complete();
     }
   });
 };
 
+const _testHandlde = (record: any): Observable<any> => {
+  return new Observable<any>(subscriber => {
+    const {doc, buffers} = createBillPDF(record, record.detail);
+    doc.on('end', () => {
+      console.log('hey');
+      let pdfData = Buffer.concat(buffers);
+      sendBillAsEmail(pdfData, record, subscriber);
+    });
+  });
+};
+
 const handleDynamoRecord = (record: any): Observable<any> => {
   return new Observable<any>(subscriber => {
 
+    console.log(record.eventName)
     switch (record.eventName) {
       case 'INSERT': {
         console.log('creating email...');
@@ -53,12 +92,12 @@ const handleDynamoRecord = (record: any): Observable<any> => {
         console.log(converted);
         console.log(converted.reference);
         console.log(calcESNR(converted.reference));
-        const {doc, buffers} = createBillPDF(converted, converted.detail);
+       /* const {doc, buffers} = createBillPDF(converted, converted.detail);
         doc.on('end', () => {
-          console.log("hey")
+          console.log('hey');
           let pdfData = Buffer.concat(buffers);
           sendBillAsEmail(pdfData, converted, subscriber);
-        });
+        });*/
         break;
       }
       case 'DELETE': {
@@ -99,6 +138,5 @@ export const handler = (event) => {
 };
 
 
-const testMe = () => {
+// _testHandlde(billinfo).subscribe(elem => console.log(elem));
 
-};

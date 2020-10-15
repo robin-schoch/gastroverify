@@ -101,5 +101,5 @@ const detailPages = (doc, detail) => {
     overviewPage_1.generateHeader(doc);
     detailPages_1.generateDetailPage(doc, detail);
 };
-exports.createBillPDF(billinfo, billinfo.detail);
+// createBillPDF(billinfo, billinfo.detail);
 //console.log(calcCheckSum(staticRef + '1010101010'));
