@@ -126,10 +126,12 @@ export class entryStorage {
   }
 
   public findPossibleCoronaSubject(id: string, timeOfEntry: string, firstName = null, lastName = null, phoneNumber = null): Observable<[Entry, Entry][]> {
+    console.log(moment(timeOfEntry).startOf('day').toISOString());
+    console.log(moment(timeOfEntry).endOf('day').toISOString());
     const queryParams = {
       ExpressionAttributeValues: {
         ':location': id,
-        ':entry': moment(timeOfEntry).startOf('day').toISOString()
+        ':entry': timeOfEntry
       },
       KeyConditionExpression: `${this.dbConnection.partitionKey} = :location and ${this.dbConnection.sortKey} >= :entry`,
       ScanIndexForward: true,
@@ -211,7 +213,9 @@ export class entryStorage {
 
 
   public createEntry(checkin: CheckIn): Observable<Partial<CheckIn> | DynamodbError<CheckIn>> {
-    return this.dbConnection.putItem(checkin).pipe(switchMap(elem => isNotDynamodbError(elem) ? of(elem) : throwError(elem)));
+    return this.dbConnection.putItem(checkin).pipe(switchMap(elem => isNotDynamodbError(elem) ?
+                                                                     of(elem) :
+                                                                     throwError(elem)));
   }
 
 }
