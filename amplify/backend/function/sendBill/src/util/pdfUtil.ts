@@ -223,4 +223,4 @@ const calcCheckSum = (ref: string): string => {
 };
 
 
-console.log(calcCheckSum(staticRef + '1010101010'));
+//console.log(calcCheckSum(staticRef + '1010101010'));
