@@ -68,7 +68,7 @@ const createBillForPartner = async (from, to, partner: Partner, billNumber: stri
 
     const p = [];
     if (partner.referral > 0) {
-      p.push(partnerstorage.subtractReferral(partner).toPromise());
+     // p.push(partnerstorage.subtractReferral(partner).toPromise());
     }
 
     p.push(createBill(bill));

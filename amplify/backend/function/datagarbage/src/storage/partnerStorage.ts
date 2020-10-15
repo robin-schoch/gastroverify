@@ -43,16 +43,15 @@ export class partnerStorage {
   }
 
   public subtractReferral(partner: Partner): Observable<Partial<Partner | DynamodbError<Partner>>> {
-    const updateParam = {
+    const updateConfig = {
       Key: {
         [this.dbConnection.partitionKey]: partner.email,
       },
       ExpressionAttributeValues: {
         ':val': 1
       },
-      UpdateExpression: 'SET referral = referral - :val',
-      ReturnValues: 'UPDATED_NEW'
+      UpdateExpression: 'SET referral = referral - :val'
     };
-    return this.dbConnection.updateItem(updateParam).pipe(tap(elem => console.log(elem)));
+    return this.dbConnection.updateItem(updateConfig).pipe(tap(elem => console.log(elem)));
   }
 }
