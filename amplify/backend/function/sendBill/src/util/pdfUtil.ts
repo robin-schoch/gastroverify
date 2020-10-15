@@ -151,10 +151,13 @@ export const createBillPDF = (overview, pages) => {
           country: 'CH'
         }
       };
+
+
       const stream = new streamBuffers.WritableStreamBuffer({
         initialSize: (100 * 1024),   // start at 100 kilobytes.
         incrementAmount: (10 * 1024) // grow by 10 kilobytes each time buffer overflows.
       });
+      console.log(calcESNR(overview.reference))
       const doc = new SwissQRBill.PDF(data, stream, {
         autoGenerate: false,
         size: 'A4'
