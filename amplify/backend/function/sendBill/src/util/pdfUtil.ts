@@ -71,8 +71,8 @@ export const createBillPDF = (overview, pages) => {
 
 
       const stream = new streamBuffers.WritableStreamBuffer({
-        initialSize: (100 * 1024),   // start at 100 kilobytes.
-        incrementAmount: (10 * 1024) // grow by 10 kilobytes each time buffer overflows.
+        initialSize: (200 * 1024),   // start at 100 kilobytes.
+        incrementAmount: (20 * 1024) // grow by 10 kilobytes each time buffer overflows.
       });
       console.log(calcESNR(overview.reference))
       const doc = new SwissQRBill.PDF(data, stream, {

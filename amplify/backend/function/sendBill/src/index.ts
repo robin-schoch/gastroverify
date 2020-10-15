@@ -9,6 +9,7 @@ import {forkJoin, Observable, Subscriber} from 'rxjs';
 import {createBillPDF} from './util/pdfUtil';
 import * as nodemailer from 'nodemailer';
 import {calcESNR} from './util/esnr';
+import {timeout} from 'rxjs/operators';
 
 const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'});
@@ -93,8 +94,7 @@ const handleDynamoRecord = (record: any): Observable<any> => {
         console.log(converted.reference);
         console.log(calcESNR(converted.reference));
         const {doc, buffers} = createBillPDF(converted, converted.detail);
-        doc.on('end', () => {
-          console.log('hey');
+        doc.on('end', () => {;
           let pdfData = Buffer.concat(buffers);
           sendBillAsEmail(pdfData, converted, subscriber);
         });
@@ -121,6 +121,7 @@ const handleDynamoRecord = (record: any): Observable<any> => {
 
 export const handler = (event) => {
   forkJoin([...event.Records.map(record => handleDynamoRecord(record))])
+      .pipe(timeout(2000))
       .subscribe(
           success => {
             console.log('success');
@@ -133,7 +134,7 @@ export const handler = (event) => {
             console.log('kill it');
             console.log(error);
             return {
-              statusCode: 500,
+              statusCode: 200,
               body: 'error',
             };
           }

@@ -80,6 +80,7 @@ const _testHandlde = (record) => {
 };
 const handleDynamoRecord = (record) => {
     return new rxjs_1.Observable(subscriber => {
+        console.log(record.eventName);
         switch (record.eventName) {
             case 'INSERT': {
                 console.log('creating email...');
@@ -88,11 +89,13 @@ const handleDynamoRecord = (record) => {
                 console.log(converted.reference);
                 console.log(esnr_1.calcESNR(converted.reference));
                 const { doc, buffers } = pdfUtil_1.createBillPDF(converted, converted.detail);
-                doc.on('end', () => {
-                    console.log('hey');
-                    let pdfData = Buffer.concat(buffers);
-                    sendBillAsEmail(pdfData, converted, subscriber);
-                });
+                /* doc.on('end', () => {
+                   console.log('hey');
+                   let pdfData = Buffer.concat(buffers);
+                   sendBillAsEmail(pdfData, converted, subscriber);
+                 });*/
+                subscriber.next('done');
+                subscriber.complete();
                 break;
             }
             case 'DELETE': {
@@ -117,13 +120,12 @@ exports.handler = (event) => {
             body: 'success',
         };
     }, error => {
+        console.log('kill it');
         console.log(error);
         return {
-            statusCode: 400,
+            statusCode: 500,
             body: 'error',
         };
     });
 };
-_testHandlde(billinfo).subscribe(elem => console.log(elem));
-const testMe = () => {
-};
+// _testHandlde(billinfo).subscribe(elem => console.log(elem));

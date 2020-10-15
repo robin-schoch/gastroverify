@@ -1,14 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.billBuilder = exports.Bill = void 0;
-const moment = require("moment");
-const crypto = require("crypto");
 class Bill {
-    constructor(partnerId, from, to, complete, paidAt, total, distinctTotal, price, finalizedPrice, customer, locations, detail, discount) {
-        this.reference = crypto.createHash('sha1')
-            .update(moment(to).toISOString() + partnerId)
-            .digest('hex')
-            .substring(0, 10);
+    constructor(billNumber, partnerId, from, to, complete, paidAt, total, distinctTotal, price, finalizedPrice, customer, locations, detail, discount) {
+        this.reference = billNumber;
         this.partnerId = partnerId;
         this.billingDate = to;
         this.from = from;
@@ -26,8 +21,8 @@ class Bill {
     }
 }
 exports.Bill = Bill;
-exports.billBuilder = (from, to, billInfo, customer, reports, discount = 0) => {
-    return new Bill(customer.email, from, to, false, '', billInfo.total, billInfo.distinctTotal, billInfo.price, billInfo.finalPrice, customer, reports.map((report) => report.res), reports.map((reports) => Object.assign({}, reports.res, {
+exports.billBuilder = (billNumber, from, to, billInfo, customer, reports, discount = 0) => {
+    return new Bill(billNumber, customer.email, from, to, false, '', billInfo.total, billInfo.distinctTotal, billInfo.price, billInfo.finalPrice, customer, reports.map((report) => report.res), reports.map((reports) => Object.assign({}, reports.res, {
         detail: reports.original.map(det => {
             return {
                 reportDate: det.reportDate,
