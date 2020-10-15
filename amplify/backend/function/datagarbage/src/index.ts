@@ -13,6 +13,7 @@
  STORAGE_PARTNER_NAME
  Amplify Params - DO NOT EDIT */
 import * as moment from 'moment';
+import {Moment} from 'moment';
 import {billBuilder} from './domain/bill';
 import {partnerStorage} from './storage/partnerStorage';
 
@@ -31,15 +32,14 @@ const partnerstorage = new partnerStorage();
 const locationstorage = new locationStorage();
 
 
-const createBillForPartner = async (from, to, partner: Partner) => {
+const createBillForPartner = async (from, to, partner: Partner, billNumber: string) => {
 
   const locations = await locationstorage.findLocations(partner.email).pipe(
       switchMap((a) => isNotDynamodbError<Page<any>>(a) ? of(a.Data) : throwError(a)),
   ).toPromise();
   return new Promise((async (resolve, reject) => {
     const reports = await Promise.all(locations.map(location => createBillForLocation(from, to, location)));
-    const billInfo: any = reports.reduce(
-        (acc, report: any) => billReducer(acc, report.res),
+    const billInfo: any = reports.reduce((acc, report: any) => billReducer(acc, report.res),
         {
           distinctTotal: 0,
           total: 0,
@@ -54,8 +54,10 @@ const createBillForPartner = async (from, to, partner: Partner) => {
     // todo partner referral -1
     const finalizeBillInfo = finalizeBill(billInfo, referralDiscount);
 
+    let index = 0;
 
     const bill = billBuilder(
+        billNumber,
         from.toISOString(),
         to.toISOString(),
         finalizeBillInfo,
@@ -122,6 +124,13 @@ const billReducer = (acc, bill) => {
   };
 };
 
+
+const calculateBillNumber = (index: number, date: Moment): string => {
+  let n = '' + index;
+  while (n.length < 10) n = '0' + n;
+  return date.format('MMYY') + n;
+};
+
 exports.handler = async (event) => {
   log.info('running');
 
@@ -135,14 +144,8 @@ exports.handler = async (event) => {
       .seconds(0)
       .milliseconds(0);
 
-  let startOfBillingDuration = moment().subtract(
-      1,
-      'month'
-  ).startOf('month');
-  let endOfBillingDuration = moment().subtract(
-      1,
-      'month'
-  ).endOf('month');
+  let startOfBillingDuration = moment().subtract(1, 'month').startOf('month');
+  let endOfBillingDuration = moment().subtract(1, 'month').endOf('month');
   //let startOfBillingDuration = moment().startOf('month')
   //let endOfBillingDuration = moment().endOf('month')
 
@@ -162,7 +165,8 @@ exports.handler = async (event) => {
       ...partners.Data.map(p => createBillForPartner(
           startOfBillingDuration.clone(),
           endOfBillingDuration.clone(),
-          p
+          p,
+          calculateBillNumber(partnerList.length + partners.Data.indexOf(p), startOfBillingDuration.clone())
       ))
     ];
   } while (!!lastEvaluatedPartnerKey);

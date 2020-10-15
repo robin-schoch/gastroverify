@@ -20,6 +20,7 @@ export class Bill {
   discount: number;
 
   constructor(
+      billNumber,
       partnerId,
       from,
       to,
@@ -34,10 +35,7 @@ export class Bill {
       detail,
       discount
   ) {
-    this.reference = crypto.createHash('sha1')
-                           .update(moment(to).toISOString() + partnerId)
-                           .digest('hex')
-                           .substring(0, 10);
+    this.reference = billNumber;
     this.partnerId = partnerId;
     this.billingDate = to;
     this.from = from;
@@ -57,8 +55,9 @@ export class Bill {
 
 }
 
-export const billBuilder = (from, to, billInfo, customer: Partner, reports, discount = 0) => {
+export const billBuilder = (billNumber:string, from, to, billInfo, customer: Partner, reports, discount = 0) => {
   return new Bill(
+      billNumber,
       customer.email,
       from,
       to,

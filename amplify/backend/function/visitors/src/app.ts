@@ -164,7 +164,8 @@ app.post('/v1/validate', (req, res) => {
 );
 
 app.post('/v1/checkin/:qrId', (req, res) => {
-  const isCheckout = req.params.checkOut === 'true'
+      const isCheckout = req.query.checkOut === 'true';
+      log.info((req.query));
       log.info('new checkin...');
       if (!hasRequriredFields(req.body)) {
         res.status(403);
