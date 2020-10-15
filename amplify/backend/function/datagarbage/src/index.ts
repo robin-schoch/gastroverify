@@ -126,9 +126,9 @@ const billReducer = (acc, bill) => {
 
 
 const calculateBillNumber = (index: number, date: Moment): string => {
-  let n = '' + index;
+  let n = date.format('MMYY') + index;
   while (n.length < 10) n = '0' + n;
-  return date.format('MMYY') + n;
+  return  n;
 };
 
 exports.handler = async (event) => {

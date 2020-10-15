@@ -47,7 +47,7 @@ const handleDynamoRecord = (record: any): Observable<any> => {
 
     switch (record.eventName) {
       case 'INSERT': {
-        console.log("creating email...")
+        console.log('creating email...');
         const converted = AWS.DynamoDB.Converter.unmarshall((record.dynamodb.NewImage));
         const {doc, buffers} = createBillPDF(converted, converted.detail);
         doc.on('end', () => {
@@ -74,7 +74,7 @@ const handleDynamoRecord = (record: any): Observable<any> => {
 };
 
 export const handler = (event) => {
-  console.log(event.Records.length)
+  console.log(event.Records.length);
   forkJoin([...event.Records.map(record => handleDynamoRecord(record))])
       .subscribe(
           success => {
@@ -92,4 +92,9 @@ export const handler = (event) => {
             };
           }
       );
+};
+
+
+const testMe = () => {
+
 };

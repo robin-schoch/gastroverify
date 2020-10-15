@@ -4,6 +4,7 @@ import {generateDetailPage} from './detailPages';
 import * as SwissQRBill from 'swissqrbill';
 import {data} from 'swissqrbill';
 import {calcESNR} from './esnr';
+import {Subscriber} from 'rxjs';
 
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
@@ -129,6 +130,8 @@ const billinfo = {
 
 const QRIBAN = 'CH443000523211899540Z';
 
+
+
 export const createBillPDF = (overview, pages) => {
   // Create a document
   const data = <data>{
@@ -159,14 +162,7 @@ export const createBillPDF = (overview, pages) => {
   //doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
 
   let buffers = [];
-
-
   doc.on('data', buffers.push.bind(buffers));
-
-  doc.on('end', () => {
-    let pdfData = Buffer.concat(buffers);
-    console.log(pdfData.toString('utf-8'));
-  });
 
   overviewPage(doc, overview);
 
