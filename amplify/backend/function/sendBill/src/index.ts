@@ -18,6 +18,7 @@ let transporter = nodemailer.createTransport({
 });
 
 const sendBillAsEmail = (bill: Buffer, converted: any, subscriber: Subscriber<any>) => {
+  console.log('send mail ');
   transporter.sendMail({
     from: 'noreply@entry-check.ch',
     to: 'gastro.verify@gmail.com',
@@ -31,8 +32,10 @@ const sendBillAsEmail = (bill: Buffer, converted: any, subscriber: Subscriber<an
     ]
   }, (err, info) => {
     if (err) {
+      console.log(err);
       subscriber.error(err);
     } else {
+      console.log(bill.toString('utf-8'));
       subscriber.next(info);
       subscriber.complete();
     }
