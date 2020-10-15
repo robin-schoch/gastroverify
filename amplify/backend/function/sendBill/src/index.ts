@@ -89,26 +89,4 @@ export const handler = (event) => {
             };
           }
       );
-
-  /*
-
-
-   .toPromise()
-   .then(elem => {
-   console.log('success');
-   return {
-   statusCode: 200,
-   body: 'success',
-   };
-   }).catch(err => {
-   console.log(err);
-   return {
-   statusCode: 400,
-   body: 'error',
-   };
-
-   });
-
-   */
-
 };
