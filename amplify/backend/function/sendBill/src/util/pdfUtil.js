@@ -5,6 +5,7 @@ const overviewPage_1 = require("./overviewPage");
 const detailPages_1 = require("./detailPages");
 const SwissQRBill = require("swissqrbill");
 const esnr_1 = require("./esnr");
+const streamBuffers = require("stream-buffers");
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const billinfo = {
@@ -148,15 +149,24 @@ exports.createBillPDF = (overview, pages) => {
             country: 'CH'
         }
     };
-    const doc = new SwissQRBill.PDF(data, fs.createWriteStream('./' + overview.reference + '.pdf'), {
+    const stream = new streamBuffers.WritableStreamBuffer({
+        initialSize: (100 * 1024),
+        incrementAmount: (10 * 1024) // grow by 10 kilobytes each time buffer overflows.
+    });
+    const doc = new SwissQRBill.PDF(data, stream, {
         autoGenerate: false,
         size: 'A4'
     });
+    // fs.createWriteStream('./' + overview.reference + '.pdf')
     // fs.createWriteStream('./pdf/' + overview.reference + '.pdf')
     //const doc = new PDFDocument({margin: 50});
     //doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
     let buffers = [];
     doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => {
+        let pdfData = Buffer.concat(buffers);
+        console.log(pdfData.toString('utf-8'));
+    });
     overviewPage(doc, overview);
     doc.addQRBill();
     pages.forEach(p => detailPages(doc, p));
