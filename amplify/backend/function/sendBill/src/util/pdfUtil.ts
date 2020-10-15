@@ -1,10 +1,8 @@
 import {generateCustomerInformation, generateFooter, generateHeader, generateInvoiceTable} from './overviewPage';
 import {generateDetailPage} from './detailPages';
-
 import * as SwissQRBill from 'swissqrbill';
 import {data} from 'swissqrbill';
 import {calcESNR} from './esnr';
-import {Subscriber} from 'rxjs';
 
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
@@ -33,7 +31,7 @@ const billinfo = {
         'zipcode': '5417'
       }
     ],
-    'referral': 3,
+    'referral': 0,
     'zipcode': '5417'
   },
   'detail': [
@@ -107,9 +105,9 @@ const billinfo = {
       'total': 2
     }
   ],
-  'discount': 20,
+  'discount': 0,
   'distinctTotal': 1,
-  'finalizedPrice': 0.12,
+  'finalizedPrice': 0.15,
   'from': '2020-09-01T00:00:00.000Z',
   'locations': [
     {
@@ -123,13 +121,11 @@ const billinfo = {
   'paidAt': '',
   'partnerId': 'andreas.umbricht@gmail.com',
   'price': 0.15,
-  'reference': '0220000001',
+  'reference': '0000009205',
   'to': '2020-09-30T23:59:59.999Z',
   'total': 2
 };
-
 const QRIBAN = 'CH443000523211899540Z';
-
 
 
 export const createBillPDF = (overview, pages) => {
@@ -154,10 +150,11 @@ export const createBillPDF = (overview, pages) => {
       country: 'CH'
     }
   };
-  const doc = new SwissQRBill.PDF(data, './pdf/' + calcESNR(overview.reference) + '.pdf', {
+  const doc = new SwissQRBill.PDF(data, fs.createWriteStream('./' + overview.reference + '.pdf'), {
     autoGenerate: false,
     size: 'A4'
   });
+  // fs.createWriteStream('./pdf/' + overview.reference + '.pdf')
   //const doc = new PDFDocument({margin: 50});
   //doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
 

@@ -22,9 +22,9 @@ const findNextCheckNumber = (nextDigit: number, lastCheckDigit: number): number 
 export const calcESNR = (ref: string): string => {
   let initDigit = 0;
   return staticRef + ref + checkDigits[
-      ref.split('')
-         .map(digit => Number(digit))
-         .reduce((acc, nextDigit) =>
-             acc = findNextCheckNumber(nextDigit, acc), initDigit)
+      (staticRef + ref).split('')
+                       .map(digit => Number(digit))
+                       .reduce((acc, nextDigit) =>
+                           acc = findNextCheckNumber(nextDigit, acc), initDigit)
       ];
 };

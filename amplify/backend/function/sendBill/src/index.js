@@ -45,7 +45,7 @@ const handleDynamoRecord = (record) => {
     return new rxjs_1.Observable(subscriber => {
         switch (record.eventName) {
             case 'INSERT': {
-                console.log("creating email...");
+                console.log('creating email...');
                 const converted = AWS.DynamoDB.Converter.unmarshall((record.dynamodb.NewImage));
                 const { doc, buffers } = pdfUtil_1.createBillPDF(converted, converted.detail);
                 doc.on('end', () => {
@@ -83,4 +83,6 @@ exports.handler = (event) => {
             body: 'error',
         };
     });
+};
+const testMe = () => {
 };
