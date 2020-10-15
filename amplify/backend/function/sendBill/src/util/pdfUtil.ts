@@ -146,7 +146,7 @@ export const createBillPDF = (overview, pages) => {
     debtor: {
       name: overview.customer.firstName + ' ' + overview.customer.lastName,
       address: overview.customer.address,
-      zip: overview.customer.zipcode,
+      zip: Number(overview.customer.zipcode),
       city: overview.customer.city,
       country: 'CH'
     }
@@ -156,11 +156,17 @@ export const createBillPDF = (overview, pages) => {
     size: 'A4'
   });
   //const doc = new PDFDocument({margin: 50});
-  // doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
+  //doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
 
   let buffers = [];
 
+
   doc.on('data', buffers.push.bind(buffers));
+
+  doc.on('end', () => {
+    let pdfData = Buffer.concat(buffers);
+    console.log(pdfData.toString('utf-8'));
+  });
 
   overviewPage(doc, overview);
 
@@ -189,6 +195,6 @@ const detailPages = (doc, detail) => {
 };
 
 
-// createBillPDF(billinfo, billinfo.detail);
+createBillPDF(billinfo, billinfo.detail);
 
 //console.log(calcCheckSum(staticRef + '1010101010'));

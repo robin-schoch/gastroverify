@@ -17,6 +17,7 @@ let transporter = nodemailer.createTransport({
     SES: ses
 });
 const sendBillAsEmail = (bill, converted, subscriber) => {
+    console.log('send mail ');
     transporter.sendMail({
         from: 'noreply@entry-check.ch',
         to: 'gastro.verify@gmail.com',
@@ -30,9 +31,11 @@ const sendBillAsEmail = (bill, converted, subscriber) => {
         ]
     }, (err, info) => {
         if (err) {
+            console.log(err);
             subscriber.error(err);
         }
         else {
+            console.log(bill.toString('utf-8'));
             subscriber.next(info);
             subscriber.complete();
         }
@@ -42,6 +45,7 @@ const handleDynamoRecord = (record) => {
     return new rxjs_1.Observable(subscriber => {
         switch (record.eventName) {
             case 'INSERT': {
+                console.log("creating email...");
                 const converted = AWS.DynamoDB.Converter.unmarshall((record.dynamodb.NewImage));
                 const { doc, buffers } = pdfUtil_1.createBillPDF(converted, converted.detail);
                 doc.on('end', () => {
@@ -64,7 +68,7 @@ const handleDynamoRecord = (record) => {
     });
 };
 exports.handler = (event) => {
-    console.log('i am called');
+    console.log(event.Records.length);
     rxjs_1.forkJoin([...event.Records.map(record => handleDynamoRecord(record))])
         .subscribe(success => {
         console.log('success');
@@ -79,24 +83,4 @@ exports.handler = (event) => {
             body: 'error',
         };
     });
-    /*
-  
-  
-     .toPromise()
-     .then(elem => {
-     console.log('success');
-     return {
-     statusCode: 200,
-     body: 'success',
-     };
-     }).catch(err => {
-     console.log(err);
-     return {
-     statusCode: 400,
-     body: 'error',
-     };
-  
-     });
-  
-     */
 };

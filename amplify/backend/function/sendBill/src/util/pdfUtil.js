@@ -4,6 +4,7 @@ exports.createBillPDF = void 0;
 const overviewPage_1 = require("./overviewPage");
 const detailPages_1 = require("./detailPages");
 const SwissQRBill = require("swissqrbill");
+const esnr_1 = require("./esnr");
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const billinfo = {
@@ -120,37 +121,45 @@ const billinfo = {
     'paidAt': '',
     'partnerId': 'andreas.umbricht@gmail.com',
     'price': 0.15,
-    'reference': '56d7cff640',
+    'reference': '0220000001',
     'to': '2020-09-30T23:59:59.999Z',
     'total': 2
 };
+const QRIBAN = 'CH443000523211899540Z';
 exports.createBillPDF = (overview, pages) => {
     // Create a document
     const data = {
         currency: 'CHF',
         amount: overview.finalizedPrice,
-        reference: '210000000003139471430009017',
+        reference: esnr_1.calcESNR(overview.reference),
         creditor: {
             name: 'Robin Schoch',
             address: 'Breitacker 6b',
             zip: 5210,
             city: 'Windisch',
-            account: 'CH443000523211899540Z',
+            account: QRIBAN,
             country: 'CH'
         },
         debtor: {
             name: overview.customer.firstName + ' ' + overview.customer.lastName,
             address: overview.customer.address,
-            zip: 5000,
+            zip: Number(overview.customer.zipcode),
             city: overview.customer.city,
             country: 'CH'
         }
     };
-    const doc = new SwissQRBill.PDF(data, './pdf/' + 'complete-qr-bill.pdf', { autoGenerate: false, size: 'A4' });
+    const doc = new SwissQRBill.PDF(data, './pdf/' + esnr_1.calcESNR(overview.reference) + '.pdf', {
+        autoGenerate: false,
+        size: 'A4'
+    });
     //const doc = new PDFDocument({margin: 50});
-    // doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
+    //doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
     let buffers = [];
-    // doc.on('data', buffers.push.bind(buffers));
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => {
+        let pdfData = Buffer.concat(buffers);
+        console.log(pdfData.toString('utf-8'));
+    });
     overviewPage(doc, overview);
     doc.addQRBill();
     pages.forEach(p => detailPages(doc, p));
@@ -172,30 +181,5 @@ const detailPages = (doc, detail) => {
     overviewPage_1.generateHeader(doc);
     detailPages_1.generateDetailPage(doc, detail);
 };
-// createBillPDF(billinfo, billinfo.detail);
-const testRef = '30232118995040008999999999';
-const staticRef = '3023211899504000';
-const checkSumMatrix = [
-    [0, 9, 4, 6, 8, 2, 7, 1, 3, 5],
-    [9, 4, 6, 8, 2, 7, 1, 3, 5, 0],
-    [4, 6, 8, 2, 7, 1, 3, 5, 0, 9],
-    [6, 8, 2, 7, 1, 3, 5, 0, 9, 4],
-    [8, 2, 7, 1, 3, 5, 0, 9, 4, 6],
-    [2, 7, 1, 3, 5, 0, 9, 4, 6, 8],
-    [7, 1, 3, 5, 0, 9, 4, 6, 8, 2],
-    [1, 3, 5, 0, 9, 4, 6, 8, 2, 7],
-    [3, 5, 0, 9, 4, 6, 8, 2, 7, 1],
-    [5, 0, 9, 4, 6, 8, 2, 7, 1, 3],
-];
-const checkDigits = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-const findNextCheckNumber = (nextDigit, lastCheckDigit) => {
-    return checkSumMatrix[lastCheckDigit][nextDigit];
-};
-const calcCheckSum = (ref) => {
-    let initDigit = 0;
-    console.log(ref.length);
-    return ref + checkDigits[ref.split('')
-        .map(digit => Number(digit))
-        .reduce((acc, nextDigit) => acc = findNextCheckNumber(nextDigit, acc), initDigit)];
-};
-console.log(calcCheckSum(staticRef + '1010101010'));
+exports.createBillPDF(billinfo, billinfo.detail);
+//console.log(calcCheckSum(staticRef + '1010101010'));
