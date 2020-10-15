@@ -1,5 +1,5 @@
 <div fxFill fxLayout="column">
-    <div fxLayoutGap="10px" fxLayout="row">
+    <div fxLayoutGap="10px" fxLayout="row" fxFlex="none">
         <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
             <mat-label>{{'report.select' | translate}}</mat-label>
             <mat-select (selectionChange)="selectLocation($event.value)">
@@ -36,7 +36,7 @@
 
     <div class="mat-elevation-z8 " fxFlex fxLayout="column">
 
-        <div fxLayout="row">
+        <div fxLayout="row" fxFlex="none">
             <mat-toolbar class="filters">
                 <span>{{'report.title' | translate}}</span>
                 <span class="example-spacer"></span>
@@ -44,9 +44,9 @@
 
             </mat-toolbar>
 
-
         </div>
-        <div class=" example-container" fxLayout="column" fxFlex *ngIf="reports$ | async as report">
+
+        <div fxFlex *ngIf="reports$ | async as report">
             <mat-table [dataSource]="report" fxFlex>
 
 

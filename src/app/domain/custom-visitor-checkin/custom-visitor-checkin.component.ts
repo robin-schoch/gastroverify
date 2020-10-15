@@ -1,10 +1,11 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {CheckIn} from '../../model/CheckIn';
 import {filter, map} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Location} from '../../model/Location';
 import {GastroService} from '../gastro-dashboard/gastro.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-custom-visitor-checkin',
@@ -14,10 +15,12 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class CustomVisitorCheckinComponent implements OnInit {
 
-  public checkIn: Partial<CheckIn> = {
+  public checkIn$: BehaviorSubject<Partial<CheckIn>> = new BehaviorSubject<Partial<CheckIn>>({
     checkIn: true
-  };
+  });
 
+  @ViewChild('signInFrom')
+  private form: NgForm;
   private _location: Location;
 
   public locations$: Observable<Location[]>;
@@ -41,14 +44,16 @@ export class CustomVisitorCheckinComponent implements OnInit {
 
   checkInUser() {
     if (!!this._location) {
-      console.log(this.checkIn);
-      this.partnerService.addCustomEntry(this._location, <CheckIn>this.checkIn).subscribe(elem => {
+      console.log(this.checkIn$.value);
+      this.partnerService.addCustomEntry(this._location, <CheckIn>this.checkIn$.value).subscribe(elem => {
         this._snackBar.open('Besucher hinzugefügt', 'ok', {
           duration: 2000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
         });
-        this.checkIn = {};
+        this.checkIn$.next({
+          checkIn: true
+        });
       }, error => {
         this._snackBar.open('Fehler', 'ok', {
           duration: 2000,

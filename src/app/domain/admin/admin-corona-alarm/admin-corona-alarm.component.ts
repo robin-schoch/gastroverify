@@ -79,5 +79,8 @@ export class AdminCoronaAlarmComponent implements OnInit {
 
   dateChanged(change: string, $event: MatDatepickerInputEvent<any, any>) {
     this.time = $event.value.toISOString(true);
+    console.log(this.time);
   }
 }
+
+
