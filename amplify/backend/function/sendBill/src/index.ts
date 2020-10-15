@@ -92,13 +92,13 @@ const handleDynamoRecord = (record: any): Observable<any> => {
         console.log(converted);
         console.log(converted.reference);
         console.log(calcESNR(converted.reference));
-        /* const {doc, buffers} = createBillPDF(converted, converted.detail);
-         doc.on('end', () => {
-         console.log('hey');
-         let pdfData = Buffer.concat(buffers);
-         sendBillAsEmail(pdfData, converted, subscriber);
-         });*/
-        subscriber.next('done')
+        const {doc, buffers} = createBillPDF(converted, converted.detail);
+        doc.on('end', () => {
+          console.log('hey');
+          let pdfData = Buffer.concat(buffers);
+          sendBillAsEmail(pdfData, converted, subscriber);
+        });
+        subscriber.next('done');
         subscriber.complete();
         break;
       }
@@ -130,9 +130,10 @@ export const handler = (event) => {
             };
           },
           error => {
+            console.log('kill it');
             console.log(error);
             return {
-              statusCode: 400,
+              statusCode: 500,
               body: 'error',
             };
           }
