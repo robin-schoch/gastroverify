@@ -126,9 +126,9 @@ export class entryStorage {
   }
 
   public findPossibleCoronaSubject(id: string, timeOfEntry: string, firstName = null, lastName = null, phoneNumber = null): Observable<[Entry, Entry][]> {
-    console.log(moment(timeOfEntry).startOf('day').toISOString());
-    console.log(moment(timeOfEntry).endOf('day').toISOString());
-    console.log(moment(timeOfEntry).toISOString());
+    console.log(moment(timeOfEntry).local(true).startOf('day').toISOString());
+    console.log(moment(timeOfEntry).local(true).endOf('day').toISOString());
+    console.log(moment(timeOfEntry).local(true).toISOString());
     const queryParams = {
       ExpressionAttributeValues: {
         ':location': id,
