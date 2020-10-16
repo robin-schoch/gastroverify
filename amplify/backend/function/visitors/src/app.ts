@@ -60,7 +60,7 @@ let redirectURL = '.entry-check.ch';
 const qrcodestorage = new qrCodeStorage();
 const validationstorage = new vs();
 const checkinstorage = new checkInStorage();
-
+let redirectTo = process.env.ENV === 'prod' ? 'app' : 'devapp'
 if (process.env.ENV && process.env.ENV !== 'NONE') {
   if (process.env.ENV === 'dev') redirectURL = 'apidev' + redirectURL;
   if (process.env.ENV === 'prod') redirectURL = 'api' + redirectURL;
@@ -231,7 +231,8 @@ app.get('/v1/checkin', (req, res) => {
 
 app.get('/v1/checkin/:qrId', (req, res) => {
       log.info(req);
-      res.redirect('https://app.entry-check.ch/?qrCodeUrl=https' + encodeURIComponent(`://${redirectURL}${req.originalUrl}`));
+      // let redirectTo = 'app';
+      res.redirect('https://' + redirectTo + '.entry-check.ch/?qrCodeUrl=https' + encodeURIComponent(`://${redirectURL}${req.originalUrl}`));
     }
 );
 
