@@ -60,12 +60,18 @@ let redirectURL = '.entry-check.ch';
 const qrcodestorage = new qrCodeStorage();
 const validationstorage = new vs();
 const checkinstorage = new checkInStorage();
-let redirectTo = process.env.ENV === 'prod' ? 'app' : 'devapp'
+let redirectTo = 'app';
 if (process.env.ENV && process.env.ENV !== 'NONE') {
-  if (process.env.ENV === 'dev') redirectURL = 'apidev' + redirectURL;
-  if (process.env.ENV === 'prod') redirectURL = 'api' + redirectURL;
+  if (process.env.ENV === 'dev') {
+    redirectURL = 'apidev' + redirectURL;
+    redirectTo = 'dev' + redirectTo;
+  }
+  if (process.env.ENV === 'prod') {
+    redirectURL = 'api' + redirectURL;
+  }
 } else if (process.env.ENV === undefined) {
   redirectURL = 'apidev' + redirectURL;
+  redirectTo = 'dev' + redirectTo;
 }
 
 // Enable CORS for all methods
