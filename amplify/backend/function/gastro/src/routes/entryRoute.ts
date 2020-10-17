@@ -118,7 +118,7 @@ router.get('/:barId', (req: any, res) => {
     }
 );
 
-router.get('/:locationId', (req: any, res) => {
+router.get(':id/location/:locationId/counter', (req: any, res) => {
   locationstorage.findLocation(req.xUser.email, req.params.locationId)
                  .pipe(switchMap(l => entrystorage.getEntryCount(l.locationId, !!req.query.hours ?
                                                                                req.query.hours :

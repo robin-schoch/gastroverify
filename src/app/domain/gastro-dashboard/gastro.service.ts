@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {AuthenticationService} from '../auth/authentication.service';
-import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
+import {AmplifyHttpClientService, IOptionalRequestParams} from '../../util/amplify-http-client.service';
 import {Partner} from '../../model/Partner';
 import {Location} from '../../model/Location';
 import {CheckIn} from '../../model/CheckIn';
@@ -128,6 +128,17 @@ export class GastroService {
     );
     body['body'] = checkIn;
     return this.amplifyHttpClient.post(this.apiName, '/v1/entry/me/location/' + location.locationId + '/visitor', body);
+  }
+
+
+  getCounter(location: Location, hours: number) {
+    let body = <IOptionalRequestParams>{
+      queryStringParameters: {
+        'hours': hours
+      }
+    };
+
+    return this.amplifyHttpClient.get(this.apiName, '/v1/entry/me/location/' + location.locationId + '/counter', body);
   }
 
 }

@@ -74,6 +74,7 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatRadioModule} from '@angular/material/radio';
 import {AllgemeineGeschaetsbedienungenComponent} from './domain/personal/allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
 import { CustomVisitorCheckinComponent } from './domain/custom-visitor-checkin/custom-visitor-checkin.component';
+import { EntryCounterComponent } from './domain/entry-counter/entry-counter.component';
 
 Amplify.configure(awsconfig);
 
@@ -111,6 +112,7 @@ Amplify.configure(awsconfig);
     AdminCoronaAlarmComponent,
     AllgemeineGeschaetsbedienungenComponent,
     CustomVisitorCheckinComponent,
+    EntryCounterComponent,
 
   ],
   imports: [

@@ -235,8 +235,10 @@ export class entryStorage {
     return this.dbConnection.queryItems(querparam)
                .pipe(switchMap(elem => isNotDynamodbError<Page<Entry>>(elem) ?
                                        of([
-                                         elem.Data.filter(e => e.checkIn).length,
-                                         elem.Data.filter(e => !e.checkIn).length
+                                         new Set(elem.Data.filter(e => e.checkIn)
+                                                     .map(e => e.phoneNumber.substring(1, e.phoneNumber.length))).size,
+                                         new Set(elem.Data.filter(e => !e.checkIn)
+                                                     .map(e => e.phoneNumber.substring(1, e.phoneNumber.length))).size
                                        ]) :
                                        throwError(elem)));
   }

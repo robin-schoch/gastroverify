@@ -20,7 +20,7 @@ export class CustomVisitorCheckinComponent implements OnInit {
   });
 
   @ViewChild('signInFrom')
-  private form: NgForm;
+  private form:  NgForm;
   private _location: Location;
 
   public locations$: Observable<Location[]>;

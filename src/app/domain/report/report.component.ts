@@ -68,8 +68,6 @@ export class ReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.reportService.reports = [];
-    this.date$.subscribe(elem => console.log(elem));
-
 
   }
 

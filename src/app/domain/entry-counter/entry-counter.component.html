@@ -1,0 +1,21 @@
+<div fxFill fxLayout="column">
+    <div fxLayoutGap="10px" fxLayout="row" fxFlex="none">
+        <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
+            <mat-label>{{'report.select' | translate}}</mat-label>
+            <mat-select (selectionChange)="selectLocation($event.value)">
+                <mat-option *ngFor="let location of locations"
+
+                            [value]="location">
+                    {{location.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field >
+            <mat-label>Hours</mat-label>
+            <input matInput [(ngModel)]="hours" type="number">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            <mat-hint>Hours back</mat-hint>
+        </mat-form-field>
+
+    </div>
+</div>
