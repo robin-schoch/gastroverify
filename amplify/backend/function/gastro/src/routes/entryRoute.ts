@@ -118,7 +118,9 @@ router.get('/:barId', (req: any, res) => {
     }
 );
 
+// dev/v1/entry/me/location/0ffb2963-dd8b-4903-8f06-766d0adb14a0/counter?hours=6
 router.get(':id/location/:locationId/counter', (req: any, res) => {
+  log.info(req.query);
   locationstorage.findLocation(req.xUser.email, req.params.locationId)
                  .pipe(switchMap(l => entrystorage.getEntryCount(l.locationId, !!req.query.hours ?
                                                                                req.query.hours :
