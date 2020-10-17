@@ -131,7 +131,7 @@ export class GastroService {
   }
 
 
-  getCounter(location: Location, hours: number) {
+  getCounter(location: Location, hours: number): Observable<any> {
     let body = <IOptionalRequestParams>{
       queryStringParameters: {
         'hours': hours
@@ -139,6 +139,22 @@ export class GastroService {
     };
 
     return this.amplifyHttpClient.get(this.apiName, '/v1/entry/me/location/' + location.locationId + '/counter', body);
+  }
+
+
+  addShadowCheckout(location: Location): Observable<any> {
+    const param = <CheckIn>{
+      checkIn: false,
+      address: 'Phantom',
+      birthdate: '01.01.1970',
+      city: 'Phantom',
+      email: 'pahton@email.com',
+      firstName: 'phantom',
+      phone: '+0000000' + new Date().valueOf(),
+      surName: 'phantom',
+      zipcode: '0000'
+    };
+    return this.addCustomEntry(location, param);
   }
 
 }

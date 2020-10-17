@@ -1,21 +1,43 @@
 <div fxFill fxLayout="column">
-    <div fxLayoutGap="10px" fxLayout="row" fxFlex="none">
-        <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
-            <mat-label>{{'report.select' | translate}}</mat-label>
-            <mat-select (selectionChange)="selectLocation($event.value)">
-                <mat-option *ngFor="let location of locations"
+    <div fxLayoutGap="10px" fxLayout="column" fxFlex class="scrollable mat-elevation-z8 defaultpadding">
 
-                            [value]="location">
-                    {{location.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field >
-            <mat-label>Hours</mat-label>
-            <input matInput [(ngModel)]="hours" type="number">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-            <mat-hint>Hours back</mat-hint>
-        </mat-form-field>
+        <div fxLayout="row" fxLayoutGap="10px">
+            <button *ngIf="selectedLocation$ | async as location" mat-fab color="primary"
+                    (click)="reloadCounter(location)" aria-label="Example icon button with a delete icon">
+                <mat-icon>replay</mat-icon>
+
+            </button>
+
+
+            <mat-form-field>
+                <mat-label>Hours</mat-label>
+                <input matInput [(ngModel)]="hours" type="number">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                <mat-hint>Hours back</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="20" appearance="outline" *ngIf="locations$ | async as locations">
+                <mat-label>{{'report.select' | translate}}</mat-label>
+                <mat-select (selectionChange)="selectLocation($event.value)">
+                    <mat-option *ngFor="let location of locations"
+                                [value]="location">
+                        {{location.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+
+        <div>
+            <h2>Count: </h2>
+            <h2 *ngIf="count$ | async as count"> {{ count}}</h2>
+            <h3 *ngIf="lastLoaded$ | async as lastReloaded"> {{lastReloaded | date: 'medium'}}</h3>
+        </div>
+        <button *ngIf="selectedLocation$ | async as location" mat-fab color="primary" (click)="addPhantomExit(location)"
+                aria-label="Example icon button with a delete icon">
+            <mat-icon>time_to_leave</mat-icon>
+
+        </button>
 
     </div>
 </div>

@@ -62,7 +62,7 @@ const createReportForLocation = async (date, location) => {
 
       if (!!data.value) {
         vals = [
-          ...data.value.map(elem => elem.phoneNumber),
+          ...data.value.filter(elem => !elem.startWith('+0000000')).map(elem => elem.phoneNumber),
           ...vals
         ];
         lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null;
@@ -89,7 +89,6 @@ exports.handler = async (event) => {
 
 
   const creationTime = moment().hours(6).minutes(0).seconds(0).milliseconds(0);
-
 
 
   log.info('create reports: ' + creationTime.toISOString());
