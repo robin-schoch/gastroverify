@@ -14,6 +14,10 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.scrollable {
+  overflow: auto;
+}
+
 
 .filters {
   mat-form-field {

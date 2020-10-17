@@ -5,7 +5,7 @@
                 <span>{{'checkin.CheckInTitle' | translate}}</span>
                 <span class="example-spacer"></span>
             </mat-toolbar>
-            <mat-card fxLayout="column" fxFlex *ngIf="checkIn$ | async as checkIn">
+            <mat-card fxLayout="column" fxFlex *ngIf="checkIn$ | async as checkIn" class="scrollable">
 
                 <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
                     <mat-label>{{'report.select' | translate}}</mat-label>

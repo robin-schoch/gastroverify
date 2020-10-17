@@ -1,5 +1,5 @@
 <div fxFill>
-    <div class="mat-elevation-z8 " fxFlex fxLayout="column" *ngIf="!(newPartner$ | async)">
+    <div class="mat-elevation-z8 scrollable" fxFlex fxLayout="column" *ngIf="!(newPartner$ | async)" >
         <form #signInFrom="ngForm" fxLayout="column" *ngIf="partner$ | async as partner" fxFlex>
             <mat-toolbar>
                 <span>{{'personal.billingaddress' | translate}}</span>
