@@ -20,7 +20,7 @@ export class CustomVisitorCheckinComponent implements OnInit {
   });
 
   @ViewChild('signInFrom')
-  private form:  NgForm;
+  private form: NgForm;
   private _location: Location;
 
   public locations$: Observable<Location[]>;
@@ -46,6 +46,7 @@ export class CustomVisitorCheckinComponent implements OnInit {
     if (!!this._location) {
       console.log(this.checkIn$.value);
       this.partnerService.addCustomEntry(this._location, <CheckIn>this.checkIn$.value).subscribe(elem => {
+        this.form.resetForm();
         this._snackBar.open('Besucher hinzugefügt', 'ok', {
           duration: 2000,
           horizontalPosition: 'center',
