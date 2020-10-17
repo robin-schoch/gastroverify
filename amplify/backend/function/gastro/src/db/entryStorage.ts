@@ -84,10 +84,12 @@ export class entryStorage {
       ExpressionAttributeValues: {
         ':location': id,
         ':entry': moment().subtract(14, 'days').toISOString(),
+        ':start': '+0000000'
       },
       KeyConditionExpression: `${this.dbConnection.partitionKey} = :location and ${this.dbConnection.sortKey} >= :entry`,
       ProjectionExpression: 'firstName, lastName, street, city, zipCode, email, phoneNumber, entryTime, checkIn, birthdate, tableNumber',
       Limit: pageSize,
+      FilterExpression: "not begins_with(phoneNumber, :start)",
       ScanIndexForward: false,
       ExclusiveStartKey: LastEvaluatedKey,
     };
