@@ -17,7 +17,6 @@ export class SignOutDirective {
   @HostListener('touchend', ['$event'])
   @HostListener('click', ['$event'])
   onClick(e) {
-
     this.authService.signOut();
     this.authService.role = [];
     this.locationService.clearPartner();

@@ -35,4 +35,7 @@ export class AdminPartnerDetailComponent implements OnInit {
         .subscribe(success => this.partner.referral -= 1);
   }
 
+  getCount() {
+
+  }
 }

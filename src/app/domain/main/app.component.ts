@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../auth/authentication.service';
 import {map, tap} from 'rxjs/operators';
+import {GastroService} from '../gastro-dashboard/gastro.service';
 
 interface Language {
   short: string,
@@ -33,7 +34,8 @@ export class AppComponent implements OnInit, AfterViewChecked {
       private toolbarService: ToolbarService,
       private changeDetect: ChangeDetectorRef,
       private translate: TranslateService,
-      private authService: AuthenticationService
+      private authService: AuthenticationService,
+      private locationService: GastroService
   ) {
 
     this.username$ = this.authService.activeUser$.pipe(map(user => user.getSignInUserSession().getIdToken().decodePayload().email));
@@ -58,6 +60,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   setOpened(opened: boolean): void {
     this.opened = opened;
+    this.hackForIOSLogout();
   }
 
   ngOnInit(): void {
@@ -76,5 +79,12 @@ export class AppComponent implements OnInit, AfterViewChecked {
     console.log('changed language');
   }
 
+
+  hackForIOSLogout() {
+    this.authService.signOut();
+    this.authService.role = [];
+    this.locationService.clearPartner();
+    this.locationService.loaded = false;
+  }
 
 }

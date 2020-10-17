@@ -118,6 +118,24 @@ router.get('/:barId', (req: any, res) => {
     }
 );
 
+router.get('/:locationId', (req: any, res) => {
+  locationstorage.findLocation(req.xUser.email, req.params.locationId)
+                 .pipe(switchMap(l => entrystorage.getEntryCount(l.locationId, !!req.query.hours ?
+                                                                               req.query.hours :
+                                                                               5)))
+                 .subscribe(count => {
+                       res.json({
+                         in: count[0],
+                         out: count[1],
+                         counter: count[0] - count[1]
+                       });
+                     },
+                     error => {
+                       res.status(500);
+                       res.json(error);
+                     });
+});
+
 const downloadResource = (res, fileName, fields, data) => {
   const csv = parse(
       data,

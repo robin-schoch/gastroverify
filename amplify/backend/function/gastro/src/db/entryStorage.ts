@@ -215,10 +215,30 @@ export class entryStorage {
 
 
   public createEntry(checkin: CheckIn): Observable<Partial<CheckIn> | DynamodbError<CheckIn>> {
-    return this.dbConnection.putItem(checkin).pipe(switchMap(elem => isNotDynamodbError(elem) ?
-                                                                     of(elem) :
-                                                                     throwError(elem)));
+    return this.dbConnection.putItem(checkin)
+               .pipe(switchMap(elem => isNotDynamodbError(elem) ?
+                                       of(elem) :
+                                       throwError(elem)));
   }
 
+  public getEntryCount(locationId, hours): Observable<number[]> {
+    const querparam = {
+      ExpressionAttributeValues: {
+        ':location': locationId,
+        ':entry': moment().subtract(hours, 'hours').toISOString()
+      },
+      KeyConditionExpression: `${this.dbConnection.partitionKey} = :location and ${this.dbConnection.sortKey} >= :entry`,
+      Limit: 100000
+
+    };
+
+    return this.dbConnection.queryItems(querparam)
+               .pipe(switchMap(elem => isNotDynamodbError<Page<Entry>>(elem) ?
+                                       of([
+                                         elem.Data.filter(e => e.checkIn).length,
+                                         elem.Data.filter(e => !e.checkIn).length
+                                       ]) :
+                                       throwError(elem)));
+  }
 }
 
