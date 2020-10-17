@@ -2,8 +2,12 @@
     <div class="mat-elevation-z8 " fxFlex fxLayout="column">
         <form #signInFrom="ngForm" fxLayout="column" fxFlex>
             <mat-toolbar>
-                <span>{{'checkin.CheckInTitle' | translate}}</span>
+                <span>{{'checkin.checkinTitle' | translate}}</span>
                 <span class="example-spacer"></span>
+                <button mat-icon-button (click)="checkInUser()"
+                        [disabled]="signInFrom.invalid || locatioSet()">
+                    <mat-icon >save</mat-icon>
+                </button>
             </mat-toolbar>
             <mat-card fxLayout="column" fxFlex *ngIf="checkIn$ | async as checkIn" class="scrollable">
 
@@ -30,7 +34,7 @@
                 <mat-form-field>
                     <input [(ngModel)]="checkIn.surName" class="cell"
                            delayedFocus matInput name="latName"
-                           placeholder="{{'personal.lastName' | translate}}"
+                           placeholder="{{'personal.lastname' | translate}}"
                            required type="name">
                 </mat-form-field>
 
@@ -69,6 +73,7 @@
 
                 <mat-form-field>
                     <input [(ngModel)]="checkIn.email" class="cell" delayedFocus matInput name="email"
+                           required
                            placeholder="Email"
                            type="email">
                 </mat-form-field>

@@ -59,7 +59,11 @@
     "lastname": "Nachname",
     "street": "Strasse + Nummer",
     "city": "Ort",
-    "zipoce": "PZL"
+    "zipoce": "PZL",
+    "phone": "Telefonnummer"
+  },
+  "checkin": {
+    "checkinTitle": "Besucher hinzufügen"
   },
   "report": {
     "toolbar": "Report",
