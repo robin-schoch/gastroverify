@@ -62,7 +62,7 @@ const createReportForLocation = async (date, location) => {
 
       if (!!data.value) {
         vals = [
-          ...data.value.filter(elem => !elem.startWith('+0000000')).map(elem => elem.phoneNumber),
+          ...data.value.map(elem => elem.phoneNumber),
           ...vals
         ];
         lastkey = data.lastEvaluatedKey ? data.lastEvaluatedKey : null;
