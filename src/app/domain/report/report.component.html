@@ -1,5 +1,6 @@
 <div fxFill fxLayout="column">
-    <div fxLayoutGap="10px" fxLayout="row" fxFlex="none">
+    <div fxLayoutGap="5px" fxLayout="column" fxFlex="none">
+
         <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
             <mat-label>{{'report.select' | translate}}</mat-label>
             <mat-select (selectionChange)="selectLocation($event.value)">
@@ -10,7 +11,6 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-
 
         <mat-form-field appearance="fill" >
             <mat-label>Datum</mat-label>

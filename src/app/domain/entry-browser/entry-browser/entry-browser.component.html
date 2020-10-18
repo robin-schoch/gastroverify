@@ -1,7 +1,7 @@
-<div class="mat-elevation-z8 " *ngIf="selectedBar$ | async as selectedbar" fxFill fxLayout="column">
+<div class="mat-elevation-z8  " *ngIf="selectedBar$ | async as selectedbar" fxFill fxLayout="column">
 
     <mat-toolbar>
-        <span>{{'context.location' | translate}}: {{selectedbar.name}}</span>
+        <span> {{selectedbar.name}}</span>
         <span class="example-spacer"></span>
         <button *ngIf="data$ | async as data" mat-raised-button (click)="exportCSV()"
                 matTooltip="{{'entry.download' | translate}}" color="warn">
@@ -11,7 +11,7 @@
             <mat-icon>replay</mat-icon>
         </button>
 
-        <button mat-icon-button (click)="reload(selectedbar)" [mat-dialog-close]="true">
+        <button mat-icon-button (click)="close()">
             <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar>
@@ -19,79 +19,89 @@
 
     <div class="example-container" fxLayout="column" *ngIf="data$ | async as data">
         <!--     -->
-        <mat-table multiTemplateDataRows [dataSource]="data.Data" *ngIf="displayedColumns$ | async as displayedColumns" fxFlex >
+        <table mat-table multiTemplateDataRows [dataSource]="data.Data" *ngIf="displayedColumns$ | async as displayedColumns"
+                   fxFlex>
 
             <ng-container matColumnDef="Checkin">
-                <mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element">
+                <th mat-header-cell  *matHeaderCellDef></th>
+                <td mat-cell  *matCellDef="let element">
                     <mat-icon *ngIf="element.checkIn" [color]="'success'">local_bar</mat-icon>
                     <mat-icon *ngIf="!element.checkIn" [color]="'warn'">no_drinks</mat-icon>
 
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="Zeit">
-                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.entryTime | date:'HH:mm : dd.MM'}} </mat-cell>
+                <th mat-header-cell  *matHeaderCellDef> {{'entry.time' | translate}}</th>
+                <td mat-cell   *matCellDef="let element"> {{element.entryTime | date:'HH:mm : dd.MM'}} </td>
             </ng-container>
 
 
             <ng-container matColumnDef="Name">
-                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.name' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{element.firstName}} {{element.lastName}} </mat-cell>
+                <th mat-header-cell *matHeaderCellDef> {{'entry.name' | translate}}</th>
+                <td mat-cell   *matCellDef="let element"> {{element.firstName}} {{element.lastName}} </td>
             </ng-container>
 
 
             <ng-container matColumnDef="Strasse">
-                <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.street' | translate}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element">
+                <th mat-header-cell *matHeaderCellDef> {{'entry.street' | translate}}</th>
+                <td mat-cell  *matCellDef="let element">
                     <div fxLayout="column">
                         <span>  {{element.street}} </span> <span>{{element.zipCode}} {{element.city}} </span>
                     </div>
-                </mat-cell>
+                </td>
             </ng-container>
 
 
             <ng-container matColumnDef="Nr.">
-                <mat-header-cell mat-header-cell *matHeaderCellDef>{{'entry.phonenr' | translate}}
-                    & {{'entry.email' | translate}} </mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element">
+                <th mat-header-cell *matHeaderCellDef>{{'entry.phonenr' | translate}}
+                    & {{'entry.email' | translate}} </th>
+                <td mat-cell   *matCellDef="let element">
                     <div fxLayout="column">
                         <span> {{element.phoneNumber}} </span>
                         <span> {{element.email}} </span>
                     </div>
-                </mat-cell>
+                </td>
             </ng-container>
 
 
             <ng-container matColumnDef="Email">
-                <mat-header-cell mat-header-cell *matHeaderCellDef>{{selectedbar.type}}</mat-header-cell>
-                <mat-cell mat-cell *matCellDef="let element"> {{mapNumber(element.tableNumber)}} </mat-cell>
+                <th mat-header-cell  *matHeaderCellDef>{{selectedbar.type}}</th>
+                <td  mat-cell *matCellDef="let element"> {{mapNumber(element.tableNumber)}} </td>
             </ng-container>
-
 
 
             <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-            <ng-container matColumnDef="expandedDetail" >
-                <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell  *matCellDef="let element" [attr.colspan]="displayedColumns.length">
                     <div class="example-element-detail"
+
                          [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                     sadfjkashjkdfhkasdjkfhjkasd
+                        <div
+                                fxLayout="column"
+                                fxLayoutGap="10px">
+                            <span class="mat-caption">{{element.firstName}} {{element.lastName}}</span>
+                            <span class="mat-caption"> {{element.street}}</span>
+                            <span class="mat-caption">{{element.city}} {{element.zipCode}}</span>
+                            <span class="mat-caption"> {{element.phoneNumber}}</span>
+                            <span class="mat-caption"> {{element.email}}</span>
+                        </div>
                     </div>
-                </mat-cell>
+                </td>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row  *matRowDef="let row; columns: displayedColumns;"
                      class="example-element-row"
                      [class.example-expanded-row]="expandedElement === row"
-                     (click)="expanedElemet(row)"
-            ></mat-row>
+                     (click)="expandedElement = expandedElement === row ? null : row"
+            ></tr>
 
-     <!-- <mat-row class="example-detail-row" *matRowDef="let row; columns: ['expandedDetail']" ></mat-row>-->
+            <tr mat-row  *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+            <!-- <mat-row class="example-detail-row" *matRowDef="let row; columns: ['expandedDetail']" ></mat-row>-->
 
 
-        </mat-table>
+        </table>
 
 
         <div fxFlex fxLayoutAlign="center center" *ngIf="data.LastEvaluatedKey">

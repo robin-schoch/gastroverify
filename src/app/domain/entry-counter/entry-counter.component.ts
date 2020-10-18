@@ -21,9 +21,9 @@ export class EntryCounterComponent implements OnInit {
 
   public hours = 6;
 
-  public in: number;
+  public in$: BehaviorSubject<number> = new BehaviorSubject<number>(null);
 
-  public out: number;
+  public out$: BehaviorSubject<number> = new BehaviorSubject<number>(null);
 
   public selectedLocation$: BehaviorSubject<Location> = new BehaviorSubject<Location>(null);
 
@@ -60,8 +60,8 @@ export class EntryCounterComponent implements OnInit {
   getCounter(location: Location) {
     this.partnerService.getCounter(location, this.hours).subscribe((elem): any => {
 
-      this.in = elem.in;
-      this.out = elem.out;
+      this.in$.next(elem.in);
+      this.out$.next(elem.out);
       this.lastLoaded$.next(new Date());
       this.count$.next(elem.counter);
       this.selectedLocation$.next(location);

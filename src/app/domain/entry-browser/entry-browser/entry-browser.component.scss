@@ -16,7 +16,7 @@
 
 .example-element-detail {
   overflow: hidden;
-  display: flex;
+
 }
 
 .mat-column-Zeit,
@@ -47,7 +47,35 @@
 
 
 .example-detail-row {
-  height: 0px !important;
-  max-height: 0px !important;
-  min-height: 0px !important;
+  height: 0;
+}
+
+
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
 }

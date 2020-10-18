@@ -1,4 +1,5 @@
 <div fxFill fxLayout="column">
+
     <div fxLayoutGap="10px" fxLayout="column" fxFlex class="scrollable mat-elevation-z8 ">
         <div fxLayout="row" fxFlex="none">
             <mat-toolbar class="filters">
@@ -16,7 +17,7 @@
 
         </div>
         <div class="defaultpadding scrollable">
-            <div fxLayout="row" fxLayoutGap="10px">
+            <div fxLayout="column" fxLayoutGap="10px">
 
 
                 <mat-form-field>
@@ -39,10 +40,30 @@
 
 
             <div>
-                <h2>Count: </h2>
-                <h2 *ngIf="count$ | async as count"> {{ count}}</h2>
+                <div>
+                    <h2>Count</h2>
+                    <span *ngIf="count$ | async as count else loading">{{count}}</span>
+
+                </div>
+                <div>
+                    <h2>Visitior Enter</h2>
+                    <span *ngIf="in$ | async as ins else loading">{{ins}}</span>
+
+
+                </div>
+                <div>
+                    <h2>Visitior leaved</h2>
+                    <span *ngIf="out$ | async as out else loading">{{out}}</span>
+
+
+                </div>
+
 
             </div>
+
+            <ng-template #loading>
+                <span>0</span>
+            </ng-template>
 
 
         </div>

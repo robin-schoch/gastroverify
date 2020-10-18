@@ -15,6 +15,7 @@ import {SnackbarService} from '../snackbar/snackbar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {EntryBrowserComponent} from '../entry-browser/entry-browser/entry-browser.component';
 import {ChooseQrCodeDialogComponent} from './choose-qr-code-dialog/choose-qr-code-dialog.component';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-gastro-dashboard',
@@ -44,7 +45,8 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
       public dialog: MatDialog,
       private router: Router,
       private snackbar: SnackbarService,
-      private translat: TranslateService
+      private translat: TranslateService,
+      private _bottomSheet: MatBottomSheet
   ) { }
 
   ngOnInit() {
@@ -90,6 +92,7 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
 
 
   openAddDialog() {
+
     let dialogRef = this.dialog.open(
         AddBarDialogComponent,
         {
@@ -144,16 +147,22 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
   }
 
   selectBar(row: Location) {
-    this.dialog.open(
-        EntryBrowserComponent,
+    this._bottomSheet.open(EntryBrowserComponent,
         {
-          autoFocus: false,
-          height: '90vh',
-          width: '90vw',
-          data: row,
-          panelClass: 'no-padding-dialog'
-        }
-    );
+          panelClass: 'my-component-bottom-sheet-no-padding',
+          data: row
+        });
+    /*
+     this.dialog.open(
+     EntryBrowserComponent,
+     {
+     autoFocus: false,
+     height: '90vh',
+     width: '90vw',
+     data: row,
+     panelClass: 'no-padding-dialog'
+     }
+     );*/
   }
 
   openConfirmDialog(location: Location): void {

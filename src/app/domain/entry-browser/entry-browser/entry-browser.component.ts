@@ -3,9 +3,9 @@ import {Location} from '../../../model/Location';
 import {Entry, EntryService, Page} from '../entry.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 
 
 export interface PeriodicElement {
@@ -62,7 +62,9 @@ export class EntryBrowserComponent implements OnInit {
 
 
   constructor(
-      @Inject(MAT_DIALOG_DATA) public location: Location,
+      // @Inject(MAT_DIALOG_DATA) public location: location,
+      private _bottomSheetRef: MatBottomSheetRef<EntryBrowserComponent>,
+      @Inject(MAT_BOTTOM_SHEET_DATA) public location: Location,
       private entryService: EntryService,
       private breakpointObserver: BreakpointObserver
   ) {
@@ -187,10 +189,14 @@ export class EntryBrowserComponent implements OnInit {
   }
 
   expanedElemet(row: any) {
-    console.log("hurra")
-    this.expandedElement = this.expandedElement === row ? null : row
-    console.log(this.expandedElement)
+    console.log('hurra');
+    this.expandedElement = this.expandedElement === row ? null : row;
+    console.log(this.expandedElement);
 
+  }
+
+  close() {
+    this._bottomSheetRef.dismiss();
   }
 }
 
