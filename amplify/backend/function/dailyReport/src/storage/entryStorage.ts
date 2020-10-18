@@ -22,13 +22,17 @@ const query = (queryParams) => {
 };
 
 export const getEntries = (id, creationtime, pageSize, LastEvaluatedKey) => {
+  console.log(creationtime.toISOString())
+
+  // ${sortkeyName} BETWEEN :from and :to
   const queryParams = {
     ExpressionAttributeValues: {
       ':location': id,
-      ':entry': creationtime.subtract(24, 'hours').toISOString(),
+      ':from': creationtime.clone().subtract(24, 'hours').toISOString(),
+      ':to': creationtime.toISOString(),
       ':start': '+0000000'
     },
-    KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} >= :entry`,
+    KeyConditionExpression: `${partitionKeyName} = :location and ${sortkeyName} BETWEEN :from and :to`,
     FilterExpression: 'not begins_with(phoneNumber, :start)',
     ProjectionExpression: 'phoneNumber',
     Limit: pageSize,

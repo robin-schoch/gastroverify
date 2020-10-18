@@ -47,7 +47,7 @@
 
         </div>
 
-        <div fxFlex *ngIf="reports$ | async as report">
+        <div fxFlex *ngIf="reports$ | async as report" class="scrollable">
             <mat-table [dataSource]="report" fxFlex>
 
 

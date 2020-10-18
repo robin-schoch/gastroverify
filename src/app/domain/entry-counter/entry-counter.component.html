@@ -1,43 +1,50 @@
 <div fxFill fxLayout="column">
-    <div fxLayoutGap="10px" fxLayout="column" fxFlex class="scrollable mat-elevation-z8 defaultpadding">
+    <div fxLayoutGap="10px" fxLayout="column" fxFlex class="scrollable mat-elevation-z8 ">
+        <div fxLayout="row" fxFlex="none">
+            <mat-toolbar class="filters">
+                <span>{{'counter.title' | translate}}</span>
+                <span class="example-spacer"></span>
+                <h3 *ngIf="lastLoaded$ | async as lastReloaded"> {{lastReloaded | date: 'short'}}</h3>
+                <button mat-icon-button *ngIf="selectedLocation$ | async as location"
+                        (click)="addPhantomExit(location)">
+                    <mat-icon>time_to_leave</mat-icon>
+                </button>
+                <button mat-icon-button *ngIf="selectedLocation$ | async as location" (click)=reloadCounter(location)>
+                    <mat-icon>replay</mat-icon>
+                </button>
+            </mat-toolbar>
 
-        <div fxLayout="row" fxLayoutGap="10px">
-            <button *ngIf="selectedLocation$ | async as location" mat-fab color="primary"
-                    (click)="reloadCounter(location)" aria-label="Example icon button with a delete icon">
-                <mat-icon>replay</mat-icon>
-
-            </button>
-
-
-            <mat-form-field>
-                <mat-label>Hours</mat-label>
-                <input matInput [(ngModel)]="hours" type="number">
-                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-                <mat-hint>Hours back</mat-hint>
-            </mat-form-field>
-
-            <mat-form-field fxFlex="20" appearance="outline" *ngIf="locations$ | async as locations">
-                <mat-label>{{'report.select' | translate}}</mat-label>
-                <mat-select (selectionChange)="selectLocation($event.value)">
-                    <mat-option *ngFor="let location of locations"
-                                [value]="location">
-                        {{location.name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
         </div>
+        <div class="defaultpadding scrollable">
+            <div fxLayout="row" fxLayoutGap="10px">
 
 
-        <div>
-            <h2>Count: </h2>
-            <h2 *ngIf="count$ | async as count"> {{ count}}</h2>
-            <h3 *ngIf="lastLoaded$ | async as lastReloaded"> {{lastReloaded | date: 'medium'}}</h3>
+                <mat-form-field>
+                    <mat-label>Hours</mat-label>
+                    <input matInput [(ngModel)]="hours" type="number">
+
+                    <mat-hint>Hours back</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="20" appearance="outline" *ngIf="locations$ | async as locations">
+                    <mat-label>{{'report.select' | translate}}</mat-label>
+                    <mat-select (selectionChange)="selectLocation($event.value)">
+                        <mat-option *ngFor="let location of locations"
+                                    [value]="location">
+                            {{location.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+            <div>
+                <h2>Count: </h2>
+                <h2 *ngIf="count$ | async as count"> {{ count}}</h2>
+
+            </div>
+
+
         </div>
-        <button *ngIf="selectedLocation$ | async as location" mat-fab color="primary" (click)="addPhantomExit(location)"
-                aria-label="Example icon button with a delete icon">
-            <mat-icon>time_to_leave</mat-icon>
-
-        </button>
-
     </div>
 </div>

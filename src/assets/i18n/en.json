@@ -80,5 +80,8 @@
     "total": "Total",
     "price": "Cost",
     "paidAt": "Paid at"
+  },
+  "counter": {
+    "title": "Counter"
   }
 }
