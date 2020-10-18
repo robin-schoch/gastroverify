@@ -5,7 +5,7 @@
     <div fxLayout="row" fxFlex fxLayoutGap="10px" *ngIf="partner$ | async as partner">
 
 
-        <div class="mat-elevation-z8 " fxFlex fxLayout="column" >
+        <div class="mat-elevation-z8 " fxFlex fxLayout="column">
             <mat-toolbar>
                 <span>{{'context.location' | translate}}</span>
                 <span class="example-spacer"></span>
@@ -34,6 +34,38 @@
 
                             </mat-cell>
                         </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                            <mat-cell fxLayoutAlign="end center" [class.disabled-cell]="!element.active" *matCellDef="let element">
+
+                                <button mat-icon-button [matMenuTriggerFor]="menu"
+                                        aria-label="Example icon-button with a menu">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu" xPosition="before">
+                                    <button mat-menu-item (click)="selectBar(element)">
+                                        <mat-icon>meeting_room</mat-icon>
+                                        <span>{{'location.entries' | translate}}</span>
+                                    </button>
+                                    <button mat-menu-item (click)="openQRCodeDialog(element)" [disabled]="!element.active">
+                                        <mat-icon>qr_code_2</mat-icon>
+                                        <span>{{'location.qrcode' | translate}}</span>
+                                    </button>
+                                    <button *ngIf="element.active" mat-menu-item  (click)="openConfirmDialog(element)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>Deaktivieren</span>
+                                    </button>
+                                    <button *ngIf="!element.active" mat-menu-item  (click)="openConfirmDialogActive(element)">
+                                        <mat-icon>rotate_right</mat-icon>
+                                        <span>Aktivieren</span>
+                                    </button>
+                                </mat-menu>
+
+                            </mat-cell>
+                        </ng-container>
+
 
                         <!-- Delete Column -->
                         <ng-container matColumnDef="Entries">

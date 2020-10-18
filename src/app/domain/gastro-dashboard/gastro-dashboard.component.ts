@@ -31,9 +31,10 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
   private _subs: Subscription[] = [];
   displayedColumns: string[] = [
     'Name',
-    'Entries',
-    'QRCodes',
-    'Delete'
+    // 'Entries',
+   // 'QRCodes',
+   // 'Delete',
+    'Action'
   ];
 
 
