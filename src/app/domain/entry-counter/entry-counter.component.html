@@ -41,18 +41,18 @@
 
             <div>
                 <div>
-                    <h2>Count</h2>
+                    <span>{{'counter.count' | translate}}: </span>
                     <span *ngIf="count$ | async as count else loading">{{count}}</span>
 
                 </div>
                 <div>
-                    <h2>Visitior Enter</h2>
+                    <span>{{'counter.enter' | translate}}: </span>
                     <span *ngIf="in$ | async as ins else loading">{{ins}}</span>
 
 
                 </div>
                 <div>
-                    <h2>Visitior leaved</h2>
+                    <span>{{'counter.leave' | translate}}: </span>
                     <span *ngIf="out$ | async as out else loading">{{out}}</span>
 
 

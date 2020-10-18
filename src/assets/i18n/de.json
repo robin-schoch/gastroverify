@@ -11,7 +11,10 @@
     "report": "Report",
     "admin": "Administration",
     "deletedAt": "Gelöscht am:",
-    "checkin": "Check In"
+    "checkin": "Check In",
+    "active": "Aktivieren",
+    "deactive": "Deaktivieren",
+    "action": "Aktion"
   },
   "location": {
     "id": "Standort ID",
@@ -88,6 +91,9 @@
     }
   },
   "counter": {
-    "title": "Zähler"
+    "title": "Zähler",
+    "count": "Anzahl Besucher",
+    "enter": "Anzahl Eintritte",
+    "leave": "Anzahl Austritte"
   }
 }

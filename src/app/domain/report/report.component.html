@@ -37,16 +37,6 @@
 
     <div class="mat-elevation-z8 " fxFlex fxLayout="column">
 
-        <div fxLayout="row" fxFlex="none">
-            <mat-toolbar class="filters">
-                <span>{{'report.title' | translate}}</span>
-                <span class="example-spacer"></span>
-
-
-            </mat-toolbar>
-
-        </div>
-
         <div fxFlex *ngIf="reports$ | async as report" class="scrollable">
             <mat-table [dataSource]="report" fxFlex>
 

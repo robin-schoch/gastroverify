@@ -26,7 +26,7 @@
 
             <mat-list-option routerLink="/location/counter" routerLinkActive="active" (click)="sidenav.toggle()">
                 <mat-icon mat-list-icon color="accent">published_with_changes</mat-icon>
-                <span>{{'context.counter' | translate}}</span>
+                <span>{{'counter.title' | translate}}</span>
             </mat-list-option>
 
             <mat-list-option routerLink="/admin"  (click)="sidenav.toggle()" *ngIf="isAdmin$ | async as admin">

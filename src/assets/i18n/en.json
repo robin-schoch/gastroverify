@@ -10,7 +10,10 @@
     "report": "Report",
     "admin": "Administration",
     "deletedAt": "Deleted at:",
-    "checkin": "Check In"
+    "checkin": "Check In",
+    "active": "Activate",
+    "deactive": "Deactivate",
+    "action": "Action"
   },
   "location": {
     "id": "Location ID",
@@ -82,6 +85,9 @@
     "paidAt": "Paid at"
   },
   "counter": {
-    "title": "Counter"
+    "title": "Counter",
+    "count": "Number of visitors",
+    "enter": "Number of entries",
+    "leave": "Number of exits"
   }
 }

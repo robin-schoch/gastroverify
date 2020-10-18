@@ -17,7 +17,7 @@
     </mat-toolbar>
     <app-spinner [data$]="data$"></app-spinner>
 
-    <div class="scrollable" fxLayoutGap="20px" fxLayout="column" *ngIf="data$ | async as data">
+    <div class="scrollable" fxFlex fxLayoutGap="20px" fxLayout="column" *ngIf="data$ | async as data">
         <!--     -->
         <table mat-table multiTemplateDataRows [dataSource]="data.Data" *ngIf="displayedColumns$ | async as displayedColumns"
                    fxFlex>
@@ -110,7 +110,7 @@
                 <mat-icon>expand_more</mat-icon>
             </button>
         </div>
-        <div fxFlex fxLayoutAlign="center center" *ngIf="!data.LastEvaluatedKey">
+        <div fxFlex fxLayoutAlign="center start" *ngIf="!data.LastEvaluatedKey">
             <span>{{'entry.nomoredata' | translate}}</span>
         </div>
     </div>
