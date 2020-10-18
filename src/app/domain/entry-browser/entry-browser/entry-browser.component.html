@@ -1,6 +1,6 @@
 <div class="mat-elevation-z8  " *ngIf="selectedBar$ | async as selectedbar" fxFill fxLayout="column">
 
-    <mat-toolbar>
+    <mat-toolbar fxFlex="60px">
         <span> {{selectedbar.name}}</span>
         <span class="example-spacer"></span>
         <button *ngIf="data$ | async as data" mat-raised-button (click)="exportCSV()"
@@ -17,7 +17,7 @@
     </mat-toolbar>
     <app-spinner [data$]="data$"></app-spinner>
 
-    <div class="example-container" fxLayout="column" *ngIf="data$ | async as data">
+    <div class="scrollable" fxLayoutGap="20px" fxLayout="column" *ngIf="data$ | async as data">
         <!--     -->
         <table mat-table multiTemplateDataRows [dataSource]="data.Data" *ngIf="displayedColumns$ | async as displayedColumns"
                    fxFlex>

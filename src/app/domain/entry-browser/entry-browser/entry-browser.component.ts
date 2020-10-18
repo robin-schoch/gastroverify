@@ -188,12 +188,6 @@ export class EntryBrowserComponent implements OnInit {
 
   }
 
-  expanedElemet(row: any) {
-    console.log('hurra');
-    this.expandedElement = this.expandedElement === row ? null : row;
-    console.log(this.expandedElement);
-
-  }
 
   close() {
     this._bottomSheetRef.dismiss();
