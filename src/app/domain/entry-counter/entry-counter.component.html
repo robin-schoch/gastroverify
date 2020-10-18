@@ -3,9 +3,9 @@
     <div fxLayoutGap="10px" fxLayout="column" fxFlex class="scrollable mat-elevation-z8 ">
         <div fxLayout="row" fxFlex="none">
             <mat-toolbar class="filters">
-                <span>{{'counter.title' | translate}}</span>
+                <span *ngIf="lastLoaded$ | async as lastReloaded"> {{lastReloaded | date: 'short'}}</span>
                 <span class="example-spacer"></span>
-                <h3 *ngIf="lastLoaded$ | async as lastReloaded"> {{lastReloaded | date: 'short'}}</h3>
+
                 <button mat-icon-button *ngIf="selectedLocation$ | async as location"
                         (click)="addPhantomExit(location)">
                     <mat-icon>time_to_leave</mat-icon>

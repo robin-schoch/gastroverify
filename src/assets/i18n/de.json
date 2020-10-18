@@ -1,17 +1,17 @@
 {
   "context": {
     "welcome": "Willkommen",
-    "profile": "Mein Profil",
+    "profile": "Rechnungsadresse",
     "signout": "Abmelden",
     "signup": "Registrieren",
     "dashboard": "Übersicht",
     "location": "Standort",
     "save": "Speichern",
     "signin": "Anmelden",
-    "report": "Report",
+    "report": "Rapport",
     "admin": "Administration",
     "deletedAt": "Gelöscht am:",
-    "checkin": "Check In",
+    "checkin": "Manuell eintragen",
     "active": "Aktivieren",
     "deactive": "Deaktivieren",
     "action": "Aktion"
@@ -34,7 +34,7 @@
     "city": "Ort",
     "zip": "PLZ",
     "add": "Hinzufügen",
-    "type": "Unterteilung vom Standort"
+    "type": "Unterteilung des Standorts"
   },
   "entry": {
     "title": "Eintritte",

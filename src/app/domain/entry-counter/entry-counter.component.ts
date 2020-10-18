@@ -4,6 +4,8 @@ import {filter, map} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Location} from '../../model/Location';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ToolbarService} from '../main/toolbar.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-entry-counter',
@@ -31,8 +33,12 @@ export class EntryCounterComponent implements OnInit {
 
   constructor(
       private partnerService: GastroService,
-      private _snackBar: MatSnackBar
-  ) { }
+      private _snackBar: MatSnackBar,
+      private toolbarService: ToolbarService,
+      private tranlate: TranslateService
+  ) {
+    this.toolbarService.toolbarTitle = 'Zähler'
+  }
 
   ngOnInit(): void {
     this.partnerService.getPartner().subscribe(

@@ -63,7 +63,7 @@ export class ReportComponent implements OnInit {
         )
       };
     }));
-    this.toolbarService.toolbarTitle = 'Report';
+    this.toolbarService.toolbarTitle = 'Rapport';
   }
 
   ngOnInit(): void {

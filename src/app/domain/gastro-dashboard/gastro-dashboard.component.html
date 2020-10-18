@@ -55,11 +55,11 @@
                                     </button>
                                     <button *ngIf="element.active" mat-menu-item  (click)="openConfirmDialog(element)">
                                         <mat-icon>delete</mat-icon>
-                                        <span>{{'context.active' | translate}}</span>
+                                        <span>{{'context.deactive' | translate}}</span>
                                     </button>
                                     <button *ngIf="!element.active" mat-menu-item  (click)="openConfirmDialogActive(element)">
                                         <mat-icon>rotate_right</mat-icon>
-                                        <span>{{'context.deactive' | translate}}</span>
+                                        <span>{{'context.active' | translate}}</span>
                                     </button>
                                 </mat-menu>
 
