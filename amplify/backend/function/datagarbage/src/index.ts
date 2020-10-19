@@ -13,6 +13,7 @@
  STORAGE_PARTNER_NAME
  Amplify Params - DO NOT EDIT */
 import * as moment from 'moment';
+import {Moment} from 'moment';
 import {billBuilder} from './domain/bill';
 import {partnerStorage} from './storage/partnerStorage';
 
@@ -24,7 +25,6 @@ import {of, throwError} from 'rxjs';
 import {Partner} from './domain/partner';
 import {DynamodbError, isNotDynamodbError, Page} from './util/dynamoDbDriver';
 import {locationStorage} from './storage/locationStorage';
-import {createBillPDF} from './util/pdfUtil';
 
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({name: 'monthlyReport', src: true});
@@ -32,22 +32,14 @@ const partnerstorage = new partnerStorage();
 const locationstorage = new locationStorage();
 
 
-const createBillForPartner = async (from, to, partner) => {
+const createBillForPartner = async (from, to, partner: Partner, billNumber: string) => {
 
   const locations = await locationstorage.findLocations(partner.email).pipe(
       switchMap((a) => isNotDynamodbError<Page<any>>(a) ? of(a.Data) : throwError(a)),
   ).toPromise();
   return new Promise((async (resolve, reject) => {
-    const reports = await Promise.all(locations.map(location => createBillForLocation(
-        from,
-        to,
-        location
-    )));
-    const billInfo: any = reports.reduce(
-        (acc, report: any) => billReducer(
-            acc,
-            report.res
-        ),
+    const reports = await Promise.all(locations.map(location => createBillForLocation(from, to, location)));
+    const billInfo: any = reports.reduce((acc, report: any) => billReducer(acc, report.res),
         {
           distinctTotal: 0,
           total: 0,
@@ -56,35 +48,37 @@ const createBillForPartner = async (from, to, partner) => {
         }
     );
 
+    const referralDiscount = partner.referral > 0 ? 20 : 0;
+
+
+    // todo partner referral -1
+    const finalizeBillInfo = finalizeBill(billInfo, referralDiscount);
+
+    let index = 0;
 
     const bill = billBuilder(
-        partner.email,
+        billNumber,
         from.toISOString(),
         to.toISOString(),
-        billInfo.total,
-        billInfo.distinctTotal,
-        billInfo.price,
+        finalizeBillInfo,
         partner,
-        reports.map((report: any) => report.res),
-        reports.map((reports: any) => Object.assign({}, reports.res, {
-          detail: reports.original.map(det => {
-            return {
-              reportDate: det.reportDate,
-              distinctTotal: det.distinctTotal,
-              price: det.distinctTotal * det.pricePerEntry
-            };
-          })
-        }))
+        reports,
+        referralDiscount
     );
-    // create pdf
-    createBill(bill).then(elem => {
-      resolve(bill);
-    });
 
-    // createBillPDF(bill, bill.detail);
+    const p = [];
+    if (partner.referral > 0) {
+     // p.push(partnerstorage.subtractReferral(partner).toPromise());
+    }
+
+    p.push(createBill(bill));
+    Promise.all(p).then(elem => resolve(bill));
   }));
+};
 
-
+const finalizeBill = (billInfo, discount: number) => {
+  const finalPrice = billInfo.price * ((100 - discount) / 100);
+  return Object.assign({}, billInfo, {finalPrice: finalPrice});
 };
 
 const createBillForLocation = async (from, to, location) => {
@@ -130,6 +124,13 @@ const billReducer = (acc, bill) => {
   };
 };
 
+
+const calculateBillNumber = (index: number, date: Moment): string => {
+  let n = date.format('MMYY') + index;
+  while (n.length < 10) n = '0' + n;
+  return  n;
+};
+
 exports.handler = async (event) => {
   log.info('running');
 
@@ -143,26 +144,20 @@ exports.handler = async (event) => {
       .seconds(0)
       .milliseconds(0);
 
-  let startOfBillingDuration = moment().subtract(
-      1,
-      'month'
-  ).startOf('month');
-  let endOfBillingDuration = moment().subtract(
-      1,
-      'month'
-  ).endOf('month');
+  let startOfBillingDuration = moment().subtract(1, 'month').startOf('month');
+  let endOfBillingDuration = moment().subtract(1, 'month').endOf('month');
   //let startOfBillingDuration = moment().startOf('month')
   //let endOfBillingDuration = moment().endOf('month')
 
   let lastEvaluatedPartnerKey = null;
   let partnerList = [];
   do {
-    let partners: Page<Partner> = await partnerstorage.findPartnerPaged()
-                                                      .pipe(
-                                                          switchMap((a: Page<Partner> | DynamodbError<Partner>) => isNotDynamodbError<Page<Partner>>(a) ?
-                                                                                                                   of(a) :
-                                                                                                                   throwError(a)),
-                                                      ).toPromise().catch(err => log.error(err));
+    let partners: Page<Partner> = await partnerstorage
+        .findPartnerPaged()
+        .pipe(switchMap((a: Page<Partner> | DynamodbError<Partner>) => isNotDynamodbError<Page<Partner>>(a) ?
+                                                                       of(a) :
+                                                                       throwError(a)),)
+        .toPromise().catch(err => log.error(err));
 
     lastEvaluatedPartnerKey = partners.LastEvaluatedKey ? partners.LastEvaluatedKey : null;
     partnerList = [
@@ -170,7 +165,8 @@ exports.handler = async (event) => {
       ...partners.Data.map(p => createBillForPartner(
           startOfBillingDuration.clone(),
           endOfBillingDuration.clone(),
-          p
+          p,
+          calculateBillNumber(partnerList.length + partners.Data.indexOf(p), startOfBillingDuration.clone())
       ))
     ];
   } while (!!lastEvaluatedPartnerKey);

@@ -1,5 +1,5 @@
 <mat-sidenav-container fxFill>
-    <mat-sidenav #sidenav mode="over" [(opened)]="opened">
+    <mat-sidenav #sidenav mode="over" [(opened)]="opened" class="scrollable">
 
         <mat-toolbar color="primary" style="min-height:200px" fxLayoutAlign="center center">
             <img src="assets/circle-cropped.png" style="max-height: 150px">
@@ -19,6 +19,16 @@
                 <span>{{'context.report' | translate}}</span>
             </mat-list-option>
 
+            <mat-list-option routerLink="/location/checkIn" routerLinkActive="active" (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon color="accent">meeting_room</mat-icon>
+                <span>{{'context.checkin' | translate}}</span>
+            </mat-list-option>
+
+            <mat-list-option routerLink="/location/counter" routerLinkActive="active" (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon color="accent">published_with_changes</mat-icon>
+                <span>{{'counter.title' | translate}}</span>
+            </mat-list-option>
+
             <mat-list-option routerLink="/admin"  (click)="sidenav.toggle()" *ngIf="isAdmin$ | async as admin">
                 <mat-icon mat-list-icon color="accent">admin_panel_settings</mat-icon>
                 <span>{{'context.admin' | translate}}</span>
@@ -34,9 +44,9 @@
 
     </mat-sidenav>
 
-    <mat-sidenav-content  fxFlex fxLayout="column">
+    <mat-sidenav-content  fxFlex fxLayout="column" class="scrollable">
 
-        <mat-toolbar *ngIf="!(toolbarHidden$ | async)" color="primary" fxLayoutAlign="space-between center">
+        <mat-toolbar fxFlex="60px" class="theToolBar" *ngIf="!(toolbarHidden$ | async)" color="primary" fxLayoutAlign="space-between center">
             <div fxLayoutAlign="center center" fxLayoutGap="10px">
                 <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
                     <mat-icon>menu</mat-icon>

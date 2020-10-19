@@ -27,7 +27,8 @@ const locationstorage = new locationStorage_1.locationStorage();
 const partnerstorage = new partnerStorage_1.partnerStorage();
 const prices = {
     premium: 0.3,
-    default: 0.15
+    default: 0.15,
+    nachtGallen: 0.12
 };
 const createReportForPartner = async (date, partner) => {
     const locations = await locationstorage.findLocations(partner.email).pipe(operators_1.tap(a => log.info(a)), operators_1.switchMap(a => dynamoDbDriver_1.isNotDynamodbError(a) ? rxjs_1.of(a.Data) : rxjs_1.throwError(a))).toPromise().catch(err => log.error(err));
@@ -50,7 +51,10 @@ const createReportForLocation = async (date, location) => {
         } while (lastkey !== null);
         let count = new Set(vals).size;
         let totalCount = vals.length;
-        await createNewReport(location.locationId, date.toISOString(), count, totalCount, !!location.senderID ? prices.premium : prices.default).catch(err => log.error(err));
+        let pricing = !!location.senderID ? prices.premium : prices.default;
+        if (location.senderID === 'NachtGallen')
+            pricing = prices.nachtGallen;
+        await createNewReport(location.locationId, date.toISOString(), count, totalCount, pricing).catch(err => log.error(err));
         resolve(true);
     });
 };

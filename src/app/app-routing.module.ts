@@ -7,6 +7,8 @@ import {GtcComponent} from './domain/gtc/gtc.component';
 import {PersonalComponent} from './domain/personal/personal.component';
 import {ReportComponent} from './domain/report/report.component';
 import {AdminDashbaordComponent} from './domain/admin/admin-dashbaord/admin-dashbaord.component';
+import {CustomVisitorCheckinComponent} from './domain/custom-visitor-checkin/custom-visitor-checkin.component';
+import {EntryCounterComponent} from './domain/entry-counter/entry-counter.component';
 
 const routes: Routes = [
     {
@@ -40,7 +42,19 @@ const routes: Routes = [
                 component: ReportComponent,
                 canActivate: [IsAuthenticatedGuard],
                 pathMatch: 'full'
-            }
+            },
+            {
+                path: 'counter',
+                component: EntryCounterComponent,
+                canActivate: [IsAuthenticatedGuard],
+                pathMatch: 'full'
+            },
+          {
+            path: 'checkIn',
+            component: CustomVisitorCheckinComponent,
+            canActivate: [IsAuthenticatedGuard],
+            pathMatch: 'full'
+          }
         ]
     },
     {
@@ -48,6 +62,7 @@ const routes: Routes = [
         component: GtcComponent,
         pathMatch: 'full'
     },
+
     {
         path: 'admin',
         component: AdminDashbaordComponent,

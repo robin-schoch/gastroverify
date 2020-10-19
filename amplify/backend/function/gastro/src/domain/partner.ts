@@ -2,48 +2,72 @@ import {v4} from 'uuid';
 
 export class Partner {
 
-  public email;
-  public firstName;
-  public lastName;
+  public email: string;
+  public contactEmail: string;
+  public firstName: string;
+  public lastName: string;
   public address;
   public city;
   public zipcode;
+  public organisation?;
+  public isHidden?: boolean;
+  public referral?: number;
   public locations?: Location[];
   public bills?;
-  public isHidden?: boolean;
-  public timeToLive?: number;
+
 
   public static fromRequest(req: any): Partner {
     return new Partner(
+        req.xUser.email,
         req.xUser.email,
         req.body.firstName,
         req.body.lastName,
         req.body.address,
         req.body.city,
-        req.body.zipcode
+        req.body.zipcode,
+        !!req.body.organisation ? req.body.organisation : 'default'
+    );
+  }
+
+  public static fromRequestUpdate(req: any): Partner {
+    return new Partner(
+        req.xUser.email,
+        req.body.contactEmail,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.address,
+        req.body.city,
+        req.body.zipcode,
+        !!req.body.organisation ? req.body.organisation : 'default'
     );
   }
 
   constructor(
       email,
+      contactEmail,
       firstName,
       lastName,
       address,
       city,
       zipcode,
+      organisation,
       locations = [],
       bills = [],
-      isHidden = false
+      isHidden = false,
+      referral = 0
   ) {
     this.email = email;
+    this.contactEmail = contactEmail;
     this.firstName = firstName;
     this.lastName = lastName;
     this.address = address;
     this.city = city;
     this.zipcode = zipcode;
+    this.organisation = organisation;
     this.locations = locations;
     this.bills = bills;
     this.isHidden = isHidden;
+    this.referral = referral;
   }
 }
 
@@ -62,8 +86,10 @@ export class Location {
   public type;
   public senderID;
   public smsText;
+  public timeToLive?: number;
 
   public static fromRequest(req): Location {
+
     return new Location(
         req.xUser.email,
         v4(),

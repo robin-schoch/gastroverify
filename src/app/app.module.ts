@@ -1,6 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatBottomSheetModule, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './domain/main/app.component';
 import {GastroDashboardComponent} from './domain/gastro-dashboard/gastro-dashboard.component';
@@ -42,62 +43,82 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AmplifyUIAngularModule} from '@aws-amplify/ui-angular';
 import {MatMenuModule} from '@angular/material/menu';
-import { PersonalAddDialogComponent } from './domain/personal/personal-add-dialog/personal-add-dialog.component';
-import { ConfirmdialogComponent } from './domain/confirmdialog/confirmdialog.component';
+import {PersonalAddDialogComponent} from './domain/personal/personal-add-dialog/personal-add-dialog.component';
+import {ConfirmdialogComponent} from './domain/confirmdialog/confirmdialog.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { LoginDialogComponent } from './domain/auth/login-dialog/login-dialog.component';
+import {LoginDialogComponent} from './domain/auth/login-dialog/login-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { ReportComponent } from './domain/report/report.component';
-import { AdminDashbaordComponent } from './domain/admin/admin-dashbaord/admin-dashbaord.component';
-import { AdminReportComponent } from './domain/admin/admin-report/admin-report.component';
-import { PartnerOverviewComponent } from './domain/admin/partner-overview/partner-overview.component';
-import { ChooseQrCodeDialogComponent } from './domain/gastro-dashboard/choose-qr-code-dialog/choose-qr-code-dialog.component';
+import {ReportComponent} from './domain/report/report.component';
+import {AdminDashbaordComponent} from './domain/admin/admin-dashbaord/admin-dashbaord.component';
+import {AdminReportComponent} from './domain/admin/admin-report/admin-report.component';
+import {PartnerOverviewComponent} from './domain/admin/partner-overview/partner-overview.component';
+import {ChooseQrCodeDialogComponent} from './domain/gastro-dashboard/choose-qr-code-dialog/choose-qr-code-dialog.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { SpinnerComponent } from './domain/spinner/spinner.component';
-import { UpdateLocationDialogComponent } from './domain/gastro-dashboard/update-location-dialog/update-location-dialog.component';
+import {SpinnerComponent} from './domain/spinner/spinner.component';
+import {UpdateLocationDialogComponent} from './domain/gastro-dashboard/update-location-dialog/update-location-dialog.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { AdminBillComponent } from './domain/admin/admin-bill/admin-bill.component';
-import { BillComponent } from './domain/bill/bill.component';
+import {AdminBillComponent} from './domain/admin/admin-bill/admin-bill.component';
+import {BillComponent} from './domain/bill/bill.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import { LandingTileComponent } from './domain/landing/landing-tile/landing-tile.component';
+import {LandingTileComponent} from './domain/landing/landing-tile/landing-tile.component';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import {AdminPartnerDetailComponent} from './domain/admin/admin-partner-detail/admin-partner-detail.component';
+import {EntryCheckTableComponent} from './components/entry-check-table/entry-check-table.component';
+import {EntryCheckTableToolbarDirective} from './components/entry-check-table/entry-check-table-toolbar.directive';
+import {AdminCoronaAlarmComponent} from './domain/admin/admin-corona-alarm/admin-corona-alarm.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MatRadioModule} from '@angular/material/radio';
+import {AllgemeineGeschaetsbedienungenComponent} from './domain/personal/allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
+import { CustomVisitorCheckinComponent } from './domain/custom-visitor-checkin/custom-visitor-checkin.component';
+import { EntryCounterComponent } from './domain/entry-counter/entry-counter.component';
 
 Amplify.configure(awsconfig);
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        GastroDashboardComponent,
-        LandingComponent,
-        SignupComponent,
-        AuthComponent,
-        SigninComponent,
-        SignOutDirective,
-        AddBarDialogComponent,
-        EntryBrowserComponent,
-        QrCodeGeneratorDialogComponent,
-        GtcComponent,
-        PersonalComponent,
-        PersonalAddDialogComponent,
-        ConfirmdialogComponent,
-        LoginDialogComponent,
-        ReportComponent,
-        AdminDashbaordComponent,
-        AdminReportComponent,
-        PartnerOverviewComponent,
-        LoginDialogComponent,
-        ChooseQrCodeDialogComponent,
-        SpinnerComponent,
-        UpdateLocationDialogComponent,
-        AdminBillComponent,
-        BillComponent,
-        LandingTileComponent,
+  declarations: [
+    AppComponent,
+    GastroDashboardComponent,
+    LandingComponent,
+    SignupComponent,
+    AuthComponent,
+    SigninComponent,
+    SignOutDirective,
+    AddBarDialogComponent,
+    EntryBrowserComponent,
+    QrCodeGeneratorDialogComponent,
+    GtcComponent,
+    PersonalComponent,
+    PersonalAddDialogComponent,
+    ConfirmdialogComponent,
+    LoginDialogComponent,
+    ReportComponent,
+    AdminDashbaordComponent,
+    AdminReportComponent,
+    PartnerOverviewComponent,
+    LoginDialogComponent,
+    ChooseQrCodeDialogComponent,
+    SpinnerComponent,
+    UpdateLocationDialogComponent,
+    AdminBillComponent,
+    BillComponent,
+    LandingTileComponent,
+    AdminPartnerDetailComponent,
+    EntryCheckTableComponent,
+    EntryCheckTableToolbarDirective,
+    AdminCoronaAlarmComponent,
+    AllgemeineGeschaetsbedienungenComponent,
+    CustomVisitorCheckinComponent,
+    EntryCounterComponent,
 
-    ],
+  ],
   imports: [
+    MatBottomSheetModule,
+    MatMomentDateModule,
+    MatNativeDateModule,
     BrowserModule,
     FlexLayoutModule,
     AppRoutingModule,
@@ -138,20 +159,22 @@ Amplify.configure(awsconfig);
     MatButtonToggleModule,
     MatSlideToggleModule,
     MatAutocompleteModule,
-    ClipboardModule
+    ClipboardModule,
+    MatDatepickerModule,
+    MatRadioModule
   ],
-    entryComponents: [AddBarDialogComponent],
-    providers: [DatePipe],
-    bootstrap: [AppComponent]
+  entryComponents: [AddBarDialogComponent],
+  providers: [DatePipe, {provide: MatBottomSheetRef, useValue: {}}],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }
 
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
-    return new TranslateHttpLoader(
-        http,
-        './assets/i18n/',
-        '.json'
-    );
+  return new TranslateHttpLoader(
+      http,
+      './assets/i18n/',
+      '.json'
+  );
 }

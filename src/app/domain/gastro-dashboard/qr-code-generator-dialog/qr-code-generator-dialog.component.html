@@ -1,14 +1,14 @@
 <div fxLayout="column" fxFill fxLayoutGap="10px">
 
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" fxFlex="60px">
         <span>QR-Code Generierung</span>
         <span class="example-spacer"></span>
-        <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+        <button mat-icon-button class="close-button" (click)="close()">
             <mat-icon class="close-icon">close</mat-icon>
         </button>
     </mat-toolbar>
 
-    <div *ngIf="qrUrl$ | async as qrUrl" fxflex="column" fxFlex fxLayoutGap="10px">
+    <div *ngIf="qrUrl$ | async as qrUrl" fxflex="column" fxFlex fxLayoutGap="10px" class="scrollable">
 
 
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">

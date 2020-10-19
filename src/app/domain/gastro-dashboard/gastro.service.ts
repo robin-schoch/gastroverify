@@ -1,34 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {AuthenticationService} from '../auth/authentication.service';
-import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
-
-export interface Partner {
-  email: string,
-  firstName: string,
-  lastName: string,
-  address: string,
-  city: string
-  zipcode: string,
-  locations: Location[],
-  bills: any[],
-  isHidden: boolean
-}
-
-export interface Location {
-  locationId: string,
-  name: string,
-  street: string,
-  city: string,
-  zipcode: string,
-  checkOutCode: string,
-  checkInCode: string,
-  active: boolean,
-  type: string,
-  senderID: string,
-  smsText: string,
-  timeToLive?: number
-}
+import {AmplifyHttpClientService, IOptionalRequestParams} from '../../util/amplify-http-client.service';
+import {Partner} from '../../model/Partner';
+import {Location} from '../../model/Location';
+import {CheckIn} from '../../model/CheckIn';
 
 
 @Injectable({
@@ -98,6 +74,19 @@ export class GastroService {
     );
   }
 
+  public updatePartner(partner: Partner): Observable<Partner> {
+    let body = Object.assign(
+        {},
+        this.myInit
+    );
+    body['body'] = partner;
+    return this.amplifyHttpClient.put<Partner>(
+        this.apiName,
+        'v1/gastro',
+        body
+    );
+  }
+
   getPartner(): Observable<Partner> {
     if (!this._loaded) {
       return this.amplifyHttpClient.get<Partner>(
@@ -127,6 +116,45 @@ export class GastroService {
   }
 
   activateLocation(location: Location): Observable<Location> {
+
     return this.amplifyHttpClient.put(this.apiName, '/v1/gastro/me/bar/' + location.locationId);
   }
+
+
+  addCustomEntry(location: Location, checkIn: CheckIn) {
+    let body = Object.assign(
+        {},
+        this.myInit
+    );
+    body['body'] = checkIn;
+    return this.amplifyHttpClient.post(this.apiName, '/v1/entry/me/location/' + location.locationId + '/visitor', body);
+  }
+
+
+  getCounter(location: Location, hours: number): Observable<any> {
+    let body = <IOptionalRequestParams>{
+      queryStringParameters: {
+        'hours': hours
+      }
+    };
+
+    return this.amplifyHttpClient.get(this.apiName, '/v1/entry/me/location/' + location.locationId + '/counter', body);
+  }
+
+
+  addShadowCheckout(location: Location): Observable<any> {
+    const param = <CheckIn>{
+      checkIn: false,
+      address: 'Phantom',
+      birthdate: '01.01.1970',
+      city: 'Phantom',
+      email: 'pahton@email.com',
+      firstName: 'phantom',
+      phone: '+0000000' + new Date().valueOf(),
+      surName: 'phantom',
+      zipcode: '0000'
+    };
+    return this.addCustomEntry(location, param);
+  }
+
 }

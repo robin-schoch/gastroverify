@@ -1,16 +1,20 @@
 {
   "context": {
     "welcome": "Willkommen",
-    "profile": "Mein Profil",
+    "profile": "Rechnungsadresse",
     "signout": "Abmelden",
     "signup": "Registrieren",
     "dashboard": "Übersicht",
     "location": "Standort",
     "save": "Speichern",
     "signin": "Anmelden",
-    "report": "Report",
+    "report": "Rapport",
     "admin": "Administration",
-    "deletedAt": "Gelöscht am:"
+    "deletedAt": "Gelöscht am:",
+    "checkin": "Manuell eintragen",
+    "active": "Aktivieren",
+    "deactive": "Deaktivieren",
+    "action": "Aktion"
   },
   "location": {
     "id": "Standort ID",
@@ -30,7 +34,7 @@
     "city": "Ort",
     "zip": "PLZ",
     "add": "Hinzufügen",
-    "type": "Unterteilung vom Standort"
+    "type": "Unterteilung des Standorts"
   },
   "entry": {
     "title": "Eintritte",
@@ -58,7 +62,11 @@
     "lastname": "Nachname",
     "street": "Strasse + Nummer",
     "city": "Ort",
-    "zipoce": "PZL"
+    "zipoce": "PZL",
+    "phone": "Telefonnummer"
+  },
+  "checkin": {
+    "checkinTitle": "Besucher hinzufügen"
   },
   "report": {
     "toolbar": "Report",
@@ -81,5 +89,11 @@
       "title": "",
       "content": "Durch die Nutzung der Entry Check App ist ein schnelles Check-in garantiert. Für die Besucher ist eine einmalige Registration erforderlich, danach muss nur noch der QR Code gescannt werden. Somit ist eine einfache und schnelle Datenübermittlung der Kunden garantiert. Dabei spielt es keine Rolle, ob sich ein Besucher ursprünglich in Ihrer oder einer anderen Bar, Restaurant oder Kino registriert hat."
     }
+  },
+  "counter": {
+    "title": "Zähler",
+    "count": "Anzahl Besucher",
+    "enter": "Anzahl Eintritte",
+    "leave": "Anzahl Austritte"
   }
 }

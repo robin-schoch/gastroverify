@@ -1,10 +1,12 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {GastroService, Location} from '../gastro.service';
+import {GastroService} from '../gastro.service';
+import {Location} from '../../../model/Location';
 import {SnackbarService} from '../../snackbar/snackbar.service';
 import {BehaviorSubject} from 'rxjs';
 
 export interface IAddBarData {
+  senderID?: string
 
 }
 
@@ -15,14 +17,6 @@ export interface IAddBarData {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddBarDialogComponent implements OnInit {
-
-  constructor(
-      @Inject(MAT_DIALOG_DATA) public data: IAddBarData,
-      public dialogRef: MatDialogRef<AddBarDialogComponent>,
-      private gastroService: GastroService,
-      private snackBar: SnackbarService
-  ) { }
-
   public newLocation = <Location>{};
 
 
@@ -37,6 +31,16 @@ export class AddBarDialogComponent implements OnInit {
 
   public reg = new RegExp('^[A-z0-9]*');
   enablePremium: boolean = false;
+
+  constructor(
+      @Inject(MAT_DIALOG_DATA) public data: IAddBarData,
+      public dialogRef: MatDialogRef<AddBarDialogComponent>,
+      private gastroService: GastroService,
+      private snackBar: SnackbarService
+  ) {
+    if (!!data.senderID) this.newLocation.senderID = data.senderID;
+  }
+
 
   ngOnInit() {
   }

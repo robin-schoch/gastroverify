@@ -18,11 +18,11 @@ export class CheckIn {
   type;
   ttl;
 
-  public static fromReq(req, code, decoded, timeIso) {
+  public static fromReq(req, code, decoded, timeIso, checkIn = false) {
     return new CheckIn(
         code.locationId, req.body.firstName, req.body.surName,
         !!req.body.email ? req.body.email : 'no email', req.body.address, req.body.city, req.body.zipcode,
-        code.checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table, code.type
+        code.checkIn && !checkIn, timeIso, decoded.phone, req.body.birthdate, req.body.firstUse, req.query.table, code.type
     );
   }
 

@@ -1,0 +1,101 @@
+<div fxLayout="column" fxLayoutGap="10px" fxFill>
+    <div class="mat-elevation-z8 " fxFlex fxLayout="column">
+        <form #signInFrom="ngForm" fxLayout="column" fxFlex>
+            <mat-toolbar>
+                <span>{{'checkin.checkinTitle' | translate}}</span>
+                <span class="example-spacer"></span>
+                <button mat-icon-button (click)="checkInUser()"
+                        [disabled]="signInFrom.invalid || locatioSet()">
+                    <mat-icon >save</mat-icon>
+                </button>
+            </mat-toolbar>
+            <mat-card fxLayout="column" fxFlex *ngIf="checkIn$ | async as checkIn" class="scrollable">
+
+                <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
+                    <mat-label>{{'report.select' | translate}}</mat-label>
+                    <mat-select (selectionChange)="selectLocation($event.value)" [required]="true">
+                        <mat-option *ngFor="let location of locations"
+
+                                    [value]="location">
+                            {{location.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.firstName" class="cell"
+                           delayedFocus matInput name="firstName"
+                           placeholder="{{'personal.name' | translate}}"
+                           required type="name">
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.surName" class="cell"
+                           delayedFocus matInput name="latName"
+                           placeholder="{{'personal.lastname' | translate}}"
+                           required type="name">
+                </mat-form-field>
+
+                <mat-form-field>
+
+                    <input [(ngModel)]="checkIn.phone" class="cell" delayedFocus matInput name="phone"
+                           placeholder="{{'personal.phone' | translate}}"
+                           required type="name">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.address" class="cell" delayedFocus matInput name="address"
+                           placeholder="{{'personal.street' | translate}}"
+                           required type="Address">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.city" class="cell" delayedFocus matInput name="city"
+                           placeholder="{{'personal.city' | translate}}"
+                           required type="city">
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.zipcode" class="cell" delayedFocus matInput name="zip"
+                           placeholder="PLZ"
+                           required type="zip">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.birthdate" class="cell" delayedFocus matInput name="birthday"
+                           placeholder="Geburtstag"
+                           required type="birthday">
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="checkIn.email" class="cell" delayedFocus matInput name="email"
+                           required
+                           placeholder="Email"
+                           type="email">
+                </mat-form-field>
+
+                <mat-radio-group aria-label="Select an option" [required]="true" [(ngModel)]="checkIn.checkIn"
+                                 class="defaultpadding"
+                                 name="isCheckin"
+                                 fxLayoutGap="10px" fxLayout="column">
+                    <mat-radio-button [value]="true">Check In</mat-radio-button>
+                    <mat-radio-button [value]="false">Check Out</mat-radio-button>
+                </mat-radio-group>
+
+
+                <button mat-flat-button color="accent" (click)="checkInUser()"
+                        [disabled]="signInFrom.invalid || locatioSet()">
+                    {{'context.save' | translate}}
+                </button>
+
+
+            </mat-card>
+        </form>
+    </div>
+
+
+</div>

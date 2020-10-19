@@ -1,10 +1,17 @@
 <div fxFill>
     <mat-toolbar>
         <span>{{data.partner.firstName}}</span>
+        <span fxFlex></span>
+        <button mat-icon-button (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
     </mat-toolbar>
 
     <mat-tab-group>
         <mat-tab label="Overview">
+            <app-admin-partner-detail [partner]="data.partner">
+
+            </app-admin-partner-detail>
 
         </mat-tab>
         <mat-tab label="Reports">
@@ -12,6 +19,9 @@
         </mat-tab>
         <mat-tab label="Bills">
             <app-admin-bill [partnerId]="data.partner.email"></app-admin-bill>
+        </mat-tab>
+        <mat-tab label="Corona Alarm">
+            <app-admin-corona-alarm [partner]="data.partner"></app-admin-corona-alarm>
         </mat-tab>
     </mat-tab-group>
 

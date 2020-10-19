@@ -9,7 +9,11 @@
     "save": "Save",
     "report": "Report",
     "admin": "Administration",
-    "deletedAt": "Deleted at:"
+    "deletedAt": "Deleted at:",
+    "checkin": "Check In",
+    "active": "Activate",
+    "deactive": "Deactivate",
+    "action": "Action"
   },
   "location": {
     "id": "Location ID",
@@ -58,7 +62,11 @@
     "lastname": "Lastname",
     "street": "Street + Number",
     "city": "City",
-    "zipoce": "Zipcode"
+    "zipoce": "Zipcode",
+    "phone": "Phonenumber"
+  },
+  "checkin": {
+    "checkinTitle": "Add visitor"
   },
   "report": {
     "toolbar": "Report",
@@ -75,5 +83,11 @@
     "total": "Total",
     "price": "Cost",
     "paidAt": "Paid at"
+  },
+  "counter": {
+    "title": "Counter",
+    "count": "Number of visitors",
+    "enter": "Number of entries",
+    "leave": "Number of exits"
   }
 }

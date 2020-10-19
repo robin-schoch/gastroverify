@@ -10,56 +10,47 @@ exports.handler = void 0;
 const rxjs_1 = require("rxjs");
 const pdfUtil_1 = require("./util/pdfUtil");
 const nodemailer = require("nodemailer");
+const esnr_1 = require("./util/esnr");
 const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.TABLE_REGION || 'eu-central-1' });
 const ses = new AWS.SES();
 let transporter = nodemailer.createTransport({
     SES: ses
 });
-/*
- const schemaBill: Schema = {
- id: {type: 'String', keyType: 'HASH'},
- date_time: {type: 'Date', keyType: 'RANGE'},
- some_property: {type: 'String'},
- another_property: {type: 'String'},
- reference: {type: 'String'},
- billingDate: {type: 'String'},
- total: {type: 'Number'},
- price: {type: 'Number'},
- distinctTotal: {type: 'Number'},
- paidAt: {type: 'String'},
- from: {type: 'String'},
- locations: {
- type: 'List',
- memberType: {
- type: 'Map', memberType: {type: 'Any'}
- }
- },
- detail: {L: []},
- partnerId: {type: 'String'},
- to: {type: 'String'},
- complete: {type: 'Boolean'},
- customer: {
- M: {
- zipcode: [Object],
- lastName: [Object],
- firstName: [Object],
- address: [Object],
- city: [Object],
- bills: [Object],
- locations: [Object],
- email: [Object],
- isHidden: [Object]
- }
- };
- };
- */
-const sendBillAsEmail = (bill, subscriber) => {
+const billinfo = {
+    'billingDate': '2020-09-30T23:59:59.999Z',
+    'complete': false,
+    'customer': {
+        'address': 'Trottackerstrasse 35',
+        'bills': [],
+        'city': 'Mellingen',
+        'email': 'gg@gg.com',
+        'firstName': 'Kathi',
+        'isHidden': true,
+        'lastName': 'Rofka',
+        'locations': [],
+        'zipcode': '5507'
+    },
+    'detail': [],
+    'discount': 0,
+    'distinctTotal': 0,
+    'finalizedPrice': 0,
+    'from': '2020-09-01T00:00:00.000Z',
+    'locations': [],
+    'paidAt': '',
+    'partnerId': 'gg@gg.com',
+    'price': 0,
+    'reference': '0000009204',
+    'to': '2020-09-30T23:59:59.999Z',
+    'total': 0
+};
+const sendBillAsEmail = (bill, converted, subscriber) => {
+    console.log('send mail ');
     transporter.sendMail({
-        from: 'noReply@entry-check.ch',
+        from: 'noreply@entry-check.ch',
         to: 'gastro.verify@gmail.com',
-        subject: 'PDF Test',
-        text: 'here is your pdf',
+        subject: process.env.ENV === 'dev' ? 'DEVD EDV DEV' : 'Prod: Rechnung',
+        text: 'here is your pdf' + converted.email + ' ',
         attachments: [
             {
                 filename: 'rechnung.pdf',
@@ -68,6 +59,7 @@ const sendBillAsEmail = (bill, subscriber) => {
         ]
     }, (err, info) => {
         if (err) {
+            console.log(err);
             subscriber.error(err);
         }
         else {
@@ -75,54 +67,35 @@ const sendBillAsEmail = (bill, subscriber) => {
             subscriber.complete();
         }
     });
-    /*const params = {
-     Destination: {
-     ToAddresses: ['gastro.verify@gmail.com']
-     },
-     Message: {
-     Body: {
-     Text: {
-     Data: 'Test'
-  
-     }
-  
-     },
-  
-     Subject: {
-     Data: 'Test Email'
-  
-     },
-     attachments: [{
-     filename: 'attachment.pdf',
-     content: bill
-     }]
-     },
-     Source: 'noReply@entry-check.ch'
-     };
-     ses.sendEmail(params, (err, data) => {
-     if (err) {
-     subscriber.error(err);
-     } else {
-     subscriber.next(data);
-     subscriber.complete();
-     }
-  
-  
-     });*/
+};
+const _testHandlde = (record) => {
+    return new rxjs_1.Observable(subscriber => {
+        const { doc, buffers } = pdfUtil_1.createBillPDF(record, record.detail);
+        doc.on('end', () => {
+            console.log('hey');
+            let pdfData = Buffer.concat(buffers);
+            sendBillAsEmail(pdfData, record, subscriber);
+        });
+    });
 };
 const handleDynamoRecord = (record) => {
     return new rxjs_1.Observable(subscriber => {
+        console.log(record.eventName);
         switch (record.eventName) {
             case 'INSERT': {
-                console.log(record.dynamodb.NewImage);
+                console.log('creating email...');
                 const converted = AWS.DynamoDB.Converter.unmarshall((record.dynamodb.NewImage));
                 console.log(converted);
+                console.log(converted.reference);
+                console.log(esnr_1.calcESNR(converted.reference));
                 const { doc, buffers } = pdfUtil_1.createBillPDF(converted, converted.detail);
-                doc.on('end', () => {
-                    let pdfData = Buffer.concat(buffers);
-                    // console.log(pdfData.toString('utf-8'));
-                    sendBillAsEmail(pdfData, subscriber);
-                });
+                /* doc.on('end', () => {
+                   console.log('hey');
+                   let pdfData = Buffer.concat(buffers);
+                   sendBillAsEmail(pdfData, converted, subscriber);
+                 });*/
+                subscriber.next('done');
+                subscriber.complete();
                 break;
             }
             case 'DELETE': {
@@ -139,7 +112,6 @@ const handleDynamoRecord = (record) => {
     });
 };
 exports.handler = (event) => {
-    console.log('i am called');
     rxjs_1.forkJoin([...event.Records.map(record => handleDynamoRecord(record))])
         .subscribe(success => {
         console.log('success');
@@ -148,30 +120,12 @@ exports.handler = (event) => {
             body: 'success',
         };
     }, error => {
+        console.log('kill it');
         console.log(error);
         return {
-            statusCode: 400,
+            statusCode: 500,
             body: 'error',
         };
     });
-    /*
-  
-  
-     .toPromise()
-     .then(elem => {
-     console.log('success');
-     return {
-     statusCode: 200,
-     body: 'success',
-     };
-     }).catch(err => {
-     console.log(err);
-     return {
-     statusCode: 400,
-     body: 'error',
-     };
-  
-     });
-  
-     */
 };
+// _testHandlde(billinfo).subscribe(elem => console.log(elem));

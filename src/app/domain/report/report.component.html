@@ -1,5 +1,6 @@
 <div fxFill fxLayout="column">
-    <div fxLayoutGap="10px" fxLayout="row">
+    <div fxLayoutGap="5px" fxLayout="column" fxFlex="none">
+
         <mat-form-field appearance="outline" *ngIf="locations$ | async as locations">
             <mat-label>{{'report.select' | translate}}</mat-label>
             <mat-select (selectionChange)="selectLocation($event.value)">
@@ -11,24 +12,24 @@
             </mat-select>
         </mat-form-field>
 
-
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" >
             <mat-label>Datum</mat-label>
             <input matInput [value]="(date$ | async) | date: 'MMMM  yyyy'" disabled="true">
-        </mat-form-field>
 
-        <div class="example-button-container" *ngIf="_selectedLocation$ | async">
-            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon"
+            <div matSuffix fxLayout="row">
+            <button mat-icon-button matSuffix color="accent"
                     (click)="dateBackwards()">
                 <mat-icon>arrow_circle_down</mat-icon>
             </button>
-        </div>
-        <div class="example-button-container" *ngIf="_selectedLocation$ | async">
-            <button mat-mini-fab color="accent" aria-label="Example icon button with a filter list icon"
+
+            <button mat-icon-button matSuffix color="accent"
                     (click)="dateForward()">
                 <mat-icon>arrow_circle_up</mat-icon>
             </button>
-        </div>
+            </div>
+
+        </mat-form-field>
+
 
 
     </div>
@@ -36,17 +37,7 @@
 
     <div class="mat-elevation-z8 " fxFlex fxLayout="column">
 
-        <div fxLayout="row">
-            <mat-toolbar class="filters">
-                <span>{{'report.title' | translate}}</span>
-                <span class="example-spacer"></span>
-
-
-            </mat-toolbar>
-
-
-        </div>
-        <div class=" example-container" fxLayout="column" fxFlex *ngIf="reports$ | async as report">
+        <div fxFlex *ngIf="reports$ | async as report" class="scrollable">
             <mat-table [dataSource]="report" fxFlex>
 
 

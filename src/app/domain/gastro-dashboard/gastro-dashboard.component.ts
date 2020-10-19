@@ -2,7 +2,9 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {AuthenticationService} from '../auth/authentication.service';
 import {ToolbarService} from '../main/toolbar.service';
 import {EntryService} from '../entry-browser/entry.service';
-import {GastroService, Location, Partner} from './gastro.service';
+import {GastroService} from './gastro.service';
+import {Location} from '../../model/Location';
+import {Partner} from '../../model/Partner';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, skip, tap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
@@ -13,6 +15,7 @@ import {SnackbarService} from '../snackbar/snackbar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {EntryBrowserComponent} from '../entry-browser/entry-browser/entry-browser.component';
 import {ChooseQrCodeDialogComponent} from './choose-qr-code-dialog/choose-qr-code-dialog.component';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-gastro-dashboard',
@@ -28,9 +31,10 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
   private _subs: Subscription[] = [];
   displayedColumns: string[] = [
     'Name',
-    'Entries',
-    'QRCodes',
-    'Delete'
+    // 'Entries',
+   // 'QRCodes',
+   // 'Delete',
+    'Action'
   ];
 
 
@@ -42,7 +46,8 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
       public dialog: MatDialog,
       private router: Router,
       private snackbar: SnackbarService,
-      private translat: TranslateService
+      private translat: TranslateService,
+      private _bottomSheet: MatBottomSheet
   ) { }
 
   ngOnInit() {
@@ -64,7 +69,10 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
     this.toolbarService.toolbarHidden = false;
     this.gastroService.getPartner().subscribe(
         elem => this.gastroService.gastro = elem,
-        error => this.gastroService.error = error
+        error => {
+          console.log(error.statusCode);
+          if (error.statusCode !== 404) this.gastroService.error = error;
+        }
     );
     this.gastroService.error$.subscribe(elem => this.router.navigate([
       'location',
@@ -85,12 +93,15 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
 
 
   openAddDialog() {
+
     let dialogRef = this.dialog.open(
         AddBarDialogComponent,
         {
           autoFocus: false,
           width: '90vw',
-          data: <IAddBarData>{}
+          data: <IAddBarData>{
+            senderID: this.gastroService.gastro.organisation
+          }
         }
     );
   }
@@ -137,16 +148,22 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
   }
 
   selectBar(row: Location) {
-    this.dialog.open(
-        EntryBrowserComponent,
+    this._bottomSheet.open(EntryBrowserComponent,
         {
-          autoFocus: false,
-          height: '90vh',
-          width: '90vw',
-          data: row,
-          panelClass: 'no-padding-dialog'
-        }
-    );
+          panelClass: 'my-component-bottom-sheet-no-padding',
+          data: row
+        });
+    /*
+     this.dialog.open(
+     EntryBrowserComponent,
+     {
+     autoFocus: false,
+     height: '90vh',
+     width: '90vw',
+     data: row,
+     panelClass: 'no-padding-dialog'
+     }
+     );*/
   }
 
   openConfirmDialog(location: Location): void {

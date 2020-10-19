@@ -1,0 +1,71 @@
+<div fxFill fxLayout="column">
+
+    <div fxLayoutGap="10px" fxLayout="column" fxFlex class="scrollable mat-elevation-z8 ">
+        <div fxLayout="row" fxFlex="none">
+            <mat-toolbar class="filters">
+                <span *ngIf="lastLoaded$ | async as lastReloaded"> {{lastReloaded | date: 'short'}}</span>
+                <span class="example-spacer"></span>
+
+                <button mat-icon-button *ngIf="selectedLocation$ | async as location"
+                        (click)="addPhantomExit(location)">
+                    <mat-icon>time_to_leave</mat-icon>
+                </button>
+                <button mat-icon-button *ngIf="selectedLocation$ | async as location" (click)=reloadCounter(location)>
+                    <mat-icon>replay</mat-icon>
+                </button>
+            </mat-toolbar>
+
+        </div>
+        <div class="defaultpadding scrollable">
+            <div fxLayout="column" fxLayoutGap="10px">
+
+
+                <mat-form-field>
+                    <mat-label>Hours</mat-label>
+                    <input matInput [(ngModel)]="hours" type="number">
+
+                    <mat-hint>Hours back</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="20" appearance="outline" *ngIf="locations$ | async as locations">
+                    <mat-label>{{'report.select' | translate}}</mat-label>
+                    <mat-select (selectionChange)="selectLocation($event.value)">
+                        <mat-option *ngFor="let location of locations"
+                                    [value]="location">
+                            {{location.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+            <div>
+                <div>
+                    <span>{{'counter.count' | translate}}: </span>
+                    <span *ngIf="count$ | async as count else loading">{{count}}</span>
+
+                </div>
+                <div>
+                    <span>{{'counter.enter' | translate}}: </span>
+                    <span *ngIf="in$ | async as ins else loading">{{ins}}</span>
+
+
+                </div>
+                <div>
+                    <span>{{'counter.leave' | translate}}: </span>
+                    <span *ngIf="out$ | async as out else loading">{{out}}</span>
+
+
+                </div>
+
+
+            </div>
+
+            <ng-template #loading>
+                <span>0</span>
+            </ng-template>
+
+
+        </div>
+    </div>
+</div>

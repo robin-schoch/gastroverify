@@ -1,44 +1,63 @@
-<h1>Registrieren</h1>
-<div mat-dialog-content>
-    <form #signInFrom="ngForm" fxLayout="column" fxFlex>
+<div fxFill class="scrollable">
+    <form #signInFrom="ngForm" fxLayout="column" fxLayoutGap="10px" fxFlex>
+        <h1>Registrieren</h1>
 
 
-        <mat-form-field>
+        <mat-form-field fxFlex>
             <input [(ngModel)]="partner.firstName" class="cell"
                    delayedFocus matInput name="firstname"
                    placeholder="Name"
                    required type="name">
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field fxFlex>
 
             <input [(ngModel)]="partner.lastName" class="cell" delayedFocus matInput name="lastname"
                    placeholder="Nachname"
                    required type="name">
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field fxFlex>
             <input [(ngModel)]="partner.address" class="cell" delayedFocus matInput name="address"
                    placeholder="Strasse + Nummer"
                    required type="Address">
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field fxFlex>
             <input [(ngModel)]="partner.city" class="cell" delayedFocus matInput name="city"
                    placeholder="Ort"
                    required type="city">
         </mat-form-field>
 
 
-        <mat-form-field>
+        <mat-form-field fxFlex>
             <input [(ngModel)]="partner.zipcode" class="cell" delayedFocus matInput name="zip"
                    pattern="[0-9]*"
                    placeholder="PLZ"
                    required type="zip">
         </mat-form-field>
 
+        <section class="example-section" fxLayout="column" fxLayoutGap="10px" fxFlex>
+            <label class="margin-bottom">Organisation:</label>
+            <mat-radio-group [(ngModel)]="partner.organisation" name="org" fxLayout="column" fxLayoutGap="10px">
+                <mat-radio-button class="example-margin" [value]="'default'">Default</mat-radio-button>
+                <mat-radio-button *ngFor="let org of orgs" [value]="org" class="example-margin"
+                                  value="before">{{org}}</mat-radio-button>
+            </mat-radio-group>
+        </section>
+
+        <section class="example-section" fxFlex fxLayout="column" fxLayoutGap="10px">
+            <label class="margin-bottom">Vertragliche Bedingungen:</label>
+            <mat-checkbox name="allgemein" [checked]="acceptedBuisnessinquries | async" (click)="openBottomSheet()"
+                          required class="example-margin">
+                Akzeptieren
+            </mat-checkbox>
+        </section>
+
+
         <button mat-flat-button
                 type="button"
-                [disabled]="signInFrom.invalid"
+                [disabled]="signInFrom.invalid || !(acceptedBuisnessinquries | async )"
+
                 (click)="registerNewPartner()"
                 color="accent">
             speichern

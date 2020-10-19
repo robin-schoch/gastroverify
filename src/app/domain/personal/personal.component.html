@@ -1,11 +1,19 @@
 <div fxFill>
-    <div class="mat-elevation-z8 " fxFlex fxLayout="column" *ngIf="!(newPartner$ | async)">
+    <div class="mat-elevation-z8 scrollable" fxFlex fxLayout="column" *ngIf="!(newPartner$ | async)" >
         <form #signInFrom="ngForm" fxLayout="column" *ngIf="partner$ | async as partner" fxFlex>
             <mat-toolbar>
                 <span>{{'personal.billingaddress' | translate}}</span>
                 <span class="example-spacer"></span>
             </mat-toolbar>
-            <mat-card fxLayout="column" fxFlex>
+            <mat-card fxLayout="column" class="scrollable" fxFlex>
+
+
+                <mat-form-field>
+                    <input [(ngModel)]="partner.contactEmail" class="cell"
+                           delayedFocus matInput name="contactEmail"
+                           placeholder="{{'personal.name' | translate}}"
+                           required type="name">
+                </mat-form-field>
 
 
                 <mat-form-field>
@@ -14,6 +22,7 @@
                            placeholder="{{'personal.name' | translate}}"
                            required type="name">
                 </mat-form-field>
+
                 <mat-form-field>
 
                     <input [(ngModel)]="partner.lastName" class="cell" delayedFocus matInput name="lastname"
@@ -39,7 +48,7 @@
                            placeholder="PLZ"
                            required type="{{'personal.zip' | translate}}">
                 </mat-form-field>
-                <button mat-flat-button color="accent" (click)="updateBillingAddress()">
+                <button mat-flat-button color="accent" (click)="updateBillingAddress()" disabled>
                     {{'context.save' | translate}}
                 </button>
 

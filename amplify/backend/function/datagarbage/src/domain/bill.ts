@@ -1,22 +1,26 @@
 import * as moment from 'moment';
 import * as crypto from 'crypto';
+import {Partner} from './partner';
 
 export class Bill {
-  reference;
-  partnerId;
-  from;
-  billingDate;
-  to;
-  complete;
-  paidAt;
-  total;
-  distinctTotal;
-  price;
-  customer;
-  locations;
-  detail;
+  reference: string;
+  partnerId: string;
+  from: string;
+  billingDate: string;
+  to: string;
+  complete: boolean;
+  paidAt: string;
+  total: number;
+  distinctTotal: number;
+  price: number;
+  finalizedPrice: number;
+  customer: any;
+  locations: any;
+  detail: any;
+  discount: number;
 
   constructor(
+      billNumber,
       partnerId,
       from,
       to,
@@ -25,11 +29,13 @@ export class Bill {
       total,
       distinctTotal,
       price,
+      finalizedPrice,
       customer,
       locations,
-      detail
+      detail,
+      discount
   ) {
-    this.reference = crypto.createHash('sha1').update(moment(to).toISOString() + partnerId).digest('hex').substring(0, 10);
+    this.reference = billNumber;
     this.partnerId = partnerId;
     this.billingDate = to;
     this.from = from;
@@ -39,27 +45,40 @@ export class Bill {
     this.total = total;
     this.distinctTotal = distinctTotal;
     this.price = price;
+    this.finalizedPrice = finalizedPrice;
     this.customer = customer;
     this.locations = locations;
     this.detail = detail;
+    this.discount = discount;
 
   }
 
 }
 
-export const billBuilder = (partnerId, from, to, total, distinct, price, customer, locations, detail) => {
+export const billBuilder = (billNumber:string, from, to, billInfo, customer: Partner, reports, discount = 0) => {
   return new Bill(
-      partnerId,
+      billNumber,
+      customer.email,
       from,
       to,
       false,
       '',
-      total,
-      distinct,
-      price,
+      billInfo.total,
+      billInfo.distinctTotal,
+      billInfo.price,
+      billInfo.finalPrice,
       customer,
-      locations,
-      detail
+      reports.map((report: any) => report.res),
+      reports.map((reports: any) => Object.assign({}, reports.res, {
+        detail: reports.original.map(det => {
+          return {
+            reportDate: det.reportDate,
+            distinctTotal: det.distinctTotal,
+            price: det.distinctTotal * det.pricePerEntry
+          };
+        })
+      })),
+      discount
   );
 };
 

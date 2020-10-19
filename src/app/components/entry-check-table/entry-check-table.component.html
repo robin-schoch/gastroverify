@@ -1,0 +1,24 @@
+<div fxFlex fxLayout="column">
+
+    <!-- Toolbar -->
+    <ng-container *ngIf="toolbarTemplate">
+        <ng-template *ngTemplateOutlet="toolbarTemplate; context: {$implicit: this}"></ng-template>
+    </ng-container>
+
+
+    <mat-table [dataSource]="dataSource" fxFlex>
+
+
+        <ng-content></ng-content>
+
+
+        <mat-header-row *matHeaderRowDef="(displayedColumns$ | async); sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: (displayedColumns$ | async);"></mat-row>
+
+        <mat-spinner *ngIf="loading"></mat-spinner>
+
+
+    </mat-table>
+
+
+</div>

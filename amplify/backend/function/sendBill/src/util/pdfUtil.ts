@@ -1,240 +1,113 @@
 import {generateCustomerInformation, generateFooter, generateHeader, generateInvoiceTable} from './overviewPage';
-import * as moment from 'moment';
 import {generateDetailPage} from './detailPages';
+import * as SwissQRBill from 'swissqrbill';
+import {data} from 'swissqrbill';
+import {calcESNR} from './esnr';
+import * as streamBuffers from 'stream-buffers';
 
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
-const overview = {
-  reference: 'asdfijaiosdf',
-  billingDate: moment().toISOString(),
-  partnerId: 'sadf@dsf',
-  complete: false,
-  from: moment().toISOString(),
-  to: moment().toISOString(),
-  paidAt: null,
-  total: 34,
-  distinctTotal: 135,
-  price: 81,
+const billinfo = {
+  "billingDate": "2020-09-30T23:59:59.999Z",
+  "complete": false,
+  "customer": {
+    "address": "Trottackerstrasse 35",
+    "bills": [
 
-  customer: {
-    firstName: 'Marc',
-    lastName: 'Lusser',
-    address: 'hohenweg 3',
-    city: 'Baden',
-    zipcode: 5400
+    ],
+    "city": "Mellingen",
+    "email": "gg@gg.com",
+    "firstName": "Kathi",
+    "isHidden": true,
+    "lastName": "Rofka",
+    "locations": [
+
+    ],
+    "zipcode": "5507"
   },
-  locations: [
-    {
-      name: 'Billabong', // location
-      distinctTotal: 123, //distinctTotal
-      price: 80
-    },
-    {
-      location: 'Time bar',
-      distinctTotal: 123,
-      price: 80
-    }
-  ]
-};
+  "detail": [
 
-const detail = [
-  {
-    locationName: 'Time bar',
-    distinctTotal: 123,
-    price: 80,
-    detail: [
-      {
-        reportDate: moment().toISOString(), // reportreportDate
-        distinctTotal: 12, // distinctTotal
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
+  ],
+  "discount": 0,
+  "distinctTotal": 0,
+  "finalizedPrice": 0,
+  "from": "2020-09-01T00:00:00.000Z",
+  "locations": [
 
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
+  ],
+  "paidAt": "",
+  "partnerId": "gg@gg.com",
+  "price": 0,
+  "reference": "0000009204",
+  "to": "2020-09-30T23:59:59.999Z",
+  "total": 0
+}
+const QRIBAN = 'CH443000523211899540Z';
 
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 12,
-        price: 12
-      }
-    ]
-  },
-  {
-    locationName: 'Billabong',
-    distinctTotal: 12,
-    price: 1,
-    detail: [
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 2,
-        price: 2
-      },
-      {
-        reportDate: moment().toISOString(),
-        distinctTotal: 2,
-        price: 2
-      }
-    ]
-  }
-];
 
 export const createBillPDF = (overview, pages) => {
-  // Create a document
-  const doc = new PDFDocument({margin: 50});
+      // Create a document
+      const data = <data>{
+        currency: 'CHF',
+        amount: overview.finalizedPrice,
+        reference: calcESNR(overview.reference),
+        creditor: {
+          name: 'Robin Schoch',
+          address: 'Breitacker 6b',
+          zip: 5210,
+          city: 'Windisch',
+          account: QRIBAN,
+          country: 'CH'
+        },
+        debtor: {
+          name: overview.customer.firstName + ' ' + overview.customer.lastName,
+          address: overview.customer.address,
+          zip: Number(overview.customer.zipcode),
+          city: overview.customer.city,
+          country: 'CH'
+        }
+      };
 
 
-  // doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
+      const stream = new streamBuffers.WritableStreamBuffer({
+        initialSize: (200 * 1024),   // start at 100 kilobytes.
+        incrementAmount: (20 * 1024) // grow by 10 kilobytes each time buffer overflows.
+      });
+      console.log(calcESNR(overview.reference))
+      const doc = new SwissQRBill.PDF(data, stream, {
+        autoGenerate: false,
+        size: 'A4'
+      });
+      // fs.createWriteStream('./' + overview.reference + '.pdf')
 
-  let buffers = [];
+      // fs.createWriteStream('./pdf/' + overview.reference + '.pdf')
+      // const doc = new PDFDocument({margin: 50});
+      //doc.pipe(fs.createWriteStream('./pdf/' + overview.reference + '.pdf'));
 
-   doc.on('data', buffers.push.bind(buffers));
-   doc.on('end', () => {
+      let buffers = [];
+      doc.on('data', buffers.push.bind(buffers));
+      /*
+       doc.on('end', () => {
+       let pdfData = Buffer.concat(buffers);
+       console.log(pdfData.toString('utf-8'));
+       });
 
-   let pdfData = Buffer.concat(buffers);
-   console.log(pdfData.toString('utf-8'));
+       */
+      overviewPage(doc, overview);
 
-   // ... now send pdfData as attachment ...
+      doc.addQRBill();
+      pages.forEach(p => detailPages(doc, p));
+      doc.end();
+      return {doc: doc, buffers: buffers};
 
-   });
-
-
-  overviewPage(doc, overview);
-  pages.forEach(p => detailPages(doc, p));
-
-
-  doc.end();
-  return {doc: doc, buffers: buffers}
-
-};
+    }
+;
 
 const overviewPage = (doc, overview) => {
   generateHeader(doc);
   generateCustomerInformation(doc, overview);
-  let pos = generateInvoiceTable(doc, overview.locations);
+  let pos = generateInvoiceTable(doc, overview);
   if (pos > 640) {
     doc.addPage();
     generateHeader(doc);
@@ -249,4 +122,6 @@ const detailPages = (doc, detail) => {
 };
 
 
-// createBillPDF(overview, detail);
+// createBillPDF(billinfo, billinfo.detail);
+
+//console.log(calcCheckSum(staticRef + '1010101010'));

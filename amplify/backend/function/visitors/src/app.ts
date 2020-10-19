@@ -60,12 +60,18 @@ let redirectURL = '.entry-check.ch';
 const qrcodestorage = new qrCodeStorage();
 const validationstorage = new vs();
 const checkinstorage = new checkInStorage();
-
+let redirectTo = 'app';
 if (process.env.ENV && process.env.ENV !== 'NONE') {
-  if (process.env.ENV === 'dev') redirectURL = 'apidev' + redirectURL;
-  if (process.env.ENV === 'prod') redirectURL = 'api' + redirectURL;
+  if (process.env.ENV === 'dev') {
+    redirectURL = 'apidev' + redirectURL;
+    redirectTo = 'dev' + redirectTo;
+  }
+  if (process.env.ENV === 'prod') {
+    redirectURL = 'api' + redirectURL;
+  }
 } else if (process.env.ENV === undefined) {
   redirectURL = 'apidev' + redirectURL;
+  redirectTo = 'dev' + redirectTo;
 }
 
 // Enable CORS for all methods
@@ -164,14 +170,16 @@ app.post('/v1/validate', (req, res) => {
 );
 
 app.post('/v1/checkin/:qrId', (req, res) => {
+      const isCheckout = req.query.checkOut === 'true';
+      log.info((req.query));
       log.info('new checkin...');
-      if (!hasRequriredFields(req.body)){
+      if (!hasRequriredFields(req.body)) {
         res.status(403);
         res.json('missing parameter');
       }
       if (!req.header('Authorization')) {
         const error = CheckInError.create(402, 'token is invalid');
-        log.error(error)
+        log.error(error);
         res.status(error.status);
         res.json(error);
       }
@@ -188,7 +196,7 @@ app.post('/v1/checkin/:qrId', (req, res) => {
             }
             if (success) {
               const timeIso = moment().toISOString();
-              let cI = CheckIn.fromReq(req, qrcode, decode, timeIso);
+              let cI = CheckIn.fromReq(req, qrcode, decode, timeIso, isCheckout);
               log.info(qrcode, 'new checkin entry');
               return forkJoin([checkinstorage.createEntry(cI), of(qrcode)]);
             } else {
@@ -203,7 +211,8 @@ app.post('/v1/checkin/:qrId', (req, res) => {
               time: checkin.entryTime,
               locationName: qrcode.locationName,
               barId: checkin.locationId,
-              locationId: checkin.locationId
+              locationId: checkin.locationId,
+              relatedCheckout: qrcode.relatedCheckOutCode
             });
           },
           error => {
@@ -228,7 +237,8 @@ app.get('/v1/checkin', (req, res) => {
 
 app.get('/v1/checkin/:qrId', (req, res) => {
       log.info(req);
-      res.redirect('https://app.entry-check.ch/?qrCodeUrl=https' + encodeURIComponent(`://${redirectURL}${req.originalUrl}`));
+      // let redirectTo = 'app';
+      res.redirect('https://' + redirectTo + '.entry-check.ch/?qrCodeUrl=https' + encodeURIComponent(`://${redirectURL}${req.originalUrl}`));
     }
 );
 

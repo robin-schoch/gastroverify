@@ -1,3 +1,76 @@
+<!--
+<app-entry-check-table
+        *ngIf="partners$ | async as partnerPage"
+        [dataSource]="partnerPage.Data"
+        [displayColumns]="displayedColumns"
+>
+    <mat-toolbar *EntryCheckTableToolbar>
+        <span>{{'entry.title' | translate}}</span>
+        <span class="example-spacer"></span>
+        <mat-slide-toggle (toggleChange)="toggleHidden()">Hidden</mat-slide-toggle>
+
+    </mat-toolbar>
+
+
+    <ng-container matColumnDef="detail">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <button mat-mini-fab color="primary"
+                    (click)="openPartnerDetail(element)">
+                <mat-icon>hot_tub</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef>email</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+        <mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.firstName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+        <mat-header-cell *matHeaderCellDef> {{'entry.name' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.lastName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.lastname' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.address}} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="city">
+        <mat-header-cell *matHeaderCellDef>{{'entry.city' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.city}} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="zip">
+        <mat-header-cell *matHeaderCellDef>{{'entry.zip' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.zipcode}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="hide">
+        <mat-header-cell *matHeaderCellDef>hide</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <button mat-mini-fab color="primary" *ngIf="toBool(element.isHidden)"
+                    (click)="hidePartner(element)">
+                <mat-icon>visibility_off</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" *ngIf="!toBool(element.isHidden)"
+                    (click)="hidePartner(element, false)">
+                <mat-icon>visibility</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+
+</app-entry-check-table>
+-->
 <div class="mat-elevation-z8 example-container " fxFill fxLayout="column">
 
     <mat-toolbar>
@@ -7,62 +80,59 @@
 
     </mat-toolbar>
 
-    <div  fxLayout="column" fxFlex *ngIf="partners$ | async as partnerPage">
+    <div fxLayout="column" fxFlex *ngIf="partners$ | async as partnerPage">
 
 
-        <mat-table  [dataSource]="partnerPage.Data" fxFlex >
-
-
+        <mat-table [dataSource]="partnerPage.Data" fxFlex>
 
 
             <ng-container matColumnDef="detail">
-                <mat-header-cell  *matHeaderCellDef></mat-header-cell>
-                <mat-cell  *matCellDef="let element">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let element">
                     <button mat-mini-fab color="primary"
                             (click)="openPartnerDetail(element)">
                         <mat-icon>hot_tub</mat-icon>
                     </button>
-                </mat-cell >
+                </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="email">
-                <mat-header-cell  *matHeaderCellDef>email</mat-header-cell>
-                <mat-cell  *matCellDef="let element"> {{element.email}} </mat-cell >
+                <mat-header-cell *matHeaderCellDef>email</mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="firstName">
                 <mat-header-cell *matHeaderCellDef> {{'entry.time' | translate}}</mat-header-cell>
-                <mat-cell  *matCellDef="let element"> {{element.firstName}} </mat-cell >
+                <mat-cell *matCellDef="let element"> {{element.firstName}} </mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="lastName">
                 <mat-header-cell *matHeaderCellDef> {{'entry.name' | translate}}</mat-header-cell>
-                <mat-cell   *matCellDef="let element"> {{element.lastName}} </mat-cell >
+                <mat-cell *matCellDef="let element"> {{element.lastName}} </mat-cell>
             </ng-container>
 
             <!-- Weight Column -->
             <ng-container matColumnDef="address">
                 <mat-header-cell mat-header-cell *matHeaderCellDef> {{'entry.lastname' | translate}}</mat-header-cell>
-                <mat-cell  *matCellDef="let element"> {{element.address}} </mat-cell >
+                <mat-cell *matCellDef="let element"> {{element.address}} </mat-cell>
             </ng-container>
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="city">
                 <mat-header-cell *matHeaderCellDef>{{'entry.city' | translate}}</mat-header-cell>
-                <mat-cell  *matCellDef="let element"> {{element.city}} </mat-cell>
+                <mat-cell *matCellDef="let element"> {{element.city}} </mat-cell>
             </ng-container>
-
 
 
             <ng-container matColumnDef="zip">
-                <mat-header-cell  *matHeaderCellDef>{{'entry.zip' | translate}}</mat-header-cell>
-                <mat-cell  *matCellDef="let element"> {{element.zipcode}} </mat-cell >
+                <mat-header-cell *matHeaderCellDef>{{'entry.zip' | translate}}</mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.zipcode}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="hide">
-                <mat-header-cell  *matHeaderCellDef>hide</mat-header-cell>
-                <mat-cell  *matCellDef="let element">
+                <mat-header-cell *matHeaderCellDef>hide</mat-header-cell>
+                <mat-cell *matCellDef="let element">
                     <button mat-mini-fab color="primary" *ngIf="toBool(element.isHidden)"
                             (click)="hidePartner(element)">
                         <mat-icon>visibility_off</mat-icon>
@@ -71,9 +141,8 @@
                             (click)="hidePartner(element, false)">
                         <mat-icon>visibility</mat-icon>
                     </button>
-                </mat-cell >
+                </mat-cell>
             </ng-container>
-
 
 
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
@@ -86,7 +155,7 @@
                 <mat-icon>expand_more</mat-icon>
             </button>
         </div>
-        <div  fxLayoutAlign="center center" *ngIf="!partnerPage.LastEvaluatedKey">
+        <div fxLayoutAlign="center center" *ngIf="!partnerPage.LastEvaluatedKey">
             <span>{{'entry.nomoredata' | translate}}</span>
         </div>
     </div>

@@ -142,35 +142,27 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     const breaks = [];
     breaks.push(breakpointObserver.observe([
       Breakpoints.XSmall
-    ]).pipe(
-        filter(result => result.matches),
-        map(elem => 1)
-    ));
+    ]).pipe(filter(result => result.matches), map(_ => 1)));
     breaks.push(breakpointObserver.observe([
       Breakpoints.Small
-    ]).pipe(
-        filter(result => result.matches),
-        map(elem => 2)
-    ));
+    ]).pipe(filter(result => result.matches), map(_ => 2)));
     breaks.push(breakpointObserver.observe([
       Breakpoints.Medium
-    ]).pipe(
-        filter(result => result.matches),
-        map(elem => 2)
-    ));
+    ]).pipe(filter(result => result.matches), map(_ => 2)));
     breaks.push(breakpointObserver.observe([
       Breakpoints.Large
-    ]).pipe(
-        filter(result => result.matches),
-        map(elem => 4)
-    ));
+    ]).pipe(filter(result => result.matches), map(_ => 4)));
     // @ts-ignore
     this.gridTiles = merge(
-        breaks[0],
-        breaks[1],
-        breaks[2],
-        breaks[3]
+        breaks
     ).pipe(startWith(4));
+
+    breakpointObserver.observe([
+      Breakpoints.Large
+    ]).pipe(filter(result => result.matches), map(_ => 4)).subscribe(elem => console.log(elem))
+
+    this.gridTiles.subscribe(elem => console.log(elem))
+    this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2));
 
     this.showIcon = breakpointObserver.observe([
       Breakpoints.HandsetLandscape,
@@ -179,8 +171,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isHandset = breakpointObserver.observe([
       Breakpoints.HandsetPortrait
     ]).pipe(map(a => a.matches));
-
-    this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2));
 
 
   }

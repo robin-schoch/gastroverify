@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Location} from '../gastro-dashboard/gastro.service';
+import {Location} from '../../model/Location';
 import {DatePipe} from '@angular/common';
 import {AmplifyHttpClientService} from '../../util/amplify-http-client.service';
 
