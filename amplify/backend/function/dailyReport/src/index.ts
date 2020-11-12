@@ -30,8 +30,8 @@ const locationstorage = new locationStorage();
 const partnerstorage = new partnerStorage();
 
 const prices = {
-  premium: 0.3,
-  default: 0.15,
+  premium: 0.24,
+  default: 0.12,
   nachtGallen: 0.12
 };
 

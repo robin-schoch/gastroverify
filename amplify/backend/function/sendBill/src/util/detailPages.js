@@ -17,7 +17,7 @@ const generateDetailTable = (doc, invoice) => {
     let i;
     const invoiceTableTop = 170;
     doc.font('Helvetica-Bold');
-    exports.generateTableRow(doc, invoiceTableTop, 'Datum', 'Einamlige Eintritte', 'Kosten');
+    exports.generateTableRow(doc, invoiceTableTop, 'Datum', 'Einmalige Eintritte', 'Kosten');
     overviewPage_1.generateHr(doc, invoiceTableTop + 9);
     doc.font('Helvetica');
     invoice = invoice.reverse();

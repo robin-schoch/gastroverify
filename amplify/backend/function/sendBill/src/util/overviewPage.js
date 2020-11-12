@@ -113,6 +113,8 @@ exports.generateInvoiceTable = (doc, meta) => {
 };
 //Zu begleichen innert 30 Tagen auf folgendes Konto:;;
 exports.generateFooter = (doc, customer) => {
+    doc.moveDown();
+    doc.text('Zahlbar innerhalb von 30 Tagen', 50);
     doc.font('Helvetica-Bold');
     doc.fontSize(10);
     //.text('Zu begleichen innert 30 Tagen auf folgendes Konto:', 50, 650, {width: 500});

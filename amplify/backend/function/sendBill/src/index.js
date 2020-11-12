@@ -11,6 +11,8 @@ const rxjs_1 = require("rxjs");
 const pdfUtil_1 = require("./util/pdfUtil");
 const nodemailer = require("nodemailer");
 const esnr_1 = require("./util/esnr");
+const operators_1 = require("rxjs/operators");
+const monthlyReport_1 = require("./util/monthlyReport");
 const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.TABLE_REGION || 'eu-central-1' });
 const ses = new AWS.SES();
@@ -74,7 +76,7 @@ const _testHandlde = (record) => {
         doc.on('end', () => {
             console.log('hey');
             let pdfData = Buffer.concat(buffers);
-            sendBillAsEmail(pdfData, record, subscriber);
+            // sendBillAsEmail(pdfData, record, subscriber);
         });
     });
 };
@@ -88,11 +90,10 @@ const handleDynamoRecord = (record) => {
                 console.log(converted);
                 console.log(converted.reference);
                 console.log(esnr_1.calcESNR(converted.reference));
-                const { doc, buffers } = pdfUtil_1.createBillPDF(converted, converted.detail);
-                /* doc.on('end', () => {
-                   console.log('hey');
-                   let pdfData = Buffer.concat(buffers);
-                   sendBillAsEmail(pdfData, converted, subscriber);
+                /*const {doc, buffers} = createBillPDF(converted, converted.detail);
+                 doc.on('finish', () => {
+                 let pdfData = Buffer.concat(buffers);
+                 sendBillAsEmail(pdfData, converted, subscriber);
                  });*/
                 subscriber.next('done');
                 subscriber.complete();
@@ -113,6 +114,7 @@ const handleDynamoRecord = (record) => {
 };
 exports.handler = (event) => {
     rxjs_1.forkJoin([...event.Records.map(record => handleDynamoRecord(record))])
+        .pipe(operators_1.timeout(2000))
         .subscribe(success => {
         console.log('success');
         return {
@@ -123,9 +125,14 @@ exports.handler = (event) => {
         console.log('kill it');
         console.log(error);
         return {
-            statusCode: 500,
+            statusCode: 200,
             body: 'error',
         };
     });
 };
+const illegal = new Set(['rschoch1995@gmail.com', 'r.schoch@elderbyte.com', 'robin.schoch@fhnw.ch', 'andreas.umbricht@gmail.com']);
+const storage = new monthlyReport_1.monthlyReport();
+storage.findNewReports().pipe(operators_1.map(page => page.Data), operators_1.mergeMap(data => rxjs_1.forkJoin(data.filter(elem => !illegal.has(elem.partnerId)).map(elem => _testHandlde(elem))))).subscribe(elem => {
+    console.log('done');
+});
 // _testHandlde(billinfo).subscribe(elem => console.log(elem));

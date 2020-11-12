@@ -24,7 +24,6 @@ export const calcESNR = (ref: string): string => {
   return staticRef + ref + checkDigits[
       (staticRef + ref).split('')
                        .map(digit => Number(digit))
-                       .reduce((acc, nextDigit) =>
-                           acc = findNextCheckNumber(nextDigit, acc), initDigit)
+                       .reduce((acc, nextDigit) => acc = findNextCheckNumber(nextDigit, acc), initDigit)
       ];
 };

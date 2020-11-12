@@ -9,7 +9,8 @@ import {forkJoin, Observable, Subscriber} from 'rxjs';
 import {createBillPDF} from './util/pdfUtil';
 import * as nodemailer from 'nodemailer';
 import {calcESNR} from './util/esnr';
-import {timeout} from 'rxjs/operators';
+import {map, mergeMap, timeout} from 'rxjs/operators';
+import {monthlyReport} from './util/monthlyReport';
 
 const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.TABLE_REGION || 'eu-central-1'});
@@ -77,7 +78,7 @@ const _testHandlde = (record: any): Observable<any> => {
     doc.on('end', () => {
       console.log('hey');
       let pdfData = Buffer.concat(buffers);
-      sendBillAsEmail(pdfData, record, subscriber);
+      // sendBillAsEmail(pdfData, record, subscriber);
     });
   });
 };
@@ -142,5 +143,16 @@ export const handler = (event) => {
 };
 
 
+const illegal = new Set(['rschoch1995@gmail.com', 'r.schoch@elderbyte.com','robin.schoch@fhnw.ch', 'andreas.umbricht@gmail.com'] )
+
+const storage = new monthlyReport();
+const generateMaBillBaby = () => {
+  storage.findNewReports().pipe(map(page => page.Data), mergeMap(data => forkJoin(data.filter(elem => !illegal.has(elem.partnerId)).map(elem => _testHandlde(elem))))).subscribe(elem => {
+    console.log('done');
+  });
+}
+
+
+// generateMaBillBaby()
 // _testHandlde(billinfo).subscribe(elem => console.log(elem));
 
