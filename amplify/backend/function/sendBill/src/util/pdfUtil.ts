@@ -9,40 +9,32 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
 const billinfo = {
-  "billingDate": "2020-09-30T23:59:59.999Z",
-  "complete": false,
-  "customer": {
-    "address": "Trottackerstrasse 35",
-    "bills": [
-
-    ],
-    "city": "Mellingen",
-    "email": "gg@gg.com",
-    "firstName": "Kathi",
-    "isHidden": true,
-    "lastName": "Rofka",
-    "locations": [
-
-    ],
-    "zipcode": "5507"
+  'billingDate': '2020-09-30T23:59:59.999Z',
+  'complete': false,
+  'customer': {
+    'address': 'Trottackerstrasse 35',
+    'bills': [],
+    'city': 'Mellingen',
+    'email': 'gg@gg.com',
+    'firstName': 'Kathi',
+    'isHidden': true,
+    'lastName': 'Rofka',
+    'locations': [],
+    'zipcode': '5507'
   },
-  "detail": [
-
-  ],
-  "discount": 0,
-  "distinctTotal": 0,
-  "finalizedPrice": 0,
-  "from": "2020-09-01T00:00:00.000Z",
-  "locations": [
-
-  ],
-  "paidAt": "",
-  "partnerId": "gg@gg.com",
-  "price": 0,
-  "reference": "0000009204",
-  "to": "2020-09-30T23:59:59.999Z",
-  "total": 0
-}
+  'detail': [],
+  'discount': 0,
+  'distinctTotal': 0,
+  'finalizedPrice': 0,
+  'from': '2020-09-01T00:00:00.000Z',
+  'locations': [],
+  'paidAt': '',
+  'partnerId': 'gg@gg.com',
+  'price': 0,
+  'reference': '0000009204',
+  'to': '2020-09-30T23:59:59.999Z',
+  'total': 0
+};
 const QRIBAN = 'CH443000523211899540Z';
 
 
@@ -74,8 +66,8 @@ export const createBillPDF = (overview, pages) => {
         initialSize: (200 * 1024),   // start at 100 kilobytes.
         incrementAmount: (20 * 1024) // grow by 10 kilobytes each time buffer overflows.
       });
-      console.log(calcESNR(overview.reference))
-      const doc = new SwissQRBill.PDF(data, stream, {
+      console.log(calcESNR(overview.reference));
+      const doc = new SwissQRBill.PDF(data, './util/pdf/rechnung_' + overview.reference + '.pdf', {
         autoGenerate: false,
         size: 'A4'
       });

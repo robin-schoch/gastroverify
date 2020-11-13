@@ -62,6 +62,7 @@ export const generateCustomerInformation = (doc, customer) => {
      .text(customer.customer.zipcode + ' ' + customer.customer.city, 300, customerInformationTop + 30)
      .moveDown();
   generateHr(doc, 252);
+
 };
 
 export const generateHr = (doc, y) => {
@@ -132,6 +133,8 @@ export const generateInvoiceTable = (doc, meta) => {
 //Zu begleichen innert 30 Tagen auf folgendes Konto:;;
 
 export const generateFooter = (doc, customer) => {
+  doc.moveDown();
+  doc.text('Zahlbar innerhalb von 30 Tagen', 50);
   doc.font('Helvetica-Bold');
   doc.fontSize(10);
   //.text('Zu begleichen innert 30 Tagen auf folgendes Konto:', 50, 650, {width: 500});
