@@ -95,7 +95,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     },
     {
       title: 'Pay-as-you go',
-      body: 'Bezahlen Sie nur, was Sie brauchen! Entry Check verlangt keine Kündigungs- und Einrichtungsgebühren. Kostenpflichtig ist lediglich die erste Registration des Kunden. Diese gilt für einen Tag und beträgt CHF 0.15. Ist diese Gebühr bezahlt, kann der Besucher innerhalb dieses Tages beliebig oft den QR Code scannen, ohne für Sie erneut kostenpflichtig zu werden.',
+      body: 'Bezahlen Sie nur, was Sie brauchen! Entry Check verlangt keine Kündigungs- und Einrichtungsgebühren. Kostenpflichtig ist lediglich die erste Registration des Kunden. Diese gilt für einen Tag und beträgt CHF 0.12. Ist diese Gebühr bezahlt, kann der Besucher innerhalb dieses Tages beliebig oft den QR Code scannen, ohne für Sie erneut kostenpflichtig zu werden.',
       imageUrl: 'https://images.unsplash.com/photo-1459257831348-f0cdd359235f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80',
       position: ContentPosition.TOP_LEFT,
       color: '#090909'

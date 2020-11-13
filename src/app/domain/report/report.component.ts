@@ -138,7 +138,7 @@ export class ReportComponent implements OnInit {
     if (element.hasOwnProperty('pricePerEntry')) {
       return element.distinctTotal * element.pricePerEntry;
     } else {
-      return element.distinctTotal * 0.15;
+      return element.distinctTotal * 0.12;
     }
   }
 
