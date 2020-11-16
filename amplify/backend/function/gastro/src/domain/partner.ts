@@ -100,7 +100,7 @@ export class Location {
         v4(),
         v4(),
         true,
-        !req.body.senderID ? 'default' : 'premium',
+        !req.body.senderID ? 'default' : 'default', // hack
         !!req.body.type ? req.body.type : 'Tisch',
         req.body.senderID,
         req.body.smsText
