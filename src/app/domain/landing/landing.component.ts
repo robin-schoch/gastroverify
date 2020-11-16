@@ -110,6 +110,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   ];
 
+
   private _subscritpion: Subscription[] = [];
   public isAuthenticated$: Observable<boolean>;
 
