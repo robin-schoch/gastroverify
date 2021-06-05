@@ -11,7 +11,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import {ToolbarService} from '../main/toolbar.service';
-import {AuthenticationService} from '../auth/authentication.service';
+
 import {merge, Observable, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GastroService} from '../gastro-dashboard/gastro.service';
@@ -22,6 +22,8 @@ import {filter, map, startWith} from 'rxjs/operators';
 import {animate, state, style, transition, trigger,} from '@angular/animations';
 import {fadeInGrow, fadeInGrowNoStagger} from '../../util/animation/fadeInGrow';
 import {ContentPosition} from './landing-tile/landing-tile.component';
+import {Store} from '@ngrx/store';
+import {isSignedIn} from '../auth/auth.selectors';
 
 export interface LandingTile {
   title: string,
@@ -112,7 +114,8 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   private _subscritpion: Subscription[] = [];
-  public isAuthenticated$: Observable<boolean>;
+
+  public isAuthenticated$ = this.store.select(isSignedIn);
 
   public gridTiles: Observable<number>;
 
@@ -130,8 +133,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
       private toolbarService: ToolbarService,
-      private authenticationService: AuthenticationService,
-      private gastroService: GastroService,
+      private store: Store,
       private router: Router,
       private ngZone: NgZone,
       public dialog: MatDialog,
@@ -160,9 +162,9 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     breakpointObserver.observe([
       Breakpoints.Large
-    ]).pipe(filter(result => result.matches), map(_ => 4)).subscribe(elem => console.log(elem))
+    ]).pipe(filter(result => result.matches), map(_ => 4)).subscribe(elem => console.log(elem));
 
-    this.gridTiles.subscribe(elem => console.log(elem))
+    this.gridTiles.subscribe(elem => console.log(elem));
     this.topGridTiles = this.gridTiles.pipe(map(elem => elem > 2));
 
     this.showIcon = breakpointObserver.observe([
@@ -178,8 +180,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngOnInit() {
-    let a = '';
-    this.isAuthenticated$ = this.authenticationService.isAuthenticated$;
+
     const sub = this.isAuthenticated$.subscribe(is => {
       if (is) {
         this.ngZone.run(() => this.router.navigate(['location/dashboard']));
@@ -224,13 +225,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public scrollToLogin(): void {
     this.openConfirmDialog();
-    /*
-     let valueInVh = 90;
-     console.log('scroll');
-     document.querySelector('mat-sidenav-content').scrollTop = valueInVh * window.innerHeight / 100;
-
-     */
-
   }
 
 

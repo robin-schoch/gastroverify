@@ -5,6 +5,9 @@ import {CognitoUser} from 'amazon-cognito-identity-js';
 import {SignUp} from './sign-up';
 import {filter} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+
+import {clearAuthStatus, confirmAuthStatus} from './auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -30,10 +33,12 @@ export class AuthenticationService {
    **************************************************************************/
 
   constructor(
-      private router: Router
+      private router: Router,
+      private store: Store
   ) {
 
     this.setUser();
+
   }
 
   /***************************************************************************
@@ -44,19 +49,25 @@ export class AuthenticationService {
 
   public setUser() {
     Auth.currentAuthenticatedUser().then(user => {
+      this.store.dispatch(confirmAuthStatus({
+        username: user.getUsername(),
+        roles: user?.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']
+      }));
       this.activeUser = <CognitoUser>user;
+
       this.isAuthenticated = true;
       const r = user.getSignInUserSession().getIdToken().decodePayload()['cognito:groups'];
-      this.setRoles(r)
+      this.setRoles(r);
       console.log('Active user: ' + user.username);
     }).catch(elem => {
       this.isAuthenticated = false;
       console.log('no active user');
-    });
+    }).catch(eror => this.store.dispatch(confirmAuthStatus({roles: []})));
   }
 
   public signOut(): void {
     Auth.signOut({global: true}).then(logout => {
+      this.store.dispatch(clearAuthStatus());
       this.isAuthenticated = false;
       this.activeUser = null;
       this.router.navigate(['/']);
@@ -181,6 +192,6 @@ export class AuthenticationService {
   }
 
   setRoles(decodePayloadElement: any[] | undefined) {
-    this.role = !decodePayloadElement ? [] : decodePayloadElement
+    this.role = !decodePayloadElement ? [] : decodePayloadElement;
   }
 }

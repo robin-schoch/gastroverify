@@ -70,7 +70,7 @@ const createReportForLocation = async (date, location) => {
     } while (lastkey !== null);
     let count = new Set(vals).size;
     let totalCount = vals.length;
-    let pricing = !!location.senderID ? prices.premium : prices.default;
+    let pricing = !!location.senderID || !(location.senderID === 'default') ? prices.premium : prices.default;
     if (location.senderID === 'NachtGallen') pricing = prices.nachtGallen;
     await createNewReport(
         location.locationId,

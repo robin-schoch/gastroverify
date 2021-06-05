@@ -73,8 +73,12 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatRadioModule} from '@angular/material/radio';
 import {AllgemeineGeschaetsbedienungenComponent} from './domain/personal/allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
-import { CustomVisitorCheckinComponent } from './domain/custom-visitor-checkin/custom-visitor-checkin.component';
-import { EntryCounterComponent } from './domain/entry-counter/entry-counter.component';
+import {CustomVisitorCheckinComponent} from './domain/custom-visitor-checkin/custom-visitor-checkin.component';
+import {EntryCounterComponent} from './domain/entry-counter/entry-counter.component';
+import {StoreModule} from '@ngrx/store';
+import {authReducer} from './domain/auth/auth.reducer';
+import {EntityDataModule} from '@ngrx/data';
+import {appEntityMetadata} from './app.entity.metadata';
 
 Amplify.configure(awsconfig);
 
@@ -161,7 +165,11 @@ Amplify.configure(awsconfig);
     MatAutocompleteModule,
     ClipboardModule,
     MatDatepickerModule,
-    MatRadioModule
+    MatRadioModule,
+    StoreModule.forRoot({
+      auth: authReducer
+    }),
+    EntityDataModule.forRoot({entityMetadata: appEntityMetadata})
   ],
   entryComponents: [AddBarDialogComponent],
   providers: [DatePipe, {provide: MatBottomSheetRef, useValue: {}}],

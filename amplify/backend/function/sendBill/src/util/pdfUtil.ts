@@ -4,6 +4,8 @@ import * as SwissQRBill from 'swissqrbill';
 import {data} from 'swissqrbill';
 import {calcESNR} from './esnr';
 import * as streamBuffers from 'stream-buffers';
+import {existsSync, mkdirSync} from 'fs';
+
 
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
@@ -67,7 +69,12 @@ export const createBillPDF = (overview, pages) => {
         incrementAmount: (20 * 1024) // grow by 10 kilobytes each time buffer overflows.
       });
       console.log(calcESNR(overview.reference));
-      const doc = new SwissQRBill.PDF(data, './util/pdf/rechnung_' + overview.reference + '.pdf', {
+      const date = new Date();
+      const dir = '../rechnungen/' + date.getMonth() + '-' + date.getFullYear();
+      if (!existsSync(dir)) {
+        mkdirSync(dir);
+      }
+      const doc = new SwissQRBill.PDF(data, dir + '/rechnung_' + overview.reference + '.pdf', {
         autoGenerate: false,
         size: 'A4'
       });

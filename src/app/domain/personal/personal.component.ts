@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService} from '../auth/authentication.service';
 import {ToolbarService} from '../main/toolbar.service';
 import {EntryService} from '../entry-browser/entry.service';
 import {GastroService} from '../gastro-dashboard/gastro.service';
@@ -26,7 +25,6 @@ export class PersonalComponent implements OnInit, OnDestroy {
   private _subs: Subscription[] = [];
 
   constructor(
-      private authenticationService: AuthenticationService,
       private toolbarService: ToolbarService,
       private entryService: EntryService,
       private gastroService: GastroService,

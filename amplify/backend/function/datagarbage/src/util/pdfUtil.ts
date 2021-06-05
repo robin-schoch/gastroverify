@@ -248,4 +248,4 @@ const detailPages = (doc, detail) => {
 };
 
 
-// createBillPDF(overview, detail);
+ //createBillPDF(overview, detail);

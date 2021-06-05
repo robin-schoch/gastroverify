@@ -40,6 +40,25 @@ export class monthlyReport {
                                                                    throwError(a)));
   }
 
+  public findByMonthAndYear(year: number, month: number): Observable<Page<MonthlyReport>> {
+    var newDate = moment.utc();
+    newDate.set('year', 2017);
+    newDate.set('month', 7);
+    newDate.set('date', 15);
+    newDate.startOf('day');
+    const date = moment().set('year', year).set('month', month).startOf('month');
+    const params = {
+      ExpressionAttributeValues: {
+        ':startDate': date.subtract(14, 'days').toISOString(),
+        ':endDate': date.add(14, 'days').toISOString(),
+      },
+      FilterExpression: 'billingDate >= :creationDate',
+    };
+    return this.dbConnection.scanItems(params).pipe(switchMap(a => isNotDynamodbError<Page<MonthlyReport>>(a) ?
+                                                                   of(a) :
+                                                                   throwError(a)));
+  }
+
   public findPaged(partnerId: string): Observable<Page<MonthlyReport> | DynamodbError<MonthlyReport>> {
     const queryParams = {
       ExpressionAttributeValues: {

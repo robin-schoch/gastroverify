@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService} from '../auth/authentication.service';
+
 import {ToolbarService} from '../main/toolbar.service';
 import {EntryService} from '../entry-browser/entry.service';
 import {GastroService} from './gastro.service';
@@ -39,7 +39,6 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
 
 
   constructor(
-      private authenticationService: AuthenticationService,
       private toolbarService: ToolbarService,
       private entryService: EntryService,
       private gastroService: GastroService,

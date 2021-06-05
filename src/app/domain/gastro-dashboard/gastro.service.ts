@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {AuthenticationService} from '../auth/authentication.service';
 import {AmplifyHttpClientService, IOptionalRequestParams} from '../../util/amplify-http-client.service';
 import {Partner} from '../../model/Partner';
 import {Location} from '../../model/Location';
@@ -24,7 +23,6 @@ export class GastroService {
   };
 
   constructor(
-      private authService: AuthenticationService,
       private amplifyHttpClient: AmplifyHttpClientService
   ) { }
 
@@ -67,11 +65,7 @@ export class GastroService {
         this.myInit
     );
     body['body'] = partner;
-    return this.amplifyHttpClient.post<Partner>(
-        this.apiName,
-        '/v1/gastro',
-        body
-    );
+    return this.amplifyHttpClient.post<Partner>(this.apiName, '/v1/gastro', body);
   }
 
   public updatePartner(partner: Partner): Observable<Partner> {

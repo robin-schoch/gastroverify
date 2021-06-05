@@ -74,7 +74,6 @@ const _testHandlde = (record) => {
     return new rxjs_1.Observable(subscriber => {
         const { doc, buffers } = pdfUtil_1.createBillPDF(record, record.detail);
         doc.on('end', () => {
-            console.log('hey');
             let pdfData = Buffer.concat(buffers);
             // sendBillAsEmail(pdfData, record, subscriber);
         });
@@ -132,7 +131,13 @@ exports.handler = (event) => {
 };
 const illegal = new Set(['rschoch1995@gmail.com', 'r.schoch@elderbyte.com', 'robin.schoch@fhnw.ch', 'andreas.umbricht@gmail.com']);
 const storage = new monthlyReport_1.monthlyReport();
-storage.findNewReports().pipe(operators_1.map(page => page.Data), operators_1.mergeMap(data => rxjs_1.forkJoin(data.filter(elem => !illegal.has(elem.partnerId)).map(elem => _testHandlde(elem))))).subscribe(elem => {
-    console.log('done');
-});
-// _testHandlde(billinfo).subscribe(elem => console.log(elem));
+const generateMaBillBaby = () => {
+    storage.findNewReports().pipe(operators_1.map(page => page.Data), operators_1.mergeMap(data => rxjs_1.forkJoin(data
+        .filter(elem => !illegal.has(elem.partnerId))
+        .map(elem => _testHandlde(elem)))))
+        .subscribe(elem => {
+        console.log('done');
+    });
+};
+generateMaBillBaby();
+//_testHandlde(billinfo).subscribe(elem => console.log(elem));

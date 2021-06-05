@@ -5,4 +5,14 @@
 .dialog-div {
   padding: 0 !important;
   margin: 0 !important;
+  background: transparent;
 }
+
+form {
+  padding: 0 !important;
+}
+
+.shrink {
+  --container-height: 400px
+}
+

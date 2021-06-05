@@ -6,6 +6,7 @@ const detailPages_1 = require("./detailPages");
 const SwissQRBill = require("swissqrbill");
 const esnr_1 = require("./esnr");
 const streamBuffers = require("stream-buffers");
+const fs_1 = require("fs");
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const billinfo = {
@@ -63,7 +64,12 @@ exports.createBillPDF = (overview, pages) => {
         incrementAmount: (20 * 1024) // grow by 10 kilobytes each time buffer overflows.
     });
     console.log(esnr_1.calcESNR(overview.reference));
-    const doc = new SwissQRBill.PDF(data, './util/pdf/rechnung_' + overview.reference + '.pdf', {
+    const date = new Date();
+    const dir = '../rechnungen/' + date.getMonth() + '-' + date.getFullYear();
+    if (!fs_1.existsSync(dir)) {
+        fs_1.mkdirSync(dir);
+    }
+    const doc = new SwissQRBill.PDF(data, dir + '/rechnung_' + overview.reference + '.pdf', {
         autoGenerate: false,
         size: 'A4'
     });

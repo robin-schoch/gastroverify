@@ -5,6 +5,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../auth/authentication.service';
 import {map, tap} from 'rxjs/operators';
 import {GastroService} from '../gastro-dashboard/gastro.service';
+import {Store} from '@ngrx/store';
+import {getAuthRoles} from '../auth/auth.selectors';
 
 interface Language {
   short: string,
@@ -20,10 +22,10 @@ export class AppComponent implements OnInit, AfterViewChecked {
   title = 'verify-manager';
   toolbarTitle$: Observable<string>;
   toolbarHidden$: Observable<boolean>;
-  username$: Observable<string>;
 
   opened: boolean;
 
+  private _roles$ = this.store.select(getAuthRoles);
   languages: Language[] = [
     {short: 'de', name: 'Deutsch'},
     {short: 'en', name: 'English'}
@@ -32,13 +34,14 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   constructor(
       private toolbarService: ToolbarService,
+      private store: Store,
       private changeDetect: ChangeDetectorRef,
       private translate: TranslateService,
-      private authService: AuthenticationService,
-      private locationService: GastroService
+      private locationService: GastroService,
+      private authService: AuthenticationService
   ) {
 
-    this.username$ = this.authService.activeUser$.pipe(map(user => user.getSignInUserSession().getIdToken().decodePayload().email));
+
     translate.addLangs(this.languages.map(lang => lang.short));
 
 
@@ -47,7 +50,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
     // Set Browser Language as Init Language
     //translate.use(translate.getBrowserLang());
-    this.isAdmin$ = this.authService.role$.pipe(
+    this.isAdmin$ = this._roles$.pipe(
         tap(roles => console.log(roles)),
         map(roles => roles.filter(elem => elem === 'admin')),
         map(roles => roles.length > 0),
@@ -82,7 +85,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   hackForIOSLogout() {
     this.authService.signOut();
-    this.authService.role = [];
     this.locationService.clearPartner();
     this.locationService.loaded = false;
   }
