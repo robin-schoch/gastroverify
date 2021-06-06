@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {AmplifyHttpClientService, IOptionalRequestParams} from '../../util/amplify-http-client.service';
-import {Partner} from '../../model/Partner';
-import {Location} from '../../model/Location';
-import {CheckIn} from '../../model/CheckIn';
+import {AmplifyHttpClientService, IOptionalRequestParams} from '../util/amplify-http-client.service';
+import {Partner} from '../model/Partner';
+import {Location} from '../model/Location';
+import {CheckIn} from '../model/CheckIn';
 
 
 @Injectable({
@@ -81,15 +81,14 @@ export class GastroService {
     );
   }
 
-  getPartner(): Observable<Partner> {
-    if (!this._loaded) {
-      return this.amplifyHttpClient.get<Partner>(
-          this.apiName,
-          '/v1/gastro/me',
-          this.myInit
-      );
-    }
+  loadPartner(): Observable<Partner> {
+    return this.amplifyHttpClient.get<Partner>(
+        this.apiName,
+        '/v1/gastro/me',
+        this.myInit
+    );
   }
+
 
   addBar(location: Location): Observable<Location> {
 

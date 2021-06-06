@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {MatDialogRef} from '@angular/material/dialog';
 import {FormFieldTypes, onAuthUIStateChange} from '@aws-amplify/ui-components';
 import {AuthenticationService} from '../authentication.service';
+import {Store} from '@ngrx/store';
+import {successLogin} from '../../../store/authentication/authentication.action';
 
 @Component({
     selector: 'app-login-dialog',
@@ -16,7 +18,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     constructor(
         public dialogRef: MatDialogRef<LoginDialogComponent>,
         private authService: AuthenticationService,
-        private ref: ChangeDetectorRef
+        private ref: ChangeDetectorRef,
+        private store: Store
     ) {
         this.formFields = [
             {
@@ -36,19 +39,9 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         onAuthUIStateChange((authState, authData) => {
-
             if (authState === 'signedin') {
-                /* let a = authData as CognitoUser;
-
-                 this.authService.isAuthenticated = true;
-                 this.authService.activeUser = a
-
-                 this.authService.setRoles(a.getSignInUserSession().getIdToken().decodePayload()['cognito:groups']);
-                 */
-                this.authService.setUser();
+              this.store.dispatch(successLogin())
                 this.dialogRef.close();
-
-
             }
             this.ref.detectChanges();
         });

@@ -3,9 +3,11 @@ import {CheckIn} from '../../model/CheckIn';
 import {filter, map} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Location} from '../../model/Location';
-import {GastroService} from '../gastro-dashboard/gastro.service';
+import {GastroService} from '../../service/gastro.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NgForm} from '@angular/forms';
+import {selectPartnerLocation} from '../../store/partner/partner.selector';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-custom-visitor-checkin',
@@ -23,18 +25,11 @@ export class CustomVisitorCheckinComponent implements OnInit {
   private form: NgForm;
   private _location: Location;
 
-  public locations$: Observable<Location[]>;
+  public locations$: Observable<Location[]> = this.store.select(selectPartnerLocation)
 
 
-  constructor(private partnerService: GastroService, private _snackBar: MatSnackBar) {
-    this.partnerService.getPartner().subscribe(
-        elem => this.partnerService.gastro = elem,
-        error => this.partnerService.error = error
-    );
-    this.locations$ = this.partnerService.gastro$.pipe(
-        filter(p => !!p),
-        map(p => p.locations)
-    );
+  constructor(private store: Store, private _snackBar: MatSnackBar) {
+
   }
 
 
@@ -43,6 +38,8 @@ export class CustomVisitorCheckinComponent implements OnInit {
   }
 
   checkInUser() {
+    // TODO fix this
+    /*
     if (!!this._location) {
       console.log(this.checkIn$.value);
       this.partnerService.addCustomEntry(this._location, <CheckIn>this.checkIn$.value).subscribe(elem => {
@@ -63,6 +60,8 @@ export class CustomVisitorCheckinComponent implements OnInit {
         });
       });
     }
+
+     */
 
   }
 

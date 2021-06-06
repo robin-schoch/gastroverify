@@ -1,14 +1,15 @@
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {IAddBarData} from '../../gastro-dashboard/add-bar-dialog/add-bar-dialog.component';
-import {GastroService} from '../../gastro-dashboard/gastro.service';
+
 import {Partner} from '../../../model/Partner';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {SnackbarService} from '../../snackbar/snackbar.service';
 import {AllgemeineGeschaetsbedienungenComponent} from '../allgemeine-geschaetsbedienungen/allgemeine-geschaetsbedienungen.component';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {MAT_CHECKBOX_CLICK_ACTION} from '@angular/material/checkbox';
+import {GastroService} from '../../../service/gastro.service';
+
 
 export interface IPersonalAddDialogData {
 
@@ -19,9 +20,7 @@ export interface IPersonalAddDialogData {
   templateUrl: './personal-add-dialog.component.html',
   styleUrls: ['./personal-add-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {provide: MAT_CHECKBOX_CLICK_ACTION, useValue: 'noop'}
-  ]
+  providers: []
 })
 export class PersonalAddDialogComponent implements OnInit, OnDestroy {
 

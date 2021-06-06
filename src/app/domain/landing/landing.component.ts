@@ -10,11 +10,11 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import {ToolbarService} from '../main/toolbar.service';
+
 
 import {merge, Observable, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {GastroService} from '../gastro-dashboard/gastro.service';
+
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from '../auth/login-dialog/login-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
@@ -23,7 +23,9 @@ import {animate, state, style, transition, trigger,} from '@angular/animations';
 import {fadeInGrow, fadeInGrowNoStagger} from '../../util/animation/fadeInGrow';
 import {ContentPosition} from './landing-tile/landing-tile.component';
 import {Store} from '@ngrx/store';
-import {isSignedIn} from '../auth/auth.selectors';
+import {selectIsSignedIn} from '../../store/authentication/authentication.selector';
+import {setToolbarHidden} from '../../store/context/context.action';
+
 
 export interface LandingTile {
   title: string,
@@ -115,7 +117,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _subscritpion: Subscription[] = [];
 
-  public isAuthenticated$ = this.store.select(isSignedIn);
+  public isAuthenticated$ = this.store.select(selectIsSignedIn);
 
   public gridTiles: Observable<number>;
 
@@ -132,7 +134,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isHandset: Observable<boolean>;
 
   constructor(
-      private toolbarService: ToolbarService,
       private store: Store,
       private router: Router,
       private ngZone: NgZone,
@@ -198,7 +199,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     if (!!initAnchor) this.scrollToAnchor(Number(initAnchor));
-    this.toolbarService.toolbarHidden = true;
+    this.store.dispatch(setToolbarHidden({hidden: true}))
 
   }
 

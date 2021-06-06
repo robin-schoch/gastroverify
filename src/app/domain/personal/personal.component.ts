@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {ToolbarService} from '../main/toolbar.service';
+
 import {EntryService} from '../entry-browser/entry.service';
-import {GastroService} from '../gastro-dashboard/gastro.service';
+import {GastroService} from '../../service/gastro.service';
 import {Partner} from '../../model/Partner';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
@@ -9,6 +9,9 @@ import {filter, map, tap} from 'rxjs/operators';
 import {IPersonalAddDialogData, PersonalAddDialogComponent} from './personal-add-dialog/personal-add-dialog.component';
 import {TranslateService} from '@ngx-translate/core';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {Store} from '@ngrx/store';
+import {setToolbarHidden, setToolbarTitle} from '../../store/context/context.action';
+import {selectPartner} from '../../store/partner/partner.selector';
 
 @Component({
   selector: 'app-personal',
@@ -25,14 +28,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
   private _subs: Subscription[] = [];
 
   constructor(
-      private toolbarService: ToolbarService,
       private entryService: EntryService,
       private gastroService: GastroService,
       public dialog: MatDialog,
-      private translet: TranslateService,
-      private _bottomSheet: MatBottomSheet
+      private _bottomSheet: MatBottomSheet,
+      private store: Store
   ) {
-    this.partner$ = this.gastroService.gastro$;
+    this.partner$ = this.store.select(selectPartner);
     this.newPartner$ = this.gastroService.gastro$.pipe(
         map(g => !g?.email)
     );
@@ -40,16 +42,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    const tsub = this.translet.get('personal.toolbar').subscribe(elem => {
-      this.toolbarService.toolbarTitle = elem;
-    });
-    this._subs.push(tsub);
+    this.store.dispatch(setToolbarTitle({title: "elem"}))
+    this.store.dispatch(setToolbarHidden({hidden: false}))
 
-    this.toolbarService.toolbarHidden = false;
-    this.gastroService.getPartner().subscribe(
-        elem => this.gastroService.gastro = elem,
-        error => this.gastroService.error = error
-    );
     const sub = this.newPartner$.pipe(
         tap(elem => console.log('new? ' + elem)),
         filter(t => t)

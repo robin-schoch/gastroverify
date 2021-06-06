@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {ToolbarService} from '../main/toolbar.service';
+import {Store} from '@ngrx/store';
+import {setToolbarHidden} from '../../store/context/context.action';
 
 @Component({
     selector: 'app-gtc',
@@ -11,18 +12,10 @@ export class GtcComponent implements OnInit {
     public userLang: string;
 
     constructor(
-        private toolbarService: ToolbarService) { }
+        private store: Store) { }
 
     ngOnInit(): void {
-        this.toolbarService.toolbarHidden = true;
-        this.setLanguage();
-    }
+      this.store.dispatch(setToolbarHidden({hidden: true}))
 
-    private setLanguage(): void {
-        this.userLang = navigator.language.slice(0, 2);
-    
-        if (this.userLang !== 'de') {
-            this.userLang = 'en';
-        }
     }
 }

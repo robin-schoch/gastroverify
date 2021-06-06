@@ -12,12 +12,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {LandingComponent} from './domain/landing/landing.component';
-import {SignupComponent} from './domain/auth/signup/signup.component';
-import {AuthComponent} from './domain/auth/auth.component';
-import {SigninComponent} from './domain/auth/signin/signin.component';
 
 import Amplify from 'aws-amplify';
-import awsconfig from './../aws-exports';
+import awsmobile from './../aws-exports';
 import {FormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -34,7 +31,6 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {EntryBrowserComponent} from './domain/entry-browser/entry-browser/entry-browser.component';
 import {MatListModule} from '@angular/material/list';
 import {QrCodeGeneratorDialogComponent} from './domain/gastro-dashboard/qr-code-generator-dialog/qr-code-generator-dialog.component';
-import {AnQrcodeModule} from 'an-qrcode';
 import {GtcComponent} from './domain/gtc/gtc.component';
 import {PersonalComponent} from './domain/personal/personal.component';
 import {DatePipe} from '@angular/common';
@@ -46,7 +42,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {PersonalAddDialogComponent} from './domain/personal/personal-add-dialog/personal-add-dialog.component';
 import {ConfirmdialogComponent} from './domain/confirmdialog/confirmdialog.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {LoginDialogComponent} from './domain/auth/login-dialog/login-dialog.component';
+
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ReportComponent} from './domain/report/report.component';
@@ -76,20 +72,24 @@ import {AllgemeineGeschaetsbedienungenComponent} from './domain/personal/allgeme
 import {CustomVisitorCheckinComponent} from './domain/custom-visitor-checkin/custom-visitor-checkin.component';
 import {EntryCounterComponent} from './domain/entry-counter/entry-counter.component';
 import {StoreModule} from '@ngrx/store';
-import {authReducer} from './domain/auth/auth.reducer';
 import {EntityDataModule} from '@ngrx/data';
 import {appEntityMetadata} from './app.entity.metadata';
+import {EffectsModule} from '@ngrx/effects';
+import {effects} from './store/effects';
+import {reducers} from './store/reducer';
+import {StoreRouterConnectingModule} from '@ngrx/router-store';
+import {RouterSerializer} from './store/router/router.serializer';
+import {LoginDialogComponent} from './domain/auth/login-dialog/login-dialog.component';
+import {environment} from '../environments/environment';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
-Amplify.configure(awsconfig);
+Amplify.configure(awsmobile);
 
 @NgModule({
   declarations: [
     AppComponent,
     GastroDashboardComponent,
     LandingComponent,
-    SignupComponent,
-    AuthComponent,
-    SigninComponent,
     SignOutDirective,
     AddBarDialogComponent,
     EntryBrowserComponent,
@@ -103,7 +103,7 @@ Amplify.configure(awsconfig);
     AdminDashbaordComponent,
     AdminReportComponent,
     PartnerOverviewComponent,
-    LoginDialogComponent,
+
     ChooseQrCodeDialogComponent,
     SpinnerComponent,
     UpdateLocationDialogComponent,
@@ -145,7 +145,6 @@ Amplify.configure(awsconfig);
     MatDialogModule,
     MatDialogModule,
     MatListModule,
-    AnQrcodeModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -166,10 +165,16 @@ Amplify.configure(awsconfig);
     ClipboardModule,
     MatDatepickerModule,
     MatRadioModule,
-    StoreModule.forRoot({
-      auth: authReducer
+    StoreModule.forRoot(reducers, {}),
+    EffectsModule.forRoot(effects),
+    StoreRouterConnectingModule.forRoot({
+      serializer: RouterSerializer,
     }),
-    EntityDataModule.forRoot({entityMetadata: appEntityMetadata})
+    EntityDataModule.forRoot({entityMetadata: appEntityMetadata}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    }),
   ],
   entryComponents: [AddBarDialogComponent],
   providers: [DatePipe, {provide: MatBottomSheetRef, useValue: {}}],

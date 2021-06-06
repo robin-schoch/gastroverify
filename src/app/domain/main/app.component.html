@@ -61,7 +61,7 @@
                 </button>
                 <mat-menu #languageMenu="matMenu">
 
-                    <button mat-menu-item *ngFor="let language of languages" (click)="changeLanguage(language)">{{language.name}}</button>
+                    <button mat-menu-item *ngFor="let language of languages$ | async" (click)="changeLanguage(language)">{{language.name}}</button>
 
                 </mat-menu>
             </div>

@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 
-import {ToolbarService} from '../main/toolbar.service';
+
 import {EntryService} from '../entry-browser/entry.service';
-import {GastroService} from './gastro.service';
+
 import {Location} from '../../model/Location';
 import {Partner} from '../../model/Partner';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
@@ -16,6 +16,11 @@ import {TranslateService} from '@ngx-translate/core';
 import {EntryBrowserComponent} from '../entry-browser/entry-browser/entry-browser.component';
 import {ChooseQrCodeDialogComponent} from './choose-qr-code-dialog/choose-qr-code-dialog.component';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {setToolbarHidden, setToolbarTitle} from '../../store/context/context.action';
+import {Store} from '@ngrx/store';
+import {GastroService} from '../../service/gastro.service';
+import {loadPartner} from '../../store/partner/partner.action';
+import {selectPartner} from '../../store/partner/partner.selector';
 
 @Component({
   selector: 'app-gastro-dashboard',
@@ -25,9 +30,9 @@ import {MatBottomSheet} from '@angular/material/bottom-sheet';
 })
 export class GastroDashboardComponent implements OnInit, OnDestroy {
 
-  public partner$: Observable<Partner>;
+  public partner$: Observable<Partner> = this.store.select(selectPartner);
   public newPartner$: Observable<boolean>;
-  public selectedBar$ = new BehaviorSubject<Location>(null);
+
   private _subs: Subscription[] = [];
   displayedColumns: string[] = [
     'Name',
@@ -39,40 +44,33 @@ export class GastroDashboardComponent implements OnInit, OnDestroy {
 
 
   constructor(
-      private toolbarService: ToolbarService,
+
       private entryService: EntryService,
       private gastroService: GastroService,
       public dialog: MatDialog,
       private router: Router,
       private snackbar: SnackbarService,
-      private translat: TranslateService,
-      private _bottomSheet: MatBottomSheet
+      private _bottomSheet: MatBottomSheet,
+      private store: Store
   ) { }
 
   ngOnInit() {
+    this.store.dispatch(setToolbarTitle({title: "elem"}))
+    this.store.dispatch(loadPartner())
 
-    const tsub = this.translat.get('context.dashboard').subscribe(elem => {
-      this.toolbarService.toolbarTitle = elem;
-    });
-    this._subs.push(tsub);
-
-    this.partner$ = this.gastroService.gastro$;
-    this.toolbarService.toolbarTitle = 'Übersicht';
+    this.store.dispatch(setToolbarTitle({title: "Übersicht"}))
+    // TODO fix this
+    /*
     this.newPartner$ = this.gastroService.gastro$.pipe(
         tap(f => console.log(f)),
         skip(1),
         filter(g => !g?.email),
-        tap(f => console.log(f)),
         map(g => !!g?.email)
     );
-    this.toolbarService.toolbarHidden = false;
-    this.gastroService.getPartner().subscribe(
-        elem => this.gastroService.gastro = elem,
-        error => {
-          console.log(error.statusCode);
-          if (error.statusCode !== 404) this.gastroService.error = error;
-        }
-    );
+
+     */
+    this.store.dispatch(setToolbarHidden({hidden: false}))
+
     this.gastroService.error$.subscribe(elem => this.router.navigate([
       'location',
       'personal'

@@ -1,17 +1,13 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ToolbarService} from './toolbar.service';
 import {Observable} from 'rxjs';
-import {TranslateService} from '@ngx-translate/core';
-import {AuthenticationService} from '../auth/authentication.service';
-import {map, tap} from 'rxjs/operators';
-import {GastroService} from '../gastro-dashboard/gastro.service';
-import {Store} from '@ngrx/store';
-import {getAuthRoles} from '../auth/auth.selectors';
 
-interface Language {
-  short: string,
-  name: string,
-}
+import {GastroService} from '../../service/gastro.service';
+import {Store} from '@ngrx/store';
+import {selectAuthRoles, selectIsAdmin} from '../../store/authentication/authentication.selector';
+import {rehydrateCurrentUser, signOut} from '../../store/authentication/authentication.action';
+import {rehydrateLanguages, setLanguage} from '../../store/context/context.action';
+import {selectLanguages, selectToolbarHidden, selectToolbarTitle} from '../../store/context/context.selector';
+import {Language} from '../../store/context/context.state';
 
 @Component({
   selector: 'app-root',
@@ -20,45 +16,22 @@ interface Language {
 })
 export class AppComponent implements OnInit, AfterViewChecked {
   title = 'verify-manager';
-  toolbarTitle$: Observable<string>;
-  toolbarHidden$: Observable<boolean>;
+  toolbarTitle$: Observable<string> = this.store.select(selectToolbarTitle);
+  toolbarHidden$: Observable<boolean> =this.store.select(selectToolbarHidden);
 
   opened: boolean;
 
-  private _roles$ = this.store.select(getAuthRoles);
-  languages: Language[] = [
-    {short: 'de', name: 'Deutsch'},
-    {short: 'en', name: 'English'}
-  ];
-  isAdmin$: Observable<boolean>;
+
+  isAdmin$: Observable<boolean> = this.store.select(selectIsAdmin);
+  languages$: Observable<Language[]> = this.store.select(selectLanguages);
 
   constructor(
-      private toolbarService: ToolbarService,
       private store: Store,
       private changeDetect: ChangeDetectorRef,
-      private translate: TranslateService,
       private locationService: GastroService,
-      private authService: AuthenticationService
   ) {
 
-
-    translate.addLangs(this.languages.map(lang => lang.short));
-
-
-    // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang('de');
-
-    // Set Browser Language as Init Language
-    //translate.use(translate.getBrowserLang());
-    this.isAdmin$ = this._roles$.pipe(
-        tap(roles => console.log(roles)),
-        map(roles => roles.filter(elem => elem === 'admin')),
-        map(roles => roles.length > 0),
-    );
-
-
-    this.isAdmin$.subscribe(elem => console.log('admin = ' + elem));
-
+    this.store.dispatch(rehydrateLanguages())
   }
 
   setOpened(opened: boolean): void {
@@ -67,8 +40,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    this.toolbarTitle$ = this.toolbarService.toolbarTitle$.asObservable();
-    this.toolbarHidden$ = this.toolbarService.toolbarHidden$.asObservable();
+    this.store.dispatch(rehydrateCurrentUser())
   }
 
   ngAfterViewChecked() {
@@ -77,14 +49,12 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
 
   changeLanguage(language: Language) {
-    this.translate.use(language.short);
-
-    console.log('changed language');
+    this.store.dispatch(setLanguage({short: language.short}))
   }
 
 
   hackForIOSLogout() {
-    this.authService.signOut();
+    this.store.dispatch(signOut());
     this.locationService.clearPartner();
     this.locationService.loaded = false;
   }

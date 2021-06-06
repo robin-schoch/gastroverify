@@ -1,11 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {GastroService} from '../gastro-dashboard/gastro.service';
+import {GastroService} from '../../service/gastro.service';
 import {filter, map} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Location} from '../../model/Location';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ToolbarService} from '../main/toolbar.service';
+
 import {TranslateService} from '@ngx-translate/core';
+import {Store} from '@ngrx/store';
+import {setToolbarTitle} from '../../store/context/context.action';
+import {selectPartnerLocation} from '../../store/partner/partner.selector';
 
 @Component({
   selector: 'app-entry-counter',
@@ -15,7 +18,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class EntryCounterComponent implements OnInit {
 
-  public locations$: Observable<Location[]>;
+  public locations$: Observable<Location[]> = this.store.select(selectPartnerLocation);
 
   public location: Location = null;
 
@@ -34,21 +37,13 @@ export class EntryCounterComponent implements OnInit {
   constructor(
       private partnerService: GastroService,
       private _snackBar: MatSnackBar,
-      private toolbarService: ToolbarService,
-      private tranlate: TranslateService
+      private store: Store
   ) {
-    this.toolbarService.toolbarTitle = 'Zähler'
+    this.store.dispatch(setToolbarTitle({title: "Zähler"}))
   }
 
   ngOnInit(): void {
-    this.partnerService.getPartner().subscribe(
-        elem => this.partnerService.gastro = elem,
-        error => this.partnerService.error = error
-    );
-    this.locations$ = this.partnerService.gastro$.pipe(
-        filter(p => !!p),
-        map(p => p.locations)
-    );
+
   }
 
   selectLocation(value: any) {

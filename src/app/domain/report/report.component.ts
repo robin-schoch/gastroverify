@@ -1,11 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Report, ReportService} from './report.service';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {GastroService} from '../gastro-dashboard/gastro.service';
+import {GastroService} from '../../service/gastro.service';
 import {Location} from '../../model/Location';
 import {filter, map} from 'rxjs/operators';
-import {ToolbarService} from '../main/toolbar.service';
+
 import * as moment from 'moment';
+import {Store} from '@ngrx/store';
+import {setToolbarTitle} from '../../store/context/context.action';
+import {selectPartnerLocation} from '../../store/partner/partner.selector';
 
 @Component({
   selector: 'app-report',
@@ -15,7 +18,7 @@ import * as moment from 'moment';
 })
 export class ReportComponent implements OnInit {
 
-  public locations$: Observable<Location[]>;
+  public locations$: Observable<Location[]> = this.store.select(selectPartnerLocation);
   public date$ = new BehaviorSubject(moment());
 
 
@@ -35,16 +38,9 @@ export class ReportComponent implements OnInit {
   constructor(
       private reportService: ReportService,
       private partnerService: GastroService,
-      private toolbarService: ToolbarService,
+      private store: Store
   ) {
-    this.partnerService.getPartner().subscribe(
-        elem => this.partnerService.gastro = elem,
-        error => this.partnerService.error = error
-    );
-    this.locations$ = this.partnerService.gastro$.pipe(
-        filter(p => !!p),
-        map(p => p.locations)
-    );
+
     this.reports$ = this.reportService.reports$;
     this.totalReports$ = this.reports$.pipe(map(reports => {
       return {
@@ -63,7 +59,7 @@ export class ReportComponent implements OnInit {
         )
       };
     }));
-    this.toolbarService.toolbarTitle = 'Rapport';
+    this.store.dispatch(setToolbarTitle({title: "Rapport"}))
   }
 
   ngOnInit(): void {
@@ -126,9 +122,6 @@ export class ReportComponent implements OnInit {
    *                                                                         *
    **************************************************************************/
 
-  get selectedLocation$(): Observable<Location> {
-    return this._selectedLocation$.asObservable();
-  }
 
   set selectedLocation(location: Location) {
     this._selectedLocation$.next(location);
